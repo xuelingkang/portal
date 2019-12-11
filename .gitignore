@@ -3,7 +3,7 @@ HELP.md
 mvnw
 mvnw.cmd
 *.log
-*/target/
+target/
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
