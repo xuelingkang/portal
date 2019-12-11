@@ -1,0 +1,30 @@
+package com.xzixi.self.portal.webapp.model.vo;
+
+import com.xzixi.self.portal.webapp.model.po.Role;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
+
+import java.util.Collection;
+
+/**
+ * @author 薛凌康
+ */
+@Data
+@NoArgsConstructor
+@ApiModel(value = "角色")
+public class RoleVO extends Role {
+
+    private static final long serialVersionUID = 1L;
+
+    @ApiModelProperty(value = "权限集合")
+    private Collection<AuthorityVO> authorities;
+    @ApiModelProperty(value = "权限标识")
+    private Collection<String> authoritySignals;
+
+    public RoleVO(Role role, String... ignoreProperties) {
+        BeanUtils.copyProperties(role, this, ignoreProperties);
+    }
+}
