@@ -6,8 +6,8 @@ import com.xzixi.self.portal.webapp.model.BaseModel;
 import com.xzixi.self.portal.webapp.redis.FuzzyEvictRedisCacheManager;
 import com.xzixi.self.portal.webapp.util.SerializeUtil;
 import com.xzixi.self.portal.webapp.util.TypeUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.common.util.CollectionUtils;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
@@ -163,21 +163,26 @@ public class RedisCacheConfig {
      */
     @Bean
     public KeyGenerator defaultEvictByEntityKeyGenerator() {
-        return (target, method, params) ->
-                target.getClass().getName() +
-                        KEY_SEPARATOR +
-                        GET_BY_ID_METHOD_NAME +
-                        KEY_SEPARATOR +
-                        ((BaseModel) params[0]).getId() +
+        return (target, method, params) -> {
+            Integer id = ((BaseModel) params[0]).getId();
+            if (id == null) {
+                return "";
+            }
+            return target.getClass().getName() +
+                    KEY_SEPARATOR +
+                    GET_BY_ID_METHOD_NAME +
+                    KEY_SEPARATOR +
+                    ((BaseModel) params[0]).getId() +
 
-                        KEYS_SEPARATOR +
+                    KEYS_SEPARATOR +
 
-                        REGEX_KEY_PREFIX +
-                        target.getClass().getName() +
-                        KEY_SEPARATOR +
-                        LIST_BY_IDS_METHOD_NAME +
-                        KEY_SEPARATOR +
-                        "*" + ((BaseModel) params[0]).getId() + "*";
+                    REGEX_KEY_PREFIX +
+                    target.getClass().getName() +
+                    KEY_SEPARATOR +
+                    LIST_BY_IDS_METHOD_NAME +
+                    KEY_SEPARATOR +
+                    "*" + ((BaseModel) params[0]).getId() + "*";
+        };
     }
 
     /**
@@ -188,8 +193,16 @@ public class RedisCacheConfig {
     @Bean
     @SuppressWarnings("unchecked")
     public KeyGenerator defaultEvictByEntitiesKeyGenerator() {
-        return (target, method, params) ->
-                StringUtils.join(((Collection<? extends BaseModel>) params[0]).stream().map(entity ->
+        return new KeyGenerator() {
+            @Override
+            public Object generate(Object target, Method method, Object... params) {
+                Collection<? extends BaseModel> collection = ((Collection<? extends BaseModel>) params[0])
+                        .stream().filter(entity -> entity.getId() != null).collect(Collectors.toList());
+                if (CollectionUtils.isEmpty(collection)) {
+                    return "";
+                }
+                return StringUtils.join(collection.stream()
+                                .map(entity ->
                                 target.getClass().getName() +
                                         KEY_SEPARATOR +
                                         GET_BY_ID_METHOD_NAME +
@@ -205,6 +218,8 @@ public class RedisCacheConfig {
                                         KEY_SEPARATOR +
                                         "*" + entity.getId() + "*").collect(Collectors.toList()),
                         KEYS_SEPARATOR);
+            }
+        };
     }
 
     private static final String PARAM_SEPARATOR = "_";
@@ -243,8 +258,8 @@ public class RedisCacheConfig {
                         if (TypeUtil.isArrayType(clazz)) {
                             return toList(param);
                         }
-                        if (TypeUtil.isIterableType(clazz)) {
-                            return toList(CollectionUtils.iterableAsArrayList((Iterable<?>) param));
+                        if (TypeUtil.isCollectionType(clazz)) {
+                            return toList(((Collection<?>) param).toArray());
                         }
                         if (TypeUtil.isSimpleValueType(clazz)) {
                             return String.valueOf(param);

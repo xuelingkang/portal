@@ -4,6 +4,7 @@ import org.springframework.util.ClassUtils;
 
 import java.net.URI;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 
@@ -37,7 +38,7 @@ public class TypeUtil {
      * @param clazz
      * @return
      */
-    public static boolean isIterableType(Class<?> clazz) {
-        return Iterable.class.isAssignableFrom(clazz);
+    public static boolean isCollectionType(Class<?> clazz) {
+        return Collection.class.isAssignableFrom(clazz);
     }
 }
