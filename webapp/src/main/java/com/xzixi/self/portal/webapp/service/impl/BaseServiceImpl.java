@@ -1,13 +1,18 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.additional.update.impl.LambdaUpdateChainWrapper;
+import com.baomidou.mybatisplus.extension.service.additional.update.impl.UpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xzixi.self.portal.webapp.exception.ProjectException;
 import com.xzixi.self.portal.webapp.mapper.IBaseMapper;
 import com.xzixi.self.portal.webapp.model.BaseModel;
 import com.xzixi.self.portal.webapp.service.IBaseService;
 
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * 用来扩展公共的service方法
@@ -39,6 +44,61 @@ public class BaseServiceImpl<M extends IBaseMapper<T>, T extends BaseModel> exte
 
     @Override
     public final boolean saveOrUpdate(T entity, Wrapper<T> updateWrapper) {
+        throw new ProjectException("禁止调用！");
+    }
+
+    @Override
+    public final <V> List<V> listObjs(Wrapper<T> queryWrapper, Function<? super Object, V> mapper) {
+        throw new ProjectException("禁止调用！");
+    }
+
+    @Override
+    public final IPage<Map<String, Object>> pageMaps(IPage<T> page, Wrapper<T> queryWrapper) {
+        throw new ProjectException("禁止调用！");
+    }
+
+    @Override
+    public final <V> V getObj(Wrapper<T> queryWrapper, Function<? super Object, V> mapper) {
+        throw new ProjectException("禁止调用！");
+    }
+
+    @Override
+    public final Map<String, Object> getMap(Wrapper<T> queryWrapper) {
+        throw new ProjectException("禁止调用！");
+    }
+
+    @Override
+    public final List<Map<String, Object>> listMaps() {
+        throw new ProjectException("禁止调用！");
+    }
+
+    @Override
+    public final List<Object> listObjs() {
+        throw new ProjectException("禁止调用！");
+    }
+
+    @Override
+    public final <V> List<V> listObjs(Function<? super Object, V> mapper) {
+        throw new ProjectException("禁止调用！");
+    }
+
+    @Override
+    public final List<Object> listObjs(Wrapper<T> queryWrapper) {
+        throw new ProjectException("禁止调用！");
+    }
+
+    @Override
+    public final IPage<Map<String, Object>> pageMaps(IPage<T> page) {
+        throw new ProjectException("禁止调用！");
+    }
+
+    @Override
+    public final UpdateChainWrapper<T> update() {
+        throw new ProjectException("禁止调用！");
+    }
+
+    @Override
+    public final LambdaUpdateChainWrapper<T> lambdaUpdate() {
         throw new ProjectException("禁止调用！");
     }
 }
