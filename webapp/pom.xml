@@ -43,6 +43,7 @@
             <groupId>com.xzixi.self.portal</groupId>
             <artifactId>enhance</artifactId>
             <version>1.0.0</version>
+            <scope>provided</scope>
         </dependency>
         <!-- web -->
         <dependency>
@@ -175,20 +176,18 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
         </dependency>
         <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
         <!-- devtools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
-            <optional>true</optional>
         </dependency>
         <!-- test -->
         <dependency>
