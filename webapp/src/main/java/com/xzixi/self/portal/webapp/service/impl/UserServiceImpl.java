@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.xzixi.self.portal.compile.annotation.BaseCache;
+import com.xzixi.self.portal.enhance.annotation.CacheEnhance;
 import com.xzixi.self.portal.webapp.mapper.UserMapper;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.Role;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @author 薛凌康
  */
 @Service
-@BaseCache
+@CacheEnhance
 public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implements IUserService {
 
     @Autowired

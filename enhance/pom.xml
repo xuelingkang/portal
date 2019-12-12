@@ -9,7 +9,9 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>compile</artifactId>
+    <artifactId>enhance</artifactId>
+
+    <description>编译期增强</description>
 
     <build>
         <plugins>

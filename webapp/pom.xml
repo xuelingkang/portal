@@ -38,9 +38,10 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- 编译期增强 -->
         <dependency>
             <groupId>com.xzixi.self.portal</groupId>
-            <artifactId>compile</artifactId>
+            <artifactId>enhance</artifactId>
             <version>1.0.0</version>
         </dependency>
         <!-- web -->

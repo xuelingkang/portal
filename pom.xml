@@ -12,8 +12,8 @@
     <description>个人门户前后台，博客、新闻、笔记、知识点整理等</description>
 
     <modules>
+        <module>enhance</module>
         <module>webapp</module>
-        <module>compile</module>
     </modules>
 
     <properties>
