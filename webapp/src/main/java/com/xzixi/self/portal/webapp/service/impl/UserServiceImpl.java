@@ -12,6 +12,7 @@ import com.xzixi.self.portal.webapp.service.IRoleService;
 import com.xzixi.self.portal.webapp.service.IUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -55,6 +56,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
      * TODO 观察用，以后删除
      */
     @Override
+    @Cacheable(cacheNames = BASE_CACHE_NAME, keyGenerator = "defaultBaseKeyGenerator")
     public Collection<User> listByIds(Collection<? extends Serializable> idList) {
         return super.listByIds(idList);
     }

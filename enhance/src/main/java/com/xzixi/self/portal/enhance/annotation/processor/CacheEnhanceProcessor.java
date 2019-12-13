@@ -82,30 +82,57 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         return true;
     }
 
+    private static final String OVERRIDE = "java.lang.Override";
+
+    private static final String CACHE_ABLE = "org.springframework.cache.annotation.Cacheable";
+
+    private static final String CACHE_NAMES = "cacheNames";
+    private static final String BASE_CACHE_NAME = "BASE_CACHE_NAME";
+    private static final String CASUAL_CACHE_NAME = "CASUAL_CACHE_NAME";
+
+    private static final String KEY_GENERATOR = "BASE_CACHE_NAME";
+    private static final String DEFAULT_BASE_KEY_GENERATOR = "defaultBaseKeyGenerator";
+    private static final String DEFAULT_CASUAL_KEY_GENERATOR = "defaultCasualKeyGenerator";
+    private static final String DEFAULT_EVICT_BY_ID_KEY_GENERATOR = "defaultEvictByIdKeyGenerator";
+    private static final String DEFAULT_EVICT_BY_IDS_KEY_GENERATOR = "defaultEvictByIdsKeyGenerator";
+    private static final String DEFAULT_EVICT_BY_ENTITY_KEY_GENERATOR = "defaultEvictByEntityKeyGenerator";
+    private static final String DEFAULT_EVICT_BY_ENTITIES_KEY_GENERATOR = "defaultEvictByEntitiesKeyGenerator";
+
+    private static final String SERIALIZABLE = "java.io.Serializable";
+
+    private static final String GET_BY_ID = "getById";
+    private static final String SUPER_GET_BY_ID = "super.getById";
+    private static final String ID = "id";
+
     /**
      * getById方法
      */
     private JCTree.JCMethodDecl getByIdDecl(String modelClassName) {
+        // @Override注解
+        JCTree.JCAnnotation overrideAnnotation = treeMaker.Annotation(memberAccess(OVERRIDE), List.nil());
+        // @Cacheable注解 TODO 还是有错
+        JCTree.JCAnnotation cacheableAnnotation = treeMaker.Annotation(memberAccess(CACHE_ABLE),
+            List.of(makeAssignment(memberAccess(CACHE_NAMES), memberAccess(BASE_CACHE_NAME)),
+                makeAssignment(memberAccess(KEY_GENERATOR), memberAccess(DEFAULT_BASE_KEY_GENERATOR))));
+        // 注解列表
+        List<JCTree.JCAnnotation> annotationList = List.of(overrideAnnotation, cacheableAnnotation);
         // 访问修饰词和注解列表
-        // TODO 配置缓存注解，参考JCAssign和TreeMaker第832行
-        List<JCTree.JCAnnotation> annotationList = List.nil();
-        JCTree.JCAnnotation overrideAnnotation = treeMaker.Annotation(memberAccess("java.lang.Override"), List.nil());
-        annotationList = annotationList.append(overrideAnnotation);
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = names.fromString("getById");
+        Name name = getNameFromString(GET_BY_ID);
         // 返回值类型
         JCTree.JCExpression returnType = memberAccess(modelClassName);
         // 泛型参数列表
         List<JCTree.JCTypeParameter> methodGenericParams = List.nil();
         // 参数列表
-        List<JCTree.JCVariableDecl> parameters = List.of(makeVarDef(treeMaker.Modifiers(Flags.PARAMETER), "id", memberAccess("java.io.Serializable"), null));
+        List<JCTree.JCVariableDecl> parameters =
+            List.of(makeVarDef(treeMaker.Modifiers(Flags.PARAMETER), ID, memberAccess(SERIALIZABLE), null));
         // 抛出异常
         List<JCTree.JCExpression> throwsClauses = List.nil();
         // 方法体
-        List<JCTree.JCStatement> statementList = List.nil();
-        JCTree.JCStatement returnStatement = treeMaker.Return(treeMaker.Apply(List.of(memberAccess("java.io.Serializable")), memberAccess("super.getById"), List.of(memberAccess("id"))));
-        statementList = statementList.append(returnStatement);
+        List<JCTree.JCStatement> statementList =
+            List.of(treeMaker.Return(
+                treeMaker.Apply(List.of(memberAccess(SERIALIZABLE)), memberAccess(SUPER_GET_BY_ID), List.of(memberAccess(ID)))));
         JCTree.JCBlock block = treeMaker.Block(0, statementList);
         return treeMaker.MethodDef(modifiers, name, returnType, methodGenericParams, parameters, throwsClauses, block, null);
     }

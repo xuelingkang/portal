@@ -64,7 +64,7 @@ public abstract class AbstractBaseProcessor extends AbstractProcessor {
     /**
      * 给变量赋值
      */
-    protected JCTree.JCExpressionStatement makeAssignment(JCTree.JCExpression lhs, JCTree.JCExpression rhs) {
-        return treeMaker.Exec(treeMaker.Assign(lhs, rhs));
+    protected JCTree.JCAssign makeAssignment(JCTree.JCExpression lhs, JCTree.JCExpression rhs) {
+        return treeMaker.Assign(lhs, rhs);
     }
 }
