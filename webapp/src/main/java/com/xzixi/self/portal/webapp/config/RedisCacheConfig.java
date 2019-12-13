@@ -193,32 +193,29 @@ public class RedisCacheConfig {
     @Bean
     @SuppressWarnings("unchecked")
     public KeyGenerator defaultEvictByEntitiesKeyGenerator() {
-        return new KeyGenerator() {
-            @Override
-            public Object generate(Object target, Method method, Object... params) {
-                Collection<? extends BaseModel> collection = ((Collection<? extends BaseModel>) params[0])
-                        .stream().filter(entity -> entity.getId() != null).collect(Collectors.toList());
-                if (CollectionUtils.isEmpty(collection)) {
-                    return "";
-                }
-                return StringUtils.join(collection.stream()
-                                .map(entity ->
-                                target.getClass().getName() +
-                                        KEY_SEPARATOR +
-                                        GET_BY_ID_METHOD_NAME +
-                                        KEY_SEPARATOR +
-                                        entity.getId() +
-
-                                        KEYS_SEPARATOR +
-
-                                        REGEX_KEY_PREFIX +
-                                        target.getClass().getName() +
-                                        KEY_SEPARATOR +
-                                        LIST_BY_IDS_METHOD_NAME +
-                                        KEY_SEPARATOR +
-                                        "*" + entity.getId() + "*").collect(Collectors.toList()),
-                        KEYS_SEPARATOR);
+        return (target, method, params) -> {
+            Collection<? extends BaseModel> collection = ((Collection<? extends BaseModel>) params[0])
+                    .stream().filter(entity -> entity.getId() != null).collect(Collectors.toList());
+            if (CollectionUtils.isEmpty(collection)) {
+                return "";
             }
+            return StringUtils.join(collection.stream()
+                            .map(entity ->
+                            target.getClass().getName() +
+                                    KEY_SEPARATOR +
+                                    GET_BY_ID_METHOD_NAME +
+                                    KEY_SEPARATOR +
+                                    entity.getId() +
+
+                                    KEYS_SEPARATOR +
+
+                                    REGEX_KEY_PREFIX +
+                                    target.getClass().getName() +
+                                    KEY_SEPARATOR +
+                                    LIST_BY_IDS_METHOD_NAME +
+                                    KEY_SEPARATOR +
+                                    "*" + entity.getId() + "*").collect(Collectors.toList()),
+                    KEYS_SEPARATOR);
         };
     }
 
