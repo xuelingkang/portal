@@ -6,6 +6,7 @@ import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.util.Context;
+import com.sun.tools.javac.util.Name;
 import com.sun.tools.javac.util.Names;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -35,17 +36,35 @@ public abstract class AbstractBaseProcessor extends AbstractProcessor {
     }
 
     /**
-     * 使用路径访问类，属性
-     *
-     * @param expression 路径
-     * @return JCExpression
+     * 根据字符串获取Name
      */
-    protected JCTree.JCExpression expression(String expression) {
-        String[] expressionArray = expression.split("\\.");
-        JCTree.JCExpression expr = treeMaker.Ident(names.fromString(expressionArray[0]));
-        for (int i = 1; i < expressionArray.length; i++) {
-            expr = treeMaker.Select(expr, names.fromString(expressionArray[i]));
+    protected Name getNameFromString(String s) {
+        return names.fromString(s);
+    }
+
+    /**
+     * 创建变量语句
+     */
+    protected JCTree.JCVariableDecl makeVarDef(JCTree.JCModifiers modifiers, String name, JCTree.JCExpression varType, JCTree.JCExpression init) {
+        return treeMaker.VarDef(modifiers, getNameFromString(name), varType, init);
+    }
+
+    /**
+     * 创建 域/方法 的多级访问
+     */
+    protected JCTree.JCExpression memberAccess(String components) {
+        String[] componentArray = components.split("\\.");
+        JCTree.JCExpression expr = treeMaker.Ident(getNameFromString(componentArray[0]));
+        for (int i = 1; i < componentArray.length; i++) {
+            expr = treeMaker.Select(expr, getNameFromString(componentArray[i]));
         }
         return expr;
+    }
+
+    /**
+     * 给变量赋值
+     */
+    protected JCTree.JCExpressionStatement makeAssignment(JCTree.JCExpression lhs, JCTree.JCExpression rhs) {
+        return treeMaker.Exec(treeMaker.Assign(lhs, rhs));
     }
 }
