@@ -43,13 +43,6 @@ public abstract class AbstractBaseProcessor extends AbstractProcessor {
     }
 
     /**
-     * 创建变量语句
-     */
-    protected JCTree.JCVariableDecl makeVarDef(JCTree.JCModifiers modifiers, String name, JCTree.JCExpression varType, JCTree.JCExpression init) {
-        return treeMaker.VarDef(modifiers, getNameFromString(name), varType, init);
-    }
-
-    /**
      * 创建 域/方法 的多级访问
      */
     protected JCTree.JCExpression memberAccess(String components) {
@@ -59,12 +52,5 @@ public abstract class AbstractBaseProcessor extends AbstractProcessor {
             expr = treeMaker.Select(expr, getNameFromString(componentArray[i]));
         }
         return expr;
-    }
-
-    /**
-     * 给变量赋值
-     */
-    protected JCTree.JCAssign makeAssignment(JCTree.JCExpression lhs, JCTree.JCExpression rhs) {
-        return treeMaker.Assign(lhs, rhs);
     }
 }

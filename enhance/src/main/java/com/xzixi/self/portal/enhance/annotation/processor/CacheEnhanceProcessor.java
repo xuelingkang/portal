@@ -1,6 +1,8 @@
 package com.xzixi.self.portal.enhance.annotation.processor;
 
+import com.sun.tools.javac.code.BoundKind;
 import com.sun.tools.javac.code.Flags;
+import com.sun.tools.javac.code.TypeTag;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.util.List;
 import com.sun.tools.javac.util.Name;
@@ -32,65 +34,49 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
             // 当前类对应的实体类的类名
             String modelClassName = ((JCTree.JCTypeApply) classDecl.extending.getTree()).arguments.get(1).type.toString();
             // 修改类，追加方法
-//            classDecl.defs = classDecl.defs.append(getByIdDecl(modelClassName));
-            for (JCTree tree: classDecl.defs) {
-                if (!(tree instanceof JCTree.JCMethodDecl)) {
-                    continue;
-                }
-                if (!"listByIds".equals(((JCTree.JCMethodDecl) tree).name.toString())) {
-                    continue;
-                }
-                messager.printMessage(Diagnostic.Kind.NOTE, "method: " + tree.toString());
-//                messager.printMessage(Diagnostic.Kind.NOTE, "mods: \n" + ((JCTree.JCMethodDecl) tree).mods);
-//                messager.printMessage(Diagnostic.Kind.NOTE, "name: \n" + ((JCTree.JCMethodDecl) tree).name);
-//                messager.printMessage(Diagnostic.Kind.NOTE, "restype: \n" + ((JCTree.JCMethodDecl) tree).restype);
-//                messager.printMessage(Diagnostic.Kind.NOTE, "typarams: \n" + ((JCTree.JCMethodDecl) tree).typarams);
-//                messager.printMessage(Diagnostic.Kind.NOTE, "recvparam: \n" + ((JCTree.JCMethodDecl) tree).recvparam);
-//                messager.printMessage(Diagnostic.Kind.NOTE, "params: \n" + ((JCTree.JCMethodDecl) tree).params);
-//                messager.printMessage(Diagnostic.Kind.NOTE, "thrown: \n" + ((JCTree.JCMethodDecl) tree).thrown);
-//                messager.printMessage(Diagnostic.Kind.NOTE, "body: \n" + ((JCTree.JCMethodDecl) tree).body);
-//                messager.printMessage(Diagnostic.Kind.NOTE, "defaultValue: \n" + ((JCTree.JCMethodDecl) tree).defaultValue);
-//                messager.printMessage(Diagnostic.Kind.NOTE, "sym: \n" + ((JCTree.JCMethodDecl) tree).sym);
-//                messager.printMessage(Diagnostic.Kind.NOTE, "pos: \n" + ((JCTree.JCMethodDecl) tree).pos);
-//                messager.printMessage(Diagnostic.Kind.NOTE, "type: \n" + ((JCTree.JCMethodDecl) tree).type);
-                for (JCTree.JCVariableDecl variableDecl: ((JCTree.JCMethodDecl) tree).params) {
-//                    messager.printMessage(Diagnostic.Kind.NOTE, "mods: \n" + variableDecl.mods);
-//                    messager.printMessage(Diagnostic.Kind.NOTE, "name: \n" + variableDecl.name);
-//                    messager.printMessage(Diagnostic.Kind.NOTE, "nameexpr: \n" + variableDecl.nameexpr);
-//                    messager.printMessage(Diagnostic.Kind.NOTE, "vartype: \n" + variableDecl.vartype);
-//                    messager.printMessage(Diagnostic.Kind.NOTE, "init: \n" + variableDecl.init);
-//                    messager.printMessage(Diagnostic.Kind.NOTE, "sym: \n" + variableDecl.sym);
-                    if (!(variableDecl.vartype instanceof JCTree.JCTypeApply)) {
-                        continue;
-                    }
-                    JCTree.JCTypeApply vartype = (JCTree.JCTypeApply) variableDecl.vartype;
-                    messager.printMessage(Diagnostic.Kind.NOTE, "clazz: " + vartype.clazz);
-                    messager.printMessage(Diagnostic.Kind.NOTE, "arguments: " + vartype.arguments);
-                    for (JCTree.JCExpression arg: vartype.arguments) {
-                        if (!(arg instanceof JCTree.JCWildcard)) {
-                            continue;
-                        }
-                        JCTree.JCWildcard wildArg = (JCTree.JCWildcard) arg;
-                        messager.printMessage(Diagnostic.Kind.NOTE, "kind: " + wildArg.kind);
-                        messager.printMessage(Diagnostic.Kind.NOTE, "kind.kind: " + wildArg.kind.kind);
-                        messager.printMessage(Diagnostic.Kind.NOTE, "kind.kind.name(): " + wildArg.kind.kind.name());
-                        messager.printMessage(Diagnostic.Kind.NOTE, "inner: " + wildArg.inner);
-                    }
-                }
-            }
+            classDecl.defs = classDecl.defs
+                    .append(getByIdDecl(modelClassName))
+                    .append(listByIdsDecl(modelClassName))
+                    .append(getOneDecl(modelClassName))
+                    .append(listDecl(modelClassName))
+                    .append(listByMapDecl(modelClassName))
+                    .append(pageDecl(modelClassName))
+                    .append(countDecl(modelClassName))
+                    .append(updateByIdDecl(modelClassName))
+                    .append(updateBatchByIdDecl(modelClassName))
+                    .append(saveDecl(modelClassName))
+                    .append(saveBatchDecl(modelClassName))
+                    .append(saveOrUpdateDecl(modelClassName))
+                    .append(saveOrUpdateBatchDecl(modelClassName))
+                    .append(removeByIdDecl())
+                    .append(removeByIdsDecl());
         }
         return true;
     }
 
     private static final String OVERRIDE = "java.lang.Override";
-
+    private static final String TRANSACTIONAL = "org.springframework.transaction.annotation.Transactional";
     private static final String CACHE_ABLE = "org.springframework.cache.annotation.Cacheable";
+    private static final String CACHE_EVICT = "org.springframework.cache.annotation.CacheEvict";
+    private static final String CACHING = "org.springframework.cache.annotation.Caching";
+
+    private static final String STRING = "java.lang.String";
+    private static final String OBJECT = "java.lang.Object";
+    private static final String SERIALIZABLE = "java.io.Serializable";
+    private static final String COLLECTION = "java.util.Collection";
+    private static final String LIST = "java.util.List";
+    private static final String MAP = "java.util.Map";
+    private static final String I_PAGE = "com.baomidou.mybatisplus.core.metadata.IPage";
+    private static final String WRAPPER = "com.baomidou.mybatisplus.core.conditions.Wrapper";
 
     private static final String CACHE_NAMES = "cacheNames";
+    private static final String KEY_GENERATOR = "keyGenerator";
+    private static final String ALL_ENTRIES = "allEntries";
+    private static final String EVICT = "evict";
+
     private static final String BASE_CACHE_NAME = "BASE_CACHE_NAME";
     private static final String CASUAL_CACHE_NAME = "CASUAL_CACHE_NAME";
 
-    private static final String KEY_GENERATOR = "BASE_CACHE_NAME";
     private static final String DEFAULT_BASE_KEY_GENERATOR = "defaultBaseKeyGenerator";
     private static final String DEFAULT_CASUAL_KEY_GENERATOR = "defaultCasualKeyGenerator";
     private static final String DEFAULT_EVICT_BY_ID_KEY_GENERATOR = "defaultEvictByIdKeyGenerator";
@@ -98,42 +84,535 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     private static final String DEFAULT_EVICT_BY_ENTITY_KEY_GENERATOR = "defaultEvictByEntityKeyGenerator";
     private static final String DEFAULT_EVICT_BY_ENTITIES_KEY_GENERATOR = "defaultEvictByEntitiesKeyGenerator";
 
-    private static final String SERIALIZABLE = "java.io.Serializable";
-
-    private static final String GET_BY_ID = "getById";
-    private static final String SUPER_GET_BY_ID = "super.getById";
-    private static final String ID = "id";
-
     /**
-     * getById方法
+     * getById
      */
     private JCTree.JCMethodDecl getByIdDecl(String modelClassName) {
-        // @Override注解
-        JCTree.JCAnnotation overrideAnnotation = treeMaker.Annotation(memberAccess(OVERRIDE), List.nil());
-        // @Cacheable注解 TODO 还是有错
-        JCTree.JCAnnotation cacheableAnnotation = treeMaker.Annotation(memberAccess(CACHE_ABLE),
-            List.of(makeAssignment(memberAccess(CACHE_NAMES), memberAccess(BASE_CACHE_NAME)),
-                makeAssignment(memberAccess(KEY_GENERATOR), memberAccess(DEFAULT_BASE_KEY_GENERATOR))));
+        final String method = "getById";
+        final String superMethod = "super.getById";
+        final String id = "id";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(overrideAnnotation, cacheableAnnotation);
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), baseCache());
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = getNameFromString(GET_BY_ID);
+        Name name = getNameFromString(method);
         // 返回值类型
         JCTree.JCExpression returnType = memberAccess(modelClassName);
-        // 泛型参数列表
-        List<JCTree.JCTypeParameter> methodGenericParams = List.nil();
         // 参数列表
-        List<JCTree.JCVariableDecl> parameters =
-            List.of(makeVarDef(treeMaker.Modifiers(Flags.PARAMETER), ID, memberAccess(SERIALIZABLE), null));
-        // 抛出异常
-        List<JCTree.JCExpression> throwsClauses = List.nil();
+        List<JCTree.JCVariableDecl> parameters = List.of(typeParamDecl(id, SERIALIZABLE));
         // 方法体
-        List<JCTree.JCStatement> statementList =
-            List.of(treeMaker.Return(
-                treeMaker.Apply(List.of(memberAccess(SERIALIZABLE)), memberAccess(SUPER_GET_BY_ID), List.of(memberAccess(ID)))));
-        JCTree.JCBlock block = treeMaker.Block(0, statementList);
-        return treeMaker.MethodDef(modifiers, name, returnType, methodGenericParams, parameters, throwsClauses, block, null);
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, id)));
+        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
+    }
+
+    /**
+     * listByIds
+     */
+    public JCTree.JCMethodDecl listByIdsDecl(String modelClassName) {
+        final String method = "listByIds";
+        final String superMethod = "super.listByIds";
+        final String idList = "idList";
+        // 注解列表
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), baseCache());
+        // 访问修饰词和注解列表
+        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
+        // 方法名
+        Name name = getNameFromString(method);
+        // 返回值类型
+        JCTree.JCExpression returnType = collectionType(modelClassName);
+        // 参数列表
+        List<JCTree.JCVariableDecl> parameters = List.of(extendsWildCollectionParamDecl(idList, SERIALIZABLE));
+        // 方法体
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, idList)));
+        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
+    }
+
+    /**
+     * getOne
+     */
+    public JCTree.JCMethodDecl getOneDecl(String modelClassName) {
+        final String method = "getOne";
+        final String superMethod = "super.getOne";
+        final String queryWrapper = "queryWrapper";
+        final String throwEx = "throwEx";
+        // 注解列表
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache());
+        // 访问修饰词和注解列表
+        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
+        // 方法名
+        Name name = getNameFromString(method);
+        // 返回值类型
+        JCTree.JCExpression returnType = memberAccess(modelClassName);
+        // 参数列表
+        List<JCTree.JCVariableDecl> parameters = List.of(wrapperParamDecl(queryWrapper, modelClassName), booleanParamDecl(throwEx));
+        // 方法体
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, queryWrapper, throwEx)));
+        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
+    }
+
+    /**
+     * list
+     */
+    public JCTree.JCMethodDecl listDecl(String modelClassName) {
+        final String method = "list";
+        final String superMethod = "super.list";
+        final String queryWrapper = "queryWrapper";
+        // 注解列表
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache());
+        // 访问修饰词和注解列表
+        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
+        // 方法名
+        Name name = getNameFromString(method);
+        // 返回值类型
+        JCTree.JCExpression returnType = listType(modelClassName);
+        // 参数列表
+        List<JCTree.JCVariableDecl> parameters = List.of(wrapperParamDecl(queryWrapper, modelClassName));
+        // 方法体
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, queryWrapper)));
+        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
+    }
+
+    /**
+     * listByMap
+     */
+    public JCTree.JCMethodDecl listByMapDecl(String modelClassName) {
+        final String method = "listByMap";
+        final String superMethod = "super.listByMap";
+        final String columnMap = "columnMap";
+        // 注解列表
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache());
+        // 访问修饰词和注解列表
+        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
+        // 方法名
+        Name name = getNameFromString(method);
+        // 返回值类型
+        JCTree.JCExpression returnType = collectionType(modelClassName);
+        // 参数列表
+        List<JCTree.JCVariableDecl> parameters = List.of(mapParamDecl(columnMap, STRING, OBJECT));
+        // 方法体
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, columnMap)));
+        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
+    }
+
+    /**
+     * page
+     */
+    public JCTree.JCMethodDecl pageDecl(String modelClassName) {
+        final String method = "page";
+        final String superMethod = "super.page";
+        final String page = "page";
+        final String queryWrapper = "queryWrapper";
+        // 注解列表
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache());
+        // 访问修饰词和注解列表
+        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
+        // 方法名
+        Name name = getNameFromString(method);
+        // 返回值类型
+        JCTree.JCExpression returnType = iPageType(modelClassName);
+        // 参数列表
+        List<JCTree.JCVariableDecl> parameters = List.of(iPageParamDecl(page, modelClassName), wrapperParamDecl(queryWrapper, modelClassName));
+        // 方法体
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, page, queryWrapper)));
+        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
+    }
+
+    /**
+     * count
+     */
+    private JCTree.JCMethodDecl countDecl(String modelClassName) {
+        final String method = "count";
+        final String superMethod = "super.count";
+        final String queryWrapper = "queryWrapper";
+        // 注解列表
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache());
+        // 访问修饰词和注解列表
+        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
+        // 方法名
+        Name name = getNameFromString(method);
+        // 返回值类型
+        JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.INT);
+        // 参数列表
+        List<JCTree.JCVariableDecl> parameters = List.of(wrapperParamDecl(queryWrapper, modelClassName));
+        // 方法体
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, queryWrapper)));
+        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
+    }
+
+    /**
+     * updateById
+     */
+    private JCTree.JCMethodDecl updateByIdDecl(String modelClassName) {
+        final String method = "updateById";
+        final String superMethod = "super.updateById";
+        final String entity = "entity";
+        // 注解列表
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), evicts(byEntityEvict(), casualEvict()));
+        // 访问修饰词和注解列表
+        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
+        // 方法名
+        Name name = getNameFromString(method);
+        // 返回值类型
+        JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
+        // 参数列表
+        List<JCTree.JCVariableDecl> parameters = List.of(typeParamDecl(entity, modelClassName));
+        // 方法体
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, entity)));
+        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
+    }
+
+    /**
+     * updateBatchById
+     */
+    private JCTree.JCMethodDecl updateBatchByIdDecl(String modelClassName) {
+        final String method = "updateBatchById";
+        final String superMethod = "super.updateBatchById";
+        final String entityList = "entityList";
+        final String batchSize = "batchSize";
+        // 注解列表
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), evicts(byEntitiesEvict(), casualEvict()));
+        // 访问修饰词和注解列表
+        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
+        // 方法名
+        Name name = getNameFromString(method);
+        // 返回值类型
+        JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
+        // 参数列表
+        List<JCTree.JCVariableDecl> parameters = List.of(collectionParamDecl(entityList, modelClassName), intParamDecl(batchSize));
+        // 方法体
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, entityList, batchSize)));
+        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
+    }
+
+    /**
+     * save
+     */
+    private JCTree.JCMethodDecl saveDecl(String modelClassName) {
+        final String method = "save";
+        final String superMethod = "super.save";
+        final String entity = "entity";
+        // 注解列表
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), casualEvict());
+        // 访问修饰词和注解列表
+        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
+        // 方法名
+        Name name = getNameFromString(method);
+        // 返回值类型
+        JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
+        // 参数列表
+        List<JCTree.JCVariableDecl> parameters = List.of(typeParamDecl(entity, modelClassName));
+        // 方法体
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, entity)));
+        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
+    }
+
+    /**
+     * saveBatch
+     */
+    private JCTree.JCMethodDecl saveBatchDecl(String modelClassName) {
+        final String method = "saveBatch";
+        final String superMethod = "super.saveBatch";
+        final String entityList = "entityList";
+        final String batchSize = "batchSize";
+        // 注解列表
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), casualEvict());
+        // 访问修饰词和注解列表
+        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
+        // 方法名
+        Name name = getNameFromString(method);
+        // 返回值类型
+        JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
+        // 参数列表
+        List<JCTree.JCVariableDecl> parameters = List.of(collectionParamDecl(entityList, modelClassName), intParamDecl(batchSize));
+        // 方法体
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, entityList, batchSize)));
+        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
+    }
+
+    /**
+     * saveOrUpdate
+     */
+    private JCTree.JCMethodDecl saveOrUpdateDecl(String modelClassName) {
+        final String method = "saveOrUpdate";
+        final String superMethod = "super.saveOrUpdate";
+        final String entity = "entity";
+        // 注解列表
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), evicts(byEntityEvict(), casualEvict()));
+        // 访问修饰词和注解列表
+        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
+        // 方法名
+        Name name = getNameFromString(method);
+        // 返回值类型
+        JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
+        // 参数列表
+        List<JCTree.JCVariableDecl> parameters = List.of(typeParamDecl(entity, modelClassName));
+        // 方法体
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, entity)));
+        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
+    }
+
+    /**
+     * saveOrUpdateBatch
+     */
+    private JCTree.JCMethodDecl saveOrUpdateBatchDecl(String modelClassName) {
+        final String method = "saveOrUpdateBatch";
+        final String superMethod = "super.saveOrUpdateBatch";
+        final String entityList = "entityList";
+        final String batchSize = "batchSize";
+        // 注解列表
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), evicts(byEntitiesEvict(), casualEvict()));
+        // 访问修饰词和注解列表
+        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
+        // 方法名
+        Name name = getNameFromString(method);
+        // 返回值类型
+        JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
+        // 参数列表
+        List<JCTree.JCVariableDecl> parameters = List.of(collectionParamDecl(entityList, modelClassName), intParamDecl(batchSize));
+        // 方法体
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, entityList, batchSize)));
+        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
+    }
+
+    /**
+     * removeById
+     */
+    private JCTree.JCMethodDecl removeByIdDecl() {
+        final String method = "removeById";
+        final String superMethod = "super.removeById";
+        final String id = "id";
+        // 注解列表
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), evicts(byIdEvict(), casualEvict()));
+        // 访问修饰词和注解列表
+        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
+        // 方法名
+        Name name = getNameFromString(method);
+        // 返回值类型
+        JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
+        // 参数列表
+        List<JCTree.JCVariableDecl> parameters = List.of(typeParamDecl(id, SERIALIZABLE));
+        // 方法体
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, id)));
+        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
+    }
+
+    /**
+     * removeByIds
+     */
+    private JCTree.JCMethodDecl removeByIdsDecl() {
+        final String method = "removeByIds";
+        final String superMethod = "super.removeByIds";
+        final String idList = "idList";
+        // 注解列表
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), evicts(byIdsEvict(), casualEvict()));
+        // 访问修饰词和注解列表
+        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
+        // 方法名
+        Name name = getNameFromString(method);
+        // 返回值类型
+        JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
+        // 参数列表
+        List<JCTree.JCVariableDecl> parameters = List.of(extendsWildCollectionParamDecl(idList, SERIALIZABLE));
+        // 方法体
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, idList)));
+        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
+    }
+
+    /**
+     * Collection&lt;innerClassName>
+     */
+    private JCTree.JCTypeApply collectionType(String innerClassName) {
+        return treeMaker.TypeApply(memberAccess(COLLECTION), List.of(memberAccess(innerClassName)));
+    }
+
+    /**
+     * Collection&lt;innerClassName>
+     */
+    private JCTree.JCTypeApply extendsWildCollectionType(String innerClassName) {
+        return treeMaker.TypeApply(memberAccess(COLLECTION),
+                List.of(treeMaker.Wildcard(treeMaker.TypeBoundKind(BoundKind.EXTENDS), memberAccess(innerClassName))));
+    }
+
+    /**
+     * List&lt;innerClassName>
+     */
+    private JCTree.JCTypeApply listType(String innerClassName) {
+        return treeMaker.TypeApply(memberAccess(LIST), List.of(memberAccess(innerClassName)));
+    }
+
+    /**
+     * Wrapper&lt;innerClassName>
+     */
+    private JCTree.JCTypeApply wrapperType(String innerClassName) {
+        return treeMaker.TypeApply(memberAccess(WRAPPER), List.of(memberAccess(innerClassName)));
+    }
+
+    /**
+     * Map&lt;keyClassName, valueClassName>
+     */
+    private JCTree.JCTypeApply mapType(String keyClassName, String valueClassName) {
+        return treeMaker.TypeApply(memberAccess(MAP), List.of(memberAccess(keyClassName), memberAccess(valueClassName)));
+    }
+
+    /**
+     * IPage&lt;innerClassName>
+     */
+    private JCTree.JCTypeApply iPageType(String innerClassName) {
+        return treeMaker.TypeApply(memberAccess(I_PAGE), List.of(memberAccess(innerClassName)));
+    }
+
+    /**
+     * boolean
+     */
+    private JCTree.JCVariableDecl booleanParamDecl(String name) {
+        return treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), getNameFromString(name), treeMaker.TypeIdent(TypeTag.BOOLEAN), null);
+    }
+
+    /**
+     * int
+     */
+    private JCTree.JCVariableDecl intParamDecl(String name) {
+        return treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), getNameFromString(name), treeMaker.TypeIdent(TypeTag.INT), null);
+    }
+
+    /**
+     * 包装类型
+     */
+    private JCTree.JCVariableDecl typeParamDecl(String name, String modelClassName) {
+        return treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), getNameFromString(name), memberAccess(modelClassName), null);
+    }
+
+    private JCTree.JCVariableDecl collectionParamDecl(String name, String innerClassName) {
+        return treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), getNameFromString(name), collectionType(innerClassName), null);
+    }
+
+    /**
+     * Collection&lt;? extends innerClassName>
+     */
+    private JCTree.JCVariableDecl extendsWildCollectionParamDecl(String name, String innerClassName) {
+        return treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), getNameFromString(name), extendsWildCollectionType(innerClassName), null);
+    }
+
+    /**
+     * Wrapper&lt;innerClassName>
+     */
+    private JCTree.JCVariableDecl wrapperParamDecl(String name, String innerClassName) {
+        return treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), getNameFromString(name), wrapperType(innerClassName), null);
+    }
+
+    /**
+     * Map&lt;keyClassName, valueClassName>
+     */
+    private JCTree.JCVariableDecl mapParamDecl(String name, String keyClassName, String valueClassName) {
+        return treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), getNameFromString(name), mapType(keyClassName, valueClassName), null);
+    }
+
+    /**
+     * IPage&lt;innerClassName>
+     */
+    private JCTree.JCVariableDecl iPageParamDecl(String name, String innerClassName) {
+        return treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), getNameFromString(name), iPageType(innerClassName), null);
+    }
+
+    /**
+     * 调用父类方法
+     */
+    private JCTree.JCReturn superReturn(String method, String... parameters) {
+        List<JCTree.JCExpression> expressions = List.nil();
+        for (String parameter : parameters) {
+            expressions = expressions.append(memberAccess(parameter));
+        }
+        return treeMaker.Return(treeMaker.Apply(List.nil(), memberAccess(method), expressions));
+    }
+
+    /**
+     * {@code @Override}
+     */
+    private JCTree.JCAnnotation override() {
+        return treeMaker.Annotation(memberAccess(OVERRIDE), List.nil());
+    }
+
+    /**
+     * {@code @Transactional}
+     */
+    private JCTree.JCAnnotation transactional() {
+        return treeMaker.Annotation(memberAccess(TRANSACTIONAL), List.nil());
+    }
+
+    /**
+     * {@code @Cacheable(cacheNames=BASE_CACHE_NAME, keyGenerator="defaultBaseKeyGenerator")}
+     */
+    private JCTree.JCAnnotation baseCache() {
+        return treeMaker.Annotation(memberAccess(CACHE_ABLE),
+                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), memberAccess(BASE_CACHE_NAME)),
+                        treeMaker.Assign(memberAccess(KEY_GENERATOR), treeMaker.Literal(DEFAULT_BASE_KEY_GENERATOR))));
+    }
+
+    /**
+     * {@code @Cacheable(cacheNames=CASUAL_CACHE_NAME, keyGenerator="defaultCasualKeyGenerator")}
+     */
+    private JCTree.JCAnnotation casualCache() {
+        return treeMaker.Annotation(memberAccess(CACHE_ABLE),
+                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), memberAccess(CASUAL_CACHE_NAME)),
+                        treeMaker.Assign(memberAccess(KEY_GENERATOR), treeMaker.Literal(DEFAULT_CASUAL_KEY_GENERATOR))));
+    }
+
+    /**
+     * {@code @CacheEvict(cacheNames=BASE_CACHE_NAME, keyGenerator="defaultEvictByIdKeyGenerator")}
+     */
+    private JCTree.JCAnnotation byIdEvict() {
+        return treeMaker.Annotation(memberAccess(CACHE_EVICT),
+                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), memberAccess(BASE_CACHE_NAME)),
+                        treeMaker.Assign(memberAccess(KEY_GENERATOR), treeMaker.Literal(DEFAULT_EVICT_BY_ID_KEY_GENERATOR))));
+    }
+
+    /**
+     * {@code @CacheEvict(cacheNames=BASE_CACHE_NAME, keyGenerator="defaultEvictByIdsKeyGenerator")}
+     */
+    private JCTree.JCAnnotation byIdsEvict() {
+        return treeMaker.Annotation(memberAccess(CACHE_EVICT),
+                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), memberAccess(BASE_CACHE_NAME)),
+                        treeMaker.Assign(memberAccess(KEY_GENERATOR), treeMaker.Literal(DEFAULT_EVICT_BY_IDS_KEY_GENERATOR))));
+    }
+
+    /**
+     * {@code @CacheEvict(cacheNames=BASE_CACHE_NAME, keyGenerator="defaultEvictByEntityKeyGenerator")}
+     */
+    private JCTree.JCAnnotation byEntityEvict() {
+        return treeMaker.Annotation(memberAccess(CACHE_EVICT),
+                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), memberAccess(BASE_CACHE_NAME)),
+                        treeMaker.Assign(memberAccess(KEY_GENERATOR), treeMaker.Literal(DEFAULT_EVICT_BY_ENTITY_KEY_GENERATOR))));
+    }
+
+    /**
+     * {@code @CacheEvict(cacheNames=BASE_CACHE_NAME, keyGenerator="defaultEvictByEntitiesKeyGenerator")}
+     */
+    private JCTree.JCAnnotation byEntitiesEvict() {
+        return treeMaker.Annotation(memberAccess(CACHE_EVICT),
+                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), memberAccess(BASE_CACHE_NAME)),
+                        treeMaker.Assign(memberAccess(KEY_GENERATOR), treeMaker.Literal(DEFAULT_EVICT_BY_ENTITIES_KEY_GENERATOR))));
+    }
+
+    /**
+     * {@code @CacheEvict(cacheNames=CASUAL_CACHE_NAME, allEntries=true)}
+     */
+    private JCTree.JCAnnotation casualEvict() {
+        return treeMaker.Annotation(memberAccess(CACHE_EVICT),
+                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), memberAccess(CASUAL_CACHE_NAME)),
+                        treeMaker.Assign(memberAccess(ALL_ENTRIES), treeMaker.Literal(true))));
+    }
+
+    private JCTree.JCAnnotation evicts(JCTree.JCAnnotation... cacheEvicts) {
+        if (cacheEvicts.length == 0) {
+            messager.printMessage(Diagnostic.Kind.ERROR, "evict不能为空!");
+        }
+        List<JCTree.JCExpression> evicts = List.nil();
+        for (JCTree.JCAnnotation cacheEvict : cacheEvicts) {
+            evicts = evicts.append(cacheEvict);
+        }
+        JCTree.JCExpression rhs = treeMaker.NewArray(null, List.nil(), evicts);
+        return treeMaker.Annotation(memberAccess(CACHING),
+                List.of(treeMaker.Assign(memberAccess(EVICT), rhs)));
     }
 }
