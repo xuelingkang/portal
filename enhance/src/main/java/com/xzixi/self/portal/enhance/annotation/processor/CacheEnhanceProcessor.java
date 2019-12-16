@@ -607,7 +607,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
 
     private JCTree.JCAnnotation evicts(JCTree.JCAnnotation... cacheEvicts) {
         if (cacheEvicts.length == 0) {
-            messager.printMessage(Diagnostic.Kind.ERROR, "evict不能为空!");
+            messager.printMessage(Diagnostic.Kind.ERROR, "cacheEvicts不能为空！");
         }
         List<JCTree.JCExpression> evicts = List.nil();
         for (JCTree.JCAnnotation cacheEvict : cacheEvicts) {
