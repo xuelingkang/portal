@@ -28,28 +28,60 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         // 遍历所有@CacheEnhance标注的类
         for (Element element: roundEnv.getElementsAnnotatedWith(CacheEnhance.class)) {
+            CacheEnhance cacheEnhance = element.getAnnotation(CacheEnhance.class);
+
             // 类定义
             JCTree.JCClassDecl classDecl = (JCTree.JCClassDecl) elements.getTree(element);
 
             // 当前类对应的实体类的类名
             String modelClassName = ((JCTree.JCTypeApply) classDecl.extending.getTree()).arguments.get(1).type.toString();
+
             // 修改类，追加方法
-            classDecl.defs = classDecl.defs
-                    .append(getByIdDecl(modelClassName))
-                    .append(listByIdsDecl(modelClassName))
-                    .append(getOneDecl(modelClassName))
-                    .append(listDecl(modelClassName))
-                    .append(listByMapDecl(modelClassName))
-                    .append(pageDecl(modelClassName))
-                    .append(countDecl(modelClassName))
-                    .append(updateByIdDecl(modelClassName))
-                    .append(updateBatchByIdDecl(modelClassName))
-                    .append(saveDecl(modelClassName))
-                    .append(saveBatchDecl(modelClassName))
-                    .append(saveOrUpdateDecl(modelClassName))
-                    .append(saveOrUpdateBatchDecl(modelClassName))
-                    .append(removeByIdDecl())
-                    .append(removeByIdsDecl());
+            if (cacheEnhance.getById()) {
+                classDecl.defs = classDecl.defs.append(getByIdDecl(modelClassName));
+            }
+            if (cacheEnhance.listByIds()) {
+                classDecl.defs = classDecl.defs.append(listByIdsDecl(modelClassName));
+            }
+            if (cacheEnhance.getOne()) {
+                classDecl.defs = classDecl.defs.append(getOneDecl(modelClassName));
+            }
+            if (cacheEnhance.list()) {
+                classDecl.defs = classDecl.defs.append(listDecl(modelClassName));
+            }
+            if (cacheEnhance.listByMap()) {
+                classDecl.defs = classDecl.defs.append(listByMapDecl(modelClassName));
+            }
+            if (cacheEnhance.page()) {
+                classDecl.defs = classDecl.defs.append(pageDecl(modelClassName));
+            }
+            if (cacheEnhance.count()) {
+                classDecl.defs = classDecl.defs.append(countDecl(modelClassName));
+            }
+            if (cacheEnhance.updateById()) {
+                classDecl.defs = classDecl.defs.append(updateByIdDecl(modelClassName));
+            }
+            if (cacheEnhance.updateBatchById()) {
+                classDecl.defs = classDecl.defs.append(updateBatchByIdDecl(modelClassName));
+            }
+            if (cacheEnhance.save()) {
+                classDecl.defs = classDecl.defs.append(saveDecl(modelClassName));
+            }
+            if (cacheEnhance.saveBatch()) {
+                classDecl.defs = classDecl.defs.append(saveBatchDecl(modelClassName));
+            }
+            if (cacheEnhance.saveOrUpdate()) {
+                classDecl.defs = classDecl.defs.append(saveOrUpdateDecl(modelClassName));
+            }
+            if (cacheEnhance.saveOrUpdateBatch()) {
+                classDecl.defs = classDecl.defs.append(saveOrUpdateBatchDecl(modelClassName));
+            }
+            if (cacheEnhance.removeById()) {
+                classDecl.defs = classDecl.defs.append(removeByIdDecl());
+            }
+            if (cacheEnhance.removeByIds()) {
+                classDecl.defs = classDecl.defs.append(removeByIdsDecl());
+            }
         }
         // 返回true，其他processor不再处理这个注解
         return true;
