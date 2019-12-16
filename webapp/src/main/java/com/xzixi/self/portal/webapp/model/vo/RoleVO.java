@@ -1,5 +1,6 @@
 package com.xzixi.self.portal.webapp.model.vo;
 
+import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.Role;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -20,7 +21,7 @@ public class RoleVO extends Role {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "权限集合")
-    private Collection<AuthorityVO> authorities;
+    private Collection<Authority> authorities;
     @ApiModelProperty(value = "权限标识")
     private Collection<String> authoritySignals;
 

@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.service.impl;
+package com.xzixi.self.portal.webapp.service.data.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xzixi.self.portal.webapp.exception.ProjectException;
 import com.xzixi.self.portal.webapp.mapper.IBaseMapper;
 import com.xzixi.self.portal.webapp.model.BaseModel;
-import com.xzixi.self.portal.webapp.service.IBaseService;
+import com.xzixi.self.portal.webapp.service.data.IBaseData;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +20,7 @@ import java.util.function.Function;
  *
  * @author 薛凌康
  */
-public class BaseServiceImpl<M extends IBaseMapper<T>, T extends BaseModel> extends ServiceImpl<M, T> implements IBaseService<T> {
+public class BaseDataImpl<M extends IBaseMapper<T>, T extends BaseModel> extends ServiceImpl<M, T> implements IBaseData<T> {
 
     @Override
     public final boolean removeByMap(Map<String, Object> columnMap) {

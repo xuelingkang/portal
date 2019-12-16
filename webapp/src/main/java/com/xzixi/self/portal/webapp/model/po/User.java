@@ -1,6 +1,7 @@
 package com.xzixi.self.portal.webapp.model.po;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.xzixi.self.portal.webapp.group.SystemUserInsert;
 import com.xzixi.self.portal.webapp.group.WebsiteUserInsert;
 import com.xzixi.self.portal.webapp.model.BaseModel;
 import com.xzixi.self.portal.webapp.model.enums.Sex;
@@ -27,24 +28,25 @@ public class User extends BaseModel {
     @ApiModelProperty(value = "用户id")
     private Integer id;
     @ApiModelProperty(value = "用户名")
-    @NotBlank(groups = {WebsiteUserInsert.class}, message = "用户名不能为空！")
+    @NotBlank(groups = {WebsiteUserInsert.class, SystemUserInsert.class}, message = "用户名不能为空！")
     private String username;
     @ApiModelProperty(value = "密码")
-    @NotEmpty(groups = {WebsiteUserInsert.class}, message = "密码不能为空！")
+    @NotEmpty(groups = {WebsiteUserInsert.class, SystemUserInsert.class}, message = "密码不能为空！")
     private String password;
     @ApiModelProperty(value = "邮箱")
-    @NotBlank(groups = {WebsiteUserInsert.class}, message = "邮箱不能为空！")
+    @NotBlank(groups = {WebsiteUserInsert.class, SystemUserInsert.class}, message = "邮箱不能为空！")
     private String email;
     @ApiModelProperty(value = "昵称")
-    @NotBlank(groups = {WebsiteUserInsert.class}, message = "昵称不能为空！")
+    @NotBlank(groups = {WebsiteUserInsert.class, SystemUserInsert.class}, message = "昵称不能为空！")
     private String nickname;
     @ApiModelProperty(value = "性别", allowableValues = "MALE,FEMALE")
-    @NotNull(groups = {WebsiteUserInsert.class}, message = "性别不能为空！")
+    @NotNull(groups = {WebsiteUserInsert.class, SystemUserInsert.class}, message = "性别不能为空！")
     private Sex sex;
     @ApiModelProperty(value = "生日")
-    @NotNull(groups = {WebsiteUserInsert.class}, message = "生日不能为空！")
+    @NotNull(groups = {WebsiteUserInsert.class, SystemUserInsert.class}, message = "生日不能为空！")
     private Long birth;
     @ApiModelProperty(value = "用户类型", allowableValues = "SYSTEM,WEBSITE")
+    @NotNull(groups = {SystemUserInsert.class}, message = "用户类型不能为空！")
     private UserType type;
     @ApiModelProperty(value = "创建时间")
     private Long createTime;

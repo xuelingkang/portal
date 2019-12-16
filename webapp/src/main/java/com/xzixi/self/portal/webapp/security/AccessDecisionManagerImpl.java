@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.security;
 
 import com.xzixi.self.portal.webapp.model.vo.RoleVO;
-import com.xzixi.self.portal.webapp.service.IRoleService;
+import com.xzixi.self.portal.webapp.service.business.IRoleBusiness;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDecisionManager;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class AccessDecisionManagerImpl implements AccessDecisionManager {
 
     @Autowired
-    private IRoleService roleService;
+    private IRoleBusiness roleBusiness;
 
     @Override
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
@@ -35,7 +35,7 @@ public class AccessDecisionManagerImpl implements AccessDecisionManager {
         Collection<? extends GrantedAuthority> authorities;
         if (authentication instanceof AnonymousAuthenticationToken) {
             // 查询游客权限
-            RoleVO guest = roleService.buildGuest();
+            RoleVO guest = roleBusiness.buildGuest();
             authorities = guest.getAuthorities().stream()
                     .map(authority -> new SimpleGrantedAuthority(String.valueOf(authority.getId())))
                     .collect(Collectors.toSet());

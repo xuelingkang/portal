@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xzixi.self.portal.webapp.exception.LogicException;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
-import com.xzixi.self.portal.webapp.service.IUserService;
+import com.xzixi.self.portal.webapp.service.business.IUserBusiness;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,19 +19,19 @@ import org.springframework.stereotype.Service;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private IUserService userService;
+    private IUserBusiness userBusiness;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (StringUtils.isEmpty(username)) {
             throw new LogicException(400, "用户名username不能为空！");
         }
-        User user = userService.getOne(new QueryWrapper<>(new User().setUsername(username)));
+        User user = userBusiness.getOne(new QueryWrapper<>(new User().setUsername(username)));
         if (user==null) {
             throw new UsernameNotFoundException("用户名："+ username + "不存在！");
         }
 
-        UserVO userVO = userService.buildUserVO(user);
+        UserVO userVO = userBusiness.buildUserVO(user);
         return new UserDetailsImpl(userVO);
     }
 }

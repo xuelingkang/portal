@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.security;
 
 import com.xzixi.self.portal.webapp.model.Result;
-import com.xzixi.self.portal.webapp.service.ITokenService;
+import com.xzixi.self.portal.webapp.service.data.ITokenData;
 import com.xzixi.self.portal.webapp.util.RequestUtil;
 import com.xzixi.self.portal.webapp.util.ResponseUtil;
 import io.jsonwebtoken.MalformedJwtException;
@@ -28,14 +28,14 @@ import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICAT
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
     @Autowired
-    private ITokenService tokenService;
+    private ITokenData tokenData;
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String tokenStr = RequestUtil.getHeaderOrParameter(request, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_NAME);
         if (StringUtils.isNotBlank(tokenStr) && !"null".equals(tokenStr)) {
             try {
-                tokenService.deleteToken(tokenStr);
+                tokenData.deleteToken(tokenStr);
             } catch (MalformedJwtException e) {
                 Result<?> result = new Result<>(401, "非法认证！", null);
                 ResponseUtil.printJson(response, result);

@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.security;
 
-import com.xzixi.self.portal.webapp.model.vo.AuthorityVO;
+import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,7 +29,7 @@ public class UserDetailsImpl implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
         if (user != null) {
-            Collection<AuthorityVO> authorityCollection = user.getAuthorities();
+            Collection<Authority> authorityCollection = user.getAuthorities();
             if (CollectionUtils.isNotEmpty(authorityCollection)) {
                 authorityCollection.forEach(authority ->
                         authorities.add(new SimpleGrantedAuthority(String.valueOf(authority.getId()))));

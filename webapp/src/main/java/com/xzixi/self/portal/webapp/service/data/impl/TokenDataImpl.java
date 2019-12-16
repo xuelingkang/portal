@@ -1,8 +1,8 @@
-package com.xzixi.self.portal.webapp.service.impl;
+package com.xzixi.self.portal.webapp.service.data.impl;
 
 import com.xzixi.self.portal.webapp.exception.LogicException;
 import com.xzixi.self.portal.webapp.model.po.Token;
-import com.xzixi.self.portal.webapp.service.ITokenService;
+import com.xzixi.self.portal.webapp.service.data.ITokenData;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang.StringUtils;
@@ -24,7 +24,7 @@ import static com.xzixi.self.portal.webapp.constant.SecurityConstant.*;
  * @author 薛凌康
  */
 @Service
-public class TokenServiceImpl implements ITokenService {
+public class TokenDataImpl implements ITokenData {
 
     private static final String LOGIN_USER_KEY = "LOGIN_USER_KEY";
     private static Key keySingleTon = null;
@@ -80,7 +80,7 @@ public class TokenServiceImpl implements ITokenService {
      */
     private Key getKeyInstance() {
         if (keySingleTon == null) {
-            synchronized (TokenServiceImpl.class) {
+            synchronized (TokenDataImpl.class) {
                 if (keySingleTon == null) {
                     byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(AUTHENTICATION_JWT_SECRET);
                     keySingleTon = new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS256.getJcaName());

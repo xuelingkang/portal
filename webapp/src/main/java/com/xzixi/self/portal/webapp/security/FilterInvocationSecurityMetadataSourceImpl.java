@@ -3,7 +3,7 @@ package com.xzixi.self.portal.webapp.security;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xzixi.self.portal.webapp.model.enums.AuthorityProtocol;
 import com.xzixi.self.portal.webapp.model.po.Authority;
-import com.xzixi.self.portal.webapp.service.IAuthorityService;
+import com.xzixi.self.portal.webapp.service.business.IAuthorityBusiness;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
@@ -26,14 +26,14 @@ import java.util.Optional;
 public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocationSecurityMetadataSource {
 
     @Autowired
-    private IAuthorityService authorityService;
+    private IAuthorityBusiness authorityBusiness;
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
         HttpServletRequest request = ((FilterInvocation) object).getHttpRequest();
 
         // 查询所有http类型的权限
-        List<Authority> authorities = authorityService
+        List<Authority> authorities = authorityBusiness
                 .list(new QueryWrapper<>(new Authority().setProtocol(AuthorityProtocol.HTTP)));
 
         // 匹配权限

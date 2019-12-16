@@ -5,8 +5,8 @@ import com.xzixi.self.portal.webapp.model.po.Token;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
 import com.xzixi.self.portal.webapp.security.UserDetailsImpl;
-import com.xzixi.self.portal.webapp.service.ITokenService;
-import com.xzixi.self.portal.webapp.service.IUserService;
+import com.xzixi.self.portal.webapp.service.business.IUserBusiness;
+import com.xzixi.self.portal.webapp.service.data.ITokenData;
 import com.xzixi.self.portal.webapp.util.RequestUtil;
 import com.xzixi.self.portal.webapp.util.ResponseUtil;
 import io.jsonwebtoken.MalformedJwtException;
@@ -45,16 +45,16 @@ public class TokenFilter extends OncePerRequestFilter {
             new AntPathRequestMatcher("/user", "POST")
     };
     @Autowired
-    private ITokenService tokenService;
+    private ITokenData tokenData;
     @Autowired
-    private IUserService userService;
+    private IUserBusiness userBusiness;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String tokenStr = RequestUtil.getHeaderOrParameter(request, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_NAME);
         if (StringUtils.isNotEmpty(tokenStr) && !"null".equals(tokenStr)) {
             try {
-                Token token = tokenService.getToken(tokenStr);
+                Token token = tokenData.getToken(tokenStr);
                 if (token == null) {
                     boolean ignore = Arrays.stream(IGNORE_PATH).anyMatch(requestMatcher -> requestMatcher.matches(request));
                     if (!ignore) {
@@ -62,7 +62,7 @@ public class TokenFilter extends OncePerRequestFilter {
                         ResponseUtil.printJson(response, result);
                     }
                 } else {
-                    token = checkExpireTime(token, response);
+                    token = checkExpireTime(token);
                     setAuthentication(token, response);
                 }
             } catch (MalformedJwtException e) {
@@ -80,7 +80,7 @@ public class TokenFilter extends OncePerRequestFilter {
      * @param token token对象
      */
     private void setAuthentication(Token token, HttpServletResponse response) {
-        User user = userService.getById(token.getUserId());
+        User user = userBusiness.getById(token.getUserId());
 
         // 检查是否冻结
         if (user.getLocked()) {
@@ -88,7 +88,7 @@ public class TokenFilter extends OncePerRequestFilter {
             ResponseUtil.printJson(response, result);
         }
 
-        UserVO userVO = userService.buildUserVO(user);
+        UserVO userVO = userBusiness.buildUserVO(user);
 
         UserDetailsImpl userDetails = new UserDetailsImpl(userVO);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
@@ -102,12 +102,12 @@ public class TokenFilter extends OncePerRequestFilter {
      * @param token Token
      * @return Token
      */
-    private Token checkExpireTime(Token token, HttpServletResponse response) {
+    private Token checkExpireTime(Token token) {
         long expireTime = token.getExpireTime();
         long currentTime = System.currentTimeMillis();
         if (expireTime - currentTime <= MINUTES_10) {
             // 刷新token
-            token = tokenService.refreshToken(token.getTokenStr());
+            token = tokenData.refreshToken(token.getTokenStr());
         }
         return token;
     }

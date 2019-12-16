@@ -1,9 +1,9 @@
-package com.xzixi.self.portal.webapp.service.impl;
+package com.xzixi.self.portal.webapp.service.data.impl;
 
 import com.xzixi.self.portal.enhance.annotation.CacheEnhance;
 import com.xzixi.self.portal.webapp.mapper.RoleAuthorityLinkMapper;
 import com.xzixi.self.portal.webapp.model.po.RoleAuthorityLink;
-import com.xzixi.self.portal.webapp.service.IRoleAuthorityLinkService;
+import com.xzixi.self.portal.webapp.service.data.IRoleAuthorityLinkData;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @CacheEnhance
-public class RoleAuthorityLinkServiceImpl extends BaseServiceImpl<RoleAuthorityLinkMapper, RoleAuthorityLink> implements IRoleAuthorityLinkService {
+public class RoleAuthorityLinkDataImpl extends BaseDataImpl<RoleAuthorityLinkMapper, RoleAuthorityLink> implements IRoleAuthorityLinkData {
 }

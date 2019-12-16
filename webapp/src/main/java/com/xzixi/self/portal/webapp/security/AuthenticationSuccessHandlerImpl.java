@@ -4,8 +4,8 @@ import com.xzixi.self.portal.webapp.model.Result;
 import com.xzixi.self.portal.webapp.model.po.Token;
 import com.xzixi.self.portal.webapp.model.vo.TokenVO;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
-import com.xzixi.self.portal.webapp.service.ITokenService;
-import com.xzixi.self.portal.webapp.service.IUserService;
+import com.xzixi.self.portal.webapp.service.business.IUserBusiness;
+import com.xzixi.self.portal.webapp.service.data.ITokenData;
 import com.xzixi.self.portal.webapp.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -23,9 +23,9 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
     @Autowired
-    private ITokenService tokenService;
+    private ITokenData tokenData;
     @Autowired
-    private IUserService userService;
+    private IUserBusiness userBusiness;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -33,7 +33,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         UserVO user = userDetails.getUser();
 
         // 保存token
-        Token token = tokenService.saveToken(user.getId());
+        Token token = tokenData.saveToken(user.getId());
 
         // 返回token
         TokenVO tokenVO = new TokenVO(token).setUser((UserVO) user.ignoreProperties("password"));
@@ -42,6 +42,6 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
 
         // 设置登录时间
         user.setLoginTime(token.getLoginTime());
-        userService.updateById(user);
+        userBusiness.updateById(user);
     }
 }
