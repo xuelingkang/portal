@@ -42,7 +42,7 @@ public class TokenFilter extends OncePerRequestFilter {
             // 登出
             new AntPathRequestMatcher("/logout", "GET"),
             // 注册
-            new AntPathRequestMatcher("/user", "POST")
+            new AntPathRequestMatcher("/website/user", "POST")
     };
     @Autowired
     private ITokenData tokenData;
