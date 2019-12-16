@@ -60,6 +60,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     private static final String CACHE_EVICT = "org.springframework.cache.annotation.CacheEvict";
     private static final String CACHING = "org.springframework.cache.annotation.Caching";
 
+    private static final String EXCEPTION = "java.lang.Exception.class";
     private static final String STRING = "java.lang.String";
     private static final String OBJECT = "java.lang.Object";
     private static final String SERIALIZABLE = "java.io.Serializable";
@@ -69,6 +70,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     private static final String I_PAGE = "com.baomidou.mybatisplus.core.metadata.IPage";
     private static final String WRAPPER = "com.baomidou.mybatisplus.core.conditions.Wrapper";
 
+    private static final String ROLLBACK_FOR = "rollbackFor";
     private static final String CACHE_NAMES = "cacheNames";
     private static final String KEY_GENERATOR = "keyGenerator";
     private static final String ALL_ENTRIES = "allEntries";
@@ -534,10 +536,10 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     }
 
     /**
-     * {@code @Transactional}
+     * {@code @Transactional(rollbackFor = Exception.class)}
      */
     private JCTree.JCAnnotation transactional() {
-        return treeMaker.Annotation(memberAccess(TRANSACTIONAL), List.nil());
+        return treeMaker.Annotation(memberAccess(TRANSACTIONAL), List.of(treeMaker.Assign(memberAccess(ROLLBACK_FOR), memberAccess(EXCEPTION))));
     }
 
     /**
