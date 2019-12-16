@@ -9,7 +9,6 @@ import com.xzixi.self.portal.webapp.service.IAuthorityService;
 import com.xzixi.self.portal.webapp.service.IRoleAuthorityLinkService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -27,7 +26,6 @@ public class AuthorityServiceImpl extends BaseServiceImpl<AuthorityMapper, Autho
     private IRoleAuthorityLinkService roleAuthorityLinkService;
 
     @Override
-    @Cacheable(value = CASUAL_CACHE_NAME, keyGenerator = "defaultCasualKeyGenerator")
     public Collection<Authority> listByRoleIds(Collection<Integer> roleIds) {
         List<RoleAuthorityLink> roleAuthorityLinks = roleAuthorityLinkService
                 .list(new QueryWrapper<RoleAuthorityLink>().in("role_id", roleIds));
