@@ -1,6 +1,7 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xzixi.self.portal.enhance.annotation.CacheEnhance;
 import com.xzixi.self.portal.webapp.mapper.AuthorityMapper;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.RoleAuthorityLink;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
  * @author 薛凌康
  */
 @Service
+@CacheEnhance
 public class AuthorityServiceImpl extends BaseServiceImpl<AuthorityMapper, Authority> implements IAuthorityService {
 
     @Autowired
