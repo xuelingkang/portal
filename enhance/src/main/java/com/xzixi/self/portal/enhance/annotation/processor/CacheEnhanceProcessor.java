@@ -51,6 +51,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
                     .append(removeByIdDecl())
                     .append(removeByIdsDecl());
         }
+        // 返回true，其他processor不再处理这个注解
         return true;
     }
 
@@ -518,7 +519,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     }
 
     /**
-     * 调用父类方法
+     * 调用父类方法并return
      */
     private JCTree.JCReturn superReturn(String method, String... parameters) {
         List<JCTree.JCExpression> expressions = List.nil();
@@ -605,6 +606,9 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
                         treeMaker.Assign(memberAccess(ALL_ENTRIES), treeMaker.Literal(true))));
     }
 
+    /**
+     * {@code @Caching(evict={})}
+     */
     private JCTree.JCAnnotation evicts(JCTree.JCAnnotation... cacheEvicts) {
         if (cacheEvicts.length == 0) {
             messager.printMessage(Diagnostic.Kind.ERROR, "cacheEvicts不能为空！");
