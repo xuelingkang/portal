@@ -12,7 +12,7 @@ public class Token implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private String tokenStr;
+    private String signature;
     private Integer userId;
     private Long loginTime;
     private Long expireTime;

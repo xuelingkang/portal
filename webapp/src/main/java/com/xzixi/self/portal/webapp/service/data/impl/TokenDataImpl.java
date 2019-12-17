@@ -34,24 +34,24 @@ public class TokenDataImpl implements ITokenData {
     @Override
     public Token saveToken(Integer userId) {
         String uuid = UUID.randomUUID().toString();
-        String tokenStr = createTokenStr(uuid);
+        String signature = createSignature(uuid);
         long loginTime = System.currentTimeMillis();
         long expireTime = loginTime + AUTHENTICATION_EXPIRE_SECOND * 1000;
         Token token = new Token();
-        token.setTokenStr(tokenStr).setUserId(userId).setLoginTime(loginTime).setExpireTime(expireTime);
+        token.setSignature(signature).setUserId(userId).setLoginTime(loginTime).setExpireTime(expireTime);
         redisTemplate.boundValueOps(getTokenKey(uuid)).set(token, AUTHENTICATION_EXPIRE_SECOND, TimeUnit.SECONDS);
         return token;
     }
 
     @Override
-    public Token getToken(String tokenStr) {
-        String uuid = getUuidFromTokenStr(tokenStr);
+    public Token getToken(String signature) {
+        String uuid = getUuidFromSignature(signature);
         return (Token) redisTemplate.opsForValue().get(getTokenKey(uuid));
     }
 
     @Override
-    public Token refreshToken(String tokenStr) {
-        String uuid = getUuidFromTokenStr(tokenStr);
+    public Token refreshToken(String signature) {
+        String uuid = getUuidFromSignature(signature);
         Token token = (Token) redisTemplate.opsForValue().get(getTokenKey(uuid));
         if (token != null) {
             token.setExpireTime(System.currentTimeMillis() + AUTHENTICATION_EXPIRE_SECOND * 1000);
@@ -61,8 +61,8 @@ public class TokenDataImpl implements ITokenData {
     }
 
     @Override
-    public void deleteToken(String tokenStr) {
-        String uuid = getUuidFromTokenStr(tokenStr);
+    public void deleteToken(String signature) {
+        String uuid = getUuidFromSignature(signature);
         Token token = (Token) redisTemplate.opsForValue().get(getTokenKey(uuid));
         if (token != null) {
             redisTemplate.delete(getTokenKey(uuid));
@@ -96,7 +96,7 @@ public class TokenDataImpl implements ITokenData {
      * @param uuid uuid
      * @return token字符串
      */
-    private String createTokenStr(String uuid) {
+    private String createSignature(String uuid) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(LOGIN_USER_KEY, uuid);
         return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS256, getKeyInstance()).compact();
@@ -105,14 +105,14 @@ public class TokenDataImpl implements ITokenData {
     /**
      * 根据token字符串解密出uuid
      *
-     * @param tokenStr token字符串
+     * @param signature token字符串
      * @return uuid，用来获取redis中的token对象
      */
-    private String getUuidFromTokenStr(String tokenStr) {
-        if (StringUtils.isEmpty(tokenStr) || "null".equals(tokenStr)) {
+    private String getUuidFromSignature(String signature) {
+        if (StringUtils.isEmpty(signature) || "null".equals(signature)) {
             throw new LogicException(401, "认证信息无效！");
         }
-        Map<String, Object> jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(tokenStr).getBody();
+        Map<String, Object> jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(signature).getBody();
         if (jwtClaims != null) {
             Object uuid = jwtClaims.get(LOGIN_USER_KEY);
             if (uuid != null) {

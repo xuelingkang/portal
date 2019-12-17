@@ -32,10 +32,10 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        String tokenStr = RequestUtil.getHeaderOrParameter(request, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_NAME);
-        if (StringUtils.isNotBlank(tokenStr) && !"null".equals(tokenStr)) {
+        String signature = RequestUtil.getHeaderOrParameter(request, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_NAME);
+        if (StringUtils.isNotBlank(signature) && !"null".equals(signature)) {
             try {
-                tokenData.deleteToken(tokenStr);
+                tokenData.deleteToken(signature);
             } catch (MalformedJwtException e) {
                 Result<?> result = new Result<>(401, "非法认证！", null);
                 ResponseUtil.printJson(response, result);

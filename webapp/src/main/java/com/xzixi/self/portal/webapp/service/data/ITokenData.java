@@ -18,23 +18,23 @@ public interface ITokenData {
     /**
      * 获取token对象
      *
-     * @param tokenStr token字符串
+     * @param signature token签名
      * @return Token
      */
-    Token getToken(String tokenStr);
+    Token getToken(String signature);
 
     /**
      * 更新token过期时间
      *
-     * @param tokenStr token字符串
+     * @param signature token签名
      * @return Token
      */
-    Token refreshToken(String tokenStr);
+    Token refreshToken(String signature);
 
     /**
-     * 删除token字符串对应的token对象
+     * 删除token签名对应的token对象
      *
-     * @param tokenStr token字符串
+     * @param signature token签名
      */
-    void deleteToken(String tokenStr);
+    void deleteToken(String signature);
 }

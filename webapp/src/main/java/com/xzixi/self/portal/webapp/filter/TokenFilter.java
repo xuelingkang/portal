@@ -51,10 +51,10 @@ public class TokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String tokenStr = RequestUtil.getHeaderOrParameter(request, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_NAME);
-        if (StringUtils.isNotEmpty(tokenStr) && !"null".equals(tokenStr)) {
+        String signature = RequestUtil.getHeaderOrParameter(request, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_NAME);
+        if (StringUtils.isNotEmpty(signature) && !"null".equals(signature)) {
             try {
-                Token token = tokenData.getToken(tokenStr);
+                Token token = tokenData.getToken(signature);
                 if (token == null) {
                     boolean ignore = Arrays.stream(IGNORE_PATH).anyMatch(requestMatcher -> requestMatcher.matches(request));
                     if (!ignore) {
@@ -107,7 +107,7 @@ public class TokenFilter extends OncePerRequestFilter {
         long currentTime = System.currentTimeMillis();
         if (expireTime - currentTime <= MINUTES_10) {
             // 刷新token
-            token = tokenData.refreshToken(token.getTokenStr());
+            token = tokenData.refreshToken(token.getSignature());
         }
         return token;
     }
