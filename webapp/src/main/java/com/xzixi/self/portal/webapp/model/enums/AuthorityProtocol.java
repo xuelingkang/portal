@@ -1,12 +1,20 @@
 package com.xzixi.self.portal.webapp.model.enums;
 
+import com.xzixi.self.portal.webapp.model.IBaseEnum;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * @author 薛凌康
  */
-public enum AuthorityProtocol {
+@Getter
+@AllArgsConstructor
+public enum AuthorityProtocol implements IBaseEnum {
 
     /** http */
-    HTTP,
+    HTTP("HTTP"),
     /** websocket */
-    WEBSOCKET
+    WEBSOCKET("WEBSOCKET");
+
+    private String value;
 }

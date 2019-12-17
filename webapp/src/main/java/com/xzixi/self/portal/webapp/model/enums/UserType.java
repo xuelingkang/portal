@@ -1,14 +1,22 @@
 package com.xzixi.self.portal.webapp.model.enums;
 
+import com.xzixi.self.portal.webapp.model.IBaseEnum;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * 用户类型
  *
  * @author 薛凌康
  */
-public enum UserType {
+@Getter
+@AllArgsConstructor
+public enum UserType implements IBaseEnum {
 
     /** 系统用户 */
-    SYSTEM,
+    SYSTEM("系统用户"),
     /** 网站用户 */
-    WEBSITE
+    WEBSITE("网站用户");
+
+    private String value;
 }
