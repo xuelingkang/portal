@@ -1,21 +1,19 @@
 package com.xzixi.self.portal.webapp.config.filter;
 
+import com.xzixi.self.portal.webapp.base.util.RequestUtil;
+import com.xzixi.self.portal.webapp.base.util.ResponseUtil;
+import com.xzixi.self.portal.webapp.config.security.UserDetailsImpl;
+import com.xzixi.self.portal.webapp.data.ITokenData;
 import com.xzixi.self.portal.webapp.model.Result;
 import com.xzixi.self.portal.webapp.model.po.Token;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
-import com.xzixi.self.portal.webapp.config.security.UserDetailsImpl;
 import com.xzixi.self.portal.webapp.service.IUserService;
-import com.xzixi.self.portal.webapp.data.ITokenData;
-import com.xzixi.self.portal.webapp.base.util.RequestUtil;
-import com.xzixi.self.portal.webapp.base.util.ResponseUtil;
 import io.jsonwebtoken.MalformedJwtException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -24,7 +22,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
 
 import static com.xzixi.self.portal.webapp.base.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
 import static com.xzixi.self.portal.webapp.base.constant.SecurityConstant.AUTHENTICATION_PARAMETER_NAME;
@@ -36,14 +33,6 @@ import static com.xzixi.self.portal.webapp.base.constant.SecurityConstant.AUTHEN
 public class TokenFilter extends OncePerRequestFilter {
 
     private static final Long MINUTES_10 = 10 * 60 * 1000L;
-    private static final RequestMatcher[] IGNORE_PATH = {
-            // 登录
-            new AntPathRequestMatcher("/login", "POST"),
-            // 登出
-            new AntPathRequestMatcher("/logout", "GET"),
-            // 注册
-            new AntPathRequestMatcher("/website/user", "POST")
-    };
     @Autowired
     private ITokenData tokenData;
     @Autowired
@@ -55,13 +44,7 @@ public class TokenFilter extends OncePerRequestFilter {
         if (StringUtils.isNotEmpty(signature) && !"null".equals(signature)) {
             try {
                 Token token = tokenData.getToken(signature);
-                if (token == null) {
-                    boolean ignore = Arrays.stream(IGNORE_PATH).anyMatch(requestMatcher -> requestMatcher.matches(request));
-                    if (!ignore) {
-                        Result<?> result = new Result<>(401, "认证信息无效！", null);
-                        ResponseUtil.printJson(response, result);
-                    }
-                } else {
+                if (token != null) {
                     token = checkExpireTime(token);
                     setAuthentication(token, response);
                 }

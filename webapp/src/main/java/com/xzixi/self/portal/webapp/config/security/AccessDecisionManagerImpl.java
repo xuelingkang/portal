@@ -31,6 +31,10 @@ public class AccessDecisionManagerImpl implements AccessDecisionManager {
 
     @Override
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
+        if (CollectionUtils.isEmpty(configAttributes)) {
+            // 权限管理范围外的请求，直接放行
+            return;
+        }
         // 当前用户权限
         Collection<? extends GrantedAuthority> authorities;
         if (authentication instanceof AnonymousAuthenticationToken) {
@@ -43,7 +47,7 @@ public class AccessDecisionManagerImpl implements AccessDecisionManager {
             // 当前用户权限
             authorities = authentication.getAuthorities();
         }
-        if (CollectionUtils.isNotEmpty(configAttributes) && CollectionUtils.isNotEmpty(authorities)) {
+        if (CollectionUtils.isNotEmpty(authorities)) {
             // 需求权限id
             String authorityId = ((List<ConfigAttribute>) configAttributes).get(0).getAttribute();
             // 检查是否包含权限

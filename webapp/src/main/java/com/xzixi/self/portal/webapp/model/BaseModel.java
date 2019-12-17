@@ -1,5 +1,6 @@
 package com.xzixi.self.portal.webapp.model;
 
+import com.xzixi.self.portal.webapp.base.exception.ProjectException;
 import com.xzixi.self.portal.webapp.base.util.FieldUtil;
 import com.xzixi.self.portal.webapp.base.util.SerializeUtil;
 import org.apache.commons.lang3.ArrayUtils;
@@ -41,7 +42,13 @@ public abstract class BaseModel implements Cloneable, Serializable {
         if (ArrayUtils.isEmpty(ignoreProperties)) {
             return this;
         }
-        BaseModel model = this.clone();
+        Class<? extends BaseModel> cls = this.getClass();
+        BaseModel model;
+        try {
+            model = cls.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            throw new ProjectException(String.format("使用无参构造器创建[%s]实例失败！", cls.getName()));
+        }
         BeanUtils.copyProperties(this, model, ignoreProperties);
         return model;
     }
@@ -67,7 +74,7 @@ public abstract class BaseModel implements Cloneable, Serializable {
     }
 
     /**
-     * 流复制
+     * 深度复制
      *
      * @return BaseModel
      */
