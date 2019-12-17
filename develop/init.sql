@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2019-12-05 00:41:26
+Date: 2019-12-18 01:23:02
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -166,7 +166,7 @@ CREATE TABLE `qrtz_scheduler_state` (
 -- ----------------------------
 -- Records of qrtz_scheduler_state
 -- ----------------------------
-INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-RKG4OBL1575477397876', '1575477458278', '10000');
+INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-RKG4OBL1576602486476', '1576602911392', '10000');
 
 -- ----------------------------
 -- Table structure for qrtz_simple_triggers
@@ -262,18 +262,23 @@ DROP TABLE IF EXISTS `t_authority`;
 CREATE TABLE `t_authority` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `protocol` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '协议类型',
-  `category` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '权限分组',
+  `category` varchar(15) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '权限分组',
   `seq` int(5) NOT NULL DEFAULT '0' COMMENT '权限顺序',
   `pattern` varchar(50) COLLATE utf8mb4_bin DEFAULT '' COMMENT '权限的ant path',
   `method` varchar(20) COLLATE utf8mb4_bin DEFAULT '' COMMENT '请求方法',
   `description` varchar(200) COLLATE utf8mb4_bin DEFAULT '' COMMENT '权限描述',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='权限';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='权限';
 
 -- ----------------------------
 -- Records of t_authority
 -- ----------------------------
-INSERT INTO `t_authority` VALUES ('1', 'HTTP', 'USER', '100', '/user/website', 'POST', '注册');
+INSERT INTO `t_authority` VALUES ('1', 'HTTP', 'AUTHORIZATION', '100', '/login', 'POST', '登录');
+INSERT INTO `t_authority` VALUES ('2', 'HTTP', 'AUTHORIZATION', '200', '/logout', 'GET', '登出');
+INSERT INTO `t_authority` VALUES ('3', 'HTTP', 'USER', '100', '/website/user', 'POST', '网站用户注册');
+INSERT INTO `t_authority` VALUES ('4', 'HTTP', 'USER', '200', '/system/user', 'POST', '添加用户');
+INSERT INTO `t_authority` VALUES ('5', 'HTTP', 'ENUM', '100', '/enum', 'GET', '获取所有枚举');
+INSERT INTO `t_authority` VALUES ('6', 'HTTP', 'ENUM', '200', '/enum/*', 'GET', '根据类名获取枚举');
 
 -- ----------------------------
 -- Table structure for t_role
@@ -293,7 +298,7 @@ CREATE TABLE `t_role` (
 -- Records of t_role
 -- ----------------------------
 INSERT INTO `t_role` VALUES ('1', 'ROLE_GUEST', '100', '0', '游客');
-INSERT INTO `t_role` VALUES ('2', 'ROLE_SYSTEM', '200', '0', '系统');
+INSERT INTO `t_role` VALUES ('2', 'ROLE_BASE', '200', '0', '基础');
 
 -- ----------------------------
 -- Table structure for t_role_authority_link
@@ -304,12 +309,16 @@ CREATE TABLE `t_role_authority_link` (
   `role_id` int(11) NOT NULL COMMENT '角色id',
   `authority_id` int(11) NOT NULL COMMENT '权限id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='角色权限关联';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='角色权限关联';
 
 -- ----------------------------
 -- Records of t_role_authority_link
 -- ----------------------------
 INSERT INTO `t_role_authority_link` VALUES ('1', '1', '1');
+INSERT INTO `t_role_authority_link` VALUES ('2', '1', '3');
+INSERT INTO `t_role_authority_link` VALUES ('3', '2', '2');
+INSERT INTO `t_role_authority_link` VALUES ('4', '2', '5');
+INSERT INTO `t_role_authority_link` VALUES ('5', '2', '6');
 
 -- ----------------------------
 -- Table structure for t_user
@@ -331,12 +340,12 @@ CREATE TABLE `t_user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `t_user_uk_username` (`username`),
   UNIQUE KEY `t_user_uk_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='用户';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='用户';
 
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
-INSERT INTO `t_user` VALUES ('1', 'xuelingkang', '$2a$10$Yhi40dmktwZ.YQDEDUwosepYgkEB5/AJDkaN8JddSG5cdBx9qNf8m', 'xuelingkang@163.com', '薛凌康', 'MALE', '655833600000', 'SYSTEM', '1575471070644', '1575475484696', '0', '0');
+INSERT INTO `t_user` VALUES ('1', 'xuelingkang', '$2a$10$Yhi40dmktwZ.YQDEDUwosepYgkEB5/AJDkaN8JddSG5cdBx9qNf8m', 'xuelingkang@163.com', '薛凌康', 'MALE', '655833600000', 'SYSTEM', '1575471070644', '1576602881017', '0', '0');
 
 -- ----------------------------
 -- Table structure for t_user_role_link
