@@ -16,7 +16,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.Collections;
 
-import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
+import static com.xzixi.self.portal.webapp.base.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
 
 /**
  * swagger2配置

@@ -3,7 +3,7 @@ package com.xzixi.self.portal.webapp.mapper;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xzixi.self.portal.webapp.exception.ProjectException;
+import com.xzixi.self.portal.webapp.base.exception.ProjectException;
 import com.xzixi.self.portal.webapp.model.BaseModel;
 
 import java.util.List;

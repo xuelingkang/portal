@@ -3,9 +3,9 @@ package com.xzixi.self.portal.webapp.config;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.xzixi.self.portal.webapp.model.BaseModel;
-import com.xzixi.self.portal.webapp.redis.FuzzyEvictRedisCacheManager;
-import com.xzixi.self.portal.webapp.util.SerializeUtil;
-import com.xzixi.self.portal.webapp.util.TypeUtil;
+import com.xzixi.self.portal.webapp.config.redis.FuzzyEvictRedisCacheManager;
+import com.xzixi.self.portal.webapp.base.util.SerializeUtil;
+import com.xzixi.self.portal.webapp.base.util.TypeUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
@@ -29,8 +29,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.xzixi.self.portal.webapp.constant.RedisConstant.KEYS_SEPARATOR;
-import static com.xzixi.self.portal.webapp.constant.RedisConstant.REGEX_KEY_PREFIX;
+import static com.xzixi.self.portal.webapp.base.constant.RedisConstant.KEYS_SEPARATOR;
+import static com.xzixi.self.portal.webapp.base.constant.RedisConstant.REGEX_KEY_PREFIX;
 
 /**
  * redis缓存配置

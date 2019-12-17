@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.model;
 
-import com.xzixi.self.portal.webapp.util.FieldUtil;
-import com.xzixi.self.portal.webapp.util.SerializeUtil;
+import com.xzixi.self.portal.webapp.base.util.FieldUtil;
+import com.xzixi.self.portal.webapp.base.util.SerializeUtil;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeanUtils;
 

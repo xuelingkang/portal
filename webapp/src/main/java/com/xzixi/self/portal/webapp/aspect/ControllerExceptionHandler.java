@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.aspect;
 
-import com.xzixi.self.portal.webapp.exception.LogicException;
-import com.xzixi.self.portal.webapp.exception.ProjectException;
+import com.xzixi.self.portal.webapp.base.exception.LogicException;
+import com.xzixi.self.portal.webapp.base.exception.ProjectException;
 import com.xzixi.self.portal.webapp.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

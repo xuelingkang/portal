@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.config;
 
-import com.xzixi.self.portal.webapp.filter.SwaggerFilter;
+import com.xzixi.self.portal.webapp.config.filter.SwaggerFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

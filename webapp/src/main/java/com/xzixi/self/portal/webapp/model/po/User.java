@@ -1,8 +1,8 @@
 package com.xzixi.self.portal.webapp.model.po;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.xzixi.self.portal.webapp.group.SystemUserInsert;
-import com.xzixi.self.portal.webapp.group.WebsiteUserInsert;
+import com.xzixi.self.portal.webapp.model.valid.SystemUserInsert;
+import com.xzixi.self.portal.webapp.model.valid.WebsiteUserInsert;
 import com.xzixi.self.portal.webapp.model.BaseModel;
 import com.xzixi.self.portal.webapp.model.enums.Sex;
 import com.xzixi.self.portal.webapp.model.enums.UserType;

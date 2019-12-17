@@ -9,6 +9,7 @@
         <groupId>com.xzixi.self.portal</groupId>
         <version>1.0.0</version>
     </parent>
+
     <artifactId>webapp</artifactId>
 
     <properties>

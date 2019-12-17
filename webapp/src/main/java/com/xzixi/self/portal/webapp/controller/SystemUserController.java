@@ -1,12 +1,12 @@
 package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.xzixi.self.portal.webapp.exception.LogicException;
-import com.xzixi.self.portal.webapp.group.SystemUserInsert;
+import com.xzixi.self.portal.webapp.base.exception.LogicException;
+import com.xzixi.self.portal.webapp.model.valid.SystemUserInsert;
 import com.xzixi.self.portal.webapp.model.Result;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
-import com.xzixi.self.portal.webapp.service.business.IUserBusiness;
+import com.xzixi.self.portal.webapp.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections.CollectionUtils;
@@ -28,18 +28,18 @@ import java.util.List;
 public class SystemUserController {
 
     @Autowired
-    private IUserBusiness userBusiness;
+    private IUserService userService;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @PostMapping
     @ApiOperation(value = "添加用户")
     public Result<UserVO> save(@Validated({SystemUserInsert.class}) UserVO user) {
-        List<User> usersByUsername = userBusiness.list(new QueryWrapper<>(new User().setUsername(user.getUsername())));
+        List<User> usersByUsername = userService.list(new QueryWrapper<>(new User().setUsername(user.getUsername())));
         if (CollectionUtils.isNotEmpty(usersByUsername)) {
             throw new LogicException(400, "用户名重复！");
         }
-        List<User> usersByEmail = userBusiness.list(new QueryWrapper<>(new User().setEmail(user.getEmail())));
+        List<User> usersByEmail = userService.list(new QueryWrapper<>(new User().setEmail(user.getEmail())));
         if (CollectionUtils.isNotEmpty(usersByEmail)) {
             throw new LogicException(400, "邮箱重复！");
         }
@@ -48,8 +48,8 @@ public class SystemUserController {
         // 加密密码
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // 保存用户
-        userBusiness.save(user, user.getRoles());
+        userService.save(user, user.getRoles());
 
-        return new Result<UserVO>().setData(userBusiness.buildUserVO(user));
+        return new Result<UserVO>().setData(userService.buildUserVO(user));
     }
 }
