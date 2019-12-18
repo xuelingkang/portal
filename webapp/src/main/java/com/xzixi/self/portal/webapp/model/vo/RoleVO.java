@@ -15,7 +15,7 @@ import java.util.Collection;
  */
 @Data
 @NoArgsConstructor
-@ApiModel(value = "角色")
+@ApiModel(value = "角色VO")
 public class RoleVO extends Role {
 
     private static final long serialVersionUID = 1L;

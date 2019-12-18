@@ -89,6 +89,16 @@ systemctl enable docker
 
 sleep 5
 
+# 数据库初始化脚本
+tee init.sql <<-'EOF'
+SET CHARACTER SET utf8mb4;
+DROP DATABASE IF EXISTS `portal`;
+CREATE DATABASE `portal` DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+USE `portal`;
+EOF
+cat portal.sql >> init.sql
+rm -rf portal.sql
+
 # mysql配置文件
 mkdir -p /etc/mysql
 tee /etc/mysql/my.cnf <<-'EOF'

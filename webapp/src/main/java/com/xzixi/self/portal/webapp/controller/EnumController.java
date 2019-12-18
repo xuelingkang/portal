@@ -1,5 +1,6 @@
 package com.xzixi.self.portal.webapp.controller;
 
+import com.xzixi.self.portal.webapp.base.exception.LogicException;
 import com.xzixi.self.portal.webapp.model.Result;
 import com.xzixi.self.portal.webapp.model.vo.EnumVO;
 import com.xzixi.self.portal.webapp.service.IEnumService;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotBlank;
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * @author 薛凌康
@@ -28,8 +29,9 @@ public class EnumController {
 
     @GetMapping
     @ApiOperation(value = "获取所有枚举")
-    public Result<Set<EnumVO>> listAll() {
-        return new Result<Set<EnumVO>>().setData(enumService.listAll());
+    public Result<Collection<EnumVO>> listAll() {
+        Collection<EnumVO> enums = enumService.listAll();
+        return new Result<Collection<EnumVO>>().setData(enums);
     }
 
     @GetMapping("/{name}")
@@ -38,6 +40,10 @@ public class EnumController {
             @ApiParam(value = "枚举类名", required = true)
             @NotBlank(message = "枚举类名不能为空")
             @PathVariable String name) {
-        return new Result<EnumVO>().setData(enumService.listByName(name));
+        EnumVO enumVO = enumService.listByName(name);
+        if (enumVO == null) {
+            throw new LogicException(400, "枚举不存在！");
+        }
+        return new Result<EnumVO>().setData(enumVO);
     }
 }

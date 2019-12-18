@@ -43,7 +43,7 @@
         <dependency>
             <groupId>com.xzixi.self.portal</groupId>
             <artifactId>enhance</artifactId>
-            <version>1.0.0</version>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <!-- web -->

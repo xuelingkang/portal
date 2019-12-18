@@ -12,7 +12,7 @@ import org.springframework.beans.BeanUtils;
  */
 @Data
 @NoArgsConstructor
-@ApiModel(value = "权限")
+@ApiModel(value = "权限VO")
 public class AuthorityVO extends Authority {
 
     private static final long serialVersionUID = 1L;
