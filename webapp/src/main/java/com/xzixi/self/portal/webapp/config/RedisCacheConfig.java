@@ -91,10 +91,6 @@ public class RedisCacheConfig {
                 new LinkedHashMap<>(), true, redisTemplate);
     }
 
-    private static final String KEY_SEPARATOR = ":";
-    private static final String GET_BY_ID_METHOD_NAME = "getById";
-    private static final String LIST_BY_IDS_METHOD_NAME = "listByIds";
-
     /**
      * 根据id生成删除缓存key
      *
