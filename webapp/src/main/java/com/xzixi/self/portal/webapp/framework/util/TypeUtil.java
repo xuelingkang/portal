@@ -8,13 +8,16 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * @author 薛凌康
+ */
 public class TypeUtil {
 
     /**
      * 判断是否基本类型或字面量类型
      *
-     * @param clazz
-     * @return
+     * @param clazz Class
+     * @return boolean
      */
     public static boolean isSimpleValueType(Class<?> clazz) {
         return (ClassUtils.isPrimitiveOrWrapper(clazz) || clazz.isEnum() || CharSequence.class.isAssignableFrom(clazz)
@@ -25,8 +28,8 @@ public class TypeUtil {
     /**
      * 判断是否数组类型
      *
-     * @param clazz
-     * @return
+     * @param clazz Class
+     * @return boolean
      */
     public static boolean isArrayType(Class<?> clazz) {
         return clazz.isArray();
@@ -35,8 +38,8 @@ public class TypeUtil {
     /**
      * 判断是否集合类型
      *
-     * @param clazz
-     * @return
+     * @param clazz Class
+     * @return boolean
      */
     public static boolean isCollectionType(Class<?> clazz) {
         return Collection.class.isAssignableFrom(clazz);
