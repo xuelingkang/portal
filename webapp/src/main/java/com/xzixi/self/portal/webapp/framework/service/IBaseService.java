@@ -1,10 +1,10 @@
-package com.xzixi.self.portal.webapp.service;
+package com.xzixi.self.portal.webapp.framework.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.xzixi.self.portal.webapp.model.BaseModel;
-import com.xzixi.self.portal.webapp.data.IBaseData;
+import com.xzixi.self.portal.webapp.framework.model.BaseModel;
+import com.xzixi.self.portal.webapp.framework.data.IBaseData;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;

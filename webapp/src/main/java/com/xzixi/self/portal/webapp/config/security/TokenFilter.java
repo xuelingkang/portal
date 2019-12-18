@@ -1,10 +1,9 @@
-package com.xzixi.self.portal.webapp.config.filter;
+package com.xzixi.self.portal.webapp.config.security;
 
-import com.xzixi.self.portal.webapp.base.util.RequestUtil;
-import com.xzixi.self.portal.webapp.base.util.ResponseUtil;
-import com.xzixi.self.portal.webapp.config.security.UserDetailsImpl;
+import com.xzixi.self.portal.webapp.framework.util.RequestUtil;
+import com.xzixi.self.portal.webapp.framework.util.ResponseUtil;
 import com.xzixi.self.portal.webapp.data.ITokenData;
-import com.xzixi.self.portal.webapp.model.Result;
+import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.model.po.Token;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
@@ -23,8 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.xzixi.self.portal.webapp.base.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
-import static com.xzixi.self.portal.webapp.base.constant.SecurityConstant.AUTHENTICATION_PARAMETER_NAME;
+import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
+import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.AUTHENTICATION_PARAMETER_NAME;
 
 /**
  * @author 薛凌康

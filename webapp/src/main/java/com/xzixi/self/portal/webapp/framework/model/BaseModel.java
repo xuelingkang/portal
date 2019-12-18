@@ -1,8 +1,8 @@
-package com.xzixi.self.portal.webapp.model;
+package com.xzixi.self.portal.webapp.framework.model;
 
-import com.xzixi.self.portal.webapp.base.exception.ProjectException;
-import com.xzixi.self.portal.webapp.base.util.FieldUtil;
-import com.xzixi.self.portal.webapp.base.util.SerializeUtil;
+import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
+import com.xzixi.self.portal.webapp.framework.util.FieldUtil;
+import com.xzixi.self.portal.webapp.framework.util.SerializeUtil;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.BeanUtils;
 

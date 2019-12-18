@@ -1,9 +1,9 @@
-package com.xzixi.self.portal.webapp.base.util;
+package com.xzixi.self.portal.webapp.framework.util;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.xzixi.self.portal.webapp.base.exception.ProjectException;
+import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
 
 /**
  * @author 薛凌康

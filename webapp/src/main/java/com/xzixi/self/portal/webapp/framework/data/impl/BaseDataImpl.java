@@ -1,14 +1,14 @@
-package com.xzixi.self.portal.webapp.data.impl;
+package com.xzixi.self.portal.webapp.framework.data.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.additional.update.impl.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.additional.update.impl.UpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xzixi.self.portal.webapp.base.exception.ProjectException;
-import com.xzixi.self.portal.webapp.mapper.IBaseMapper;
-import com.xzixi.self.portal.webapp.model.BaseModel;
-import com.xzixi.self.portal.webapp.data.IBaseData;
+import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
+import com.xzixi.self.portal.webapp.framework.mapper.IBaseMapper;
+import com.xzixi.self.portal.webapp.framework.model.BaseModel;
+import com.xzixi.self.portal.webapp.framework.data.IBaseData;
 
 import java.util.List;
 import java.util.Map;

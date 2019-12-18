@@ -1,8 +1,8 @@
 package com.xzixi.self.portal.webapp.aspect;
 
-import com.xzixi.self.portal.webapp.base.exception.LogicException;
-import com.xzixi.self.portal.webapp.base.exception.ProjectException;
-import com.xzixi.self.portal.webapp.model.Result;
+import com.xzixi.self.portal.webapp.framework.exception.LogicException;
+import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
+import com.xzixi.self.portal.webapp.framework.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;

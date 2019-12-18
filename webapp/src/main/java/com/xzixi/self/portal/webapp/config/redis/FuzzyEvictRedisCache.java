@@ -9,8 +9,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import java.util.Arrays;
 import java.util.Set;
 
-import static com.xzixi.self.portal.webapp.base.constant.RedisConstant.KEYS_SEPARATOR;
-import static com.xzixi.self.portal.webapp.base.constant.RedisConstant.REGEX_KEY_PREFIX;
+import static com.xzixi.self.portal.webapp.framework.constant.RedisConstant.KEYS_SEPARATOR;
+import static com.xzixi.self.portal.webapp.framework.constant.RedisConstant.REGEX_KEY_PREFIX;
 
 /**
  * evict支持模糊匹配key

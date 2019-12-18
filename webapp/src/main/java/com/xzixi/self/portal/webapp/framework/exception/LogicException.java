@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.base.exception;
+package com.xzixi.self.portal.webapp.framework.exception;
 
 import lombok.Data;
 

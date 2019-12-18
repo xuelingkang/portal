@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.model;
+package com.xzixi.self.portal.webapp.framework.model;
 
 /**
  * 项目中枚举类的规范

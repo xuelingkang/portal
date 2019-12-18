@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.config.filter;
 
-import com.xzixi.self.portal.webapp.base.util.ResponseWrapper;
+import com.xzixi.self.portal.webapp.framework.util.ResponseWrapper;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static com.xzixi.self.portal.webapp.base.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
+import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
 
 /**
  * swagger过滤器

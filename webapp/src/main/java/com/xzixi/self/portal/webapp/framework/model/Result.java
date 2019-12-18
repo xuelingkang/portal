@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.model;
+package com.xzixi.self.portal.webapp.framework.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

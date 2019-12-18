@@ -1,9 +1,9 @@
 package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.xzixi.self.portal.webapp.base.exception.LogicException;
+import com.xzixi.self.portal.webapp.framework.exception.LogicException;
 import com.xzixi.self.portal.webapp.model.valid.WebsiteUserInsert;
-import com.xzixi.self.portal.webapp.model.Result;
+import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.model.enums.UserType;
 import com.xzixi.self.portal.webapp.model.po.Role;
 import com.xzixi.self.portal.webapp.model.po.User;

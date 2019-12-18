@@ -1,7 +1,7 @@
-package com.xzixi.self.portal.webapp.base.util;
+package com.xzixi.self.portal.webapp.framework.util;
 
 import com.alibaba.fastjson.JSON;
-import com.xzixi.self.portal.webapp.model.Result;
+import com.xzixi.self.portal.webapp.framework.model.Result;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

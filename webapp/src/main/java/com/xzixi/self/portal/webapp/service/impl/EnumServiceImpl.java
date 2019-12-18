@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.xzixi.self.portal.webapp.model.IBaseEnum;
+import com.xzixi.self.portal.webapp.framework.model.IBaseEnum;
 import com.xzixi.self.portal.webapp.model.vo.EnumItemVO;
 import com.xzixi.self.portal.webapp.model.vo.EnumVO;
 import com.xzixi.self.portal.webapp.service.IEnumService;

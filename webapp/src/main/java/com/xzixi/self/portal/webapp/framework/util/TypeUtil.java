@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.base.util;
+package com.xzixi.self.portal.webapp.framework.util;
 
 import org.springframework.util.ClassUtils;
 

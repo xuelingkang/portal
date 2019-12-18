@@ -1,6 +1,6 @@
-package com.xzixi.self.portal.webapp.base.util;
+package com.xzixi.self.portal.webapp.framework.util;
 
-import com.xzixi.self.portal.webapp.base.exception.ProjectException;
+import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;

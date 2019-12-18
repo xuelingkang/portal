@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.base.exception;
+package com.xzixi.self.portal.webapp.framework.exception;
 
 /**
  * 项目异常

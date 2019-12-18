@@ -1,10 +1,10 @@
-package com.xzixi.self.portal.webapp.mapper;
+package com.xzixi.self.portal.webapp.framework.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xzixi.self.portal.webapp.base.exception.ProjectException;
-import com.xzixi.self.portal.webapp.model.BaseModel;
+import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
+import com.xzixi.self.portal.webapp.framework.model.BaseModel;
 
 import java.util.List;
 import java.util.Map;

@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.config.security;
 
-import com.xzixi.self.portal.webapp.model.Result;
-import com.xzixi.self.portal.webapp.base.util.ResponseUtil;
+import com.xzixi.self.portal.webapp.framework.model.Result;
+import com.xzixi.self.portal.webapp.framework.util.ResponseUtil;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
