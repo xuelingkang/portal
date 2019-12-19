@@ -16,12 +16,16 @@ public class Role extends BaseModel {
 
     @ApiModelProperty(value = "角色id")
     private Integer id;
+
     @ApiModelProperty(value = "角色名称")
     private String name;
+
     @ApiModelProperty(value = "角色顺序")
     private Integer seq;
+
     @ApiModelProperty(value = "是否初始角色", allowableValues = "true,false")
     private Boolean initial;
+
     @ApiModelProperty(value = "角色描述")
     private String description;
 }

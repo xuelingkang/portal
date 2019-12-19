@@ -22,6 +22,7 @@ public class EnumVO implements Serializable {
 
     @ApiModelProperty(value = "名称")
     private String name;
+
     @ApiModelProperty(value = "枚举项集合")
     private List<EnumItemVO> items;
 }

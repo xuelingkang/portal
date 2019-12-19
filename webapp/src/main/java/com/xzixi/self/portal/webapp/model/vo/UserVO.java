@@ -23,8 +23,10 @@ public class UserVO extends User {
 
     @ApiModelProperty(value = "角色集合")
     private Collection<Role> roles;
+
     @ApiModelProperty(value = "权限集合")
     private Collection<Authority> authorities;
+
     @ApiModelProperty(value = "权限标识")
     private Collection<String> authoritySignals;
 

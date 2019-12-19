@@ -17,10 +17,13 @@ public class Token implements Serializable {
 
     @ApiModelProperty(value = "标识")
     private String signature;
+
     @ApiModelProperty(value = "用户id")
     private Integer userId;
+
     @ApiModelProperty(value = "登陆时间")
     private Long loginTime;
+
     @ApiModelProperty(value = "过期时间")
     private Long expireTime;
 }

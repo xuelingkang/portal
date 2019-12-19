@@ -21,6 +21,7 @@ public class EnumItemVO implements Serializable {
 
     @ApiModelProperty(value = "名称")
     private String name;
+
     @ApiModelProperty(value = "值")
     private String value;
 }
