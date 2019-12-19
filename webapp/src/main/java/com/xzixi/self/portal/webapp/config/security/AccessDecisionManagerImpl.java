@@ -1,7 +1,10 @@
 package com.xzixi.self.portal.webapp.config.security;
 
-import com.xzixi.self.portal.webapp.model.vo.RoleVO;
-import com.xzixi.self.portal.webapp.service.IRoleService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xzixi.self.portal.webapp.model.enums.UserType;
+import com.xzixi.self.portal.webapp.model.po.Authority;
+import com.xzixi.self.portal.webapp.model.po.Role;
+import com.xzixi.self.portal.webapp.service.IAuthorityService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDecisionManager;
@@ -27,7 +30,7 @@ import java.util.stream.Collectors;
 public class AccessDecisionManagerImpl implements AccessDecisionManager {
 
     @Autowired
-    private IRoleService roleService;
+    private IAuthorityService authorityService;
 
     @Override
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
@@ -38,14 +41,25 @@ public class AccessDecisionManagerImpl implements AccessDecisionManager {
         // 当前用户权限
         Collection<? extends GrantedAuthority> authorities;
         if (authentication instanceof AnonymousAuthenticationToken) {
-            // 查询游客权限
-            RoleVO guest = roleService.buildGuest();
-            authorities = guest.getAuthorities().stream()
+            // 游客权限
+            Collection<Authority> guestAuthorities = authorityService
+                    .listByRoleWrapper(new QueryWrapper<>(new Role().setGuest(true)));
+            authorities = guestAuthorities.stream()
                     .map(authority -> new SimpleGrantedAuthority(String.valueOf(authority.getId())))
                     .collect(Collectors.toSet());
         } else {
-            // 当前用户权限
-            authorities = authentication.getAuthorities();
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            if (UserType.WEBSITE.equals(userDetails.getUser().getType())) {
+                // 网站用户权限
+                Collection<Authority> websiteAuthorities = authorityService
+                        .listByRoleWrapper(new QueryWrapper<>(new Role().setWebsite(true)));
+                authorities = websiteAuthorities.stream()
+                        .map(authority -> new SimpleGrantedAuthority(String.valueOf(authority.getId())))
+                        .collect(Collectors.toSet());
+            } else {
+                // 当前用户权限
+                authorities = authentication.getAuthorities();
+            }
         }
         if (CollectionUtils.isNotEmpty(authorities)) {
             // 需求权限id

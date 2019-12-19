@@ -1,5 +1,6 @@
 package com.xzixi.self.portal.webapp.model.vo;
 
+import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.Role;
 import com.xzixi.self.portal.webapp.model.po.User;
@@ -7,7 +8,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 import java.util.Collection;
 
@@ -31,6 +31,6 @@ public class UserVO extends User {
     private Collection<String> authoritySignals;
 
     public UserVO(User user, String... ignoreProperties) {
-        BeanUtils.copyProperties(user, this, ignoreProperties);
+        BeanUtils.copyProperties(user, ignoreProperties);
     }
 }

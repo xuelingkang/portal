@@ -1,12 +1,9 @@
 package com.xzixi.self.portal.webapp.service;
 
+import com.xzixi.self.portal.webapp.data.IUserData;
 import com.xzixi.self.portal.webapp.framework.service.IBaseService;
-import com.xzixi.self.portal.webapp.model.po.Role;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
-import com.xzixi.self.portal.webapp.data.IUserData;
-
-import java.util.Collection;
 
 /**
  * @author 薛凌康
@@ -16,10 +13,9 @@ public interface IUserService extends IBaseService<User, IUserData> {
     /**
      * 保存用户
      *
-     * @param user 用户
-     * @param roles 权限
+     * @param user User
      */
-    void save(User user, Collection<? extends Role> roles);
+    void saveUser(User user);
 
     /**
      * 构建UserVO对象

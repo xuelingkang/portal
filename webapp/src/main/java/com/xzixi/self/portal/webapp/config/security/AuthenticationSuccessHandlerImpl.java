@@ -36,7 +36,8 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         Token token = tokenData.saveToken(user.getId());
 
         // 返回token
-        TokenVO tokenVO = new TokenVO(token).setUser(user.ignoreProperties("password"));
+        user.setPassword(null);
+        TokenVO tokenVO = new TokenVO(token).setUser(user);
         Result<TokenVO> result = new Result<>(200, "登录成功！", tokenVO);
         ResponseUtil.printJson(response, result);
 

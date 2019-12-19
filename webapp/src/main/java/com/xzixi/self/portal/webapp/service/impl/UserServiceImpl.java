@@ -2,19 +2,18 @@ package com.xzixi.self.portal.webapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xzixi.self.portal.webapp.data.IUserData;
-import com.xzixi.self.portal.webapp.data.IUserRoleLinkData;
 import com.xzixi.self.portal.webapp.framework.exception.LogicException;
 import com.xzixi.self.portal.webapp.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.Role;
 import com.xzixi.self.portal.webapp.model.po.User;
-import com.xzixi.self.portal.webapp.model.po.UserRoleLink;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
 import com.xzixi.self.portal.webapp.service.IAuthorityService;
 import com.xzixi.self.portal.webapp.service.IRoleService;
 import com.xzixi.self.portal.webapp.service.IUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,17 +32,17 @@ public class UserServiceImpl extends BaseServiceImpl<User, IUserData> implements
     @Autowired
     private IAuthorityService authorityService;
     @Autowired
-    private IUserRoleLinkData userRoleLinkData;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(User user, Collection<? extends Role> roles) {
+    public void saveUser(User user) {
+        // 加密密码
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // 检查属性
         checkSaveUserProps(user);
+        // 保存用户
         baseData.save(user);
-        List<UserRoleLink> userRoleLinks = roles.stream().map(role ->
-                new UserRoleLink().setUserId(user.getId()).setRoleId(role.getId()))
-                .collect(Collectors.toList());
-        userRoleLinkData.saveBatch(userRoleLinks);
     }
 
     @Override
@@ -67,6 +66,7 @@ public class UserServiceImpl extends BaseServiceImpl<User, IUserData> implements
                 authority.getProtocol() + "." + authority.getPattern() + "." + authority.getMethod()).collect(Collectors.toSet()));
         return userVO;
     }
+
 
     private void checkSaveUserProps(User user) {
         List<User> usersByUsername = baseData.list(new QueryWrapper<>(new User().setUsername(user.getUsername())));

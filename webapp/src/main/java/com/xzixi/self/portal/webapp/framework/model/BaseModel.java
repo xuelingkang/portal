@@ -1,10 +1,6 @@
 package com.xzixi.self.portal.webapp.framework.model;
 
-import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
-import com.xzixi.self.portal.webapp.framework.util.FieldUtil;
 import com.xzixi.self.portal.webapp.framework.util.SerializeUtil;
-import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 
@@ -31,48 +27,6 @@ public abstract class BaseModel implements Cloneable, Serializable {
      * @return 当前对象
      */
     public abstract BaseModel setId(Integer id);
-
-    /**
-     * 忽略属性
-     *
-     * @param ignoreProperties 忽略的属性名称
-     * @return BaseModel
-     */
-    @SuppressWarnings("unchecked")
-    public <T extends BaseModel> T ignoreProperties(String... ignoreProperties) {
-        if (ArrayUtils.isEmpty(ignoreProperties)) {
-            return (T) this;
-        }
-        Class<T> cls = (Class<T>) this.getClass();
-        T model;
-        try {
-            model = cls.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new ProjectException(String.format("使用无参构造器创建[%s]实例失败！", cls.getName()));
-        }
-        BeanUtils.copyProperties(this, model, ignoreProperties);
-        return model;
-    }
-
-    /**
-     * 按照字段名称取值
-     *
-     * @param fieldName 字段名称
-     * @return 字段值
-     */
-    public Object value(String fieldName) {
-        return FieldUtil.get(this, fieldName);
-    }
-
-    /**
-     * 按照字段名称赋值
-     *
-     * @param fieldName 字段名称
-     * @param value 字段值
-     */
-    public void value(String fieldName, Object value) {
-        FieldUtil.set(this, fieldName, value);
-    }
 
     /**
      * 深度复制

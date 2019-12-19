@@ -23,8 +23,11 @@ public class Role extends BaseModel {
     @ApiModelProperty(value = "角色顺序")
     private Integer seq;
 
-    @ApiModelProperty(value = "是否初始角色", allowableValues = "true,false")
-    private Boolean initial;
+    @ApiModelProperty(value = "是否游客用户的默认角色", allowableValues = "true,false")
+    private Boolean guest;
+
+    @ApiModelProperty(value = "是否网站用户的默认角色", allowableValues = "true,false")
+    private Boolean website;
 
     @ApiModelProperty(value = "角色描述")
     private String description;

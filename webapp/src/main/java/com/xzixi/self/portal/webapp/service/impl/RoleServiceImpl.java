@@ -41,12 +41,6 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, IRoleData> implements
     }
 
     @Override
-    public RoleVO buildGuest() {
-        Role guest = baseData.getOne(new QueryWrapper<>(new Role().setName(GUEST_ROLE_NAME)));
-        return buildRoleVO(guest);
-    }
-
-    @Override
     public RoleVO buildRoleVO(Role role) {
         RoleVO roleVO = new RoleVO(role);
         // 查询权限

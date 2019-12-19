@@ -1,11 +1,11 @@
 package com.xzixi.self.portal.webapp.model.vo;
 
+import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.po.Token;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 
 /**
  * @author 薛凌康
