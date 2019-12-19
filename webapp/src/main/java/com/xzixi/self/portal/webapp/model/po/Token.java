@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @author 薛凌康
  */
 @Data
-@ApiModel(value = "令牌")
+@ApiModel(description = "令牌")
 public class Token implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -9,7 +9,7 @@ import lombok.Data;
  * @author 薛凌康
  */
 @Data
-@ApiModel(value = "角色")
+@ApiModel(description = "角色")
 public class Role extends BaseModel {
 
     private static final long serialVersionUID = 1L;

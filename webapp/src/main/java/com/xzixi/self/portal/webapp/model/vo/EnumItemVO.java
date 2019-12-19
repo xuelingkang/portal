@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "枚举项VO")
+@ApiModel(description = "枚举项")
 public class EnumItemVO implements Serializable {
 
     private static final long serialVersionUID = 1L;

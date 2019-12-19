@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(value = "枚举项VO")
+@ApiModel(description = "枚举")
 public class EnumVO implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -12,12 +12,12 @@ import org.springframework.beans.BeanUtils;
  */
 @Data
 @NoArgsConstructor
-@ApiModel(value = "令牌VO")
+@ApiModel(description = "令牌")
 public class TokenVO extends Token {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "用户VO")
+    @ApiModelProperty(value = "用户")
     private UserVO user;
 
     public TokenVO(Token token, String... ignoreProperties) {

@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
  * @author 薛凌康
  */
 @Data
-@ApiModel(value = "用户")
+@ApiModel(description = "用户")
 public class User extends BaseModel {
 
     private static final long serialVersionUID = 1L;

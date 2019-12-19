@@ -16,15 +16,15 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ApiModel("返回结果")
+@ApiModel(description = "返回结果")
 public class Result<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("状态码")
+    @ApiModelProperty(value = "状态码")
     private int code = 200;
-    @ApiModelProperty("消息")
+    @ApiModelProperty(value = "消息")
     private String message;
-    @ApiModelProperty("数据")
+    @ApiModelProperty(value = "数据")
     private T data;
 }

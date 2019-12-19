@@ -12,7 +12,7 @@ import lombok.Data;
  * @author 薛凌康
  */
 @Data
-@ApiModel(value = "权限")
+@ApiModel(description = "权限")
 public class Authority extends BaseModel {
 
     private static final long serialVersionUID = 1L;
