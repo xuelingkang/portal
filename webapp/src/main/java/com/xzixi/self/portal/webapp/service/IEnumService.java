@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public interface IEnumService {
 
-    String BASE_PACKAGE = "com.xzixi.self.portal.webapp.model.enums";
+    String ENUM_SCAN = "classpath:com/xzixi/self/portal/webapp/model/enums/**.class";
     Set<EnumVO> ENUMS = new HashSet<>();
 
     /**

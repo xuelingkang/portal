@@ -38,12 +38,13 @@ public abstract class BaseModel implements Cloneable, Serializable {
      * @param ignoreProperties 忽略的属性名称
      * @return BaseModel
      */
-    public BaseModel ignoreProperties(String... ignoreProperties) {
+    @SuppressWarnings("unchecked")
+    public <T extends BaseModel> T ignoreProperties(String... ignoreProperties) {
         if (ArrayUtils.isEmpty(ignoreProperties)) {
-            return this;
+            return (T) this;
         }
-        Class<? extends BaseModel> cls = this.getClass();
-        BaseModel model;
+        Class<T> cls = (Class<T>) this.getClass();
+        T model;
         try {
             model = cls.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {

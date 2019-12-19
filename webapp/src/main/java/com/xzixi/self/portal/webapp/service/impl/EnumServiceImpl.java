@@ -32,10 +32,9 @@ public class EnumServiceImpl implements IEnumService {
     @PostConstruct
     @SuppressWarnings("unchecked")
     public <E extends Enum<E>> void init() throws IOException, ClassNotFoundException {
-        String pattern = "classpath:" + BASE_PACKAGE.replaceAll("\\.", "/") + "/**.class";
         ResourcePatternResolver resolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
         MetadataReaderFactory metaReader = new CachingMetadataReaderFactory(resourceLoader);
-        Resource[] resources = resolver.getResources(pattern);
+        Resource[] resources = resolver.getResources(ENUM_SCAN);
         for (Resource resource : resources) {
             if (resource.isReadable()) {
                 MetadataReader reader = metaReader.getMetadataReader(resource);
@@ -44,10 +43,10 @@ public class EnumServiceImpl implements IEnumService {
                     continue;
                 }
                 EnumSet<E> enumSet = EnumSet.allOf(cls);
-                List<EnumItemVO> enumItems = enumSet.stream()
+                List<EnumItemVO> items = enumSet.stream()
                         .map(e -> new EnumItemVO(e.name(), ((IBaseEnum) e).getValue()))
                         .collect(Collectors.toList());
-                ENUMS.add(new EnumVO(cls.getSimpleName(), enumItems));
+                ENUMS.add(new EnumVO(cls.getSimpleName(), items));
             }
         }
     }
