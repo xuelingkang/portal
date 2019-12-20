@@ -31,6 +31,6 @@ public class UserVO extends User {
     private Collection<String> authoritySignals;
 
     public UserVO(User user, String... ignoreProperties) {
-        BeanUtils.copyProperties(user, ignoreProperties);
+        BeanUtils.copyProperties(user, this, ignoreProperties);
     }
 }

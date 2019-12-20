@@ -27,6 +27,6 @@ public class RoleVO extends Role {
     private Collection<String> authoritySignals;
 
     public RoleVO(Role role, String... ignoreProperties) {
-        BeanUtils.copyProperties(role, ignoreProperties);
+        BeanUtils.copyProperties(role, this, ignoreProperties);
     }
 }
