@@ -43,6 +43,6 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
 
         // 设置登录时间
         user.setLoginTime(token.getLoginTime());
-        userService.updateById(user);
+        userService.updateByIdIgnoreNullProps(user);
     }
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.webapp.framework.data.IBaseData;
 import com.xzixi.self.portal.webapp.framework.model.BaseModel;
 import com.xzixi.self.portal.webapp.framework.service.IBaseService;
+import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +14,9 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 代理baseData的所有方法
@@ -24,6 +27,27 @@ public class BaseServiceImpl<T extends BaseModel, D extends IBaseData<T>> implem
 
     @Autowired
     protected D baseData;
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateByIdIgnoreNullProps(T entity) {
+        T entityData = baseData.getById(entity.getId());
+        BeanUtils.copyPropertiesIgnoreNull(entity, entityData);
+        return baseData.updateById(entityData);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateBatchByIdIgnoreNullProps(Collection<T> entityList, int batchSize) {
+        Collection<Integer> idList = entityList.stream().map(BaseModel::getId).collect(Collectors.toList());
+        Collection<T> entities = baseData.listByIds(idList);
+        entities.forEach(entityData -> {
+            Optional<T> entityOptional = entityList.stream()
+                .filter(entity -> entityData.getId().equals(entity.getId())).findFirst();
+            entityOptional.ifPresent(entity -> BeanUtils.copyPropertiesIgnoreNull(entity, entityData));
+        });
+        return baseData.updateBatchById(entities, batchSize);
+    }
 
     @Override
     public T getById(Serializable id) {
