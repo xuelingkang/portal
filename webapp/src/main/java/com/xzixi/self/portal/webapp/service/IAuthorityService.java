@@ -1,7 +1,6 @@
 package com.xzixi.self.portal.webapp.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.xzixi.self.portal.webapp.data.IAuthorityData;
 import com.xzixi.self.portal.webapp.framework.service.IBaseService;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.Role;
@@ -11,7 +10,7 @@ import java.util.Collection;
 /**
  * @author 薛凌康
  */
-public interface IAuthorityService extends IBaseService<Authority, IAuthorityData> {
+public interface IAuthorityService extends IBaseService<Authority> {
 
     /**
      * 根据角色id查询权限
