@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.webapp.framework.data.IBaseData;
+import com.xzixi.self.portal.webapp.framework.exception.LogicException;
 import com.xzixi.self.portal.webapp.framework.model.BaseModel;
 import com.xzixi.self.portal.webapp.framework.service.IBaseService;
 import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
@@ -51,12 +52,25 @@ public class BaseServiceImpl<T extends BaseModel, D extends IBaseData<T>> implem
 
     @Override
     public T getById(Serializable id) {
-        return baseData.getById(id);
+        T entity = baseData.getById(id);
+        if (entity == null) {
+            throw new LogicException(404, String.format("id为%s的记录不存在！", id));
+        }
+        return entity;
     }
 
     @Override
     public Collection<T> listByIds(Collection<? extends Serializable> idList) {
         return baseData.listByIds(idList);
+    }
+
+    @Override
+    public T getOne(Wrapper<T> queryWrapper) {
+        T entity = baseData.getOne(queryWrapper, false);
+        if (entity == null) {
+            throw new LogicException(404, "记录不存在！");
+        }
+        return entity;
     }
 
     @Override

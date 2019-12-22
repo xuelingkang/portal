@@ -64,9 +64,9 @@ public class TokenFilter extends OncePerRequestFilter {
     private void setAuthentication(Token token, HttpServletResponse response) {
         User user = userService.getById(token.getUserId());
 
-        // 检查是否冻结
+        // 检查是否锁定
         if (user.getLocked()) {
-            Result<?> result = new Result<>(401, "账户被冻结！", null);
+            Result<?> result = new Result<>(401, "账户已被锁定！", null);
             ResponseUtil.printJson(response, result);
         }
 

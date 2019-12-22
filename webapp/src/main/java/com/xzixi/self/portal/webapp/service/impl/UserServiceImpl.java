@@ -13,7 +13,6 @@ import com.xzixi.self.portal.webapp.service.IRoleService;
 import com.xzixi.self.portal.webapp.service.IUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,14 +30,10 @@ public class UserServiceImpl extends BaseServiceImpl<User, IUserData> implements
     private IRoleService roleService;
     @Autowired
     private IAuthorityService authorityService;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveUser(User user) {
-        // 加密密码
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         // 检查属性
         checkSaveUserProps(user);
         // 保存用户
