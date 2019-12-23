@@ -7,6 +7,7 @@ import com.xzixi.self.portal.webapp.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.Role;
 import com.xzixi.self.portal.webapp.model.po.RoleAuthorityLink;
+import com.xzixi.self.portal.webapp.model.vo.AuthorityVO;
 import com.xzixi.self.portal.webapp.service.IAuthorityService;
 import com.xzixi.self.portal.webapp.service.IRoleService;
 import org.apache.commons.collections.CollectionUtils;
@@ -45,5 +46,13 @@ public class AuthorityServiceImpl extends BaseServiceImpl<Authority, IAuthorityD
         List<Role> roles = roleService.list(queryWrapper);
         List<Integer> roleIds = roles.stream().map(Role::getId).collect(Collectors.toList());
         return listByRoleIds(roleIds);
+    }
+
+    @Override
+    public AuthorityVO buildAuthorityVO(Authority authority) {
+        authority = baseData.getById(authority.getId());
+        AuthorityVO authorityVO = new AuthorityVO(authority);
+        authorityVO.setAuthoritySignal(authority.getProtocol() + "." + authority.getPattern() + "." + authority.getMethod());
+        return authorityVO;
     }
 }
