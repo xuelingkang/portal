@@ -1,10 +1,12 @@
 package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.webapp.framework.exception.LogicException;
 import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.framework.util.SecurityUtil;
+import com.xzixi.self.portal.webapp.model.params.UserSearchParams;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.valid.UserSave;
 import com.xzixi.self.portal.webapp.model.valid.UserUpdate;
@@ -40,6 +42,23 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
+    @GetMapping
+    @ApiOperation(value = "分页查询用户")
+    public Result<IPage<User>> page(UserSearchParams searchParams) {
+        searchParams.setDefaultOrderItems(new String[]{"create_time false"});
+        IPage<User> page = userService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
+        page.getRecords().forEach(user -> user.setPassword(null));
+        return new Result<IPage<User>>().setData(page);
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation(value = "根据id查询用户")
+    public Result<User> getById(@PathVariable @NotNull(message = "用户id不能为空！") Integer id) {
+        User user = userService.getById(id);
+        user.setPassword(null);
+        return new Result<User>().setData(user);
+    }
 
     @PostMapping
     @ApiOperation(value = "添加用户")
