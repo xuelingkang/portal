@@ -13,8 +13,9 @@
 
     <modules>
         <module>enhance</module>
-        <module>webapp</module>
         <module>extension</module>
+        <module>starter</module>
+        <module>webapp</module>
     </modules>
 
     <properties>
@@ -22,8 +23,22 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-boot.version>2.1.10.RELEASE</spring-boot.version>
         <docker.host>http://docker:2375</docker.host>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- spring boot -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <finalName>${project.name}</finalName>
