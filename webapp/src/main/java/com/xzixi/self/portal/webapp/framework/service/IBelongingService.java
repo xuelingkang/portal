@@ -8,9 +8,9 @@ import com.xzixi.self.portal.webapp.framework.model.IBelonging;
 public interface IBelongingService {
 
     /**
-     * 检查当前用户是否传入物品的拥有者
+     * 检查当前用户是否传入对象的拥有者
      *
-     * @param belonging IBelonging
+     * @param belonging IBelonging接口的实例
      */
     void checkOwner(IBelonging belonging);
 }
