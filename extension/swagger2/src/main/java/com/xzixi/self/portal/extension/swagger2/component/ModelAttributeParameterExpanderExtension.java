@@ -283,9 +283,7 @@ public class ModelAttributeParameterExpanderExtension extends ModelAttributePara
                         if (field!=null) {
                             field.setAccessible(true);
                             IgnoreSwagger2Parameter ignoreSwaggerParameter = field.getDeclaredAnnotation(IgnoreSwagger2Parameter.class);
-                            if (ignoreSwaggerParameter != null) {
-                                return false;
-                            }
+                            return ignoreSwaggerParameter == null;
                         }
                         return true;
                     })
