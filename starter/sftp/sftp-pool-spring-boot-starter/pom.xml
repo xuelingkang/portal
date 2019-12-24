@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>sftp-pool-spring-boot-starter</artifactId>
-    <description>sftp启动器</description>
+    <description>sftp连接池启动器</description>
 
     <dependencies>
         <!-- sftp连接池 -->

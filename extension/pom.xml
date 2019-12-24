@@ -15,6 +15,6 @@
     <description>功能扩展</description>
 
     <modules>
-        <module>swagger2</module>
+        <module>swagger2-extension</module>
     </modules>
 </project>

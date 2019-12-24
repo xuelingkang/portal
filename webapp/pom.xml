@@ -31,12 +31,13 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- swagger2 -->
+        <!-- swagger2扩展 -->
         <dependency>
             <groupId>com.xzixi.self.portal</groupId>
-            <artifactId>swagger2</artifactId>
+            <artifactId>swagger2-extension</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- sftp连接池启动器 -->
         <dependency>
             <groupId>com.xzixi.self.portal</groupId>
             <artifactId>sftp-pool-spring-boot-starter</artifactId>
