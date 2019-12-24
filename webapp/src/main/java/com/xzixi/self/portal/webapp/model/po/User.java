@@ -1,6 +1,7 @@
 package com.xzixi.self.portal.webapp.model.po;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.xzixi.self.portal.webapp.framework.model.IBelonging;
 import com.xzixi.self.portal.webapp.model.valid.UserSave;
 import com.xzixi.self.portal.webapp.model.valid.WebsiteUserSave;
 import com.xzixi.self.portal.webapp.framework.model.BaseModel;
@@ -20,7 +21,7 @@ import javax.validation.constraints.*;
  */
 @Data
 @ApiModel(description = "用户")
-public class User extends BaseModel {
+public class User extends BaseModel implements IBelonging {
 
     private static final long serialVersionUID = 1L;
 
@@ -70,4 +71,9 @@ public class User extends BaseModel {
     @ApiModelProperty(value = "是否删除", allowableValues = "true,false")
     @TableLogic
     private Boolean deleted;
+
+    @Override
+    public Integer ownerId() {
+        return id;
+    }
 }

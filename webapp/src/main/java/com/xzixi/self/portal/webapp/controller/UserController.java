@@ -4,8 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.webapp.framework.exception.LogicException;
 import com.xzixi.self.portal.webapp.framework.model.Result;
+import com.xzixi.self.portal.webapp.framework.service.IBelongingService;
 import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
-import com.xzixi.self.portal.webapp.framework.util.SecurityUtil;
 import com.xzixi.self.portal.webapp.model.params.UserSearchParams;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.valid.UserSave;
@@ -42,6 +42,8 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private IBelongingService belongingService;
 
     @GetMapping
     @ApiOperation(value = "分页查询用户")
@@ -91,7 +93,7 @@ public class UserController {
     @PutMapping("/personal")
     @ApiOperation(value = "更新个人信息")
     public Result<?> selfUpdate(@Validated({UserUpdate.class}) User user) {
-        SecurityUtil.checkCurrentUser(user);
+        belongingService.checkOwner(user);
         User userData = userService.getById(user.getId());
         // 清除不可更新的属性
         String[] ignoreProperties = {"createTime", "loginTime", "locked", "deleted", "password", "type"};
@@ -150,7 +152,7 @@ public class UserController {
     @PatchMapping("/personal/password")
     @ApiOperation(value = "修改个人账户密码")
     public Result<?> updatePersonalPassword(@Validated({UserUpdate.class}) User user) {
-        SecurityUtil.checkCurrentUser(user);
+        belongingService.checkOwner(user);
         User userData = userService.getById(user.getId());
         userData.setPassword(passwordEncoder.encode(user.getPassword()));
         if (userService.updateById(userData)) {
