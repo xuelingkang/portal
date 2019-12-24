@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
+import com.xzixi.self.portal.webapp.framework.exception.ServerException;
 import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.params.RoleSearchParams;
@@ -49,7 +49,7 @@ public class RoleController {
     public Result<RoleVO> save(@Validated({RoleSave.class}) Role role) {
         // 保存角色
         if (!roleService.save(role)) {
-            throw new ProjectException("保存角色失败！");
+            throw new ServerException();
         }
         // 构建RoleVO
         RoleVO roleVO = roleService.buildRoleVO(role);
@@ -64,6 +64,6 @@ public class RoleController {
         if (roleService.updateById(roleData)) {
             return new Result<>();
         }
-        throw new ProjectException("更新角色失败！");
+        throw new ServerException();
     }
 }

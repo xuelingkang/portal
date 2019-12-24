@@ -2,6 +2,7 @@ package com.xzixi.self.portal.webapp.aspect;
 
 import com.xzixi.self.portal.webapp.framework.exception.LogicException;
 import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
+import com.xzixi.self.portal.webapp.framework.exception.ServerException;
 import com.xzixi.self.portal.webapp.framework.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -97,6 +98,19 @@ public class ControllerExceptionHandler {
     }
 
     /**
+     * 服务器异常
+     *
+     * @param e ServerException
+     * @return Result
+     */
+    @ExceptionHandler({ServerException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result<?> handleServerException(ServerException e) {
+        log.error(e.getMessage(), e);
+        return new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), null);
+    }
+
+    /**
      * 项目异常
      *
      * @param e ProjectException
@@ -106,7 +120,7 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result<?> handleProjectException(ProjectException e) {
         log.error(e.getMessage(), e);
-        return new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), null);
+        return new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "项目异常！", null);
     }
 
     /**

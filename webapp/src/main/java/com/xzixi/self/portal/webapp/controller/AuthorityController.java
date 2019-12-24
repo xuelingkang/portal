@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
+import com.xzixi.self.portal.webapp.framework.exception.ServerException;
 import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.params.AuthoritySearchParams;
@@ -49,7 +49,7 @@ public class AuthorityController {
     public Result<AuthorityVO> save(@Validated({AuthoritySave.class}) Authority authority) {
         // 保存权限
         if (!authorityService.save(authority)) {
-            throw new ProjectException("保存权限失败！");
+            throw new ServerException();
         }
         // 构建AuthorityVO
         AuthorityVO authorityVO = authorityService.buildAuthorityVO(authority);
@@ -64,6 +64,6 @@ public class AuthorityController {
         if (authorityService.updateById(authorityData)) {
             return new Result<>();
         }
-        throw new ProjectException("更新权限失败！");
+        throw new ServerException();
     }
 }

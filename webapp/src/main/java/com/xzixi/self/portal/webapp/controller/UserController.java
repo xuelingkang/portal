@@ -3,7 +3,7 @@ package com.xzixi.self.portal.webapp.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.webapp.framework.exception.LogicException;
-import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
+import com.xzixi.self.portal.webapp.framework.exception.ServerException;
 import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.framework.service.IBelongingService;
 import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
@@ -72,7 +72,7 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // 保存用户
         if (!userService.saveUser(user)) {
-            throw new ProjectException("保存用户失败！");
+            throw new ServerException();
         }
         // 构建UserVO
         UserVO userVO = userService.buildUserVO(user);
@@ -90,7 +90,7 @@ public class UserController {
         if (userService.updateById(userData)) {
             return new Result<>();
         }
-        throw new ProjectException("更新用户失败！");
+        throw new ServerException();
     }
 
     @PutMapping("/personal")
@@ -104,7 +104,7 @@ public class UserController {
         if (userService.updateById(userData)) {
             return new Result<>();
         }
-        throw new ProjectException("更新个人信息失败！");
+        throw new ServerException();
     }
 
     @PatchMapping("/{id}/lock")
@@ -116,7 +116,7 @@ public class UserController {
         if (userService.updateById(user)) {
             return new Result<>();
         }
-        throw new ProjectException("锁定用户账户失败！");
+        throw new ServerException();
     }
 
     @PatchMapping("/{id}/unlock")
@@ -128,7 +128,7 @@ public class UserController {
         if (userService.updateById(user)) {
             return new Result<>();
         }
-        throw new ProjectException("解锁用户账户失败！");
+        throw new ServerException();
     }
 
     @DeleteMapping("/{id}")
@@ -138,7 +138,7 @@ public class UserController {
         if (userService.removeById(id)) {
             return new Result<>();
         }
-        throw new ProjectException("删除用户账户失败！");
+        throw new ServerException();
     }
 
     @PatchMapping("/password")
@@ -149,7 +149,7 @@ public class UserController {
         if (userService.updateById(userData)) {
             return new Result<>();
         }
-        throw new ProjectException("修改用户账户密码失败！");
+        throw new ServerException();
     }
 
     @PatchMapping("/personal/password")
@@ -161,7 +161,7 @@ public class UserController {
         if (userService.updateById(userData)) {
             return new Result<>();
         }
-        throw new ProjectException("修改个人账户密码失败！");
+        throw new ServerException();
     }
 
     @GetMapping("/reset-password-url")
@@ -188,6 +188,6 @@ public class UserController {
         if (userService.updateById(userData)) {
             return new Result<>();
         }
-        throw new ProjectException("重置账户密码失败！");
+        throw new ServerException();
     }
 }
