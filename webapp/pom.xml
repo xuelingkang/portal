@@ -13,30 +13,15 @@
     <artifactId>webapp</artifactId>
 
     <properties>
-        <spring-boot.version>2.1.10.RELEASE</spring-boot.version>
         <commons-lang3.version>3.7</commons-lang3.version>
         <commons-io.version>2.6</commons-io.version>
         <fastjson.version>1.2.62</fastjson.version>
         <druid.version>1.1.21</druid.version>
         <mybatis-plus.version>3.2.0</mybatis-plus.version>
         <jwt.version>0.9.1</jwt.version>
-        <swagger.version>2.9.2</swagger.version>
         <json-lib.version>2.4</json-lib.version>
         <sftp.version>1.0</sftp.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <!-- spring boot -->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <!-- 编译期增强 -->
@@ -46,7 +31,7 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- swagger2扩展 -->
+        <!-- swagger2 -->
         <dependency>
             <groupId>com.xzixi.self.portal</groupId>
             <artifactId>swagger2</artifactId>
@@ -73,38 +58,6 @@
             <groupId>com.xzixi</groupId>
             <artifactId>sftp-pool-spring-boot-starter</artifactId>
             <version>${sftp.version}</version>
-        </dependency>
-        <!-- swagger2 -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${swagger.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.swagger</groupId>
-                    <artifactId>swagger-annotations</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>io.swagger</groupId>
-                    <artifactId>swagger-models</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-annotations</artifactId>
-            <version>1.5.21</version>
-        </dependency>
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-models</artifactId>
-            <version>1.5.21</version>
-        </dependency>
-        <!-- swagger-ui -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${swagger.version}</version>
         </dependency>
         <!-- mysql -->
         <dependency>
