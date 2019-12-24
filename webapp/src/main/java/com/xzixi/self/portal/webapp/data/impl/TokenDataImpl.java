@@ -112,7 +112,12 @@ public class TokenDataImpl implements ITokenData {
         if (StringUtils.isEmpty(signature) || "null".equals(signature)) {
             throw new LogicException(401, "认证信息无效！");
         }
-        Map<String, Object> jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(signature).getBody();
+        Map<String, Object> jwtClaims;
+        try {
+            jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(signature).getBody();
+        } catch (Exception e) {
+            throw new LogicException(401, "认证信息无效！");
+        }
         if (jwtClaims != null) {
             Object uuid = jwtClaims.get(LOGIN_USER_KEY);
             if (uuid != null) {

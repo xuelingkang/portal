@@ -1,10 +1,9 @@
 package com.xzixi.self.portal.webapp.config.security;
 
-import com.xzixi.self.portal.webapp.framework.util.RequestUtil;
-import com.xzixi.self.portal.webapp.framework.util.ResponseUtil;
 import com.xzixi.self.portal.webapp.data.ITokenData;
 import com.xzixi.self.portal.webapp.framework.model.Result;
-import io.jsonwebtoken.MalformedJwtException;
+import com.xzixi.self.portal.webapp.framework.util.RequestUtil;
+import com.xzixi.self.portal.webapp.framework.util.ResponseUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -34,7 +33,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
         if (StringUtils.isNotBlank(signature) && !"null".equals(signature)) {
             try {
                 tokenData.deleteToken(signature);
-            } catch (MalformedJwtException e) {
+            } catch (Exception e) {
                 Result<?> result = new Result<>(401, "非法认证！", null);
                 ResponseUtil.printJson(response, result);
                 return;

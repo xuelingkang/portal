@@ -1,14 +1,13 @@
 package com.xzixi.self.portal.webapp.config.security;
 
-import com.xzixi.self.portal.webapp.framework.util.RequestUtil;
-import com.xzixi.self.portal.webapp.framework.util.ResponseUtil;
 import com.xzixi.self.portal.webapp.data.ITokenData;
 import com.xzixi.self.portal.webapp.framework.model.Result;
+import com.xzixi.self.portal.webapp.framework.util.RequestUtil;
+import com.xzixi.self.portal.webapp.framework.util.ResponseUtil;
 import com.xzixi.self.portal.webapp.model.po.Token;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
 import com.xzixi.self.portal.webapp.service.IUserService;
-import io.jsonwebtoken.MalformedJwtException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,7 +46,7 @@ public class TokenFilter extends OncePerRequestFilter {
                     token = checkExpireTime(token);
                     setAuthentication(token, response);
                 }
-            } catch (MalformedJwtException e) {
+            } catch (Exception e) {
                 Result<?> result = new Result<>(401, "非法认证！", null);
                 ResponseUtil.printJson(response, result);
                 return;
