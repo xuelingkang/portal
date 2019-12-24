@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.config;
 
-import com.xzixi.swagger2.plus.annotation.EnableSwagger2Plus;
+import com.xzixi.self.portal.extension.swagger2.annotation.EnableSwagger2Extension;
 import io.swagger.annotations.Api;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
@@ -25,8 +25,8 @@ import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.A
  */
 @Configuration
 @ConditionalOnExpression("${swagger2.enable}==true")
-@EnableSwagger2Plus
-public class Swagger2PlusConfig {
+@EnableSwagger2Extension
+public class Swagger2Config {
 
     @Bean
     public Docket api() {

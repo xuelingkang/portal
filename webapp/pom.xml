@@ -20,9 +20,9 @@
         <druid.version>1.1.21</druid.version>
         <mybatis-plus.version>3.2.0</mybatis-plus.version>
         <jwt.version>0.9.1</jwt.version>
+        <swagger.version>2.9.2</swagger.version>
         <json-lib.version>2.4</json-lib.version>
         <sftp.version>1.0</sftp.version>
-        <swagger2-plus.version>1.0</swagger2-plus.version>
     </properties>
 
     <dependencyManagement>
@@ -46,6 +46,12 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!-- swagger2扩展 -->
+        <dependency>
+            <groupId>com.xzixi.self.portal</groupId>
+            <artifactId>swagger2</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -68,11 +74,37 @@
             <artifactId>sftp-pool-spring-boot-starter</artifactId>
             <version>${sftp.version}</version>
         </dependency>
-        <!-- swagger2-plus -->
+        <!-- swagger2 -->
         <dependency>
-            <groupId>com.xzixi</groupId>
-            <artifactId>swagger2-plus</artifactId>
-            <version>${swagger2-plus.version}</version>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.swagger</groupId>
+                    <artifactId>swagger-annotations</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>io.swagger</groupId>
+                    <artifactId>swagger-models</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>1.5.21</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-models</artifactId>
+            <version>1.5.21</version>
+        </dependency>
+        <!-- swagger-ui -->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
         <!-- mysql -->
         <dependency>
