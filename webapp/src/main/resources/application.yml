@@ -192,7 +192,6 @@ sftp-pool:
     # 如果池实现了org.apache.commons.pool2.UsageTracking接口，是否记录完整堆栈信息用来辅助调试废弃对象，当logAbandoned为true时有效
     use-usage-tracking: false
 
-
 # 日志
 logging:
   config: classpath:logback-spring.xml
@@ -202,3 +201,7 @@ log:
   max-size: 30MB # 日志最大大小
   max-history: 30 # 日志保留天数
   charset: UTF-8 # 日志编码
+
+project:
+  name: @project.parent.artifactId@-@project.artifactId@
+  version: @project.version@

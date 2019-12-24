@@ -2,6 +2,7 @@ package com.xzixi.self.portal.webapp.config;
 
 import com.xzixi.self.portal.extension.swagger2.annotation.EnableSwagger2Extension;
 import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,11 @@ import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.A
 @EnableSwagger2Extension
 public class Swagger2Config {
 
+    @Value("${project.name}")
+    private String projectName;
+    @Value("${project.version}")
+    private String projectVersion;
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -52,8 +58,8 @@ public class Swagger2Config {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("portal")
-                .version("1.0.0")
+                .title(projectName)
+                .version(projectVersion)
                 .build();
     }
 }
