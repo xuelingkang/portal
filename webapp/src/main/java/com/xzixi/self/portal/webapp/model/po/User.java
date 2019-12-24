@@ -1,13 +1,13 @@
 package com.xzixi.self.portal.webapp.model.po;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.xzixi.self.portal.webapp.framework.model.IBelonging;
-import com.xzixi.self.portal.webapp.model.valid.UserSave;
-import com.xzixi.self.portal.webapp.model.valid.WebsiteUserSave;
 import com.xzixi.self.portal.webapp.framework.model.BaseModel;
+import com.xzixi.self.portal.webapp.framework.model.IBelonging;
 import com.xzixi.self.portal.webapp.model.enums.Sex;
 import com.xzixi.self.portal.webapp.model.enums.UserType;
+import com.xzixi.self.portal.webapp.model.valid.UserSave;
 import com.xzixi.self.portal.webapp.model.valid.UserUpdate;
+import com.xzixi.self.portal.webapp.model.valid.WebsiteUserSave;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
