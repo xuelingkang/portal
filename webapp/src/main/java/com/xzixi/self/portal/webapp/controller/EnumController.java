@@ -31,7 +31,7 @@ public class EnumController {
     @ApiOperation(value = "获取所有枚举")
     public Result<Collection<EnumVO>> listAll() {
         Collection<EnumVO> enums = enumService.listAll();
-        return new Result<Collection<EnumVO>>().setData(enums);
+        return new Result<>(enums);
     }
 
     @GetMapping("/{name}")
@@ -44,6 +44,6 @@ public class EnumController {
         if (enumVO == null) {
             throw new LogicException(400, "枚举不存在！");
         }
-        return new Result<EnumVO>().setData(enumVO);
+        return new Result<>(enumVO);
     }
 }

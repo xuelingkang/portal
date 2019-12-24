@@ -3,6 +3,7 @@ package com.xzixi.self.portal.webapp.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.webapp.framework.exception.LogicException;
+import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
 import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.framework.service.IBelongingService;
 import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
@@ -51,7 +52,7 @@ public class UserController {
         searchParams.setDefaultOrderItems(new String[]{"create_time false"});
         IPage<User> page = userService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
         page.getRecords().forEach(user -> user.setPassword(null));
-        return new Result<IPage<User>>().setData(page);
+        return new Result<>(page);
     }
 
     @GetMapping("/{id}")
@@ -59,7 +60,7 @@ public class UserController {
     public Result<User> getById(@PathVariable @NotNull(message = "用户id不能为空！") Integer id) {
         User user = userService.getById(id);
         user.setPassword(null);
-        return new Result<User>().setData(user);
+        return new Result<>(user);
     }
 
     @PostMapping
@@ -70,11 +71,13 @@ public class UserController {
         // 加密密码
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // 保存用户
-        userService.saveUser(user);
+        if (!userService.saveUser(user)) {
+            throw new ProjectException("保存用户失败！");
+        }
         // 构建UserVO
         UserVO userVO = userService.buildUserVO(user);
         userVO.setPassword(null);
-        return new Result<UserVO>().setData(userVO);
+        return new Result<>(userVO);
     }
 
     @PutMapping
@@ -87,7 +90,7 @@ public class UserController {
         if (userService.updateById(userData)) {
             return new Result<>();
         }
-        return new Result<>().setCode(500);
+        throw new ProjectException("更新用户失败！");
     }
 
     @PutMapping("/personal")
@@ -101,7 +104,7 @@ public class UserController {
         if (userService.updateById(userData)) {
             return new Result<>();
         }
-        return new Result<>().setCode(500);
+        throw new ProjectException("更新个人信息失败！");
     }
 
     @PatchMapping("/{id}/lock")
@@ -113,7 +116,7 @@ public class UserController {
         if (userService.updateById(user)) {
             return new Result<>();
         }
-        return new Result<>().setCode(500);
+        throw new ProjectException("锁定用户账户失败！");
     }
 
     @PatchMapping("/{id}/unlock")
@@ -125,7 +128,7 @@ public class UserController {
         if (userService.updateById(user)) {
             return new Result<>();
         }
-        return new Result<>().setCode(500);
+        throw new ProjectException("解锁用户账户失败！");
     }
 
     @DeleteMapping("/{id}")
@@ -135,7 +138,7 @@ public class UserController {
         if (userService.removeById(id)) {
             return new Result<>();
         }
-        return new Result<>().setCode(500);
+        throw new ProjectException("删除用户账户失败！");
     }
 
     @PatchMapping("/password")
@@ -146,7 +149,7 @@ public class UserController {
         if (userService.updateById(userData)) {
             return new Result<>();
         }
-        return new Result<>().setCode(500);
+        throw new ProjectException("修改用户账户密码失败！");
     }
 
     @PatchMapping("/personal/password")
@@ -158,7 +161,7 @@ public class UserController {
         if (userService.updateById(userData)) {
             return new Result<>();
         }
-        return new Result<>().setCode(500);
+        throw new ProjectException("修改个人账户密码失败！");
     }
 
     @GetMapping("/reset-password-url")
@@ -185,6 +188,6 @@ public class UserController {
         if (userService.updateById(userData)) {
             return new Result<>();
         }
-        return new Result<>().setCode(500);
+        throw new ProjectException("重置账户密码失败！");
     }
 }

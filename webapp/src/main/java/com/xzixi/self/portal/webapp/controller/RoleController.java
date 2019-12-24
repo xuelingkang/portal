@@ -1,6 +1,7 @@
 package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
 import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.params.RoleSearchParams;
@@ -33,14 +34,14 @@ public class RoleController {
     public Result<IPage<Role>> page(RoleSearchParams searchParams) {
         searchParams.setDefaultOrderItems(new String[]{"seq true"});
         IPage<Role> page = roleService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
-        return new Result<IPage<Role>>().setData(page);
+        return new Result<>(page);
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询角色")
     public Result<Role> getById(@PathVariable @NotNull(message = "角色id不能为空！") Integer id) {
         Role role = roleService.getById(id);
-        return new Result<Role>().setData(role);
+        return new Result<>(role);
     }
 
     @PostMapping
@@ -48,11 +49,11 @@ public class RoleController {
     public Result<RoleVO> save(@Validated({RoleSave.class}) Role role) {
         // 保存角色
         if (!roleService.save(role)) {
-            return new Result<RoleVO>().setCode(500).setMessage("保存角色失败！");
+            throw new ProjectException("保存角色失败！");
         }
         // 构建RoleVO
         RoleVO roleVO = roleService.buildRoleVO(role);
-        return new Result<RoleVO>().setMessage("保存角色成功！").setData(roleVO);
+        return new Result<>(roleVO);
     }
 
     @PutMapping
@@ -61,8 +62,8 @@ public class RoleController {
         Role roleData = roleService.getById(role.getId());
         BeanUtils.copyPropertiesIgnoreNull(role, roleData);
         if (roleService.updateById(roleData)) {
-            return new Result<>().setMessage("更新角色成功！");
+            return new Result<>();
         }
-        return new Result<>().setCode(500).setMessage("更新角色失败！");
+        throw new ProjectException("更新角色失败！");
     }
 }

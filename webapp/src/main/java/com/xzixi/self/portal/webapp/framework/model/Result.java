@@ -27,4 +27,8 @@ public class Result<T> implements Serializable {
     private String message;
     @ApiModelProperty(value = "数据")
     private T data;
+
+    public Result(T data) {
+        this.data = data;
+    }
 }

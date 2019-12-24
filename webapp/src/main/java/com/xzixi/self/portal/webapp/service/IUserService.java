@@ -13,8 +13,9 @@ public interface IUserService extends IBaseService<User> {
      * 保存用户
      *
      * @param user User
+     * @return {@code true} 保存成功 {@code false} 保存失败
      */
-    void saveUser(User user);
+    boolean saveUser(User user);
 
     /**
      * 构建UserVO对象

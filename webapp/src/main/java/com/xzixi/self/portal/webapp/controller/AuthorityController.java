@@ -1,6 +1,7 @@
 package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
 import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.params.AuthoritySearchParams;
@@ -33,24 +34,26 @@ public class AuthorityController {
     public Result<IPage<Authority>> page(AuthoritySearchParams searchParams) {
         searchParams.setDefaultOrderItems(new String[]{"category true", "seq true"});
         IPage<Authority> page = authorityService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
-        return new Result<IPage<Authority>>().setData(page);
+        return new Result<>(page);
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询权限")
     public Result<Authority> getById(@PathVariable @NotNull(message = "权限id不能为空！") Integer id) {
         Authority authority = authorityService.getById(id);
-        return new Result<Authority>().setData(authority);
+        return new Result<>(authority);
     }
 
     @PostMapping
-    @ApiOperation(value = "添加权限")
+    @ApiOperation(value = "保存权限")
     public Result<AuthorityVO> save(@Validated({AuthoritySave.class}) Authority authority) {
         // 保存权限
-        authorityService.save(authority);
+        if (!authorityService.save(authority)) {
+            throw new ProjectException("保存权限失败！");
+        }
         // 构建AuthorityVO
         AuthorityVO authorityVO = authorityService.buildAuthorityVO(authority);
-        return new Result<AuthorityVO>().setData(authorityVO);
+        return new Result<>(authorityVO);
     }
 
     @PutMapping
@@ -61,6 +64,6 @@ public class AuthorityController {
         if (authorityService.updateById(authorityData)) {
             return new Result<>();
         }
-        return new Result<>().setCode(500);
+        throw new ProjectException("更新权限失败！");
     }
 }

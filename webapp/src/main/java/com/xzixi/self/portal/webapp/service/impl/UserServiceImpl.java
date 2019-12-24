@@ -33,11 +33,11 @@ public class UserServiceImpl extends BaseServiceImpl<User, IUserData> implements
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveUser(User user) {
+    public boolean saveUser(User user) {
         // 检查属性
         checkSaveUserProps(user);
         // 保存用户
-        baseData.save(user);
+        return baseData.save(user);
     }
 
     @Override
