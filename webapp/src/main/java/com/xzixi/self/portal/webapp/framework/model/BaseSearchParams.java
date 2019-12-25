@@ -3,7 +3,6 @@ package com.xzixi.self.portal.webapp.framework.model;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xzixi.self.portal.webapp.framework.exception.LogicException;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,6 +10,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 @Data
 @ApiModel(description = "查询参数")
 public class BaseSearchParams<T> {
+
+    private static final Pattern ASC_REG = Pattern.compile("\\s*[Aa][Ss][Cc]\\s*");
 
     @ApiModelProperty(value = "实体类参数")
     private T entity;
@@ -41,23 +43,25 @@ public class BaseSearchParams<T> {
      * @return Page&lt;T>
      */
     public Page<T> buildPageParams() {
-        Page<T> page = new Page<>(getCurrent(), getSize());
-        String[] orderItems = getOrderItems();
+        Page<T> page = new Page<>(this.current, this.size);
+        String[] orderItems = this.orderItems;
         if (ArrayUtils.isEmpty(orderItems)) {
-            orderItems = getDefaultOrderItems();
+            orderItems = this.defaultOrderItems;
         }
-        List<OrderItem> orderItemList = Arrays.stream(orderItems).map(item -> {
-            String[] arr = item.split("\\s");
-            if (arr.length != 2) {
-                throw new LogicException(400, "排序规则错误！");
-            }
-            String column = arr[0];
-            boolean asc = Boolean.parseBoolean(arr[1]);
-            if (asc) {
-                return OrderItem.asc(column);
-            }
-            return OrderItem.desc(column);
-        }).collect(Collectors.toList());
+        List<OrderItem> orderItemList = Arrays.stream(orderItems)
+            // 按空白拆分
+            .map(item -> item.split("\\s+"))
+            // 过滤出长度为2的数组
+            .filter(arr -> arr.length == 2)
+            //
+            .map(arr -> {
+                String column = arr[0];
+                boolean asc = ASC_REG.matcher(arr[1]).matches();
+                if (asc) {
+                    return OrderItem.asc(column);
+                }
+                return OrderItem.desc(column);
+            }).collect(Collectors.toList());
         page.addOrder(orderItemList);
         return page;
     }
@@ -68,6 +72,6 @@ public class BaseSearchParams<T> {
      * @return QueryWrapper&lt;T>
      */
     public QueryWrapper<T> buildQueryWrapper() {
-        return new QueryWrapper<>(getEntity());
+        return new QueryWrapper<>(this.entity);
     }
 }
