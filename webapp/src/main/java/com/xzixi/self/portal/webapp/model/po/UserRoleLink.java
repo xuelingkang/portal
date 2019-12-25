@@ -16,4 +16,9 @@ public class UserRoleLink extends BaseModel {
     private Integer userId;
 
     private Integer roleId;
+
+    public UserRoleLink(Integer userId, Integer roleId) {
+        this.userId = userId;
+        this.roleId = roleId;
+    }
 }

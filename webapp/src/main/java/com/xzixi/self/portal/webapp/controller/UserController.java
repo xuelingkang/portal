@@ -9,9 +9,11 @@ import com.xzixi.self.portal.webapp.framework.service.IBelongingService;
 import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.params.UserSearchParams;
 import com.xzixi.self.portal.webapp.model.po.User;
+import com.xzixi.self.portal.webapp.model.po.UserRoleLink;
 import com.xzixi.self.portal.webapp.model.valid.UserSave;
 import com.xzixi.self.portal.webapp.model.valid.UserUpdate;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
+import com.xzixi.self.portal.webapp.service.IUserRoleLinkService;
 import com.xzixi.self.portal.webapp.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,9 +24,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.RESET_PASSWORD_URL_EXPIRE_SECOND;
 import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.RESET_PASSWORD_URL_PREFIX;
@@ -40,11 +45,13 @@ public class UserController {
     @Autowired
     private IUserService userService;
     @Autowired
+    private IBelongingService belongingService;
+    @Autowired
+    private IUserRoleLinkService userRoleLinkService;
+    @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
-    @Autowired
-    private IBelongingService belongingService;
 
     @GetMapping
     @ApiOperation(value = "分页查询用户")
@@ -189,5 +196,18 @@ public class UserController {
             return new Result<>();
         }
         throw new ServerException();
+    }
+
+    @PostMapping("/{id}/role")
+    @ApiOperation(value = "更新用户角色")
+    public Result<?> updateUserRole(@PathVariable @NotNull(message = "用户id不能为空！") Integer id,
+                                    @NotEmpty(message = "角色id不能为空！") List<Integer> roleIds) {
+        List<UserRoleLink> newLinks = roleIds.stream().map(roleId -> new UserRoleLink(id, roleId)).collect(Collectors.toList());
+        List<UserRoleLink> oldLinks = userRoleLinkService.list(new QueryWrapper<>(new UserRoleLink().setUserId(id)));
+        userRoleLinkService.merge(newLinks, oldLinks, (models, item) -> models.stream()
+                .filter(model -> model.getUserId() != null && model.getRoleId() != null
+                        && model.getUserId().equals(item.getUserId()) && model.getRoleId().equals(item.getRoleId()))
+                .findFirst().orElse(null));
+        return new Result<>();
     }
 }
