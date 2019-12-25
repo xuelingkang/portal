@@ -51,20 +51,20 @@ public class BaseServiceImpl<T extends BaseModel, D extends IBaseData<T>> implem
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void merge(Collection<T> newModels, Collection<T> oldModels, MergeComparator<T> comparator) {
+    public void merge(Collection<T> newModels, Collection<T> oldModels, MergeSelector<T> selector) {
         // 需要保存的数据
         List<T> modelsForSave = newModels.stream()
-                .filter(newModel -> comparator.find(oldModels, newModel) == null)
+                .filter(newModel -> selector.select(oldModels, newModel) == null)
                 .collect(Collectors.toList());
         // 需要删除的数据id
         List<Integer> modelIdsForRemove = oldModels.stream()
-                .filter(oldModel -> comparator.find(newModels, oldModel) == null)
+                .filter(oldModel -> selector.select(newModels, oldModel) == null)
                 .map(T::getId)
                 .collect(Collectors.toList());
         // 需要更新的数据
         List<T> modelsForUpdate = oldModels.stream()
                 .filter(oldModel -> {
-                    T newModel = comparator.find(newModels, oldModel);
+                    T newModel = selector.select(newModels, oldModel);
                     if (newModel == null) {
                         return false;
                     }

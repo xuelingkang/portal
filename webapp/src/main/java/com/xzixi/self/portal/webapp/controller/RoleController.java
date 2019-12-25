@@ -83,8 +83,8 @@ public class RoleController {
                 .map(authorityId -> new RoleAuthorityLink(id, authorityId))
                 .collect(Collectors.toList());
         List<RoleAuthorityLink> oldLinks = roleAuthorityLinkService.list(new QueryWrapper<>(new RoleAuthorityLink().setRoleId(id)));
-        roleAuthorityLinkService.merge(newLinks, oldLinks, (models, item) -> models.stream()
-                .filter(model -> model.getAuthorityId() != null && model.getAuthorityId().equals(item.getAuthorityId()))
+        roleAuthorityLinkService.merge(newLinks, oldLinks, (sources, target) -> sources.stream()
+                .filter(source -> source.getAuthorityId() != null && source.getAuthorityId().equals(target.getAuthorityId()))
                 .findFirst().orElse(null));
         return new Result<>();
     }

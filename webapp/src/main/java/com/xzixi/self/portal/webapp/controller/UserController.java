@@ -204,8 +204,8 @@ public class UserController {
                                     @NotEmpty(message = "角色id不能为空！") List<Integer> roleIds) {
         List<UserRoleLink> newLinks = roleIds.stream().map(roleId -> new UserRoleLink(id, roleId)).collect(Collectors.toList());
         List<UserRoleLink> oldLinks = userRoleLinkService.list(new QueryWrapper<>(new UserRoleLink().setUserId(id)));
-        userRoleLinkService.merge(newLinks, oldLinks, (models, item) -> models.stream()
-                .filter(model -> model.getRoleId() != null && model.getRoleId().equals(item.getRoleId()))
+        userRoleLinkService.merge(newLinks, oldLinks, (sources, target) -> sources.stream()
+                .filter(source -> source.getRoleId() != null && source.getRoleId().equals(target.getRoleId()))
                 .findFirst().orElse(null));
         return new Result<>();
     }

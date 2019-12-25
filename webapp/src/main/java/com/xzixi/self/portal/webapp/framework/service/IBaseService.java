@@ -44,19 +44,19 @@ public interface IBaseService<T extends BaseModel> extends IBaseData<T> {
      *
      * @param newModels 新数据集
      * @param oldModels 旧数据集
-     * @param comparator 比较器
+     * @param selector 比较器
      */
-    void merge(Collection<T> newModels, Collection<T> oldModels, MergeComparator<T> comparator);
+    void merge(Collection<T> newModels, Collection<T> oldModels, MergeSelector<T> selector);
 
-    interface MergeComparator<T> {
+    interface MergeSelector<T> {
 
         /**
-         * 查询models中与item相等的元素
+         * 查询源数据集中与目标实例匹配的元素
          *
-         * @param models Collection&lt;T>
-         * @param item T
-         * @return models中与item相等的元素
+         * @param sources 源数据集
+         * @param target 目标实例
+         * @return 查询结果，{@code null}表示没有查询到
          */
-        T find(Collection<T> models, T item);
+        T select(Collection<T> sources, T target);
     }
 }
