@@ -2,13 +2,13 @@ package com.xzixi.self.portal.webapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xzixi.self.portal.webapp.data.IAuthorityData;
-import com.xzixi.self.portal.webapp.data.IRoleAuthorityLinkData;
 import com.xzixi.self.portal.webapp.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.Role;
 import com.xzixi.self.portal.webapp.model.po.RoleAuthorityLink;
 import com.xzixi.self.portal.webapp.model.vo.AuthorityVO;
 import com.xzixi.self.portal.webapp.service.IAuthorityService;
+import com.xzixi.self.portal.webapp.service.IRoleAuthorityLinkService;
 import com.xzixi.self.portal.webapp.service.IRoleService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +27,11 @@ public class AuthorityServiceImpl extends BaseServiceImpl<Authority, IAuthorityD
     @Autowired
     private IRoleService roleService;
     @Autowired
-    private IRoleAuthorityLinkData roleAuthorityLinkData;
+    private IRoleAuthorityLinkService roleAuthorityLinkService;
 
     @Override
     public Collection<Authority> listByRoleIds(Collection<Integer> roleIds) {
-        List<RoleAuthorityLink> roleAuthorityLinks = roleAuthorityLinkData
+        List<RoleAuthorityLink> roleAuthorityLinks = roleAuthorityLinkService
                 .list(new QueryWrapper<RoleAuthorityLink>().in("role_id", roleIds));
         if (CollectionUtils.isEmpty(roleAuthorityLinks)) {
             return null;
