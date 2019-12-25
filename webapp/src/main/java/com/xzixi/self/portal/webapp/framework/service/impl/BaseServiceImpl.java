@@ -26,50 +26,27 @@ import java.util.stream.Collectors;
 public class BaseServiceImpl<T extends BaseModel, D extends IBaseData<T>> implements IBaseService<T> {
 
     @Autowired
-    protected D baseData;
+    private D baseData;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateByIdIgnoreNullProps(T entity) {
-        T entityData = baseData.getById(entity.getId());
+        T entityData = getById(entity.getId());
         BeanUtils.copyPropertiesIgnoreNull(entity, entityData);
-        return baseData.updateById(entityData);
+        return updateById(entityData);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateBatchByIdIgnoreNullProps(Collection<T> entityList, int batchSize) {
         Collection<Integer> idList = entityList.stream().map(BaseModel::getId).collect(Collectors.toList());
-        Collection<T> entities = baseData.listByIds(idList);
+        Collection<T> entities = listByIds(idList);
         entities.forEach(entityData -> {
             Optional<T> entityOptional = entityList.stream()
                 .filter(entity -> entityData.getId().equals(entity.getId())).findFirst();
             entityOptional.ifPresent(entity -> BeanUtils.copyPropertiesIgnoreNull(entity, entityData));
         });
-        return baseData.updateBatchById(entities, batchSize);
-    }
-
-    @Override
-    public T getById(Serializable id) {
-        T entity = baseData.getById(id);
-        if (entity == null) {
-            throw new LogicException(404, String.format("id为%s的记录不存在！", id));
-        }
-        return entity;
-    }
-
-    @Override
-    public Collection<T> listByIds(Collection<? extends Serializable> idList) {
-        return baseData.listByIds(idList);
-    }
-
-    @Override
-    public T getOne(Wrapper<T> queryWrapper) {
-        T entity = baseData.getOne(queryWrapper, false);
-        if (entity == null) {
-            throw new LogicException(404, "记录不存在！");
-        }
-        return entity;
+        return updateBatchById(entities, batchSize);
     }
 
     @Override
@@ -96,14 +73,37 @@ public class BaseServiceImpl<T extends BaseModel, D extends IBaseData<T>> implem
                 })
                 .collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(modelsForSave)) {
-            baseData.saveBatch(modelsForSave);
+            saveBatch(modelsForSave);
         }
         if (CollectionUtils.isNotEmpty(modelIdsForRemove)) {
-            baseData.removeByIds(modelIdsForRemove);
+            removeByIds(modelIdsForRemove);
         }
         if (CollectionUtils.isNotEmpty(modelsForUpdate)) {
-            baseData.updateBatchById(modelsForUpdate);
+            updateBatchById(modelsForUpdate);
         }
+    }
+
+    @Override
+    public T getById(Serializable id) {
+        T entity = baseData.getById(id);
+        if (entity == null) {
+            throw new LogicException(404, String.format("id为%s的记录不存在！", id));
+        }
+        return entity;
+    }
+
+    @Override
+    public Collection<T> listByIds(Collection<? extends Serializable> idList) {
+        return baseData.listByIds(idList);
+    }
+
+    @Override
+    public T getOne(Wrapper<T> queryWrapper) {
+        T entity = getOne(queryWrapper, false);
+        if (entity == null) {
+            throw new LogicException(404, "记录不存在！");
+        }
+        return entity;
     }
 
     @Override

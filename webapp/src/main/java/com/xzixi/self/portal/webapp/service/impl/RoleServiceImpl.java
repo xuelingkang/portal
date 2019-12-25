@@ -37,12 +37,12 @@ public class RoleServiceImpl extends BaseServiceImpl<Role, IRoleData> implements
         if (CollectionUtils.isEmpty(roleIds)) {
             return null;
         }
-        return baseData.listByIds(roleIds);
+        return listByIds(roleIds);
     }
 
     @Override
     public RoleVO buildRoleVO(Role role) {
-        role = baseData.getById(role.getId());
+        role = getById(role.getId());
         RoleVO roleVO = new RoleVO(role);
         // 查询权限
         Collection<Authority> authorities = authorityService.listByRoleIds(Collections.singletonList(role.getId()));

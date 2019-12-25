@@ -37,12 +37,12 @@ public class UserServiceImpl extends BaseServiceImpl<User, IUserData> implements
         // 检查属性
         checkSaveUserProps(user);
         // 保存用户
-        return baseData.save(user);
+        return save(user);
     }
 
     @Override
     public UserVO buildUserVO(User user) {
-        user = baseData.getById(user.getId());
+        user = getById(user.getId());
         UserVO userVO = new UserVO(user);
         // 查询角色
         Collection<Role> roles = roleService.listByUserId(user.getId());
@@ -64,11 +64,11 @@ public class UserServiceImpl extends BaseServiceImpl<User, IUserData> implements
 
 
     private void checkSaveUserProps(User user) {
-        List<User> usersByUsername = baseData.list(new QueryWrapper<>(new User().setUsername(user.getUsername())));
+        List<User> usersByUsername = list(new QueryWrapper<>(new User().setUsername(user.getUsername())));
         if (CollectionUtils.isNotEmpty(usersByUsername)) {
             throw new LogicException(400, "用户名重复！");
         }
-        List<User> usersByEmail = baseData.list(new QueryWrapper<>(new User().setEmail(user.getEmail())));
+        List<User> usersByEmail = list(new QueryWrapper<>(new User().setEmail(user.getEmail())));
         if (CollectionUtils.isNotEmpty(usersByEmail)) {
             throw new LogicException(400, "邮箱重复！");
         }

@@ -38,7 +38,7 @@ public class AuthorityServiceImpl extends BaseServiceImpl<Authority, IAuthorityD
         }
         List<Integer> authorityIds = roleAuthorityLinks.stream()
                 .map(RoleAuthorityLink::getAuthorityId).collect(Collectors.toList());
-        return baseData.listByIds(authorityIds);
+        return listByIds(authorityIds);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class AuthorityServiceImpl extends BaseServiceImpl<Authority, IAuthorityD
 
     @Override
     public AuthorityVO buildAuthorityVO(Authority authority) {
-        authority = baseData.getById(authority.getId());
+        authority = getById(authority.getId());
         AuthorityVO authorityVO = new AuthorityVO(authority);
         authorityVO.setAuthoritySignal(authority.getProtocol() + "." + authority.getPattern() + "." + authority.getMethod());
         return authorityVO;
