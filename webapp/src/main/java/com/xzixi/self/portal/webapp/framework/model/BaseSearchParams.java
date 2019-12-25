@@ -53,7 +53,6 @@ public class BaseSearchParams<T> {
             .map(item -> item.split("\\s+"))
             // 过滤出长度为2的数组
             .filter(arr -> arr.length == 2)
-            //
             .map(arr -> {
                 String column = arr[0];
                 boolean asc = ASC_REG.matcher(arr[1]).matches();
