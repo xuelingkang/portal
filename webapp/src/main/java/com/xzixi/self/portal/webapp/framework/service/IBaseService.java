@@ -53,8 +53,8 @@ public interface IBaseService<T extends BaseModel> extends IBaseData<T> {
         /**
          * 查询models中与item相等的元素
          *
-         * @param models {@link T}集合
-         * @param item {@link T}
+         * @param models Collection&lt;T>
+         * @param item T
          * @return models中与item相等的元素
          */
         T find(Collection<T> models, T item);

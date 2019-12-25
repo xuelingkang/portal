@@ -205,8 +205,7 @@ public class UserController {
         List<UserRoleLink> newLinks = roleIds.stream().map(roleId -> new UserRoleLink(id, roleId)).collect(Collectors.toList());
         List<UserRoleLink> oldLinks = userRoleLinkService.list(new QueryWrapper<>(new UserRoleLink().setUserId(id)));
         userRoleLinkService.merge(newLinks, oldLinks, (models, item) -> models.stream()
-                .filter(model -> model.getUserId() != null && model.getRoleId() != null
-                        && model.getUserId().equals(item.getUserId()) && model.getRoleId().equals(item.getRoleId()))
+                .filter(model -> model.getRoleId() != null && model.getRoleId().equals(item.getRoleId()))
                 .findFirst().orElse(null));
         return new Result<>();
     }
