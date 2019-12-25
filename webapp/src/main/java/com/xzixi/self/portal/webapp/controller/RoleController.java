@@ -1,14 +1,17 @@
 package com.xzixi.self.portal.webapp.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.webapp.framework.exception.ServerException;
 import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.params.RoleSearchParams;
 import com.xzixi.self.portal.webapp.model.po.Role;
+import com.xzixi.self.portal.webapp.model.po.RoleAuthorityLink;
 import com.xzixi.self.portal.webapp.model.valid.RoleSave;
 import com.xzixi.self.portal.webapp.model.valid.RoleUpdate;
 import com.xzixi.self.portal.webapp.model.vo.RoleVO;
+import com.xzixi.self.portal.webapp.service.IRoleAuthorityLinkService;
 import com.xzixi.self.portal.webapp.service.IRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,7 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author 薛凌康
@@ -28,6 +34,8 @@ public class RoleController {
 
     @Autowired
     private IRoleService roleService;
+    @Autowired
+    private IRoleAuthorityLinkService roleAuthorityLinkService;
 
     @GetMapping
     @ApiOperation(value = "分页查询角色")
@@ -65,5 +73,20 @@ public class RoleController {
             return new Result<>();
         }
         throw new ServerException();
+    }
+
+    @PutMapping("/{id}/authority")
+    @ApiOperation(value = "更新角色权限")
+    public Result<?> updateRoleAuthority(@PathVariable @NotNull(message = "角色id不能为空") Integer id,
+                                         @NotEmpty(message = "权限id不能为空！") List<Integer> authorityIds) {
+        List<RoleAuthorityLink> newLinks = authorityIds.stream()
+                .map(authorityId -> new RoleAuthorityLink(id, authorityId))
+                .collect(Collectors.toList());
+        List<RoleAuthorityLink> oldLinks = roleAuthorityLinkService.list(new QueryWrapper<>(new RoleAuthorityLink().setRoleId(id)));
+        roleAuthorityLinkService.merge(newLinks, oldLinks, (models, item) -> models.stream()
+                .filter(model -> model.getRoleId() != null && model.getAuthorityId() != null
+                        && model.getRoleId().equals(item.getRoleId()) && model.getAuthorityId().equals(item.getAuthorityId()))
+                .findFirst().orElse(null));
+        return new Result<>();
     }
 }
