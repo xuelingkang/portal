@@ -75,7 +75,7 @@ public class RoleController {
         throw new ServerException();
     }
 
-    @PutMapping("/{id}/authority")
+    @PostMapping("/{id}/authority")
     @ApiOperation(value = "更新角色权限")
     public Result<?> updateRoleAuthority(@PathVariable @NotNull(message = "角色id不能为空") Integer id,
                                          @NotEmpty(message = "权限id不能为空！") List<Integer> authorityIds) {
