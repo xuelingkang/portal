@@ -38,4 +38,25 @@ public interface IBaseService<T extends BaseModel> extends IBaseData<T> {
      * @return {@code true} 更新成功 {@code false} 更新失败
      */
     boolean updateBatchByIdIgnoreNullProps(Collection<T> entityList, int batchSize);
+
+    /**
+     * 对新旧数据集进行合并
+     *
+     * @param newModels 新数据集
+     * @param oldModels 旧数据集
+     * @param comparator 比较器
+     */
+    void merge(Collection<T> newModels, Collection<T> oldModels, MergeComparator<T> comparator);
+
+    interface MergeComparator<T> {
+
+        /**
+         * 查询models中与item相等的元素
+         *
+         * @param models {@link T}集合
+         * @param item {@link T}
+         * @return models中与item相等的元素
+         */
+        T find(Collection<T> models, T item);
+    }
 }

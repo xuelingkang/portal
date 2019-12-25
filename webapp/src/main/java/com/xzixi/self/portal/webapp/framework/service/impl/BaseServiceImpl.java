@@ -5,17 +5,16 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.webapp.framework.data.IBaseData;
 import com.xzixi.self.portal.webapp.framework.exception.LogicException;
+import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
 import com.xzixi.self.portal.webapp.framework.model.BaseModel;
 import com.xzixi.self.portal.webapp.framework.service.IBaseService;
 import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -74,6 +73,40 @@ public class BaseServiceImpl<T extends BaseModel, D extends IBaseData<T>> implem
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void merge(Collection<T> newModels, Collection<T> oldModels, MergeComparator<T> comparator) {
+        // 需要保存的数据
+        List<T> modelsForSave = newModels.stream()
+                .filter(newModel -> comparator.find(oldModels, newModel) == null)
+                .collect(Collectors.toList());
+        // 需要删除的数据id
+        List<Integer> modelIdsForRemove = oldModels.stream()
+                .filter(oldModel -> comparator.find(newModels, oldModel) == null)
+                .map(T::getId)
+                .collect(Collectors.toList());
+        // 需要更新的数据
+        List<T> modelsForUpdate = oldModels.stream()
+                .filter(oldModel -> {
+                    T newModel = comparator.find(newModels, oldModel);
+                    if (newModel == null) {
+                        return false;
+                    }
+                    BeanUtils.copyPropertiesIgnoreNull(newModel, oldModel);
+                    return true;
+                })
+                .collect(Collectors.toList());
+        if (CollectionUtils.isNotEmpty(modelsForSave)) {
+            baseData.saveBatch(modelsForSave);
+        }
+        if (CollectionUtils.isNotEmpty(modelIdsForRemove)) {
+            baseData.removeByIds(modelIdsForRemove);
+        }
+        if (CollectionUtils.isNotEmpty(modelsForUpdate)) {
+            baseData.updateBatchById(modelsForUpdate);
+        }
+    }
+
+    @Override
     public T getOne(Wrapper<T> queryWrapper, boolean throwEx) {
         return baseData.getOne(queryWrapper, throwEx);
     }
@@ -101,48 +134,75 @@ public class BaseServiceImpl<T extends BaseModel, D extends IBaseData<T>> implem
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateById(T entity) {
+        if (entity.getId() == null) {
+            throw new ProjectException("id不能为null！");
+        }
         return baseData.updateById(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateBatchById(Collection<T> entityList, int batchSize) {
+        for (T entity : entityList) {
+            if (entity.getId() == null) {
+                throw new ProjectException("id不能为null！");
+            }
+        }
         return baseData.updateBatchById(entityList, batchSize);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean save(T entity) {
+        if (entity == null) {
+            throw new ProjectException("entity不能为null！");
+        }
         return baseData.save(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean saveBatch(Collection<T> entityList, int batchSize) {
+        if (CollectionUtils.isEmpty(entityList)) {
+            throw new ProjectException("entityList不能为空！");
+        }
         return baseData.saveBatch(entityList, batchSize);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean saveOrUpdate(T entity) {
+        if (entity == null) {
+            throw new ProjectException("entity不能为null！");
+        }
         return baseData.saveOrUpdate(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean saveOrUpdateBatch(Collection<T> entityList, int batchSize) {
+        if (CollectionUtils.isEmpty(entityList)) {
+            throw new ProjectException("entityList不能为空！");
+        }
         return baseData.saveOrUpdateBatch(entityList, batchSize);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean removeById(Serializable id) {
+        if (id == null) {
+            throw new ProjectException("id不能为null！");
+        }
         return baseData.removeById(id);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean removeByIds(Collection<? extends Serializable> idList) {
+        idList = idList.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(idList)) {
+            throw new ProjectException("idList不能为空！");
+        }
         return baseData.removeByIds(idList);
     }
 
