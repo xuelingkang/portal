@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.config.security;
 
-import com.xzixi.self.portal.webapp.data.ITokenData;
+import com.xzixi.self.portal.webapp.service.ITokenService;
 import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.framework.util.RequestUtil;
 import com.xzixi.self.portal.webapp.framework.util.ResponseUtil;
@@ -25,14 +25,14 @@ import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.A
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
     @Autowired
-    private ITokenData tokenData;
+    private ITokenService tokenService;
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String signature = RequestUtil.getHeaderOrParameter(request, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_NAME);
         if (StringUtils.isNotBlank(signature) && !"null".equals(signature)) {
             try {
-                tokenData.deleteToken(signature);
+                tokenService.deleteToken(signature);
             } catch (Exception e) {
                 Result<?> result = new Result<>(401, "非法认证！", null);
                 ResponseUtil.printJson(response, result);

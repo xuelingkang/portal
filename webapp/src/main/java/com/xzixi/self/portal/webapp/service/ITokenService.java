@@ -1,11 +1,11 @@
-package com.xzixi.self.portal.webapp.data;
+package com.xzixi.self.portal.webapp.service;
 
 import com.xzixi.self.portal.webapp.model.po.Token;
 
 /**
  * @author 薛凌康
  */
-public interface ITokenData {
+public interface ITokenService {
 
     /**
      * 生成并保存token

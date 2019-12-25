@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.config.security;
 
-import com.xzixi.self.portal.webapp.data.ITokenData;
+import com.xzixi.self.portal.webapp.service.ITokenService;
 import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.framework.util.RequestUtil;
 import com.xzixi.self.portal.webapp.framework.util.ResponseUtil;
@@ -32,7 +32,7 @@ public class TokenFilter extends OncePerRequestFilter {
 
     private static final Long MINUTES_10 = 10 * 60 * 1000L;
     @Autowired
-    private ITokenData tokenData;
+    private ITokenService tokenService;
     @Autowired
     private IUserService userService;
 
@@ -41,7 +41,7 @@ public class TokenFilter extends OncePerRequestFilter {
         String signature = RequestUtil.getHeaderOrParameter(request, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_NAME);
         if (StringUtils.isNotEmpty(signature) && !"null".equals(signature)) {
             try {
-                Token token = tokenData.getToken(signature);
+                Token token = tokenService.getToken(signature);
                 if (token != null) {
                     token = checkExpireTime(token);
                     setAuthentication(token, response);
@@ -88,7 +88,7 @@ public class TokenFilter extends OncePerRequestFilter {
         long currentTime = System.currentTimeMillis();
         if (expireTime - currentTime <= MINUTES_10) {
             // 刷新token
-            token = tokenData.refreshToken(token.getSignature());
+            token = tokenService.refreshToken(token.getSignature());
         }
         return token;
     }

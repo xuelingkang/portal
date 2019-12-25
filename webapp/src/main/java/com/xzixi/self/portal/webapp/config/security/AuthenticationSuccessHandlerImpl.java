@@ -5,7 +5,7 @@ import com.xzixi.self.portal.webapp.model.po.Token;
 import com.xzixi.self.portal.webapp.model.vo.TokenVO;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
 import com.xzixi.self.portal.webapp.service.IUserService;
-import com.xzixi.self.portal.webapp.data.ITokenData;
+import com.xzixi.self.portal.webapp.service.ITokenService;
 import com.xzixi.self.portal.webapp.framework.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
     @Autowired
-    private ITokenData tokenData;
+    private ITokenService tokenService;
     @Autowired
     private IUserService userService;
 
@@ -33,7 +33,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         UserVO user = userDetails.getUser();
 
         // 保存token
-        Token token = tokenData.saveToken(user.getId());
+        Token token = tokenService.saveToken(user.getId());
 
         // 返回token
         user.setPassword(null);
