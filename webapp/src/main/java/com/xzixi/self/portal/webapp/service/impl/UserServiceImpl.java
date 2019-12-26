@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * @author 薛凌康
  */
 @Service
-public class UserServiceImpl extends BaseServiceImpl<User, IUserData> implements IUserService {
+public class UserServiceImpl extends BaseServiceImpl<IUserData, User> implements IUserService {
 
     @Autowired
     private IRoleService roleService;

@@ -71,9 +71,7 @@ public class UserController {
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询用户")
     public Result<User> getById(
-            @ApiParam(value = "用户id", required = true)
-            @NotNull(message = "用户id不能为空！")
-            @PathVariable Integer id) {
+            @ApiParam(value = "用户id", required = true) @NotNull(message = "用户id不能为空！") @PathVariable Integer id) {
         User user = userService.getById(id);
         user.setPassword(null);
         return new Result<>(user);
@@ -126,8 +124,7 @@ public class UserController {
     @PatchMapping("/lock")
     @ApiOperation(value = "锁定用户账户")
     public Result<?> lock(
-            @ApiParam(value = "用户id", required = true)
-            @NotEmpty(message = "用户id不能为空！") List<Integer> ids) {
+            @ApiParam(value = "用户id", required = true) @NotEmpty(message = "用户id不能为空！") @RequestParam List<Integer> ids) {
         Collection<User> users = userService.listByIds(ids);
         if (CollectionUtils.isEmpty(users)) {
             return new Result<>();
@@ -143,8 +140,7 @@ public class UserController {
     @PatchMapping("/unlock")
     @ApiOperation(value = "解锁用户账户")
     public Result<?> unlock(
-            @ApiParam(value = "用户id", required = true)
-            @NotEmpty(message = "用户id不能为空！") List<Integer> ids) {
+            @ApiParam(value = "用户id", required = true) @NotEmpty(message = "用户id不能为空！") @RequestParam List<Integer> ids) {
         Collection<User> users = userService.listByIds(ids);
         if (CollectionUtils.isEmpty(users)) {
             return new Result<>();
@@ -160,8 +156,7 @@ public class UserController {
     @DeleteMapping
     @ApiOperation(value = "删除用户账户")
     public Result<?> remove(
-            @ApiParam(value = "用户id", required = true)
-            @NotEmpty(message = "用户id不能为空！") List<Integer> ids) {
+            @ApiParam(value = "用户id", required = true) @NotEmpty(message = "用户id不能为空！") @RequestParam List<Integer> ids) {
         if (userService.removeUsersByIds(ids)) {
             return new Result<>();
         }
@@ -191,12 +186,10 @@ public class UserController {
         throw new ServerException();
     }
 
-    @GetMapping("/{username}/reset-password-url")
+    @GetMapping("/reset-password")
     @ApiOperation(value = "获取重置密码链接")
     public Result<?> generateResultPasswordUrl(
-            @ApiParam(value = "用户名", required = true)
-            @NotBlank(message = "用户名不能为空！")
-            @PathVariable String username) {
+            @ApiParam(value = "用户名", required = true) @NotBlank(message = "用户名不能为空！") @RequestParam String username) {
         User user = userService.getOne(new QueryWrapper<>(new User().setUsername(username)));
         String key = UUID.randomUUID().toString();
         String url = String.format("%s?key=%s", resetPasswordUrl, key);
@@ -209,10 +202,8 @@ public class UserController {
     @PatchMapping("/reset-password")
     @ApiOperation(value = "重置账户密码")
     public Result<?> resetPassword(
-            @ApiParam(value = "重置密码key", required = true)
-            @NotBlank(message = "key不能为空！") String key,
-            @ApiParam(value = "密码", required = true)
-            @NotBlank(message = "密码不能为空！") String password) {
+            @ApiParam(value = "重置密码key", required = true) @NotBlank(message = "key不能为空！") @RequestParam String key,
+            @ApiParam(value = "密码", required = true) @NotBlank(message = "密码不能为空！") @RequestParam String password) {
         Integer id = (Integer) redisTemplate.opsForValue().get(key);
         if (id == null) {
             throw new LogicException(404, "key已经失效！");
@@ -227,8 +218,9 @@ public class UserController {
 
     @PostMapping("/{id}/role")
     @ApiOperation(value = "更新用户角色")
-    public Result<?> updateUserRole(@PathVariable @NotNull(message = "用户id不能为空！") Integer id,
-                                    @NotEmpty(message = "角色id不能为空！") List<Integer> roleIds) {
+    public Result<?> updateUserRole(
+            @ApiParam(value = "用户id", required = true) @NotNull(message = "用户id不能为空！") @PathVariable Integer id,
+            @ApiParam(value = "角色id", required = true) @NotEmpty(message = "角色id不能为空！") @RequestParam List<Integer> roleIds) {
         List<UserRoleLink> newLinks = roleIds.stream().map(roleId -> new UserRoleLink(id, roleId)).collect(Collectors.toList());
         List<UserRoleLink> oldLinks = userRoleLinkService.list(new QueryWrapper<>(new UserRoleLink().setUserId(id)));
         userRoleLinkService.merge(newLinks, oldLinks, (sources, target) -> sources.stream()

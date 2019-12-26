@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  *
  * @author 薛凌康
  */
-public class BaseServiceImpl<T extends BaseModel, D extends IBaseData<T>> implements IBaseService<T> {
+public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implements IBaseService<T> {
 
     @Autowired
     private D baseData;

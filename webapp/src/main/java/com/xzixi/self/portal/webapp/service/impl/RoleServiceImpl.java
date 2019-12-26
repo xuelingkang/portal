@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * @author 薛凌康
  */
 @Service
-public class RoleServiceImpl extends BaseServiceImpl<Role, IRoleData> implements IRoleService {
+public class RoleServiceImpl extends BaseServiceImpl<IRoleData, Role> implements IRoleService {
 
     @Autowired
     private IAuthorityService authorityService;

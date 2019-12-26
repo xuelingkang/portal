@@ -50,9 +50,7 @@ public class RoleController {
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询角色")
     public Result<Role> getById(
-            @ApiParam(value = "角色id", required = true)
-            @NotNull(message = "角色id不能为空！")
-            @PathVariable Integer id) {
+            @ApiParam(value = "角色id", required = true) @NotNull(message = "角色id不能为空！") @PathVariable Integer id) {
         Role role = roleService.getById(id);
         return new Result<>(role);
     }
@@ -83,8 +81,7 @@ public class RoleController {
     @DeleteMapping
     @ApiOperation(value = "删除角色")
     public Result<?> remove(
-            @ApiParam(value = "角色id", required = true)
-            @NotEmpty(message = "角色id不能为空！") List<Integer> ids) {
+            @ApiParam(value = "角色id", required = true) @NotEmpty(message = "角色id不能为空！") @RequestParam List<Integer> ids) {
         if (roleService.removeRolesByIds(ids)) {
             return new Result<>();
         }
@@ -94,11 +91,8 @@ public class RoleController {
     @PostMapping("/{id}/authority")
     @ApiOperation(value = "更新角色权限")
     public Result<?> updateRoleAuthority(
-            @ApiParam(value = "角色id", required = true)
-            @NotNull(message = "角色id不能为空")
-            @PathVariable Integer id,
-            @ApiParam(value = "权限id", required = true)
-            @NotEmpty(message = "权限id不能为空！") List<Integer> authorityIds) {
+            @ApiParam(value = "角色id", required = true) @NotNull(message = "角色id不能为空") @PathVariable Integer id,
+            @ApiParam(value = "权限id", required = true) @NotEmpty(message = "权限id不能为空！") @RequestParam List<Integer> authorityIds) {
         List<RoleAuthorityLink> newLinks = authorityIds.stream()
                 .map(authorityId -> new RoleAuthorityLink(id, authorityId))
                 .collect(Collectors.toList());

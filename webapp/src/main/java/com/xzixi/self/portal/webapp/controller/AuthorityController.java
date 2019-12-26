@@ -44,9 +44,7 @@ public class AuthorityController {
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询权限")
     public Result<Authority> getById(
-            @ApiParam(value = "权限id", required = true)
-            @NotNull(message = "权限id不能为空！")
-            @PathVariable Integer id) {
+            @ApiParam(value = "权限id", required = true) @NotNull(message = "权限id不能为空！") @PathVariable Integer id) {
         Authority authority = authorityService.getById(id);
         return new Result<>(authority);
     }
@@ -77,8 +75,7 @@ public class AuthorityController {
     @DeleteMapping
     @ApiOperation(value = "删除权限")
     public Result<?> remove(
-            @ApiParam(value = "权限id", required = true)
-            @NotEmpty(message = "权限id不能为空！") List<Integer> ids) {
+            @ApiParam(value = "权限id", required = true) @NotEmpty(message = "权限id不能为空！") @RequestParam List<Integer> ids) {
         if (authorityService.removeAuthoritiesByIds(ids)) {
             return new Result<>();
         }

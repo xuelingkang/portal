@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * @author 薛凌康
  */
 @Service
-public class AuthorityServiceImpl extends BaseServiceImpl<Authority, IAuthorityData> implements IAuthorityService {
+public class AuthorityServiceImpl extends BaseServiceImpl<IAuthorityData, Authority> implements IAuthorityService {
 
     @Autowired
     private IRoleService roleService;

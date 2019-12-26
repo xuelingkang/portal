@@ -14,7 +14,7 @@ import java.util.List;
  * @author 薛凌康
  */
 @Service
-public class UserRoleServiceImpl extends BaseServiceImpl<UserRoleLink, IUserRoleLinkData> implements IUserRoleLinkService {
+public class UserRoleServiceImpl extends BaseServiceImpl<IUserRoleLinkData, UserRoleLink> implements IUserRoleLinkService {
 
     @Override
     public List<UserRoleLink> listByUserId(Integer userId) {
