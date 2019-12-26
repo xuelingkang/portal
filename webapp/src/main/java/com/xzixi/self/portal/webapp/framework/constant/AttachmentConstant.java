@@ -5,6 +5,8 @@ package com.xzixi.self.portal.webapp.framework.constant;
  */
 public interface AttachmentConstant {
 
-    String ATTACHMENT_URL_PREFIX = "/portalfile";
-    String ATTACHMENT_FILE_SEPARATOR = "/";
+    String DEFAULT_NAME = "DEFAULT";
+    String BASE_URL = "/portalfile";
+    String BASE_ADDRESS = "/home/portalfile";
+    String SEPARATOR = "/";
 }
