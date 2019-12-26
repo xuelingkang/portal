@@ -40,6 +40,7 @@ import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.R
 @RestController
 @RequestMapping(value = "/user", produces="application/json; charset=UTF-8")
 @Api(tags="用户")
+@Validated
 public class UserController {
 
     @Value("${reset-password-url}")

@@ -24,6 +24,7 @@ import javax.validation.constraints.NotNull;
 @RestController
 @RequestMapping(value = "/authority", produces="application/json; charset=UTF-8")
 @Api(tags="权限")
+@Validated
 public class AuthorityController {
 
     @Autowired

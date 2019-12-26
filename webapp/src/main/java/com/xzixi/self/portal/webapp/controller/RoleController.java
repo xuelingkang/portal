@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/role", produces="application/json; charset=UTF-8")
 @Api(tags="角色")
+@Validated
 public class RoleController {
 
     @Autowired
