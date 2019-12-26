@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.sftp.pool.component;
 
-import com.xzixi.self.portal.sftp.pool.exception.SftpPoolException;
+import com.xzixi.self.portal.sftp.pool.exception.SftpClientException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,12 +24,31 @@ public class SftpClient {
         Sftp sftp = null;
         try {
             sftp = sftpPool.borrowObject();
-            handler.doHandle(sftp);
+            Handler policyHandler = new PolicyHandler(handler);
+            policyHandler.doHandle(sftp);
+        } catch (SftpClientException e) {
+            throw new SftpClientException("执行sftp操作异常！", e);
         } catch (Exception e) {
-            throw new SftpPoolException("获取sftp连接出错！", e);
+            throw new SftpClientException("获取sftp连接出错！", e);
         } finally {
             if (sftp != null) {
                 sftpPool.returnObject(sftp);
+            }
+        }
+    }
+
+    @AllArgsConstructor
+    static class PolicyHandler implements Handler {
+
+        private Handler delegate;
+
+        @Override
+        public void doHandle(Sftp sftp) {
+            try {
+                delegate.doHandle(sftp);
+            } catch (Exception e) {
+                // 捕获sftp操作的所有异常，包装成SftpClientException
+                throw new SftpClientException(e);
             }
         }
     }
@@ -41,7 +60,8 @@ public class SftpClient {
          *
          * @param sftp Sftp实例
          * @see Sftp
+         * @throws Exception sftp操作可能抛出的任何异常
          */
-        void doHandle(Sftp sftp);
+        void doHandle(Sftp sftp) throws Exception;
     }
 }

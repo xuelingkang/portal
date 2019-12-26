@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.sftp.pool.util;
 
-import com.xzixi.self.portal.sftp.pool.exception.SftpPoolException;
+import com.xzixi.self.portal.sftp.pool.exception.SftpClientException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -25,7 +25,7 @@ public class ByteUtil {
             }
             return out.toByteArray();
         } catch (Exception e) {
-            throw new SftpPoolException("输入流转字节数组出错", e);
+            throw new SftpClientException("输入流转字节数组出错", e);
         }
     }
 }

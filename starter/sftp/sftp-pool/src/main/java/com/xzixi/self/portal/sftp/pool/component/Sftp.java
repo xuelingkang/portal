@@ -2,7 +2,7 @@ package com.xzixi.self.portal.sftp.pool.component;
 
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.SftpException;
-import com.xzixi.self.portal.sftp.pool.exception.SftpPoolException;
+import com.xzixi.self.portal.sftp.pool.exception.SftpClientException;
 import com.xzixi.self.portal.sftp.pool.util.ByteUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,7 +33,7 @@ public class Sftp {
             InputStream in = channelSftp.get(name);
             return ByteUtil.inputStreamToByteArray(in);
         } catch (SftpException e) {
-            throw new SftpPoolException("sftp下载文件出错", e);
+            throw new SftpClientException("sftp下载文件出错", e);
         }
     }
 
@@ -50,7 +50,7 @@ public class Sftp {
             channelSftp.cd(dir);
             channelSftp.put(in, name);
         } catch (SftpException e) {
-            throw new SftpPoolException("sftp上传文件出错", e);
+            throw new SftpClientException("sftp上传文件出错", e);
         }
     }
 
@@ -65,7 +65,7 @@ public class Sftp {
             channelSftp.cd(dir);
             channelSftp.rm(name);
         } catch (SftpException e) {
-            throw new SftpPoolException("sftp删除文件出错", e);
+            throw new SftpClientException("sftp删除文件出错", e);
         }
     }
 
@@ -89,7 +89,7 @@ public class Sftp {
                 }
             }
         } catch (SftpException e) {
-            throw new SftpPoolException("sftp创建目录出错", e);
+            throw new SftpClientException("sftp创建目录出错", e);
         }
     }
 }

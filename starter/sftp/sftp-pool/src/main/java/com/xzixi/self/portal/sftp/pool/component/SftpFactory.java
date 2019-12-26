@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.sftp.pool.component;
 
 import com.jcraft.jsch.*;
-import com.xzixi.self.portal.sftp.pool.exception.SftpPoolException;
+import com.xzixi.self.portal.sftp.pool.exception.SftpClientException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -52,7 +52,7 @@ public class SftpFactory extends BasePooledObjectFactory<Sftp> {
             channel.connect();
             return new Sftp(channel);
         } catch (JSchException e) {
-            throw new SftpPoolException("连接sfpt失败", e);
+            throw new SftpClientException("连接sftp失败", e);
         }
     }
 
