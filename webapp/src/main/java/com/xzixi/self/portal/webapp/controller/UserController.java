@@ -18,6 +18,7 @@ import com.xzixi.self.portal.webapp.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
@@ -31,8 +32,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.RESET_PASSWORD_URL_EXPIRE_SECOND;
-import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.RESET_PASSWORD_URL_PREFIX;
+import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.RESET_PASSWORD_KEY_EXPIRE_SECOND;
 
 /**
  * @author 薛凌康
@@ -42,6 +42,8 @@ import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.R
 @Api(tags="用户")
 public class UserController {
 
+    @Value("${reset-password-url}")
+    private String resetPasswordUrl;
     @Autowired
     private IUserService userService;
     @Autowired
@@ -176,9 +178,10 @@ public class UserController {
     public Result<?> generateResultPasswordUrl(@NotBlank(message = "用户名不能为空！") String username) {
         User user = userService.getOne(new QueryWrapper<>(new User().setUsername(username)));
         String key = UUID.randomUUID().toString();
-        String url = String.format("%s?key=%s", RESET_PASSWORD_URL_PREFIX, key);
+        String url = String.format("%s?key=%s", resetPasswordUrl, key);
         // TODO 发送邮件
-        redisTemplate.boundValueOps(key).set(user.getId(), RESET_PASSWORD_URL_EXPIRE_SECOND, TimeUnit.SECONDS);
+        // 将key保存到redis
+        redisTemplate.boundValueOps(key).set(user.getId(), RESET_PASSWORD_KEY_EXPIRE_SECOND, TimeUnit.SECONDS);
         return new Result<>();
     }
 
