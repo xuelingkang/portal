@@ -15,7 +15,7 @@
     <description>sftp文件传输</description>
 
     <modules>
-        <module>sftp-pool</module>
-        <module>sftp-pool-spring-boot-starter</module>
+        <module>sftp-client</module>
+        <module>sftp-client-spring-boot-starter</module>
     </modules>
 </project>

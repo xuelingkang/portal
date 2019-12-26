@@ -40,7 +40,7 @@
         <!-- sftp连接池启动器 -->
         <dependency>
             <groupId>com.xzixi.self.portal</groupId>
-            <artifactId>sftp-pool-spring-boot-starter</artifactId>
+            <artifactId>sftp-client-spring-boot-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- web -->

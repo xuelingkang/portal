@@ -10,14 +10,14 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>sftp-pool-spring-boot-starter</artifactId>
+    <artifactId>sftp-client-spring-boot-starter</artifactId>
     <description>sftp连接池启动器</description>
 
     <dependencies>
         <!-- sftp连接池 -->
         <dependency>
             <groupId>com.xzixi.self.portal</groupId>
-            <artifactId>sftp-pool</artifactId>
+            <artifactId>sftp-client</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 自定义启动器需要依赖spring-boot-starter -->

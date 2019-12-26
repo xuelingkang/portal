@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sftp-pool</artifactId>
+    <artifactId>sftp-client</artifactId>
     <description>sftp连接池</description>
 
     <properties>
