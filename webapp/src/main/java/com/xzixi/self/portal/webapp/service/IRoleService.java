@@ -20,6 +20,14 @@ public interface IRoleService extends IBaseService<Role> {
     Collection<Role> listByUserId(Integer userId);
 
     /**
+     * 根据角色id删除角色，同时删除与用户和权限的关联
+     *
+     * @param ids 角色id
+     * @return {@code true} 删除成功 {@code false} 删除失败
+     */
+    boolean removeRolesByIds(Collection<Integer> ids);
+
+    /**
      * 构建RoleVO对象
      *
      * @param role 角色

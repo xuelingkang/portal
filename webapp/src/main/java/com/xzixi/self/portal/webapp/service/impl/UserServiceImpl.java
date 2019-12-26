@@ -7,9 +7,11 @@ import com.xzixi.self.portal.webapp.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.Role;
 import com.xzixi.self.portal.webapp.model.po.User;
+import com.xzixi.self.portal.webapp.model.po.UserRoleLink;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
 import com.xzixi.self.portal.webapp.service.IAuthorityService;
 import com.xzixi.self.portal.webapp.service.IRoleService;
+import com.xzixi.self.portal.webapp.service.IUserRoleLinkService;
 import com.xzixi.self.portal.webapp.service.IUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ public class UserServiceImpl extends BaseServiceImpl<User, IUserData> implements
     private IRoleService roleService;
     @Autowired
     private IAuthorityService authorityService;
+    @Autowired
+    private IUserRoleLinkService userRoleLinkService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -38,6 +42,23 @@ public class UserServiceImpl extends BaseServiceImpl<User, IUserData> implements
         checkSaveUserProps(user);
         // 保存用户
         return save(user);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean removeUsersByIds(Collection<Integer> ids) {
+        if (!removeByIds(ids)) {
+            return false;
+        }
+
+        List<UserRoleLink> userRoleLinks = userRoleLinkService.listByUserIds(ids);
+        if (CollectionUtils.isNotEmpty(userRoleLinks)) {
+            List<Integer> linkIds = userRoleLinks.stream().map(UserRoleLink::getId).collect(Collectors.toList());
+            if (!userRoleLinkService.removeByIds(linkIds)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

@@ -30,6 +30,14 @@ public interface IAuthorityService extends IBaseService<Authority> {
     Collection<Authority> listByRoleWrapper(QueryWrapper<Role> queryWrapper);
 
     /**
+     * 根据权限id删除权限，同时删除与角色的关联
+     *
+     * @param ids 权限id
+     * @return {@code true} 删除成功 {@code false} 删除失败
+     */
+    boolean removeAuthoritiesByIds(Collection<Integer> ids);
+
+    /**
      * 构建AuthorityVO
      *
      * @param authority Authority

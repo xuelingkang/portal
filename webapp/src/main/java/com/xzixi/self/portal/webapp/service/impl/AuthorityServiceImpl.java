@@ -13,6 +13,7 @@ import com.xzixi.self.portal.webapp.service.IRoleService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,8 +32,7 @@ public class AuthorityServiceImpl extends BaseServiceImpl<Authority, IAuthorityD
 
     @Override
     public Collection<Authority> listByRoleIds(Collection<Integer> roleIds) {
-        List<RoleAuthorityLink> roleAuthorityLinks = roleAuthorityLinkService
-                .list(new QueryWrapper<RoleAuthorityLink>().in("role_id", roleIds));
+        List<RoleAuthorityLink> roleAuthorityLinks = roleAuthorityLinkService.listByRoleIds(roleIds);
         if (CollectionUtils.isEmpty(roleAuthorityLinks)) {
             return null;
         }
@@ -46,6 +46,24 @@ public class AuthorityServiceImpl extends BaseServiceImpl<Authority, IAuthorityD
         List<Role> roles = roleService.list(queryWrapper);
         List<Integer> roleIds = roles.stream().map(Role::getId).collect(Collectors.toList());
         return listByRoleIds(roleIds);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean removeAuthoritiesByIds(Collection<Integer> ids) {
+        if (!removeByIds(ids)) {
+            return false;
+        }
+
+        List<RoleAuthorityLink> roleAuthorityLinks = roleAuthorityLinkService.listByAuthorityIds(ids);
+        if (CollectionUtils.isNotEmpty(roleAuthorityLinks)) {
+            List<Integer> linkIds = roleAuthorityLinks.stream().map(RoleAuthorityLink::getId).collect(Collectors.toList());
+            if (!roleAuthorityLinkService.removeByIds(linkIds)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override

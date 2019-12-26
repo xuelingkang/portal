@@ -15,6 +15,7 @@ import com.xzixi.self.portal.webapp.service.IRoleAuthorityLinkService;
 import com.xzixi.self.portal.webapp.service.IRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -48,7 +49,10 @@ public class RoleController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询角色")
-    public Result<Role> getById(@PathVariable @NotNull(message = "角色id不能为空！") Integer id) {
+    public Result<Role> getById(
+            @ApiParam(value = "角色id", required = true)
+            @NotNull(message = "角色id不能为空！")
+            @PathVariable Integer id) {
         Role role = roleService.getById(id);
         return new Result<>(role);
     }
@@ -76,10 +80,25 @@ public class RoleController {
         throw new ServerException();
     }
 
+    @DeleteMapping
+    @ApiOperation(value = "删除角色")
+    public Result<?> remove(
+            @ApiParam(value = "角色id", required = true)
+            @NotEmpty(message = "角色id不能为空！") List<Integer> ids) {
+        if (roleService.removeRolesByIds(ids)) {
+            return new Result<>();
+        }
+        throw new ServerException();
+    }
+
     @PostMapping("/{id}/authority")
     @ApiOperation(value = "更新角色权限")
-    public Result<?> updateRoleAuthority(@PathVariable @NotNull(message = "角色id不能为空") Integer id,
-                                         @NotEmpty(message = "权限id不能为空！") List<Integer> authorityIds) {
+    public Result<?> updateRoleAuthority(
+            @ApiParam(value = "角色id", required = true)
+            @NotNull(message = "角色id不能为空")
+            @PathVariable Integer id,
+            @ApiParam(value = "权限id", required = true)
+            @NotEmpty(message = "权限id不能为空！") List<Integer> authorityIds) {
         List<RoleAuthorityLink> newLinks = authorityIds.stream()
                 .map(authorityId -> new RoleAuthorityLink(id, authorityId))
                 .collect(Collectors.toList());

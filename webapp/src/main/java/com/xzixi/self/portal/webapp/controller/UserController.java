@@ -17,6 +17,8 @@ import com.xzixi.self.portal.webapp.service.IUserRoleLinkService;
 import com.xzixi.self.portal.webapp.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -27,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -67,7 +70,10 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询用户")
-    public Result<User> getById(@PathVariable @NotNull(message = "用户id不能为空！") Integer id) {
+    public Result<User> getById(
+            @ApiParam(value = "用户id", required = true)
+            @NotNull(message = "用户id不能为空！")
+            @PathVariable Integer id) {
         User user = userService.getById(id);
         user.setPassword(null);
         return new Result<>(user);
@@ -117,35 +123,46 @@ public class UserController {
         throw new ServerException();
     }
 
-    @PatchMapping("/{id}/lock")
+    @PatchMapping("/lock")
     @ApiOperation(value = "锁定用户账户")
-    public Result<?> lock(@PathVariable @NotNull(message = "用户id不能为空！") Integer id) {
-        User user = userService.getById(id);
+    public Result<?> lock(
+            @ApiParam(value = "用户id", required = true)
+            @NotEmpty(message = "用户id不能为空！") List<Integer> ids) {
+        Collection<User> users = userService.listByIds(ids);
+        if (CollectionUtils.isEmpty(users)) {
+            return new Result<>();
+        }
         // 锁定
-        user.setLocked(true);
-        if (userService.updateById(user)) {
+        users.forEach(user -> user.setLocked(true));
+        if (userService.updateBatchById(users)) {
             return new Result<>();
         }
         throw new ServerException();
     }
 
-    @PatchMapping("/{id}/unlock")
+    @PatchMapping("/unlock")
     @ApiOperation(value = "解锁用户账户")
-    public Result<?> unlock(@PathVariable @NotNull(message = "用户id不能为空！") Integer id) {
-        User user = userService.getById(id);
+    public Result<?> unlock(
+            @ApiParam(value = "用户id", required = true)
+            @NotEmpty(message = "用户id不能为空！") List<Integer> ids) {
+        Collection<User> users = userService.listByIds(ids);
+        if (CollectionUtils.isEmpty(users)) {
+            return new Result<>();
+        }
         // 解锁
-        user.setLocked(false);
-        if (userService.updateById(user)) {
+        users.forEach(user -> user.setLocked(false));
+        if (userService.updateBatchById(users)) {
             return new Result<>();
         }
         throw new ServerException();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping
     @ApiOperation(value = "删除用户账户")
-    public Result<?> delete(@PathVariable @NotNull(message = "用户id不能为空！") Integer id) {
-        userService.getById(id);
-        if (userService.removeById(id)) {
+    public Result<?> remove(
+            @ApiParam(value = "用户id", required = true)
+            @NotEmpty(message = "用户id不能为空！") List<Integer> ids) {
+        if (userService.removeUsersByIds(ids)) {
             return new Result<>();
         }
         throw new ServerException();
@@ -174,9 +191,12 @@ public class UserController {
         throw new ServerException();
     }
 
-    @GetMapping("/reset-password-url")
+    @GetMapping("/{username}/reset-password-url")
     @ApiOperation(value = "获取重置密码链接")
-    public Result<?> generateResultPasswordUrl(@NotBlank(message = "用户名不能为空！") String username) {
+    public Result<?> generateResultPasswordUrl(
+            @ApiParam(value = "用户名", required = true)
+            @NotBlank(message = "用户名不能为空！")
+            @PathVariable String username) {
         User user = userService.getOne(new QueryWrapper<>(new User().setUsername(username)));
         String key = UUID.randomUUID().toString();
         String url = String.format("%s?key=%s", resetPasswordUrl, key);
@@ -188,8 +208,11 @@ public class UserController {
 
     @PatchMapping("/reset-password")
     @ApiOperation(value = "重置账户密码")
-    public Result<?> resetPassword(@NotBlank(message = "key不能为空！") String key,
-                                   @NotBlank(message = "密码不能为空！") String password) {
+    public Result<?> resetPassword(
+            @ApiParam(value = "重置密码key", required = true)
+            @NotBlank(message = "key不能为空！") String key,
+            @ApiParam(value = "密码", required = true)
+            @NotBlank(message = "密码不能为空！") String password) {
         Integer id = (Integer) redisTemplate.opsForValue().get(key);
         if (id == null) {
             throw new LogicException(404, "key已经失效！");

@@ -12,11 +12,14 @@ import com.xzixi.self.portal.webapp.model.vo.AuthorityVO;
 import com.xzixi.self.portal.webapp.service.IAuthorityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @author 薛凌康
@@ -40,7 +43,10 @@ public class AuthorityController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询权限")
-    public Result<Authority> getById(@PathVariable @NotNull(message = "权限id不能为空！") Integer id) {
+    public Result<Authority> getById(
+            @ApiParam(value = "权限id", required = true)
+            @NotNull(message = "权限id不能为空！")
+            @PathVariable Integer id) {
         Authority authority = authorityService.getById(id);
         return new Result<>(authority);
     }
@@ -63,6 +69,17 @@ public class AuthorityController {
         Authority authorityData = authorityService.getById(authority.getId());
         BeanUtils.copyPropertiesIgnoreNull(authority, authorityData);
         if (authorityService.updateById(authorityData)) {
+            return new Result<>();
+        }
+        throw new ServerException();
+    }
+
+    @DeleteMapping
+    @ApiOperation(value = "删除权限")
+    public Result<?> remove(
+            @ApiParam(value = "权限id", required = true)
+            @NotEmpty(message = "权限id不能为空！") List<Integer> ids) {
+        if (authorityService.removeAuthoritiesByIds(ids)) {
             return new Result<>();
         }
         throw new ServerException();
