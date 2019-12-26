@@ -1,9 +1,6 @@
 package com.xzixi.self.portal.sftp.starter.autoconfigure;
 
-import com.xzixi.self.portal.sftp.pool.component.SftpAbandonedConfig;
-import com.xzixi.self.portal.sftp.pool.component.SftpFactory;
-import com.xzixi.self.portal.sftp.pool.component.SftpPool;
-import com.xzixi.self.portal.sftp.pool.component.SftpPoolConfig;
+import com.xzixi.self.portal.sftp.pool.component.*;
 import org.apache.commons.pool2.impl.DefaultEvictionPolicy;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -84,5 +81,11 @@ public class SftpPoolAutoConfiguration {
                              SftpPoolConfig sftpPoolConfig,
                              SftpAbandonedConfig sftpAbandonedConfig) {
         return new SftpPool(sftpFactory, sftpPoolConfig, sftpAbandonedConfig);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public SftpClient sftpClient(SftpPool sftpPool) {
+        return new SftpClient(sftpPool);
     }
 }
