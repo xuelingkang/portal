@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2019-12-20 00:13:41
+Date: 2019-12-27 01:13:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -166,7 +166,7 @@ CREATE TABLE `qrtz_scheduler_state` (
 -- ----------------------------
 -- Records of qrtz_scheduler_state
 -- ----------------------------
-INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-RKG4OBL1576771887840', '1576771898606', '10000');
+INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-RKG4OBL1577380114530', '1577380155543', '10000');
 
 -- ----------------------------
 -- Table structure for qrtz_simple_triggers
@@ -254,6 +254,26 @@ CREATE TABLE `qrtz_triggers` (
 -- ----------------------------
 -- Records of qrtz_triggers
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_attachment
+-- ----------------------------
+DROP TABLE IF EXISTS `t_attachment`;
+CREATE TABLE `t_attachment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '附件类型',
+  `name` varchar(260) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '附件名称',
+  `url` varchar(500) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '访问路径',
+  `address` varchar(500) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '磁盘路径',
+  `create_time` bigint(20) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='附件';
+
+-- ----------------------------
+-- Records of t_attachment
+-- ----------------------------
+INSERT INTO `t_attachment` VALUES ('1', 'BLOG', '阿里巴巴Java开发手册v1.4.0.pdf', '/portalfile/blog/阿里巴巴Java开发手册v1.4.0.pdf', '/home/portalfile/blog/阿里巴巴Java开发手册v1.4.0.pdf', '1577375916855');
+INSERT INTO `t_attachment` VALUES ('2', 'NEWS', '开发计划.md', '/portalfile/news/3b97cf7eeef54ef8bc4c613f2252257d.md', '/home/portalfile/news/3b97cf7eeef54ef8bc4c613f2252257d.md', '1577376234260');
 
 -- ----------------------------
 -- Table structure for t_authority
@@ -347,7 +367,7 @@ CREATE TABLE `t_user` (
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
-INSERT INTO `t_user` VALUES ('1', 'xuelingkang', '$2a$10$Yhi40dmktwZ.YQDEDUwosepYgkEB5/AJDkaN8JddSG5cdBx9qNf8m', 'xuelingkang@163.com', '薛凌康', 'MALE', '655833600000', 'SYSTEM', '1575471070644', '1576754613835', '0', '0');
+INSERT INTO `t_user` VALUES ('1', 'xuelingkang', '$2a$10$Yhi40dmktwZ.YQDEDUwosepYgkEB5/AJDkaN8JddSG5cdBx9qNf8m', 'xuelingkang@163.com', '薛凌康', 'MALE', '655833600000', 'SYSTEM', '1575471070644', '1577289037530', '0', '0');
 
 -- ----------------------------
 -- Table structure for t_user_role_link
