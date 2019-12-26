@@ -10,6 +10,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -29,6 +30,19 @@ import java.util.Set;
 @RestControllerAdvice
 @Slf4j
 public class ControllerExceptionHandler {
+
+    /**
+     * 缺少@RequestParam(require=true)的参数
+     *
+     * @param e MissingServletRequestParameterException
+     * @return Result
+     */
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result<?> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
+        String errMsg = String.format("缺少参数（类型：%s，名称：%s）！", e.getParameterType(), e.getParameterName());
+        return new Result<>(HttpStatus.BAD_REQUEST.value(), errMsg, null);
+    }
 
     /**
      * controller形参校验异常
