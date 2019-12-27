@@ -14,6 +14,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
@@ -41,6 +42,20 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result<?> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
         String errMsg = String.format("缺少参数（类型：%s，名称：%s）！", e.getParameterType(), e.getParameterName());
+        return new Result<>(HttpStatus.BAD_REQUEST.value(), errMsg, null);
+    }
+
+    /**
+     * 参数类型转换异常，用错误的类型接收参数，或参数值不合法导致转换异常
+     *
+     * @param e MethodArgumentTypeMismatchException
+     * @return Result
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result<?> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        String errMsg = String.format("参数类型转换错误（类型：%s，名称：%s，值：%s）！",
+            e.getParameter().getParameterType().getSimpleName(), e.getName(), e.getValue());
         return new Result<>(HttpStatus.BAD_REQUEST.value(), errMsg, null);
     }
 
