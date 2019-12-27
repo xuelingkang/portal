@@ -1,9 +1,12 @@
 package com.xzixi.self.portal.webapp.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.sftp.pool.component.SftpClient;
+import com.xzixi.self.portal.webapp.framework.exception.ServerException;
 import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.framework.util.FileUtil;
 import com.xzixi.self.portal.webapp.model.enums.AttachmentType;
+import com.xzixi.self.portal.webapp.model.params.AttachmentSearchParams;
 import com.xzixi.self.portal.webapp.model.po.Attachment;
 import com.xzixi.self.portal.webapp.model.vo.AttachmentVO;
 import com.xzixi.self.portal.webapp.service.IAttachmentService;
@@ -16,9 +19,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
+import java.util.List;
 
 import static com.xzixi.self.portal.webapp.framework.constant.AttachmentConstant.*;
 
@@ -74,5 +80,39 @@ public class AttachmentController {
         attachmentService.save(attachment);
         AttachmentVO attachmentVO = attachmentService.buildAttachmentVO(attachment);
         return new Result<>(attachmentVO);
+    }
+
+    @GetMapping
+    @ApiOperation(value = "分页查询附件")
+    public Result<IPage<Attachment>> page(AttachmentSearchParams searchParams) {
+        searchParams.setDefaultOrderItems(new String[]{"create_time desc"});
+        IPage<Attachment> page = attachmentService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
+        return new Result<>(page);
+    }
+
+    @GetMapping("/{id}")
+    @ApiOperation(value = "根据id查询附件")
+    public Result<Attachment> getById(
+        @ApiParam(value = "附件id", required = true) @NotNull(message = "附件id不能为空！") @PathVariable Integer id) {
+        Attachment attachment = attachmentService.getById(id);
+        return new Result<>(attachment);
+    }
+
+    @DeleteMapping
+    @ApiOperation(value = "删除附件")
+    public Result<?> remove(
+        @ApiParam(value = "附件id", required = true) @NotEmpty(message = "附件id不能为空！") @RequestParam List<Integer> ids) {
+        Collection<Attachment> attachments = attachmentService.listByIds(ids);
+        if (!attachmentService.removeByIds(ids)) {
+            throw new ServerException();
+        }
+        sftpClient.open(sftp -> attachments.forEach(attachment -> {
+            String address = attachment.getAddress();
+            int lastSeparatorIndex = address.lastIndexOf(SEPARATOR);
+            String dir = address.substring(0, lastSeparatorIndex);
+            String name = address.substring(lastSeparatorIndex + 1);
+            sftp.delete(dir, name);
+        }));
+        return new Result<>();
     }
 }
