@@ -27,7 +27,7 @@ public class SftpClient {
             Handler policyHandler = new PolicyHandler(handler);
             policyHandler.doHandle(sftp);
         } catch (SftpClientException e) {
-            throw new SftpClientException("执行sftp操作异常！", e);
+            throw e;
         } catch (Exception e) {
             throw new SftpClientException("获取sftp连接出错！", e);
         } finally {
