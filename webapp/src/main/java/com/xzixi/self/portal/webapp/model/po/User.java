@@ -47,7 +47,7 @@ public class User extends BaseModel implements IBelonging {
     @NotBlank(groups = {WebsiteUserSave.class, UserSave.class}, message = "昵称不能为空！")
     private String nickname;
 
-    @ApiModelProperty(value = "性别", allowableValues = "MALE,FEMALE")
+    @ApiModelProperty(value = "性别")
     @NotNull(groups = {WebsiteUserSave.class, UserSave.class}, message = "性别不能为空！")
     private Sex sex;
 
@@ -55,7 +55,7 @@ public class User extends BaseModel implements IBelonging {
     @NotNull(groups = {WebsiteUserSave.class, UserSave.class}, message = "生日不能为空！")
     private Long birth;
 
-    @ApiModelProperty(value = "用户类型", allowableValues = "SYSTEM,WEBSITE")
+    @ApiModelProperty(value = "用户类型")
     @NotNull(groups = {UserSave.class}, message = "用户类型不能为空！")
     private UserType type;
 
@@ -65,10 +65,10 @@ public class User extends BaseModel implements IBelonging {
     @ApiModelProperty(value = "登录时间")
     private Long loginTime;
 
-    @ApiModelProperty(value = "是否锁定", allowableValues = "true,false")
+    @ApiModelProperty(value = "是否锁定")
     private Boolean locked;
 
-    @ApiModelProperty(value = "是否删除", allowableValues = "true,false")
+    @ApiModelProperty(value = "是否删除")
     @TableLogic
     private Boolean deleted;
 

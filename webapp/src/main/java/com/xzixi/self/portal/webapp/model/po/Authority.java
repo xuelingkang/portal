@@ -27,11 +27,11 @@ public class Authority extends BaseModel {
     @NotNull(groups = {AuthorityUpdate.class}, message = "权限id不能为空！")
     private Integer id;
 
-    @ApiModelProperty(value = "协议类型", allowableValues = "HTTP,WEBSOCKET")
+    @ApiModelProperty(value = "协议类型")
     @NotNull(groups = {AuthoritySave.class}, message = "协议类型不能为空！")
     private AuthorityProtocol protocol;
 
-    @ApiModelProperty(value = "权限类别", allowableValues = "USER,ROLE,AUTHORITY,ATTACHMENT,JOB,MAIL,ARTICLE,LETTER")
+    @ApiModelProperty(value = "权限类别")
     @NotNull(groups = {AuthoritySave.class}, message = "权限类别不能为空！")
     private AuthorityCategory category;
 
@@ -43,7 +43,7 @@ public class Authority extends BaseModel {
     @NotNull(groups = {AuthoritySave.class}, message = "权限路径不能为空！")
     private String pattern;
 
-    @ApiModelProperty(value = "请求方法", allowableValues = "GET,HEAD,DELETE,POST,PUT,PATCH,SUBSCRIBE")
+    @ApiModelProperty(value = "请求方法")
     private AuthorityMethod method;
 
     @ApiModelProperty(value = "权限描述")

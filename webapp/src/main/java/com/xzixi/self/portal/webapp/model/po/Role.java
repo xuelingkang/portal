@@ -32,11 +32,11 @@ public class Role extends BaseModel {
     @NotNull(groups = {RoleSave.class}, message = "角色顺序不能为空！")
     private Integer seq;
 
-    @ApiModelProperty(value = "是否游客用户的默认角色", allowableValues = "true,false")
+    @ApiModelProperty(value = "是否游客用户的默认角色")
     @NotNull(groups = {RoleSave.class}, message = "是否游客用户的默认角色不能为空！")
     private Boolean guest;
 
-    @ApiModelProperty(value = "是否网站用户的默认角色", allowableValues = "true,false")
+    @ApiModelProperty(value = "是否网站用户的默认角色")
     @NotNull(groups = {RoleSave.class}, message = "是否网站用户的默认角色不能为空！")
     private Boolean website;
 

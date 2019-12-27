@@ -38,11 +38,11 @@ public class AttachmentController {
     private SftpClient sftpClient;
 
     @PostMapping("/{type}")
-    @ApiOperation(value = "上传文件")
+    @ApiOperation(value = "上传附件")
     public Result<AttachmentVO> upload(
-            @ApiParam(value = "文件", required = true) @NotNull(message = "文件不能为空！") @RequestParam("file") MultipartFile file,
+            @ApiParam(value = "文件", required = true) @NotNull(message = "文件不能为空！") @RequestParam MultipartFile file,
             @ApiParam(value = "文件类型", required = true) @NotNull(message = "文件类型不能为空！") @PathVariable AttachmentType type,
-            @ApiParam(value = "是否重命名", allowableValues = "true,false", required = true) @NotNull(message = "是否重命名不能为空！") @RequestParam boolean rename) {
+            @ApiParam(value = "是否重命名", required = true) @NotNull(message = "是否重命名不能为空！") @RequestParam boolean rename) {
         String originalFilename = file.getOriginalFilename();
         // 处理文件名
         String name;
