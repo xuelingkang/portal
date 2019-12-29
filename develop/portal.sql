@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2019-12-27 01:13:24
+Date: 2019-12-29 23:56:49
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -166,7 +166,7 @@ CREATE TABLE `qrtz_scheduler_state` (
 -- ----------------------------
 -- Records of qrtz_scheduler_state
 -- ----------------------------
-INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-RKG4OBL1577380114530', '1577380155543', '10000');
+INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-RKG4OBL1577630393961', '1577630515726', '10000');
 
 -- ----------------------------
 -- Table structure for qrtz_simple_triggers
@@ -267,13 +267,11 @@ CREATE TABLE `t_attachment` (
   `address` varchar(500) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '磁盘路径',
   `create_time` bigint(20) NOT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='附件';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='附件';
 
 -- ----------------------------
 -- Records of t_attachment
 -- ----------------------------
-INSERT INTO `t_attachment` VALUES ('1', 'BLOG', '阿里巴巴Java开发手册v1.4.0.pdf', '/portalfile/blog/阿里巴巴Java开发手册v1.4.0.pdf', '/home/portalfile/blog/阿里巴巴Java开发手册v1.4.0.pdf', '1577375916855');
-INSERT INTO `t_attachment` VALUES ('2', 'NEWS', '开发计划.md', '/portalfile/news/3b97cf7eeef54ef8bc4c613f2252257d.md', '/home/portalfile/news/3b97cf7eeef54ef8bc4c613f2252257d.md', '1577376234260');
 
 -- ----------------------------
 -- Table structure for t_authority
@@ -299,6 +297,39 @@ INSERT INTO `t_authority` VALUES ('3', 'HTTP', 'USER', '100', '/website/user', '
 INSERT INTO `t_authority` VALUES ('4', 'HTTP', 'USER', '200', '/user', 'POST', '添加用户');
 INSERT INTO `t_authority` VALUES ('5', 'HTTP', 'ENUM', '100', '/enum', 'GET', '获取所有枚举');
 INSERT INTO `t_authority` VALUES ('6', 'HTTP', 'ENUM', '200', '/enum/*', 'GET', '根据类名获取枚举');
+
+-- ----------------------------
+-- Table structure for t_job_template
+-- ----------------------------
+DROP TABLE IF EXISTS `t_job_template`;
+CREATE TABLE `t_job_template` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '任务模板名称',
+  `class_name` varchar(200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '任务模板类名',
+  `description` varchar(200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '任务模板描述',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='任务模板';
+
+-- ----------------------------
+-- Records of t_job_template
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_job_template_parameter
+-- ----------------------------
+DROP TABLE IF EXISTS `t_job_template_parameter`;
+CREATE TABLE `t_job_template_parameter` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `job_template_id` int(11) NOT NULL COMMENT '任务模板id',
+  `name` varchar(50) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '参数名称',
+  `type` varchar(50) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '参数类型',
+  `description` varchar(200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '参数描述',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='任务模板参数';
+
+-- ----------------------------
+-- Records of t_job_template_parameter
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for t_role
