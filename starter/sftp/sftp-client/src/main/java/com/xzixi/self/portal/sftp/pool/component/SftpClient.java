@@ -24,7 +24,7 @@ public class SftpClient {
         Sftp sftp = null;
         try {
             sftp = sftpPool.borrowObject();
-            Handler policyHandler = new PolicyHandler(handler);
+            Handler policyHandler = new DelegateHandler(handler);
             policyHandler.doHandle(sftp);
         } catch (SftpClientException e) {
             throw e;
@@ -38,17 +38,17 @@ public class SftpClient {
     }
 
     @AllArgsConstructor
-    static class PolicyHandler implements Handler {
+    static class DelegateHandler implements Handler {
 
-        private Handler delegate;
+        private Handler target;
 
         @Override
         public void doHandle(Sftp sftp) {
             try {
-                delegate.doHandle(sftp);
+                target.doHandle(sftp);
             } catch (Exception e) {
                 // 捕获sftp操作的所有异常，包装成SftpClientException
-                throw new SftpClientException(e);
+                throw new SftpClientException("执行sftp操作出错！", e);
             }
         }
     }
