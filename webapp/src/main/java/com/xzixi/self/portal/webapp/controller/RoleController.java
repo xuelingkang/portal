@@ -49,22 +49,20 @@ public class RoleController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询角色")
-    public Result<Role> getById(
+    public Result<RoleVO> getById(
             @ApiParam(value = "角色id", required = true) @NotNull(message = "角色id不能为空！") @PathVariable Integer id) {
-        Role role = roleService.getById(id);
-        return new Result<>(role);
+        RoleVO roleVO = roleService.buildRoleVO(id);
+        return new Result<>(roleVO);
     }
 
     @PostMapping
     @ApiOperation(value = "保存角色")
-    public Result<RoleVO> save(@Validated({RoleSave.class}) Role role) {
+    public Result<?> save(@Validated({RoleSave.class}) Role role) {
         // 保存角色
         if (!roleService.save(role)) {
             throw new ServerException();
         }
-        // 构建RoleVO
-        RoleVO roleVO = roleService.buildRoleVO(role);
-        return new Result<>(roleVO);
+        return new Result<>();
     }
 
     @PutMapping
@@ -97,9 +95,12 @@ public class RoleController {
                 .map(authorityId -> new RoleAuthorityLink(id, authorityId))
                 .collect(Collectors.toList());
         List<RoleAuthorityLink> oldLinks = roleAuthorityLinkService.list(new QueryWrapper<>(new RoleAuthorityLink().setRoleId(id)));
-        roleAuthorityLinkService.merge(newLinks, oldLinks, (sources, target) -> sources.stream()
+        boolean result = roleAuthorityLinkService.merge(newLinks, oldLinks, (sources, target) -> sources.stream()
                 .filter(source -> source.getAuthorityId() != null && source.getAuthorityId().equals(target.getAuthorityId()))
                 .findFirst().orElse(null));
-        return new Result<>();
+        if (result) {
+            return new Result<>();
+        }
+        throw new ServerException();
     }
 }

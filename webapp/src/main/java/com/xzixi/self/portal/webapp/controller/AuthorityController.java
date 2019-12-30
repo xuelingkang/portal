@@ -43,22 +43,20 @@ public class AuthorityController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询权限")
-    public Result<Authority> getById(
+    public Result<AuthorityVO> getById(
             @ApiParam(value = "权限id", required = true) @NotNull(message = "权限id不能为空！") @PathVariable Integer id) {
-        Authority authority = authorityService.getById(id);
-        return new Result<>(authority);
+        AuthorityVO authorityVO = authorityService.buildAuthorityVO(id);
+        return new Result<>(authorityVO);
     }
 
     @PostMapping
     @ApiOperation(value = "保存权限")
-    public Result<AuthorityVO> save(@Validated({AuthoritySave.class}) Authority authority) {
+    public Result<?> save(@Validated({AuthoritySave.class}) Authority authority) {
         // 保存权限
         if (!authorityService.save(authority)) {
             throw new ServerException();
         }
-        // 构建AuthorityVO
-        AuthorityVO authorityVO = authorityService.buildAuthorityVO(authority);
-        return new Result<>(authorityVO);
+        return new Result<>();
     }
 
     @PutMapping

@@ -62,8 +62,13 @@ public class UserServiceImpl extends BaseServiceImpl<IUserData, User> implements
     }
 
     @Override
+    public UserVO buildUserVO(Integer id) {
+        User user = getById(id);
+        return buildUserVO(user);
+    }
+
+    @Override
     public UserVO buildUserVO(User user) {
-        user = getById(user.getId());
         UserVO userVO = new UserVO(user);
         // 查询角色
         Collection<Role> roles = roleService.listByUserId(user.getId());

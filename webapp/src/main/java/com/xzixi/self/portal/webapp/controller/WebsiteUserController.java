@@ -5,7 +5,6 @@ import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.model.enums.UserType;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.valid.WebsiteUserSave;
-import com.xzixi.self.portal.webapp.model.vo.UserVO;
 import com.xzixi.self.portal.webapp.service.IUserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,7 +30,7 @@ public class WebsiteUserController {
 
     @PostMapping
     @ApiOperation(value = "注册")
-    public Result<UserVO> save(@Validated({WebsiteUserSave.class}) User user) {
+    public Result<?> save(@Validated({WebsiteUserSave.class}) User user) {
         user.setType(UserType.WEBSITE).setCreateTime(System.currentTimeMillis())
                 .setLoginTime(null).setLocked(false).setDeleted(false);
         // 加密密码
@@ -40,9 +39,6 @@ public class WebsiteUserController {
         if (!userService.saveUser(user)) {
             throw new ServerException();
         }
-        // 构建UserVO
-        UserVO userVO = userService.buildUserVO(user);
-        userVO.setPassword(null);
-        return new Result<>(userVO);
+        return new Result<>();
     }
 }

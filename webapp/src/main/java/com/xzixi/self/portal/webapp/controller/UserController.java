@@ -70,16 +70,16 @@ public class UserController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询用户")
-    public Result<User> getById(
+    public Result<UserVO> getById(
             @ApiParam(value = "用户id", required = true) @NotNull(message = "用户id不能为空！") @PathVariable Integer id) {
-        User user = userService.getById(id);
-        user.setPassword(null);
-        return new Result<>(user);
+        UserVO userVO = userService.buildUserVO(id);
+        userVO.setPassword(null);
+        return new Result<>(userVO);
     }
 
     @PostMapping
     @ApiOperation(value = "添加用户")
-    public Result<UserVO> save(@Validated({UserSave.class}) User user) {
+    public Result<?> save(@Validated({UserSave.class}) User user) {
         user.setCreateTime(System.currentTimeMillis())
                 .setLoginTime(null).setLocked(false).setDeleted(false);
         // 加密密码
@@ -88,10 +88,7 @@ public class UserController {
         if (!userService.saveUser(user)) {
             throw new ServerException();
         }
-        // 构建UserVO
-        UserVO userVO = userService.buildUserVO(user);
-        userVO.setPassword(null);
-        return new Result<>(userVO);
+        return new Result<>();
     }
 
     @PutMapping
@@ -223,9 +220,12 @@ public class UserController {
             @ApiParam(value = "角色id", required = true) @NotEmpty(message = "角色id不能为空！") @RequestParam List<Integer> roleIds) {
         List<UserRoleLink> newLinks = roleIds.stream().map(roleId -> new UserRoleLink(id, roleId)).collect(Collectors.toList());
         List<UserRoleLink> oldLinks = userRoleLinkService.list(new QueryWrapper<>(new UserRoleLink().setUserId(id)));
-        userRoleLinkService.merge(newLinks, oldLinks, (sources, target) -> sources.stream()
+        boolean result = userRoleLinkService.merge(newLinks, oldLinks, (sources, target) -> sources.stream()
                 .filter(source -> source.getRoleId() != null && source.getRoleId().equals(target.getRoleId()))
                 .findFirst().orElse(null));
-        return new Result<>();
+        if (result) {
+            return new Result<>();
+        }
+        throw new ServerException();
     }
 }

@@ -30,6 +30,14 @@ public interface IRoleService extends IBaseService<Role> {
     /**
      * 构建RoleVO对象
      *
+     * @param id 角色id
+     * @return RoleVO
+     */
+    RoleVO buildRoleVO(Integer id);
+
+    /**
+     * 构建RoleVO对象
+     *
      * @param role 角色
      * @return RoleVO
      */

@@ -92,10 +92,10 @@ public class AttachmentController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "根据id查询附件")
-    public Result<Attachment> getById(
+    public Result<AttachmentVO> getById(
         @ApiParam(value = "附件id", required = true) @NotNull(message = "附件id不能为空！") @PathVariable Integer id) {
-        Attachment attachment = attachmentService.getById(id);
-        return new Result<>(attachment);
+        AttachmentVO attachmentVO = attachmentService.buildAttachmentVO(id);
+        return new Result<>(attachmentVO);
     }
 
     @DeleteMapping

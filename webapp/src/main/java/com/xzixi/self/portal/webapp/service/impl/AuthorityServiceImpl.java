@@ -67,8 +67,13 @@ public class AuthorityServiceImpl extends BaseServiceImpl<IAuthorityData, Author
     }
 
     @Override
+    public AuthorityVO buildAuthorityVO(Integer id) {
+        Authority authority = getById(id);
+        return buildAuthorityVO(authority);
+    }
+
+    @Override
     public AuthorityVO buildAuthorityVO(Authority authority) {
-        authority = getById(authority.getId());
         AuthorityVO authorityVO = new AuthorityVO(authority);
         authorityVO.setAuthoritySignal(authority.getProtocol() + "." + authority.getPattern() + "." + authority.getMethod());
         return authorityVO;

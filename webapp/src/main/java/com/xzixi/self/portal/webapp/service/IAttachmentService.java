@@ -12,6 +12,14 @@ public interface IAttachmentService extends IBaseService<Attachment> {
     /**
      * 构建AttachmentVO
      *
+     * @param id 附件id
+     * @return AttachmentVO
+     */
+    AttachmentVO buildAttachmentVO(Integer id);
+
+    /**
+     * 构建AttachmentVO
+     *
      * @param attachment Attachment
      * @return AttachmentVO
      */

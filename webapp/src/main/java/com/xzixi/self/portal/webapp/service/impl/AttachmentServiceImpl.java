@@ -14,8 +14,13 @@ import org.springframework.stereotype.Service;
 public class AttachmentServiceImpl extends BaseServiceImpl<IAttachmentData, Attachment> implements IAttachmentService {
 
     @Override
+    public AttachmentVO buildAttachmentVO(Integer id) {
+        Attachment attachment = getById(id);
+        return buildAttachmentVO(attachment);
+    }
+
+    @Override
     public AttachmentVO buildAttachmentVO(Attachment attachment) {
-        attachment = getById(attachment.getId());
         return new AttachmentVO(attachment);
     }
 }

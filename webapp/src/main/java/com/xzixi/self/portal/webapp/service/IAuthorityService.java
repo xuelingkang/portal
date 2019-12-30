@@ -40,6 +40,14 @@ public interface IAuthorityService extends IBaseService<Authority> {
     /**
      * 构建AuthorityVO
      *
+     * @param id 权限id
+     * @return AuthorityVO
+     */
+    AuthorityVO buildAuthorityVO(Integer id);
+
+    /**
+     * 构建AuthorityVO
+     *
      * @param authority Authority
      * @return AuthorityVO
      */

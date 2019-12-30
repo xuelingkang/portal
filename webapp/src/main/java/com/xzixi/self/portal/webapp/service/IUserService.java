@@ -30,6 +30,14 @@ public interface IUserService extends IBaseService<User> {
     /**
      * 构建UserVO对象
      *
+     * @param id 用户id
+     * @return UserVO
+     */
+    UserVO buildUserVO(Integer id);
+
+    /**
+     * 构建UserVO对象
+     *
      * @param user 用户
      * @return UserVO
      */

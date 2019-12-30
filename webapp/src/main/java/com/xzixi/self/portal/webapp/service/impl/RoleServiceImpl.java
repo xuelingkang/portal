@@ -71,8 +71,13 @@ public class RoleServiceImpl extends BaseServiceImpl<IRoleData, Role> implements
     }
 
     @Override
+    public RoleVO buildRoleVO(Integer id) {
+        Role role = getById(id);
+        return buildRoleVO(role);
+    }
+
+    @Override
     public RoleVO buildRoleVO(Role role) {
-        role = getById(role.getId());
         RoleVO roleVO = new RoleVO(role);
         // 查询权限
         Collection<Authority> authorities = authorityService.listByRoleIds(Collections.singletonList(role.getId()));
