@@ -46,7 +46,7 @@ public interface IBaseService<T extends BaseModel> extends IBaseData<T> {
      * @param oldModels 旧数据集
      * @param selector 比较器
      */
-    void merge(Collection<T> newModels, Collection<T> oldModels, MergeSelector<T> selector);
+    boolean merge(Collection<T> newModels, Collection<T> oldModels, MergeSelector<T> selector);
 
     interface MergeSelector<T> {
 

@@ -51,7 +51,7 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void merge(Collection<T> newModels, Collection<T> oldModels, MergeSelector<T> selector) {
+    public boolean merge(Collection<T> newModels, Collection<T> oldModels, MergeSelector<T> selector) {
         // 需要保存的数据
         List<T> modelsForSave = newModels.stream()
                 .filter(newModel -> selector.select(oldModels, newModel) == null)
@@ -73,14 +73,21 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
                 })
                 .collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(modelsForSave)) {
-            saveBatch(modelsForSave);
+            if (!saveBatch(modelsForSave)) {
+                return false;
+            }
         }
         if (CollectionUtils.isNotEmpty(modelIdsForRemove)) {
-            removeByIds(modelIdsForRemove);
+            if (!removeByIds(modelIdsForRemove)) {
+                return false;
+            }
         }
         if (CollectionUtils.isNotEmpty(modelsForUpdate)) {
-            updateBatchById(modelsForUpdate);
+            if (!updateBatchById(modelsForUpdate)) {
+                return false;
+            }
         }
+        return true;
     }
 
     @Override
