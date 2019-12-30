@@ -26,10 +26,40 @@
 
 ## 参数设计
 
+`BaseSearchParams`是查询参数的基类，没有特殊需求只需要继承这个类就可以使用，默认会包含分页参数和实体类的所有属性，也可以在子类中扩展属性
+
 ## 参数校验
+
+- 直接在controller的方法参数上使用validation框架的注解，需要在controller类加上`@Validate`
+- 在com.xzixi.self.portal.webapp.model.valid包下创建接口用作校验分组，在controller的方法参数上添加`@Validated`，会按照实体类字段上定义的校验规则进行校验
 
 ## 返回值设计
 
+restful接口返回值统一都是`Result`
+
+- `code`：状态码，意思和http状态码一致
+- `message`：消息
+- `data`：数据
+
 ## 缓存设计
 
+- 使用`FuzzyEvictRedisCacheManager`扩展`RedisCacheManager`，`FuzzyEvictRedisCache`扩展`RedisCache`，实现了使用通配符匹配key
+- 在com.xzixi.self.portal.webapp.config.redis包定义了一些默认的`KeyGenerator`，包括：
+    1. 根据id和id集合生成key
+    2. 根据参数列表的hashCode生成key
+- `@CacheEnhance`编译期注解的作用：编译期重写`ServiceImpl`的方法，并添加缓存管理，使用`@CacheEnhance`需要定义两个字符串常量`BASE_CACHE_NAME`和`CASUAL_CACHE_NAME`
+
 ## 认证授权
+
+使用spring-security框架，认证支持前后分离，自定义授权逻辑，具体流程：
+
+1. `FilterInvocationSecurityMetadataSourceImpl`，使用`AntPathRequestMatcher`匹配当前请求所需要的权限，将权限封装到返回值
+2. `AccessDecisionManagerImpl`，接收上一步的返回值，比对当前用户的权限，没有权限就抛出异常，有权限就`return`执行真正的请求
+
+com.xzixi.self.portal.webapp.config.security包除了以上两个类，还包括一些认证授权成功或失败处理器等
+
+## 全局异常拦截
+
+1. 处理参数错误，给出友好的提示
+2. 项目运行期出现的可预期的异常，给出友好的提示
+3. 项目运行期出现的不可预期的bug，防止堆栈信息暴露
