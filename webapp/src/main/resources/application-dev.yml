@@ -65,7 +65,7 @@ server:
       enabled: true # 开启访问日志，默认false
 
 log:
-  home: E:/project/java/logs/self-portal # 日志目录
+  home: E:/project/java/logs/portal # 日志目录
 
 attachment:
   save-dir: /home/portalfile # 文件保存路径
