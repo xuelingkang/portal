@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -123,6 +124,7 @@ public class BaseSearchParams<T> {
             return;
         }
         Field[] fields = ReflectUtil.getDeclaredFields(object.getClass());
+        // TODO 有bug，改成按真实类型判断
         for (Field field : fields) {
             Annotation annotation = findAnnotation(field);
             if (annotation == null) {
@@ -131,19 +133,12 @@ public class BaseSearchParams<T> {
 
             Object value = ReflectUtil.getProp(object, field);
 
-            Class<?> annotationClass = annotation.getClass();
             String column = ReflectUtil.invokeMethod(annotation, "value", new Class<?>[0]);
-
-            Parser parser = annotationClass.getDeclaredAnnotation(Parser.class);
-            String methodName;
-            Class<?>[] parameterTypes;
-            if (parser == null) {
-                methodName = annotationClass.getSimpleName().toLowerCase();
-                parameterTypes = new Class<?>[]{String.class, Object.class};
-            } else {
-                methodName = parser.value();
-                parameterTypes = parser.parameterTypes();
+            if (StringUtils.isBlank(column)) {
+                column = field.getName();
             }
+            String methodName = ReflectUtil.invokeMethod(annotation, "methodName", new Class<?>[0]);
+            Class<?>[] parameterTypes = ReflectUtil.invokeMethod(annotation, "parameterTypes", new Class<?>[0]);
 
             ReflectUtil.invokeMethod(queryWrapper, methodName, parameterTypes, column, value);
         }

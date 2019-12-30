@@ -10,7 +10,6 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Parser("eq")
 public @interface Eq {
 
     /** 列名 */

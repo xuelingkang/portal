@@ -10,7 +10,6 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Parser("ge")
 public @interface Ge {
 
     /** 列名 */

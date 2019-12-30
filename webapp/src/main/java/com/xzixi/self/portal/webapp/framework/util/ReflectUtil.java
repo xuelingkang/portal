@@ -12,10 +12,19 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
+ * 反射工具类
+ *
  * @author 薛凌康
  */
 public class ReflectUtil {
 
+    /**
+     * 反射创建实例
+     *
+     * @param cls 类
+     * @param <T> 返回值类型
+     * @return cls的实例
+     */
     public static <T> T newInstance(Class<T> cls) {
         try {
             return cls.newInstance();
@@ -34,8 +43,8 @@ public class ReflectUtil {
      */
     public static Field[] getDeclaredFields(Class<?> cls) {
         Field[] fields = cls.getDeclaredFields();
-        while (cls.getSuperclass() != Object.class) {
-            ArrayUtils.add(fields, getDeclaredFields(cls.getSuperclass()));
+        if (cls.getSuperclass() != Object.class) {
+            fields = ArrayUtils.addAll(fields, getDeclaredFields(cls.getSuperclass()));
         }
         return fields;
     }
@@ -61,17 +70,7 @@ public class ReflectUtil {
             throw new ProjectException(String.format("方法名称(%s)不合法！", methodName));
         }
 
-        Method method;
-        try {
-            method = instance.getClass().getDeclaredMethod(methodName, parameterTypes);
-        } catch (NoSuchMethodException e) {
-            String errMsg = String.format(
-                    "类(%s)没有方法(%s(%s))！",
-                    instance.getClass().getName(),
-                    methodName,
-                    StringUtils.join(Arrays.stream(parameterTypes).map(Class::getName).collect(Collectors.toList()), ","));
-            throw new ProjectException(errMsg, e);
-        }
+        Method method = getDeclaredMethod(instance.getClass(), methodName, parameterTypes);
 
         method.setAccessible(true);
         Object result;
@@ -196,12 +195,29 @@ public class ReflectUtil {
         Field field;
         try {
             if (cls == Object.class) {
-                return null;
+                throw new ProjectException(String.format("没有属性(%s)", fieldName));
             }
             field = cls.getDeclaredField(fieldName);
         } catch (NoSuchFieldException e) {
             field = getDeclaredField(cls.getSuperclass(), fieldName);
         }
         return field;
+    }
+
+    private static Method getDeclaredMethod(Class<?> cls, String methodName, Class<?>[] parameterTypes) {
+        Method method;
+        try {
+            if (cls == Object.class) {
+                String errMsg = String.format(
+                        "没有方法(%s(%s))！",
+                        methodName,
+                        StringUtils.join(Arrays.stream(parameterTypes).map(Class::getName).collect(Collectors.toList()), ","));
+                throw new ProjectException(errMsg);
+            }
+            method = cls.getDeclaredMethod(methodName, parameterTypes);
+        } catch (NoSuchMethodException e) {
+            method = getDeclaredMethod(cls.getSuperclass(), methodName, parameterTypes);
+        }
+        return method;
     }
 }
