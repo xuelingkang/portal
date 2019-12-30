@@ -195,7 +195,7 @@ public class ReflectUtil {
     private static Field getDeclaredField(Class<?> cls, String fieldName) {
         Field field;
         try {
-            if (cls == null) {
+            if (cls == Object.class) {
                 return null;
             }
             field = cls.getDeclaredField(fieldName);
