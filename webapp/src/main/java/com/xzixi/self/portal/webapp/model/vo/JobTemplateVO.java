@@ -7,7 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
-import java.util.List;
+import java.util.Collection;
 
 /**
  * @author 薛凌康
@@ -19,7 +19,7 @@ public class JobTemplateVO extends JobTemplate {
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "任务模板参数列表")
-    private List<JobTemplateParameter> parameters;
+    private Collection<JobTemplateParameter> parameters;
 
     public JobTemplateVO(JobTemplate jobTemplate, String... ignoreProperties) {
         BeanUtils.copyProperties(jobTemplate, this, ignoreProperties);
