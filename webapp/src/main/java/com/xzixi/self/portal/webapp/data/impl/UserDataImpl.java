@@ -11,6 +11,6 @@ import org.springframework.stereotype.Service;
  * @author 薛凌康
  */
 @Service
-@CacheEnhance
+@CacheEnhance(baseCacheName = "user:base", casualCacheName = "user:casual")
 public class UserDataImpl extends BaseDataImpl<UserMapper, User> implements IUserData {
 }

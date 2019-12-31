@@ -11,6 +11,6 @@ import org.springframework.stereotype.Service;
  * @author 薛凌康
  */
 @Service
-@CacheEnhance
+@CacheEnhance(baseCacheName = "jobTemplate:base", casualCacheName = "jobTemplate:casual")
 public class JobTemplateDataImpl extends BaseDataImpl<JobTemplateMapper, JobTemplate> implements IJobTemplateData {
 }

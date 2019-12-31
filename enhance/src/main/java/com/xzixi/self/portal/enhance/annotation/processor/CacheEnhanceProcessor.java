@@ -7,6 +7,7 @@ import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.util.List;
 import com.sun.tools.javac.util.Name;
 import com.xzixi.self.portal.enhance.annotation.CacheEnhance;
+import com.xzixi.self.portal.enhance.annotation.util.StringUtils;
 
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -30,6 +31,14 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         for (Element element: roundEnv.getElementsAnnotatedWith(CacheEnhance.class)) {
             CacheEnhance cacheEnhance = element.getAnnotation(CacheEnhance.class);
 
+            if (StringUtils.isBlank(cacheEnhance.baseCacheName())) {
+                messager.printMessage(Diagnostic.Kind.ERROR, "baseCacheName不能为空！");
+            }
+
+            if (StringUtils.isBlank(cacheEnhance.casualCacheName())) {
+                messager.printMessage(Diagnostic.Kind.ERROR, "casualCacheName不能为空！");
+            }
+
             // 类定义
             JCTree.JCClassDecl classDecl = (JCTree.JCClassDecl) elements.getTree(element);
 
@@ -38,49 +47,49 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
 
             // 修改类，追加方法
             if (cacheEnhance.getById()) {
-                classDecl.defs = classDecl.defs.append(getByIdDecl(modelClassName));
+                classDecl.defs = classDecl.defs.append(getByIdDecl(cacheEnhance, modelClassName));
             }
             if (cacheEnhance.listByIds()) {
-                classDecl.defs = classDecl.defs.append(listByIdsDecl(modelClassName));
+                classDecl.defs = classDecl.defs.append(listByIdsDecl(cacheEnhance, modelClassName));
             }
             if (cacheEnhance.getOne()) {
-                classDecl.defs = classDecl.defs.append(getOneDecl(modelClassName));
+                classDecl.defs = classDecl.defs.append(getOneDecl(cacheEnhance, modelClassName));
             }
             if (cacheEnhance.list()) {
-                classDecl.defs = classDecl.defs.append(listDecl(modelClassName));
+                classDecl.defs = classDecl.defs.append(listDecl(cacheEnhance, modelClassName));
             }
             if (cacheEnhance.listByMap()) {
-                classDecl.defs = classDecl.defs.append(listByMapDecl(modelClassName));
+                classDecl.defs = classDecl.defs.append(listByMapDecl(cacheEnhance, modelClassName));
             }
             if (cacheEnhance.page()) {
-                classDecl.defs = classDecl.defs.append(pageDecl(modelClassName));
+                classDecl.defs = classDecl.defs.append(pageDecl(cacheEnhance, modelClassName));
             }
             if (cacheEnhance.count()) {
-                classDecl.defs = classDecl.defs.append(countDecl(modelClassName));
+                classDecl.defs = classDecl.defs.append(countDecl(cacheEnhance, modelClassName));
             }
             if (cacheEnhance.updateById()) {
-                classDecl.defs = classDecl.defs.append(updateByIdDecl(modelClassName));
+                classDecl.defs = classDecl.defs.append(updateByIdDecl(cacheEnhance, modelClassName));
             }
             if (cacheEnhance.updateBatchById()) {
-                classDecl.defs = classDecl.defs.append(updateBatchByIdDecl(modelClassName));
+                classDecl.defs = classDecl.defs.append(updateBatchByIdDecl(cacheEnhance, modelClassName));
             }
             if (cacheEnhance.save()) {
-                classDecl.defs = classDecl.defs.append(saveDecl(modelClassName));
+                classDecl.defs = classDecl.defs.append(saveDecl(cacheEnhance, modelClassName));
             }
             if (cacheEnhance.saveBatch()) {
-                classDecl.defs = classDecl.defs.append(saveBatchDecl(modelClassName));
+                classDecl.defs = classDecl.defs.append(saveBatchDecl(cacheEnhance, modelClassName));
             }
             if (cacheEnhance.saveOrUpdate()) {
-                classDecl.defs = classDecl.defs.append(saveOrUpdateDecl(modelClassName));
+                classDecl.defs = classDecl.defs.append(saveOrUpdateDecl(cacheEnhance, modelClassName));
             }
             if (cacheEnhance.saveOrUpdateBatch()) {
-                classDecl.defs = classDecl.defs.append(saveOrUpdateBatchDecl(modelClassName));
+                classDecl.defs = classDecl.defs.append(saveOrUpdateBatchDecl(cacheEnhance, modelClassName));
             }
             if (cacheEnhance.removeById()) {
-                classDecl.defs = classDecl.defs.append(removeByIdDecl());
+                classDecl.defs = classDecl.defs.append(removeByIdDecl(cacheEnhance));
             }
             if (cacheEnhance.removeByIds()) {
-                classDecl.defs = classDecl.defs.append(removeByIdsDecl());
+                classDecl.defs = classDecl.defs.append(removeByIdsDecl(cacheEnhance));
             }
         }
         // 返回true，其他processor不再处理这个注解
@@ -109,9 +118,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     private static final String ALL_ENTRIES = "allEntries";
     private static final String EVICT = "evict";
 
-    private static final String BASE_CACHE_NAME = "BASE_CACHE_NAME";
-    private static final String CASUAL_CACHE_NAME = "CASUAL_CACHE_NAME";
-
     private static final String DEFAULT_BASE_KEY_GENERATOR = "defaultBaseKeyGenerator";
     private static final String DEFAULT_CASUAL_KEY_GENERATOR = "defaultCasualKeyGenerator";
     private static final String DEFAULT_EVICT_BY_ID_KEY_GENERATOR = "defaultEvictByIdKeyGenerator";
@@ -122,12 +128,12 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * getById
      */
-    private JCTree.JCMethodDecl getByIdDecl(String modelClassName) {
+    private JCTree.JCMethodDecl getByIdDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "getById";
         final String superMethod = "super.getById";
         final String id = "id";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), baseCache());
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), baseCache(cacheEnhance.baseCacheName()));
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -144,12 +150,12 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * listByIds
      */
-    public JCTree.JCMethodDecl listByIdsDecl(String modelClassName) {
+    public JCTree.JCMethodDecl listByIdsDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "listByIds";
         final String superMethod = "super.listByIds";
         final String idList = "idList";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), baseCache());
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), baseCache(cacheEnhance.baseCacheName()));
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -166,13 +172,13 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * getOne
      */
-    public JCTree.JCMethodDecl getOneDecl(String modelClassName) {
+    public JCTree.JCMethodDecl getOneDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "getOne";
         final String superMethod = "super.getOne";
         final String queryWrapper = "queryWrapper";
         final String throwEx = "throwEx";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache());
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache(cacheEnhance.casualCacheName()));
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -189,12 +195,12 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * list
      */
-    public JCTree.JCMethodDecl listDecl(String modelClassName) {
+    public JCTree.JCMethodDecl listDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "list";
         final String superMethod = "super.list";
         final String queryWrapper = "queryWrapper";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache());
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache(cacheEnhance.casualCacheName()));
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -211,12 +217,12 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * listByMap
      */
-    public JCTree.JCMethodDecl listByMapDecl(String modelClassName) {
+    public JCTree.JCMethodDecl listByMapDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "listByMap";
         final String superMethod = "super.listByMap";
         final String columnMap = "columnMap";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache());
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache(cacheEnhance.casualCacheName()));
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -233,13 +239,13 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * page
      */
-    public JCTree.JCMethodDecl pageDecl(String modelClassName) {
+    public JCTree.JCMethodDecl pageDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "page";
         final String superMethod = "super.page";
         final String page = "page";
         final String queryWrapper = "queryWrapper";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache());
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache(cacheEnhance.casualCacheName()));
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -256,12 +262,12 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * count
      */
-    private JCTree.JCMethodDecl countDecl(String modelClassName) {
+    private JCTree.JCMethodDecl countDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "count";
         final String superMethod = "super.count";
         final String queryWrapper = "queryWrapper";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache());
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache(cacheEnhance.casualCacheName()));
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -278,12 +284,13 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * updateById
      */
-    private JCTree.JCMethodDecl updateByIdDecl(String modelClassName) {
+    private JCTree.JCMethodDecl updateByIdDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "updateById";
         final String superMethod = "super.updateById";
         final String entity = "entity";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), evicts(byEntityEvict(), casualEvict()));
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(),
+            evicts(byEntityEvict(cacheEnhance.baseCacheName()), casualEvict(cacheEnhance.casualCacheName())));
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -300,13 +307,14 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * updateBatchById
      */
-    private JCTree.JCMethodDecl updateBatchByIdDecl(String modelClassName) {
+    private JCTree.JCMethodDecl updateBatchByIdDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "updateBatchById";
         final String superMethod = "super.updateBatchById";
         final String entityList = "entityList";
         final String batchSize = "batchSize";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), evicts(byEntitiesEvict(), casualEvict()));
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(),
+            evicts(byEntitiesEvict(cacheEnhance.baseCacheName()), casualEvict(cacheEnhance.casualCacheName())));
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -323,12 +331,12 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * save
      */
-    private JCTree.JCMethodDecl saveDecl(String modelClassName) {
+    private JCTree.JCMethodDecl saveDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "save";
         final String superMethod = "super.save";
         final String entity = "entity";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), casualEvict());
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), casualEvict(cacheEnhance.casualCacheName()));
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -345,13 +353,13 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * saveBatch
      */
-    private JCTree.JCMethodDecl saveBatchDecl(String modelClassName) {
+    private JCTree.JCMethodDecl saveBatchDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "saveBatch";
         final String superMethod = "super.saveBatch";
         final String entityList = "entityList";
         final String batchSize = "batchSize";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), casualEvict());
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), casualEvict(cacheEnhance.casualCacheName()));
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -368,12 +376,13 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * saveOrUpdate
      */
-    private JCTree.JCMethodDecl saveOrUpdateDecl(String modelClassName) {
+    private JCTree.JCMethodDecl saveOrUpdateDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "saveOrUpdate";
         final String superMethod = "super.saveOrUpdate";
         final String entity = "entity";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), evicts(byEntityEvict(), casualEvict()));
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(),
+            evicts(byEntityEvict(cacheEnhance.baseCacheName()), casualEvict(cacheEnhance.casualCacheName())));
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -390,13 +399,14 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * saveOrUpdateBatch
      */
-    private JCTree.JCMethodDecl saveOrUpdateBatchDecl(String modelClassName) {
+    private JCTree.JCMethodDecl saveOrUpdateBatchDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "saveOrUpdateBatch";
         final String superMethod = "super.saveOrUpdateBatch";
         final String entityList = "entityList";
         final String batchSize = "batchSize";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), evicts(byEntitiesEvict(), casualEvict()));
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(),
+            evicts(byEntitiesEvict(cacheEnhance.baseCacheName()), casualEvict(cacheEnhance.casualCacheName())));
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -413,12 +423,13 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * removeById
      */
-    private JCTree.JCMethodDecl removeByIdDecl() {
+    private JCTree.JCMethodDecl removeByIdDecl(CacheEnhance cacheEnhance) {
         final String method = "removeById";
         final String superMethod = "super.removeById";
         final String id = "id";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), evicts(byIdEvict(), casualEvict()));
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(),
+            evicts(byIdEvict(cacheEnhance.baseCacheName()), casualEvict(cacheEnhance.casualCacheName())));
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -435,12 +446,13 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * removeByIds
      */
-    private JCTree.JCMethodDecl removeByIdsDecl() {
+    private JCTree.JCMethodDecl removeByIdsDecl(CacheEnhance cacheEnhance) {
         final String method = "removeByIds";
         final String superMethod = "super.removeByIds";
         final String idList = "idList";
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(), evicts(byIdsEvict(), casualEvict()));
+        List<JCTree.JCAnnotation> annotationList = List.of(override(), transactional(),
+            evicts(byIdsEvict(cacheEnhance.baseCacheName()), casualEvict(cacheEnhance.casualCacheName())));
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -578,63 +590,63 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * {@code @Cacheable(cacheNames=BASE_CACHE_NAME, keyGenerator="defaultBaseKeyGenerator")}
      */
-    private JCTree.JCAnnotation baseCache() {
+    private JCTree.JCAnnotation baseCache(String cacheName) {
         return treeMaker.Annotation(memberAccess(CACHE_ABLE),
-                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), memberAccess(BASE_CACHE_NAME)),
+                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), treeMaker.Literal(cacheName)),
                         treeMaker.Assign(memberAccess(KEY_GENERATOR), treeMaker.Literal(DEFAULT_BASE_KEY_GENERATOR))));
     }
 
     /**
      * {@code @Cacheable(cacheNames=CASUAL_CACHE_NAME, keyGenerator="defaultCasualKeyGenerator")}
      */
-    private JCTree.JCAnnotation casualCache() {
+    private JCTree.JCAnnotation casualCache(String cacheName) {
         return treeMaker.Annotation(memberAccess(CACHE_ABLE),
-                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), memberAccess(CASUAL_CACHE_NAME)),
+                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), treeMaker.Literal(cacheName)),
                         treeMaker.Assign(memberAccess(KEY_GENERATOR), treeMaker.Literal(DEFAULT_CASUAL_KEY_GENERATOR))));
     }
 
     /**
      * {@code @CacheEvict(cacheNames=BASE_CACHE_NAME, keyGenerator="defaultEvictByIdKeyGenerator")}
      */
-    private JCTree.JCAnnotation byIdEvict() {
+    private JCTree.JCAnnotation byIdEvict(String cacheName) {
         return treeMaker.Annotation(memberAccess(CACHE_EVICT),
-                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), memberAccess(BASE_CACHE_NAME)),
+                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), treeMaker.Literal(cacheName)),
                         treeMaker.Assign(memberAccess(KEY_GENERATOR), treeMaker.Literal(DEFAULT_EVICT_BY_ID_KEY_GENERATOR))));
     }
 
     /**
      * {@code @CacheEvict(cacheNames=BASE_CACHE_NAME, keyGenerator="defaultEvictByIdsKeyGenerator")}
      */
-    private JCTree.JCAnnotation byIdsEvict() {
+    private JCTree.JCAnnotation byIdsEvict(String cacheName) {
         return treeMaker.Annotation(memberAccess(CACHE_EVICT),
-                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), memberAccess(BASE_CACHE_NAME)),
+                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), treeMaker.Literal(cacheName)),
                         treeMaker.Assign(memberAccess(KEY_GENERATOR), treeMaker.Literal(DEFAULT_EVICT_BY_IDS_KEY_GENERATOR))));
     }
 
     /**
      * {@code @CacheEvict(cacheNames=BASE_CACHE_NAME, keyGenerator="defaultEvictByEntityKeyGenerator")}
      */
-    private JCTree.JCAnnotation byEntityEvict() {
+    private JCTree.JCAnnotation byEntityEvict(String cacheName) {
         return treeMaker.Annotation(memberAccess(CACHE_EVICT),
-                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), memberAccess(BASE_CACHE_NAME)),
+                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), treeMaker.Literal(cacheName)),
                         treeMaker.Assign(memberAccess(KEY_GENERATOR), treeMaker.Literal(DEFAULT_EVICT_BY_ENTITY_KEY_GENERATOR))));
     }
 
     /**
      * {@code @CacheEvict(cacheNames=BASE_CACHE_NAME, keyGenerator="defaultEvictByEntitiesKeyGenerator")}
      */
-    private JCTree.JCAnnotation byEntitiesEvict() {
+    private JCTree.JCAnnotation byEntitiesEvict(String cacheName) {
         return treeMaker.Annotation(memberAccess(CACHE_EVICT),
-                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), memberAccess(BASE_CACHE_NAME)),
+                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), treeMaker.Literal(cacheName)),
                         treeMaker.Assign(memberAccess(KEY_GENERATOR), treeMaker.Literal(DEFAULT_EVICT_BY_ENTITIES_KEY_GENERATOR))));
     }
 
     /**
      * {@code @CacheEvict(cacheNames=CASUAL_CACHE_NAME, allEntries=true)}
      */
-    private JCTree.JCAnnotation casualEvict() {
+    private JCTree.JCAnnotation casualEvict(String cacheName) {
         return treeMaker.Annotation(memberAccess(CACHE_EVICT),
-                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), memberAccess(CASUAL_CACHE_NAME)),
+                List.of(treeMaker.Assign(memberAccess(CACHE_NAMES), treeMaker.Literal(cacheName)),
                         treeMaker.Assign(memberAccess(ALL_ENTRIES), treeMaker.Literal(true))));
     }
 

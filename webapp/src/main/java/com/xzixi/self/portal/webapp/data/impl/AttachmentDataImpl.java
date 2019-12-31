@@ -11,6 +11,6 @@ import org.springframework.stereotype.Service;
  * @author 薛凌康
  */
 @Service
-@CacheEnhance
+@CacheEnhance(baseCacheName = "attachment:base", casualCacheName = "attachment:casual")
 public class AttachmentDataImpl extends BaseDataImpl<AttachmentMapper, Attachment> implements IAttachmentData {
 }

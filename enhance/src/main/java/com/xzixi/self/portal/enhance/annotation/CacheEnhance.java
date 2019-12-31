@@ -12,6 +12,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface CacheEnhance {
 
+    String baseCacheName();
+    String casualCacheName();
     boolean getById() default true;
     boolean listByIds() default true;
     boolean getOne() default true;

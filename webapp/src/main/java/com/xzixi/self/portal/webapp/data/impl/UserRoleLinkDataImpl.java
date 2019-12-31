@@ -11,6 +11,6 @@ import org.springframework.stereotype.Service;
  * @author 薛凌康
  */
 @Service
-@CacheEnhance
+@CacheEnhance(baseCacheName = "userRoleLink:base", casualCacheName = "userRoleLink:casual")
 public class UserRoleLinkDataImpl extends BaseDataImpl<UserRoleLinkMapper, UserRoleLink> implements IUserRoleLinkData {
 }
