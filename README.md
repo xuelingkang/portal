@@ -24,8 +24,7 @@
 
 - 持久层使用mybatis-plus实现
 
-- 数据层基于mybatis-plus的`IService`和`ServiceImpl`实现，使用`@CacheEnhance`在编译期重写`ServiceImpl`的方法，同时追加缓存管理注解，
-使用`@CacheEnhance`时，需要在对应的实现类或接口中定义两个常量：`BASE_CACHE_NAME`和`CASUAL_CACHE_NAME`，否则编译会报错
+- 数据层基于mybatis-plus的`IService`和`ServiceImpl`实现，使用`@CacheEnhance`在编译期重写`ServiceImpl`的方法，同时追加缓存管理注解
 
 - 业务层通过`IBaseService`和`BaseServiceImpl`静态代理了对应数据层的所有方法，一般情况下不需要显式的调用数据层，
 业务之间互相调用，也通过service，而不是去调用其他业务的数据层对象，这样可以使代码更加整洁（个人习惯）
@@ -58,7 +57,7 @@ restful接口返回值统一都是`Result`
 - 在com.xzixi.self.portal.webapp.config.redis包定义了一些默认的`KeyGenerator`，包括：
     1. 根据id和id集合生成key
     2. 根据参数列表的hashCode生成key
-- `@CacheEnhance`编译期注解的作用：编译期重写`ServiceImpl`的方法，并添加缓存管理，使用`@CacheEnhance`需要定义两个字符串常量`BASE_CACHE_NAME`和`CASUAL_CACHE_NAME`
+- `@CacheEnhance`编译期注解的作用：编译期重写`ServiceImpl`的方法，并添加缓存管理注解
 
 ### 认证授权
 
