@@ -32,7 +32,7 @@ public class JobTemplateServiceImpl extends BaseServiceImpl<IJobTemplateData, Jo
         if (!save(jobTemplateVO)) {
             return false;
         }
-        List<JobTemplateParameter> parameters = jobTemplateVO.getParameters();
+        Collection<JobTemplateParameter> parameters = jobTemplateVO.getParameters();
         if (CollectionUtils.isNotEmpty(parameters)) {
             if (!jobTemplateParameterService.saveBatch(parameters)) {
                 return false;
@@ -47,7 +47,7 @@ public class JobTemplateServiceImpl extends BaseServiceImpl<IJobTemplateData, Jo
         if (!updateById(jobTemplateVO)) {
             return false;
         }
-        List<JobTemplateParameter> parameters = jobTemplateVO.getParameters();
+        Collection<JobTemplateParameter> parameters = jobTemplateVO.getParameters();
         List<JobTemplateParameter> oldParameters = jobTemplateParameterService
                 .list(new QueryWrapper<>(new JobTemplateParameter().setJobTemplateId(jobTemplateVO.getId())));
         return jobTemplateParameterService.merge(parameters, oldParameters, ((sources, target) ->
