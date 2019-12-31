@@ -1,6 +1,7 @@
 package com.xzixi.self.portal.webapp.model.po;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.xzixi.self.portal.extension.swagger2.annotation.IgnoreSwagger2Parameter;
 import com.xzixi.self.portal.webapp.framework.model.BaseModel;
 import com.xzixi.self.portal.webapp.framework.model.IBelonging;
 import com.xzixi.self.portal.webapp.model.enums.Sex;
@@ -70,6 +71,7 @@ public class User extends BaseModel implements IBelonging {
 
     @ApiModelProperty(value = "是否删除")
     @TableLogic
+    @IgnoreSwagger2Parameter
     private Boolean deleted;
 
     @Override
