@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2019-12-29 23:56:49
+Date: 2020-01-01 01:52:11
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -166,7 +166,7 @@ CREATE TABLE `qrtz_scheduler_state` (
 -- ----------------------------
 -- Records of qrtz_scheduler_state
 -- ----------------------------
-INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-RKG4OBL1577630393961', '1577630515726', '10000');
+INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-RKG4OBL1577810048596', '1577810079919', '10000');
 
 -- ----------------------------
 -- Table structure for qrtz_simple_triggers
@@ -297,6 +297,43 @@ INSERT INTO `t_authority` VALUES ('3', 'HTTP', 'USER', '100', '/website/user', '
 INSERT INTO `t_authority` VALUES ('4', 'HTTP', 'USER', '200', '/user', 'POST', '添加用户');
 INSERT INTO `t_authority` VALUES ('5', 'HTTP', 'ENUM', '100', '/enum', 'GET', '获取所有枚举');
 INSERT INTO `t_authority` VALUES ('6', 'HTTP', 'ENUM', '200', '/enum/*', 'GET', '根据类名获取枚举');
+
+-- ----------------------------
+-- Table structure for t_job
+-- ----------------------------
+DROP TABLE IF EXISTS `t_job`;
+CREATE TABLE `t_job` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `job_template_id` int(11) NOT NULL COMMENT '任务模板id',
+  `start_time` bigint(20) NOT NULL COMMENT '开始时间',
+  `end_time` bigint(20) DEFAULT NULL COMMENT '结束时间',
+  `cron_expression` varchar(20) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT 'cron表达式',
+  `description` varchar(200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '任务描述',
+  `sched_name` varchar(120) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '调度器名称',
+  `trigger_name` varchar(190) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '触发器名称',
+  `trigger_group` varchar(190) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '触发器组',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='定时任务';
+
+-- ----------------------------
+-- Records of t_job
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_job_parameter
+-- ----------------------------
+DROP TABLE IF EXISTS `t_job_parameter`;
+CREATE TABLE `t_job_parameter` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `job_id` int(11) NOT NULL COMMENT '定时任务id',
+  `name` varchar(200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '参数名称',
+  `value` varchar(200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '参数值',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='定时任务参数';
+
+-- ----------------------------
+-- Records of t_job_parameter
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for t_job_template
