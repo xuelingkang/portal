@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xzixi.self.portal.webapp.framework.model.annotation.*;
+import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.framework.util.ReflectUtil;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -98,13 +98,10 @@ public class BaseSearchParams<T> {
         }
         Class<T> cls = (Class<T>) this.entity.getClass();
         Field[] fields = ReflectUtil.getDeclaredFields(cls);
-        List<Field> fieldList = Arrays.stream(fields).filter(field -> findAnnotation(field) == null).collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(fieldList)) {
-            return new QueryWrapper<>();
-        }
         T instance = ReflectUtil.newInstance(cls);
-        fieldList.forEach(field -> ReflectUtil.setProp(instance, field, ReflectUtil.getProp(this.entity, field)));
-        return new QueryWrapper<>(this.entity);
+        BeanUtils.copyPropertiesIgnoreNull(this.entity, instance, Arrays.stream(fields).filter(field ->
+            findAnnotation(field) != null).map(Field::getName).toArray(String[]::new));
+        return new QueryWrapper<>(instance);
     }
 
     @SuppressWarnings("unchecked")
@@ -124,23 +121,31 @@ public class BaseSearchParams<T> {
             return;
         }
         Field[] fields = ReflectUtil.getDeclaredFields(object.getClass());
-        // TODO 有bug，改成按真实类型判断
         for (Field field : fields) {
             Annotation annotation = findAnnotation(field);
             if (annotation == null) {
                 continue;
             }
 
-            Object value = ReflectUtil.getProp(object, field);
-
             String column = ReflectUtil.invokeMethod(annotation, "value", new Class<?>[0]);
             if (StringUtils.isBlank(column)) {
                 column = field.getName();
             }
-            String methodName = ReflectUtil.invokeMethod(annotation, "methodName", new Class<?>[0]);
-            Class<?>[] parameterTypes = ReflectUtil.invokeMethod(annotation, "parameterTypes", new Class<?>[0]);
+            Object value = ReflectUtil.getProp(object, field);
 
-            ReflectUtil.invokeMethod(queryWrapper, methodName, parameterTypes, column, value);
+            if (Eq.class.isAssignableFrom(annotation.annotationType())) {
+                queryWrapper.eq(column, value);
+            } else if (Ge.class.isAssignableFrom(annotation.annotationType())) {
+                queryWrapper.ge(column, value);
+            } else if (Gt.class.isAssignableFrom(annotation.annotationType())) {
+                queryWrapper.gt(column, value);
+            } else if (Le.class.isAssignableFrom(annotation.annotationType())) {
+                queryWrapper.le(column, value);
+            } else if (Lt.class.isAssignableFrom(annotation.annotationType())) {
+                queryWrapper.lt(column, value);
+            } else if (Like.class.isAssignableFrom(annotation.annotationType())) {
+                queryWrapper.like(column, value);
+            }
         }
     }
 }
