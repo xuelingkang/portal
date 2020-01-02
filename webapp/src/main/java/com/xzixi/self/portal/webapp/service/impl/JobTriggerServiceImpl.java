@@ -1,11 +1,11 @@
-package com.xzixi.self.portal.webapp.data.impl;
+package com.xzixi.self.portal.webapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xzixi.self.portal.webapp.data.IJobTriggerData;
 import com.xzixi.self.portal.webapp.mapper.JobTriggerMapper;
 import com.xzixi.self.portal.webapp.model.po.Job;
 import com.xzixi.self.portal.webapp.model.po.JobTrigger;
+import com.xzixi.self.portal.webapp.service.IJobTriggerService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +14,12 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * 这个service特殊，直接调用mapper
+ *
  * @author 薛凌康
  */
 @Service
-public class JobTriggerDataImpl extends ServiceImpl<JobTriggerMapper, JobTrigger> implements IJobTriggerData {
+public class JobTriggerServiceImpl extends ServiceImpl<JobTriggerMapper, JobTrigger> implements IJobTriggerService {
 
     @Override
     public JobTrigger getByJob(Job job) {
@@ -28,7 +30,7 @@ public class JobTriggerDataImpl extends ServiceImpl<JobTriggerMapper, JobTrigger
     }
 
     @Override
-    public List<JobTrigger> getByJobs(Collection<Job> jobs) {
+    public List<JobTrigger> listByJobs(Collection<Job> jobs) {
         if (CollectionUtils.isEmpty(jobs)) {
             return new ArrayList<>();
         }

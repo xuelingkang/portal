@@ -83,9 +83,7 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
             }
         }
         if (CollectionUtils.isNotEmpty(modelsForUpdate)) {
-            if (!updateBatchById(modelsForUpdate)) {
-                return false;
-            }
+            return updateBatchById(modelsForUpdate);
         }
         return true;
     }

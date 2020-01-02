@@ -58,9 +58,7 @@ public class AuthorityServiceImpl extends BaseServiceImpl<IAuthorityData, Author
         List<RoleAuthorityLink> roleAuthorityLinks = roleAuthorityLinkService.listByAuthorityIds(ids);
         if (CollectionUtils.isNotEmpty(roleAuthorityLinks)) {
             List<Integer> linkIds = roleAuthorityLinks.stream().map(RoleAuthorityLink::getId).collect(Collectors.toList());
-            if (!roleAuthorityLinkService.removeByIds(linkIds)) {
-                return false;
-            }
+            return roleAuthorityLinkService.removeByIds(linkIds);
         }
 
         return true;

@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.data;
+package com.xzixi.self.portal.webapp.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xzixi.self.portal.webapp.model.po.Job;
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * @author 薛凌康
  */
-public interface IJobTriggerData extends IService<JobTrigger> {
+public interface IJobTriggerService extends IService<JobTrigger> {
 
     /**
      * 根据定时任务查询触发器
@@ -26,5 +26,5 @@ public interface IJobTriggerData extends IService<JobTrigger> {
      * @param jobs 定时任务集合
      * @return Collection&lt;JobTrigger>
      */
-    List<JobTrigger> getByJobs(Collection<Job> jobs);
+    List<JobTrigger> listByJobs(Collection<Job> jobs);
 }
