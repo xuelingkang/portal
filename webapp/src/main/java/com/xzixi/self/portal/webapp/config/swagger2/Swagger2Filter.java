@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.config.filter;
+package com.xzixi.self.portal.webapp.config.swagger2;
 
 import com.xzixi.self.portal.webapp.framework.util.ResponseWrapper;
 import net.sf.json.JSONArray;
@@ -16,7 +16,7 @@ import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.A
  *
  * @author 薛凌康
  */
-public class SwaggerFilter implements Filter {
+public class Swagger2Filter implements Filter {
 
     /**
      * 拦截api信息，动态添加认证接口

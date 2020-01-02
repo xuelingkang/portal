@@ -1,3 +1,7 @@
+project:
+  name: @project.parent.artifactId@-@project.artifactId@
+  version: @project.version@
+
 spring:
   profiles:
     active: @profileActive@
@@ -201,7 +205,3 @@ log:
   max-size: 30MB # 日志最大大小
   max-history: 30 # 日志保留天数
   charset: UTF-8 # 日志编码
-
-project:
-  name: @project.parent.artifactId@-@project.artifactId@
-  version: @project.version@

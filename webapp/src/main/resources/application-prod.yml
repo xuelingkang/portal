@@ -72,3 +72,5 @@ attachment:
 
 swagger2:
   enable: false # 关闭swagger2
+
+reset-password-url: https://xzixi.com/reset-password.html
