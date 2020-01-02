@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.config;
 
+import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.xzixi.self.portal.webapp.config.redis.*;
-import com.xzixi.self.portal.webapp.framework.util.SerializeUtil;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
@@ -16,7 +16,6 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.LinkedHashMap;
@@ -38,17 +37,7 @@ public class RedisCacheConfig {
 
     @Bean
     public RedisSerializer<Object> objectRedisSerializer() {
-        return new RedisSerializer<Object>() {
-            @Override
-            public byte[] serialize(Object obj) throws SerializationException {
-                return SerializeUtil.serialize(obj);
-            }
-
-            @Override
-            public Object deserialize(byte[] bytes) throws SerializationException {
-                return SerializeUtil.deserialize(bytes);
-            }
-        };
+        return new GenericFastJsonRedisSerializer();
     }
 
     @Bean
