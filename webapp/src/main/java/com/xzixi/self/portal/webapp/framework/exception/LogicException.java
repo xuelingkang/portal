@@ -3,7 +3,7 @@ package com.xzixi.self.portal.webapp.framework.exception;
 import lombok.Data;
 
 /**
- * 业务逻辑异常
+ * 客户端原因产生的异常
  *
  * @author 薛凌康
  */

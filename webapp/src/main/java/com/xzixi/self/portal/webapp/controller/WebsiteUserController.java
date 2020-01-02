@@ -1,6 +1,5 @@
 package com.xzixi.self.portal.webapp.controller;
 
-import com.xzixi.self.portal.webapp.framework.exception.ServerException;
 import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.model.enums.UserType;
 import com.xzixi.self.portal.webapp.model.po.User;
@@ -36,9 +35,7 @@ public class WebsiteUserController {
         // 加密密码
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // 保存用户
-        if (!userService.saveUser(user)) {
-            throw new ServerException();
-        }
+        userService.saveUser(user);
         return new Result<>();
     }
 }

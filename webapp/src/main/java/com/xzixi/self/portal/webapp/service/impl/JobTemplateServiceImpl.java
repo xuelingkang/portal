@@ -2,6 +2,7 @@ package com.xzixi.self.portal.webapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xzixi.self.portal.webapp.data.IJobTemplateData;
+import com.xzixi.self.portal.webapp.framework.exception.ServerException;
 import com.xzixi.self.portal.webapp.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.model.po.JobTemplate;
 import com.xzixi.self.portal.webapp.model.po.JobTemplateParameter;
@@ -28,47 +29,48 @@ public class JobTemplateServiceImpl extends BaseServiceImpl<IJobTemplateData, Jo
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean saveJobTemplate(JobTemplateVO jobTemplateVO) {
-        if (!save(jobTemplateVO)) {
-            return false;
+    public void saveJobTemplate(JobTemplate jobTemplate, Collection<JobTemplateParameter> parameters) {
+        if (!save(jobTemplate)) {
+            throw new ServerException(jobTemplate, "保存定时任务模板失败！");
         }
-        Collection<JobTemplateParameter> parameters = jobTemplateVO.getParameters();
+        parameters.forEach(parameter -> parameter.setJobTemplateId(jobTemplate.getId()));
         if (CollectionUtils.isNotEmpty(parameters)) {
             if (!jobTemplateParameterService.saveBatch(parameters)) {
-                return false;
+                throw new ServerException(parameters, "保存定时任务模板参数失败！");
             }
         }
-        return true;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateJobTemplateById(JobTemplateVO jobTemplateVO) {
-        if (!updateById(jobTemplateVO)) {
-            return false;
+    public void updateJobTemplateById(JobTemplate jobTemplate, Collection<JobTemplateParameter> parameters) {
+        if (!updateById(jobTemplate)) {
+            throw new ServerException(jobTemplate, "更新定时任务模板失败！");
         }
-        Collection<JobTemplateParameter> parameters = jobTemplateVO.getParameters();
+        parameters.forEach(parameter -> parameter.setJobTemplateId(jobTemplate.getId()));
         List<JobTemplateParameter> oldParameters = jobTemplateParameterService
-                .list(new QueryWrapper<>(new JobTemplateParameter().setJobTemplateId(jobTemplateVO.getId())));
-        return jobTemplateParameterService.merge(parameters, oldParameters, ((sources, target) ->
-                sources.stream().filter(source -> source.getId().equals(target.getId())).findFirst().orElse(null)));
+                .list(new QueryWrapper<>(new JobTemplateParameter().setJobTemplateId(jobTemplate.getId())));
+        boolean mergeResult = jobTemplateParameterService.merge(parameters, oldParameters, ((sources, target) ->
+                sources.stream().filter(source -> source.getId() != null && source.getId().equals(target.getId())).findFirst().orElse(null)));
+        if (!mergeResult) {
+            throw new ServerException(parameters, "更新定时任务模板参数失败！");
+        }
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean removeJobTemplatesByIds(Collection<Integer> ids) {
+    public void removeJobTemplatesByIds(Collection<Integer> ids) {
         if (!removeByIds(ids)) {
-            return false;
+            throw new ServerException(ids, "删除定时任务模板失败！");
         }
 
         List<JobTemplateParameter> parameters = jobTemplateParameterService.listByJobTemplateIds(ids);
         if (CollectionUtils.isNotEmpty(parameters)) {
             List<Integer> parameterIds = parameters.stream().map(JobTemplateParameter::getId).collect(Collectors.toList());
             if (!jobTemplateParameterService.removeByIds(parameterIds)) {
-                return false;
+                throw new ServerException(parameters, "删除定时任务模板参数失败！");
             }
         }
-        return true;
     }
 
     @Override

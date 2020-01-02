@@ -2,6 +2,7 @@ package com.xzixi.self.portal.webapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xzixi.self.portal.webapp.data.IAuthorityData;
+import com.xzixi.self.portal.webapp.framework.exception.ServerException;
 import com.xzixi.self.portal.webapp.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.Role;
@@ -50,18 +51,18 @@ public class AuthorityServiceImpl extends BaseServiceImpl<IAuthorityData, Author
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean removeAuthoritiesByIds(Collection<Integer> ids) {
+    public void removeAuthoritiesByIds(Collection<Integer> ids) {
         if (!removeByIds(ids)) {
-            return false;
+            throw new ServerException(ids, "删除权限失败！");
         }
 
         List<RoleAuthorityLink> roleAuthorityLinks = roleAuthorityLinkService.listByAuthorityIds(ids);
         if (CollectionUtils.isNotEmpty(roleAuthorityLinks)) {
             List<Integer> linkIds = roleAuthorityLinks.stream().map(RoleAuthorityLink::getId).collect(Collectors.toList());
-            return roleAuthorityLinkService.removeByIds(linkIds);
+            if (!roleAuthorityLinkService.removeByIds(linkIds)) {
+                throw new ServerException(roleAuthorityLinks, "删除角色和权限的关联失败！");
+            }
         }
-
-        return true;
     }
 
     @Override

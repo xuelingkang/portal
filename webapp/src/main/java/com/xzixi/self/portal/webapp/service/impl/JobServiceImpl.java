@@ -48,11 +48,11 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
     public void saveJob(Job job, Collection<JobParameter> parameters) {
         scheduleJob(job, parameters);
         if (!save(job)) {
-            throw new ServerException("保存定时任务失败！");
+            throw new ServerException(job, "保存定时任务失败！");
         }
         parameters.forEach(parameter -> parameter.setJobId(job.getId()));
         if (!jobParameterService.saveBatch(parameters)) {
-            throw new ServerException("保存定时任务参数失败！");
+            throw new ServerException(parameters, "保存定时任务参数失败！");
         }
     }
 
@@ -60,18 +60,18 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
     @Transactional(rollbackFor = Exception.class)
     public void updateJob(Job job, Collection<JobParameter> parameters) {
         if (!unscheduleJob(job)) {
-            throw new ServerException("关闭定时任务失败！");
+            throw new ServerException(job, "关闭定时任务失败！");
         }
         scheduleJob(job, parameters);
         if (!updateById(job)) {
-            throw new ServerException("更新定时任务失败！");
+            throw new ServerException(job, "更新定时任务失败！");
         }
         parameters.forEach(parameter -> parameter.setJobId(job.getId()));
         List<JobParameter> oldParameters = jobParameterService.listByJobId(job.getId());
         boolean mergeResult = jobParameterService.merge(parameters, oldParameters, (sources, target) -> sources.stream()
                 .filter(source -> source.getId() != null && source.getId().equals(target.getId())).findFirst().orElse(null));
         if (!mergeResult) {
-            throw new ServerException("更新定时任务参数失败！");
+            throw new ServerException(parameters, "更新定时任务参数失败！");
         }
     }
 
@@ -80,15 +80,15 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
     public void removeJobsByIds(Collection<Integer> ids) {
         Collection<Job> jobs = listByIds(ids);
         if (!unscheduleJobs(jobs)) {
-            throw new ServerException("关闭定时任务失败！");
+            throw new ServerException(jobs, "关闭定时任务失败！");
         }
         if (!removeByIds(ids)) {
-            throw new ServerException("删除定时任务失败！");
+            throw new ServerException(jobs, "删除定时任务失败！");
         }
         List<JobParameter> parameters = jobParameterService.listByJobIds(ids);
         List<Integer> jobParameterIds = parameters.stream().map(JobParameter::getId).collect(Collectors.toList());
         if (!jobParameterService.removeByIds(jobParameterIds)) {
-            throw new ServerException("删除定时任务参数失败！");
+            throw new ServerException(parameters, "删除定时任务参数失败！");
         }
     }
 
@@ -100,7 +100,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
             try {
                 scheduler.pauseTrigger(buildTriggerKey(job));
             } catch (SchedulerException e) {
-                throw new ServerException(String.format("暂停定时任务(%s)失败！", job.getId()), e);
+                throw new ServerException(job, "暂停定时任务失败！", e);
             }
         }
     }
@@ -113,7 +113,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
             try {
                 scheduler.resumeTrigger(buildTriggerKey(job));
             } catch (SchedulerException e) {
-                throw new ServerException(String.format("恢复定时任务(%s)失败！", job.getId()), e);
+                throw new ServerException(job, "恢复定时任务失败！", e);
             }
         }
     }

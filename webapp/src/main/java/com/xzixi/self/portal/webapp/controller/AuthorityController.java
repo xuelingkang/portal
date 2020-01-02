@@ -53,10 +53,10 @@ public class AuthorityController {
     @ApiOperation(value = "保存权限")
     public Result<?> save(@Validated({AuthoritySave.class}) Authority authority) {
         // 保存权限
-        if (!authorityService.save(authority)) {
-            throw new ServerException();
+        if (authorityService.save(authority)) {
+            return new Result<>();
         }
-        return new Result<>();
+        throw new ServerException(authority, "保存权限失败！");
     }
 
     @PutMapping
@@ -67,16 +67,14 @@ public class AuthorityController {
         if (authorityService.updateById(authorityData)) {
             return new Result<>();
         }
-        throw new ServerException();
+        throw new ServerException(authority, "更新权限失败！");
     }
 
     @DeleteMapping
     @ApiOperation(value = "删除权限")
     public Result<?> remove(
             @ApiParam(value = "权限id", required = true) @NotEmpty(message = "权限id不能为空！") @RequestParam List<Integer> ids) {
-        if (authorityService.removeAuthoritiesByIds(ids)) {
-            return new Result<>();
-        }
-        throw new ServerException();
+        authorityService.removeAuthoritiesByIds(ids);
+        return new Result<>();
     }
 }

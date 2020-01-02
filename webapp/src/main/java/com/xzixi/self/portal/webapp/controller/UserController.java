@@ -78,16 +78,14 @@ public class UserController {
     }
 
     @PostMapping
-    @ApiOperation(value = "添加用户")
+    @ApiOperation(value = "保存用户")
     public Result<?> save(@Validated({UserSave.class}) User user) {
         user.setCreateTime(System.currentTimeMillis())
                 .setLoginTime(null).setLocked(false).setDeleted(false);
         // 加密密码
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // 保存用户
-        if (!userService.saveUser(user)) {
-            throw new ServerException();
-        }
+        userService.saveUser(user);
         return new Result<>();
     }
 
@@ -101,7 +99,7 @@ public class UserController {
         if (userService.updateById(userData)) {
             return new Result<>();
         }
-        throw new ServerException();
+        throw new ServerException(user, "更新用户失败！");
     }
 
     @PutMapping("/personal")
@@ -115,7 +113,7 @@ public class UserController {
         if (userService.updateById(userData)) {
             return new Result<>();
         }
-        throw new ServerException();
+        throw new ServerException(user, "更新个人信息失败！");
     }
 
     @PatchMapping("/lock")
@@ -131,7 +129,7 @@ public class UserController {
         if (userService.updateBatchById(users)) {
             return new Result<>();
         }
-        throw new ServerException();
+        throw new ServerException(ids, "锁定用户账户失败！");
     }
 
     @PatchMapping("/unlock")
@@ -147,17 +145,15 @@ public class UserController {
         if (userService.updateBatchById(users)) {
             return new Result<>();
         }
-        throw new ServerException();
+        throw new ServerException(ids, "解锁用户账户失败！");
     }
 
     @DeleteMapping
     @ApiOperation(value = "删除用户账户")
     public Result<?> remove(
             @ApiParam(value = "用户id", required = true) @NotEmpty(message = "用户id不能为空！") @RequestParam List<Integer> ids) {
-        if (userService.removeUsersByIds(ids)) {
-            return new Result<>();
-        }
-        throw new ServerException();
+        userService.removeUsersByIds(ids);
+        return new Result<>();
     }
 
     @PatchMapping("/password")
@@ -168,7 +164,7 @@ public class UserController {
         if (userService.updateById(userData)) {
             return new Result<>();
         }
-        throw new ServerException();
+        throw new ServerException(user, "修改用户账户密码失败！");
     }
 
     @PatchMapping("/personal/password")
@@ -180,7 +176,7 @@ public class UserController {
         if (userService.updateById(userData)) {
             return new Result<>();
         }
-        throw new ServerException();
+        throw new ServerException(user, "修改个人账户密码失败！");
     }
 
     @GetMapping("/reset-password")
@@ -210,7 +206,7 @@ public class UserController {
         if (userService.updateById(userData)) {
             return new Result<>();
         }
-        throw new ServerException();
+        throw new ServerException(String.format("key = %s, password = %s", key, password), "修改个人账户密码失败！");
     }
 
     @PostMapping("/{id}/role")
@@ -226,6 +222,6 @@ public class UserController {
         if (result) {
             return new Result<>();
         }
-        throw new ServerException();
+        throw new ServerException(newLinks, "更新用户角色失败！");
     }
 }

@@ -1,7 +1,6 @@
 package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xzixi.self.portal.webapp.framework.exception.ServerException;
 import com.xzixi.self.portal.webapp.framework.model.Result;
 import com.xzixi.self.portal.webapp.model.params.JobTemplateSearchParams;
 import com.xzixi.self.portal.webapp.model.po.JobTemplate;
@@ -50,29 +49,23 @@ public class JobTemplateController {
 
     @PostMapping
     @ApiOperation(value = "保存任务模板")
-    public Result<?> save(@Validated({JobTemplateSave.class}) JobTemplateVO jobTemplateVO) {
-        if (jobTemplateService.saveJobTemplate(jobTemplateVO)) {
-            return new Result<>();
-        }
-        throw new ServerException();
+    public Result<?> save(@Validated({JobTemplateSave.class}) @RequestBody JobTemplateVO jobTemplateVO) {
+        jobTemplateService.saveJobTemplate(jobTemplateVO, jobTemplateVO.getParameters());
+        return new Result<>();
     }
 
     @PutMapping
     @ApiOperation(value = "更新任务模板")
-    public Result<?> update(@Validated({JobTemplateUpdate.class}) JobTemplateVO jobTemplateVO) {
-        if (jobTemplateService.updateJobTemplateById(jobTemplateVO)) {
-            return new Result<>();
-        }
-        throw new ServerException();
+    public Result<?> update(@Validated({JobTemplateUpdate.class}) @RequestBody JobTemplateVO jobTemplateVO) {
+        jobTemplateService.updateJobTemplateById(jobTemplateVO, jobTemplateVO.getParameters());
+        return new Result<>();
     }
 
     @DeleteMapping
     @ApiOperation(value = "删除任务模板")
     public Result<?> remove(
             @ApiParam(value = "任务模板id", required = true) @NotEmpty(message = "任务模板id不能为空！") @RequestParam List<Integer> ids) {
-        if (jobTemplateService.removeJobTemplatesByIds(ids)) {
-            return new Result<>();
-        }
-        throw new ServerException();
+        jobTemplateService.removeJobTemplatesByIds(ids);
+        return new Result<>();
     }
 }

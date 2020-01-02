@@ -1,6 +1,7 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
 import com.xzixi.self.portal.webapp.data.IRoleData;
+import com.xzixi.self.portal.webapp.framework.exception.ServerException;
 import com.xzixi.self.portal.webapp.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.Role;
@@ -46,16 +47,16 @@ public class RoleServiceImpl extends BaseServiceImpl<IRoleData, Role> implements
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean removeRolesByIds(Collection<Integer> ids) {
+    public void removeRolesByIds(Collection<Integer> ids) {
         if (!removeByIds(ids)) {
-            return false;
+            throw new ServerException(ids, "删除角色失败！");
         }
 
         List<RoleAuthorityLink> roleAuthorityLinks = roleAuthorityLinkService.listByRoleIds(ids);
         if (CollectionUtils.isNotEmpty(roleAuthorityLinks)) {
             List<Integer> linkIds = roleAuthorityLinks.stream().map(RoleAuthorityLink::getId).collect(Collectors.toList());
             if (!roleAuthorityLinkService.removeByIds(linkIds)) {
-                return false;
+                throw new ServerException(roleAuthorityLinks, "删除角色与权限的关联失败！");
             }
         }
 
@@ -63,11 +64,9 @@ public class RoleServiceImpl extends BaseServiceImpl<IRoleData, Role> implements
         if (CollectionUtils.isNotEmpty(userRoleLinks)) {
             List<Integer> linkIds = userRoleLinks.stream().map(UserRoleLink::getId).collect(Collectors.toList());
             if (!userRoleLinkService.removeByIds(linkIds)) {
-                return false;
+                throw new ServerException(userRoleLinks, "删除用户与角色的关联失败！");
             }
         }
-
-        return true;
     }
 
     @Override

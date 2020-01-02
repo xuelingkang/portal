@@ -104,7 +104,7 @@ public class AttachmentController {
         @ApiParam(value = "附件id", required = true) @NotEmpty(message = "附件id不能为空！") @RequestParam List<Integer> ids) {
         Collection<Attachment> attachments = attachmentService.listByIds(ids);
         if (!attachmentService.removeByIds(ids)) {
-            throw new ServerException();
+            throw new ServerException(ids, "删除附件失败！");
         }
         sftpClient.open(sftp -> attachments.forEach(attachment -> {
             String address = attachment.getAddress();

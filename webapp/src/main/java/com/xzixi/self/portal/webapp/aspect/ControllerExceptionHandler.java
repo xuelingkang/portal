@@ -1,5 +1,7 @@
 package com.xzixi.self.portal.webapp.aspect;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.xzixi.self.portal.webapp.framework.exception.LogicException;
 import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
 import com.xzixi.self.portal.webapp.framework.exception.ServerException;
@@ -135,8 +137,16 @@ public class ControllerExceptionHandler {
     @ExceptionHandler({ServerException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result<?> handleServerException(ServerException e) {
-        log.error(e.getMessage(), e);
-        return new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(), null);
+        String dataMsg = null;
+        if (e.getData() != null) {
+            if (CharSequence.class.isAssignableFrom(e.getData().getClass())) {
+                dataMsg = e.getData().toString();
+            } else {
+                dataMsg = JSON.toJSONString(e.getData(), SerializerFeature.PrettyFormat, SerializerFeature.WriteClassName);
+            }
+        }
+        log.error(String.format("异常信息：%s，异常数据：%s", e.getMessage(), dataMsg), e);
+        return new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务端异常！", null);
     }
 
     /**
@@ -149,7 +159,7 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result<?> handleProjectException(ProjectException e) {
         log.error(e.getMessage(), e);
-        return new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "项目异常！", null);
+        return new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务端异常！", null);
     }
 
     /**
@@ -162,6 +172,6 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Result<?> handleThrowable(Throwable e) {
         log.error(e.getMessage(), e);
-        return new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务器异常！", null);
+        return new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务端异常！", null);
     }
 }

@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.framework.exception;
 
 /**
- * 项目异常
+ * 项目bug
  *
  * @author 薛凌康
  */

@@ -1,27 +1,24 @@
 package com.xzixi.self.portal.webapp.framework.exception;
 
+import lombok.Data;
+
 /**
+ * 服务端原因产生的异常
+ *
  * @author 薛凌康
  */
+@Data
 public class ServerException extends RuntimeException {
 
-    public ServerException() {
-        super("服务器异常！");
-    }
+    private Object data;
 
-    public ServerException(String message) {
+    public ServerException(Object data, String message) {
         super(message);
+        this.data = data;
     }
 
-    public ServerException(String message, Throwable cause) {
+    public ServerException(Object data, String message, Throwable cause) {
         super(message, cause);
-    }
-
-    public ServerException(Throwable cause) {
-        super(cause);
-    }
-
-    public ServerException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+        this.data = data;
     }
 }

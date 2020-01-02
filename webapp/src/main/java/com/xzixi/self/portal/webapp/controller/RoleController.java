@@ -59,10 +59,10 @@ public class RoleController {
     @ApiOperation(value = "保存角色")
     public Result<?> save(@Validated({RoleSave.class}) Role role) {
         // 保存角色
-        if (!roleService.save(role)) {
-            throw new ServerException();
+        if (roleService.save(role)) {
+            return new Result<>();
         }
-        return new Result<>();
+        throw new ServerException(role, "保存角色失败！");
     }
 
     @PutMapping
@@ -73,17 +73,15 @@ public class RoleController {
         if (roleService.updateById(roleData)) {
             return new Result<>();
         }
-        throw new ServerException();
+        throw new ServerException(role, "更新角色失败！");
     }
 
     @DeleteMapping
     @ApiOperation(value = "删除角色")
     public Result<?> remove(
             @ApiParam(value = "角色id", required = true) @NotEmpty(message = "角色id不能为空！") @RequestParam List<Integer> ids) {
-        if (roleService.removeRolesByIds(ids)) {
-            return new Result<>();
-        }
-        throw new ServerException();
+        roleService.removeRolesByIds(ids);
+        return new Result<>();
     }
 
     @PostMapping("/{id}/authority")
@@ -101,6 +99,6 @@ public class RoleController {
         if (result) {
             return new Result<>();
         }
-        throw new ServerException();
+        throw new ServerException(newLinks, "更新角色权限失败！");
     }
 }
