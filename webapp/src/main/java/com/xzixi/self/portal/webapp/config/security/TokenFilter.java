@@ -68,7 +68,7 @@ public class TokenFilter extends OncePerRequestFilter {
             WebUtil.printJson(response, result);
         }
 
-        UserVO userVO = userService.buildVO(user);
+        UserVO userVO = userService.buildVO(user, new UserVO.BuildOption(true, true));
 
         UserDetailsImpl userDetails = new UserDetailsImpl(userVO);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
