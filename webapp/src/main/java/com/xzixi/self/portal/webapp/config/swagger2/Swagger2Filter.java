@@ -9,10 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
+import static com.xzixi.self.portal.webapp.constant.Swagger2Constant.AUTHORIZATION_PARAMETER_NAME;
+import static com.xzixi.self.portal.webapp.constant.Swagger2Constant.AUTHORIZATION_SCOPE_NAME;
 
 /**
  * swagger过滤器
+ * TODO 将json提取到文本文件
  *
  * @author 薛凌康
  */
@@ -108,12 +110,8 @@ public class Swagger2Filter implements Filter {
                         "        \"summary\": \"登出\"," +
                         "        \"operationId\": \"logoutUsingGET\"," +
                         "        \"produces\": [\"application/json;charset=UTF-8\"]," +
-                        "        \"parameters\": [{" +
-                        "            \"name\": \"" + AUTHENTICATION_HEADER_NAME + "\"," +
-                        "            \"in\": \"header\"," +
-                        "            \"description\": \"认证参数\"," +
-                        "            \"required\": true," +
-                        "            \"type\": \"string\"" +
+                        "        \"security\": [{" +
+                        "            \"" + AUTHORIZATION_PARAMETER_NAME + "\": [\"" + AUTHORIZATION_SCOPE_NAME + "\"]" +
                         "        }]," +
                         "        \"responses\": {" +
                         "            \"200\": {" +

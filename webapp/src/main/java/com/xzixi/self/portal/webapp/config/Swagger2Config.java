@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
+import static com.xzixi.self.portal.webapp.constant.Swagger2Constant.*;
 
 /**
  * swagger2配置
@@ -35,12 +36,6 @@ import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICAT
 @EnableSwagger2Extension
 public class Swagger2Config {
 
-    private static final String AUTHORIZATION_API_FILTER_NAME = "swaggerFilter";
-    private static final String AUTHORIZATION_PARAMETER_NAME = "Authorization";
-    private static final String AUTHORIZATION_PARAMETER_TYPE = "header";
-    private static final String AUTHORIZATION_EXCLUDE_URL_REG = "^(?!/login).*$";
-    private static final String AUTHORIZATION_SCOPE_NAME = "global";
-    private static final String AUTHORIZATION_SCOPE_DESCRIPTION = "全局";
     @Value("${project.name}")
     private String projectName;
     @Value("${project.version}")
