@@ -9,22 +9,24 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.ParameterBuilder;
+import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Parameter;
+import springfox.documentation.service.ApiKey;
+import springfox.documentation.service.AuthorizationScope;
+import springfox.documentation.service.SecurityReference;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.web.Swagger2Controller;
 
 import java.util.Collections;
+import java.util.List;
 
 import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
 
 /**
  * swagger2配置
- * TODO 改成starter
  *
  * @author 薛凌康
  */
@@ -33,6 +35,12 @@ import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICAT
 @EnableSwagger2Extension
 public class Swagger2Config {
 
+    private static final String AUTHORIZATION_API_FILTER_NAME = "swaggerFilter";
+    private static final String AUTHORIZATION_PARAMETER_NAME = "Authorization";
+    private static final String AUTHORIZATION_PARAMETER_TYPE = "header";
+    private static final String AUTHORIZATION_EXCLUDE_URL_REG = "^(?!/login).*$";
+    private static final String AUTHORIZATION_SCOPE_NAME = "global";
+    private static final String AUTHORIZATION_SCOPE_DESCRIPTION = "全局";
     @Value("${project.name}")
     private String projectName;
     @Value("${project.version}")
@@ -45,8 +53,9 @@ public class Swagger2Config {
                 // 只显示添加@Api注解的类
                 .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
                 .build()
-                .globalOperationParameters(Collections.singletonList(tokenHeader()))
-                .apiInfo(apiInfo());
+                .apiInfo(apiInfo())
+                .securitySchemes(securitySchemes())
+                .securityContexts(securityContexts());
     }
 
     @Bean
@@ -59,19 +68,8 @@ public class Swagger2Config {
         FilterRegistrationBean<Swagger2Filter> registration = new FilterRegistrationBean<>();
         registration.setFilter(swagger2Filter);
         registration.addUrlPatterns(Swagger2Controller.DEFAULT_URL);
-        registration.setName("swaggerFilter");
+        registration.setName(AUTHORIZATION_API_FILTER_NAME);
         return registration;
-    }
-
-    private Parameter tokenHeader() {
-        return new ParameterBuilder()
-                .parameterType("header")
-                .parameterAccess("access")
-                .name(AUTHENTICATION_HEADER_NAME)
-                .description("认证参数")
-                .required(false)
-                .modelRef(new ModelRef("string"))
-                .build();
     }
 
     private ApiInfo apiInfo() {
@@ -79,5 +77,22 @@ public class Swagger2Config {
                 .title(projectName)
                 .version(projectVersion)
                 .build();
+    }
+
+    private List<ApiKey> securitySchemes() {
+        return Collections.singletonList(new ApiKey(AUTHORIZATION_PARAMETER_NAME, AUTHENTICATION_HEADER_NAME, AUTHORIZATION_PARAMETER_TYPE));
+    }
+
+    private List<SecurityContext> securityContexts() {
+        return Collections.singletonList(SecurityContext.builder()
+                .securityReferences(securityReferences())
+                .forPaths(PathSelectors.regex(AUTHORIZATION_EXCLUDE_URL_REG))
+                .build());
+    }
+
+    private List<SecurityReference> securityReferences() {
+        AuthorizationScope[] authorizationScopes
+                = new AuthorizationScope[]{new AuthorizationScope(AUTHORIZATION_SCOPE_NAME, AUTHORIZATION_SCOPE_DESCRIPTION)};
+        return Collections.singletonList(new SecurityReference(AUTHORIZATION_PARAMETER_NAME, authorizationScopes));
     }
 }

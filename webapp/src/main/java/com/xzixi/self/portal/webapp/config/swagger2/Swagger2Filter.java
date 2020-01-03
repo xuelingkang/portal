@@ -21,10 +21,10 @@ public class Swagger2Filter implements Filter {
     /**
      * 拦截api信息，动态添加认证接口
      *
-     * @param request ServletRequest
+     * @param request  ServletRequest
      * @param response ServletResponse
-     * @param chain FilterChain
-     * @throws IOException IOException
+     * @param chain    FilterChain
+     * @throws IOException      IOException
      * @throws ServletException ServletException
      */
     @Override
@@ -36,7 +36,7 @@ public class Swagger2Filter implements Filter {
         // 获取返回值
         byte[] content = responseWrapper.getContent();
         // 判断是否有值
-        if (content.length>0) {
+        if (content.length > 0) {
             String str = new String(content, StandardCharsets.UTF_8);
             JSONObject swagger = JSONObject.fromObject(str);
             JSONArray tags = swagger.getJSONArray("tags");
@@ -54,92 +54,90 @@ public class Swagger2Filter implements Filter {
 
     private JSONObject tokenTag() {
         return JSONObject.fromObject(
-                        "{"+
-                        "    \"description\": \"Authorization\","+
-                        "    \"name\": \"认证\""+
+                        "{" +
+                        "    \"description\": \"Authorization\"," +
+                        "    \"name\": \"认证\"" +
                         "}");
     }
 
     private JSONObject loginPath() {
         return JSONObject.fromObject(
-                        "{"+
-                        "    \"post\": {"+
-                        "        \"tags\": [\"认证\"],"+
-                        "        \"summary\": \"登录\","+
-                        "        \"operationId\": \"loginUsingPOST\","+
-                        "        \"produces\": [\"application/json;charset=UTF-8\"],"+
-                        "        \"responses\": {"+
-                        "            \"200\": {"+
-                        "                \"description\": \"OK\""+
-                        "            },"+
-                        "            \"401\": {"+
-                        "                \"description\": \"Unauthorized\""+
-                        "            },"+
-                        "            \"403\": {"+
-                        "                \"description\": \"Forbidden\""+
-                        "            },"+
-                        "            \"404\": {"+
-                        "                \"description\": \"Not Found\""+
-                        "            }"+
-                        "        },"+
-                        "        \"parameters\": [{"+
-                        "            \"name\": \"username\","+
-                        "            \"in\": \"query\","+
-                        "            \"description\": \"用户名\","+
-                        "            \"required\": true,"+
-                        "            \"type\": \"string\""+
-                        "        },"+
-                        "        {"+
-                        "            \"name\": \"password\","+
-                        "            \"in\": \"query\","+
-                        "            \"description\": \"密码\","+
-                        "            \"required\": true,"+
-                        "            \"type\": \"string\""+
-                        "        }]"+
-                        "    }"+
+                        "{" +
+                        "    \"post\": {" +
+                        "        \"tags\": [\"认证\"]," +
+                        "        \"summary\": \"登录\"," +
+                        "        \"operationId\": \"loginUsingPOST\"," +
+                        "        \"produces\": [\"application/json;charset=UTF-8\"]," +
+                        "        \"responses\": {" +
+                        "            \"200\": {" +
+                        "                \"description\": \"OK\"" +
+                        "            }," +
+                        "            \"401\": {" +
+                        "                \"description\": \"Unauthorized\"" +
+                        "            }," +
+                        "            \"403\": {" +
+                        "                \"description\": \"Forbidden\"" +
+                        "            }," +
+                        "            \"404\": {" +
+                        "                \"description\": \"Not Found\"" +
+                        "            }" +
+                        "        }," +
+                        "        \"parameters\": [{" +
+                        "            \"name\": \"username\"," +
+                        "            \"in\": \"query\"," +
+                        "            \"description\": \"用户名\"," +
+                        "            \"required\": true," +
+                        "            \"type\": \"string\"" +
+                        "        }," +
+                        "        {" +
+                        "            \"name\": \"password\"," +
+                        "            \"in\": \"query\"," +
+                        "            \"description\": \"密码\"," +
+                        "            \"required\": true," +
+                        "            \"type\": \"string\"" +
+                        "        }]" +
+                        "    }" +
                         "}");
     }
 
     private JSONObject logoutPath() {
         return JSONObject.fromObject(
-                        "{"+
-                        "    \"get\": {"+
-                        "        \"tags\": [\"认证\"],"+
-                        "        \"summary\": \"登出\","+
-                        "        \"operationId\": \"logoutUsingGET\","+
-                        "        \"produces\": [\"application/json;charset=UTF-8\"],"+
-                        "        \"parameters\": [{"+
-                        "            \"name\": \""+AUTHENTICATION_HEADER_NAME+"\","+
-                        "            \"in\": \"header\","+
-                        "            \"description\": \"认证参数\","+
-                        "            \"required\": true,"+
-                        "            \"type\": \"string\""+
-                        "        }],"+
-                        "        \"responses\": {"+
-                        "            \"200\": {"+
-                        "                \"description\": \"OK\""+
-                        "            },"+
-                        "            \"401\": {"+
-                        "                \"description\": \"Unauthorized\""+
-                        "            },"+
-                        "            \"403\": {"+
-                        "                \"description\": \"Forbidden\""+
-                        "            },"+
-                        "            \"404\": {"+
-                        "                \"description\": \"Not Found\""+
-                        "            }"+
-                        "        }"+
-                        "    }"+
+                        "{" +
+                        "    \"get\": {" +
+                        "        \"tags\": [\"认证\"]," +
+                        "        \"summary\": \"登出\"," +
+                        "        \"operationId\": \"logoutUsingGET\"," +
+                        "        \"produces\": [\"application/json;charset=UTF-8\"]," +
+                        "        \"parameters\": [{" +
+                        "            \"name\": \"" + AUTHENTICATION_HEADER_NAME + "\"," +
+                        "            \"in\": \"header\"," +
+                        "            \"description\": \"认证参数\"," +
+                        "            \"required\": true," +
+                        "            \"type\": \"string\"" +
+                        "        }]," +
+                        "        \"responses\": {" +
+                        "            \"200\": {" +
+                        "                \"description\": \"OK\"" +
+                        "            }," +
+                        "            \"401\": {" +
+                        "                \"description\": \"Unauthorized\"" +
+                        "            }," +
+                        "            \"403\": {" +
+                        "                \"description\": \"Forbidden\"" +
+                        "            }," +
+                        "            \"404\": {" +
+                        "                \"description\": \"Not Found\"" +
+                        "            }" +
+                        "        }" +
+                        "    }" +
                         "}");
     }
 
     @Override
     public void init(FilterConfig filterConfig) {
-
     }
 
     @Override
     public void destroy() {
-
     }
 }
