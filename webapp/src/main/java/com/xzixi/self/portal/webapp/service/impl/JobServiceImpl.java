@@ -1,19 +1,16 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
+import com.xzixi.self.portal.framework.exception.ClientException;
 import com.xzixi.self.portal.framework.exception.ProjectException;
 import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.data.IJobData;
+import com.xzixi.self.portal.webapp.model.po.*;
 import com.xzixi.self.portal.webapp.model.po.Job;
-import com.xzixi.self.portal.webapp.model.po.JobParameter;
-import com.xzixi.self.portal.webapp.model.po.JobTemplate;
-import com.xzixi.self.portal.webapp.model.po.JobTrigger;
 import com.xzixi.self.portal.webapp.model.vo.JobVO;
-import com.xzixi.self.portal.webapp.service.IJobParameterService;
-import com.xzixi.self.portal.webapp.service.IJobService;
-import com.xzixi.self.portal.webapp.service.IJobTemplateService;
-import com.xzixi.self.portal.webapp.service.IJobTriggerService;
+import com.xzixi.self.portal.webapp.service.*;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,11 +38,14 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
     @Autowired
     private IJobTemplateService jobTemplateService;
     @Autowired
+    private IJobTemplateParameterService jobTemplateParameterService;
+    @Autowired
     private Scheduler scheduler;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveJob(Job job, Collection<JobParameter> parameters) {
+        checkParameters(job.getJobTemplateId(), parameters);
         scheduleJob(job, parameters);
         if (!save(job)) {
             throw new ServerException(job, "保存定时任务失败！");
@@ -59,6 +59,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateJob(Job job, Collection<JobParameter> parameters) {
+        checkParameters(job.getJobTemplateId(), parameters);
         if (!unscheduleJob(job)) {
             throw new ServerException(job, "关闭定时任务失败！");
         }
@@ -119,19 +120,84 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
     }
 
     @Override
-    public JobVO buildJobVO(Integer id) {
+    public JobVO buildJobVO(Integer id, BuildOption option) {
         Job job = getById(id);
-        return buildJobVO(job);
+        return buildJobVO(job, option);
     }
 
     @Override
-    public JobVO buildJobVO(Job job) {
+    public JobVO buildJobVO(Job job, BuildOption option) {
         JobVO jobVO = new JobVO(job);
-        JobTrigger jobTrigger = jobTriggerService.getByJob(job);
-        jobVO.setJobTrigger(jobTrigger);
-        List<JobParameter> parameters = jobParameterService.listByJobId(job.getId());
-        jobVO.setParameters(parameters);
+        if (option.isTrigger()) {
+            JobTrigger jobTrigger = jobTriggerService.getByJob(job);
+            jobVO.setJobTrigger(jobTrigger);
+        }
+        if (option.isParameters()) {
+            List<JobParameter> parameters = jobParameterService.listByJobId(job.getId());
+            jobVO.setParameters(parameters);
+        }
         return jobVO;
+    }
+
+    @Override
+    public List<JobVO> buildJobVO(Collection<Job> jobs, BuildOption option) {
+        List<JobVO> jobVOList = jobs.stream().map(JobVO::new).collect(Collectors.toList());
+        if (option.isTrigger()) {
+            List<JobTrigger> jobTriggers = jobTriggerService.listByJobs(jobs);
+            jobVOList.forEach(jobVO -> {
+                JobTrigger jobTrigger = jobTriggers.stream().filter(trigger ->
+                        jobVO.getSchedName() != null && jobVO.getSchedName().equals(trigger.getSchedName())
+                        && jobVO.getTriggerName() != null && jobVO.getTriggerName().equals(trigger.getTriggerName())
+                        && jobVO.getTriggerGroup() != null && jobVO.getTriggerGroup().equals(trigger.getTriggerGroup()))
+                        .findFirst().orElse(null);
+                jobVO.setJobTrigger(jobTrigger);
+            });
+        }
+        if (option.isParameters()) {
+            List<JobParameter> parameters = jobParameterService.listByJobIds(jobs.stream().map(Job::getId).collect(Collectors.toList()));
+            jobVOList.forEach(jobVO -> {
+                List<JobParameter> params = parameters.stream().filter(parameter -> jobVO.getId().equals(parameter.getJobId()))
+                        .collect(Collectors.toList());
+                jobVO.setParameters(params);
+            });
+        }
+        return jobVOList;
+    }
+
+    /**
+     * 检查定时任务参数
+     * @param jobTemplateId 任务模板id
+     * @param parameters 定时任务参数
+     */
+    private void checkParameters(Integer jobTemplateId, Collection<JobParameter> parameters) {
+        Collection<JobTemplateParameter> templateParameters = jobTemplateParameterService.listByJobTemplateId(jobTemplateId);
+        if (CollectionUtils.isEmpty(templateParameters) && CollectionUtils.isNotEmpty(parameters)) {
+            checkError("参数与模板不一致!");
+        }
+        if (CollectionUtils.isNotEmpty(templateParameters) && CollectionUtils.isEmpty(parameters)) {
+            checkError("参数与模板不一致!");
+        }
+        if (CollectionUtils.isEmpty(templateParameters)) {
+            return;
+        }
+        if (templateParameters.size() != parameters.size()) {
+            checkError("参数与模板不一致!");
+        }
+        for (JobTemplateParameter templateParameter : templateParameters) {
+            JobParameter parameter = parameters.stream()
+                    .filter(param -> StringUtils.isNotBlank(param.getName()) && param.getName().equals(templateParameter.getName()))
+                    .findFirst().orElse(null);
+            if (parameter == null) {
+                checkError(String.format("缺少参数(%s)!", templateParameter.getName()));
+            }
+            if (!templateParameter.getType().match(parameter.getValue())) {
+                checkError(String.format("参数类型错误(%s=%s)!", parameter.getName(), parameter.getValue()));
+            }
+        }
+    }
+
+    private void checkError(String message) {
+        throw new ClientException(400, message);
     }
 
     /**

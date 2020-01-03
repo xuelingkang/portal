@@ -17,6 +17,11 @@ import java.util.List;
 public class JobTemplateParameterServiceImpl extends BaseServiceImpl<IJobTemplateParameterData, JobTemplateParameter> implements IJobTemplateParameterService {
 
     @Override
+    public List<JobTemplateParameter> listByJobTemplateId(Integer jobTemplateId) {
+        return list(new QueryWrapper<>(new JobTemplateParameter().setJobTemplateId(jobTemplateId)));
+    }
+
+    @Override
     public List<JobTemplateParameter> listByJobTemplateIds(Collection<Integer> jobTemplateIds) {
         return list(new QueryWrapper<JobTemplateParameter>().in("job_template_id", jobTemplateIds));
     }
