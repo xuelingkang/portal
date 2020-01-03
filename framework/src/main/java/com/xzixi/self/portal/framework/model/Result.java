@@ -1,7 +1,5 @@
 package com.xzixi.self.portal.framework.model;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,16 +14,17 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@ApiModel(description = "返回结果")
 public class Result<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "状态码")
+    /** 状态码 */
     private int code = 200;
-    @ApiModelProperty(value = "消息")
+
+    /** 消息 */
     private String message;
-    @ApiModelProperty(value = "数据")
+
+    /** 数据 */
     private T data;
 
     public Result(T data) {

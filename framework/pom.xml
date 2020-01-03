@@ -11,24 +11,13 @@
     </parent>
 
     <artifactId>framework</artifactId>
-    <description>基础web框架，基于mybatis-plus和swagger2</description>
+    <description>基础web框架，基于mybatis-plus</description>
 
     <dependencies>
-        <!-- swagger2扩展 -->
-        <dependency>
-            <groupId>com.xzixi.self.portal</groupId>
-            <artifactId>swagger2-extension</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <!-- mybatis plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-        <!-- fastjson -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
         </dependency>
         <!-- commons-lang3 -->
         <dependency>

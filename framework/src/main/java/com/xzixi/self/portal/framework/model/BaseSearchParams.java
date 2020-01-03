@@ -6,8 +6,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xzixi.self.portal.framework.model.annotation.*;
 import com.xzixi.self.portal.framework.util.BeanUtils;
 import com.xzixi.self.portal.framework.util.ReflectUtil;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -23,24 +21,23 @@ import java.util.stream.Collectors;
  * @author 薛凌康
  */
 @Data
-@ApiModel(description = "查询参数")
 public class BaseSearchParams<T> {
 
     private static final Pattern ASC_REG = Pattern.compile("\\s*[Aa][Ss][Cc]\\s*");
 
-    @ApiModelProperty(value = "实体类参数")
+    /** 实体类参数 */
     private T entity;
 
-    @ApiModelProperty(value = "当前页")
+    /** 当前页 */
     private Long current = 1L;
 
-    @ApiModelProperty(value = "每页个数")
+    /** 每页个数 */
     private Long size = 10L;
 
-    @ApiModelProperty(value = "排序规则")
+    /** 排序规则 */
     private String[] orderItems;
 
-    @ApiModelProperty(value = "默认排序规则")
+    /** 默认排序规则 */
     private String[] defaultOrderItems;
 
     /**

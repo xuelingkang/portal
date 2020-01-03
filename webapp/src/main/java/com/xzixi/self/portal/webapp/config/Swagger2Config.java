@@ -24,6 +24,7 @@ import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICAT
 
 /**
  * swagger2配置
+ * TODO 改成starter
  *
  * @author 薛凌康
  */
