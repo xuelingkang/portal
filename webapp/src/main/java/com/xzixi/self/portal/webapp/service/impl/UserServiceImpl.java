@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.xzixi.self.portal.framework.exception.LogicException;
+import com.xzixi.self.portal.framework.exception.ClientException;
 import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.data.IUserData;
@@ -94,11 +94,11 @@ public class UserServiceImpl extends BaseServiceImpl<IUserData, User> implements
     private void checkSaveUserProps(User user) {
         List<User> usersByUsername = list(new QueryWrapper<>(new User().setUsername(user.getUsername())));
         if (CollectionUtils.isNotEmpty(usersByUsername)) {
-            throw new LogicException(400, "用户名重复！");
+            throw new ClientException(400, "用户名重复！");
         }
         List<User> usersByEmail = list(new QueryWrapper<>(new User().setEmail(user.getEmail())));
         if (CollectionUtils.isNotEmpty(usersByEmail)) {
-            throw new LogicException(400, "邮箱重复！");
+            throw new ClientException(400, "邮箱重复！");
         }
     }
 }

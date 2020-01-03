@@ -2,7 +2,7 @@ package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xzixi.self.portal.framework.exception.LogicException;
+import com.xzixi.self.portal.framework.exception.ClientException;
 import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.model.Result;
 import com.xzixi.self.portal.framework.service.IBelongingService;
@@ -199,7 +199,7 @@ public class UserController {
             @ApiParam(value = "密码", required = true) @NotBlank(message = "密码不能为空！") @RequestParam String password) {
         Integer id = (Integer) redisTemplate.opsForValue().get(key);
         if (id == null) {
-            throw new LogicException(404, "key已经失效！");
+            throw new ClientException(404, "key已经失效！");
         }
         User userData = userService.getById(id);
         userData.setPassword(passwordEncoder.encode(password));

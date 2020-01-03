@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.xzixi.self.portal.framework.exception.LogicException;
+import com.xzixi.self.portal.framework.exception.ClientException;
 import com.xzixi.self.portal.webapp.model.po.Token;
 import com.xzixi.self.portal.webapp.service.ITokenService;
 import io.jsonwebtoken.Jwts;
@@ -110,13 +110,13 @@ public class TokenServiceImpl implements ITokenService {
      */
     private String getUuidFromSignature(String signature) {
         if (StringUtils.isEmpty(signature) || "null".equals(signature)) {
-            throw new LogicException(401, "认证信息无效！");
+            throw new ClientException(401, "认证信息无效！");
         }
         Map<String, Object> jwtClaims;
         try {
             jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(signature).getBody();
         } catch (Exception e) {
-            throw new LogicException(401, "认证信息无效！");
+            throw new ClientException(401, "认证信息无效！");
         }
         if (jwtClaims != null) {
             Object uuid = jwtClaims.get(LOGIN_USER_KEY);
@@ -124,6 +124,6 @@ public class TokenServiceImpl implements ITokenService {
                 return uuid.toString();
             }
         }
-        throw new LogicException(401, "认证信息无效！");
+        throw new ClientException(401, "认证信息无效！");
     }
 }

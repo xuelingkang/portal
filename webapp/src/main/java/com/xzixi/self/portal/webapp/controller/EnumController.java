@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.controller;
 
-import com.xzixi.self.portal.framework.exception.LogicException;
+import com.xzixi.self.portal.framework.exception.ClientException;
 import com.xzixi.self.portal.framework.model.Result;
 import com.xzixi.self.portal.webapp.model.vo.EnumVO;
 import com.xzixi.self.portal.webapp.service.IEnumService;
@@ -44,7 +44,7 @@ public class EnumController {
             @PathVariable String name) {
         EnumVO enumVO = enumService.listByName(name);
         if (enumVO == null) {
-            throw new LogicException(400, "枚举不存在！");
+            throw new ClientException(400, "枚举不存在！");
         }
         return new Result<>(enumVO);
     }

@@ -2,7 +2,7 @@ package com.xzixi.self.portal.webapp.aspect;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.xzixi.self.portal.framework.exception.LogicException;
+import com.xzixi.self.portal.framework.exception.ClientException;
 import com.xzixi.self.portal.framework.exception.ProjectException;
 import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.model.Result;
@@ -122,8 +122,8 @@ public class ControllerExceptionHandler {
      * @param e LogicException
      * @return Result
      */
-    @ExceptionHandler({LogicException.class})
-    public Result<?> handleLogicException(LogicException e, HttpServletResponse response) {
+    @ExceptionHandler({ClientException.class})
+    public Result<?> handleLogicException(ClientException e, HttpServletResponse response) {
         response.setStatus(e.getStatus());
         return new Result<>(e.getStatus(), e.getMessage(), null);
     }

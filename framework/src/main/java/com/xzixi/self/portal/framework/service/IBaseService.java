@@ -45,6 +45,7 @@ public interface IBaseService<T extends BaseModel> extends IBaseData<T> {
      * @param newModels 新数据集
      * @param oldModels 旧数据集
      * @param selector 比较器
+     * @return {@code true} 合并成功 {@code false} 合并失败
      */
     boolean merge(Collection<T> newModels, Collection<T> oldModels, MergeSelector<T> selector);
 
