@@ -1,9 +1,9 @@
 package com.xzixi.self.portal.webapp.config.security;
 
+import com.xzixi.self.portal.framework.model.Result;
 import com.xzixi.self.portal.webapp.service.ITokenService;
-import com.xzixi.self.portal.webapp.framework.model.Result;
-import com.xzixi.self.portal.webapp.framework.util.RequestUtil;
-import com.xzixi.self.portal.webapp.framework.util.ResponseUtil;
+import com.xzixi.self.portal.webapp.util.RequestUtil;
+import com.xzixi.self.portal.webapp.util.ResponseUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
-import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.AUTHENTICATION_PARAMETER_NAME;
+import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
+import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICATION_PARAMETER_NAME;
 
 /**
  * 退出登录

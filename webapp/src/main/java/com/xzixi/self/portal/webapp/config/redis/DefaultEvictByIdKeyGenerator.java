@@ -4,7 +4,7 @@ import org.springframework.cache.interceptor.KeyGenerator;
 
 import java.lang.reflect.Method;
 
-import static com.xzixi.self.portal.webapp.framework.constant.RedisConstant.*;
+import static com.xzixi.self.portal.webapp.constant.RedisConstant.*;
 
 /**
  * 根据id生成删除缓存key

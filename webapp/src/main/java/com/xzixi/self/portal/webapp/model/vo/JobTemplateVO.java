@@ -1,11 +1,11 @@
 package com.xzixi.self.portal.webapp.model.vo;
 
+import com.xzixi.self.portal.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.po.JobTemplate;
 import com.xzixi.self.portal.webapp.model.po.JobTemplateParameter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.beans.BeanUtils;
 
 import java.util.Collection;
 

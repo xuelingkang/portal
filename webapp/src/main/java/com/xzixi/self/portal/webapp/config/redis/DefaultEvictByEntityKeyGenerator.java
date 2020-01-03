@@ -1,11 +1,11 @@
 package com.xzixi.self.portal.webapp.config.redis;
 
-import com.xzixi.self.portal.webapp.framework.model.BaseModel;
+import com.xzixi.self.portal.framework.model.BaseModel;
 import org.springframework.cache.interceptor.KeyGenerator;
 
 import java.lang.reflect.Method;
 
-import static com.xzixi.self.portal.webapp.framework.constant.RedisConstant.*;
+import static com.xzixi.self.portal.webapp.constant.RedisConstant.*;
 
 /**
  * @author 薛凌康

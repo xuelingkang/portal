@@ -2,14 +2,14 @@ package com.xzixi.self.portal.webapp.config.redis;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.xzixi.self.portal.webapp.framework.util.TypeUtil;
+import com.xzixi.self.portal.webapp.util.TypeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.interceptor.KeyGenerator;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import static com.xzixi.self.portal.webapp.framework.constant.RedisConstant.*;
+import static com.xzixi.self.portal.webapp.constant.RedisConstant.*;
 
 /**
  * 使用其他非正式参数生成key

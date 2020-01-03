@@ -1,15 +1,15 @@
 package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.xzixi.self.portal.framework.exception.ServerException;
+import com.xzixi.self.portal.framework.model.Result;
 import com.xzixi.self.portal.sftp.pool.component.SftpClient;
-import com.xzixi.self.portal.webapp.framework.exception.ServerException;
-import com.xzixi.self.portal.webapp.framework.model.Result;
-import com.xzixi.self.portal.webapp.framework.util.FileUtil;
 import com.xzixi.self.portal.webapp.model.enums.AttachmentType;
 import com.xzixi.self.portal.webapp.model.params.AttachmentSearchParams;
 import com.xzixi.self.portal.webapp.model.po.Attachment;
 import com.xzixi.self.portal.webapp.model.vo.AttachmentVO;
 import com.xzixi.self.portal.webapp.service.IAttachmentService;
+import com.xzixi.self.portal.webapp.util.FileUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 
-import static com.xzixi.self.portal.webapp.framework.constant.AttachmentConstant.*;
+import static com.xzixi.self.portal.webapp.constant.AttachmentConstant.*;
 
 /**
  * @author 薛凌康

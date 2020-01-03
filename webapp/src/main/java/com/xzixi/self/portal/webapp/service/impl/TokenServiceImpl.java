@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.xzixi.self.portal.webapp.framework.exception.LogicException;
+import com.xzixi.self.portal.framework.exception.LogicException;
 import com.xzixi.self.portal.webapp.model.po.Token;
 import com.xzixi.self.portal.webapp.service.ITokenService;
 import io.jsonwebtoken.Jwts;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.*;
+import static com.xzixi.self.portal.webapp.constant.SecurityConstant.*;
 
 /**
  * @author 薛凌康

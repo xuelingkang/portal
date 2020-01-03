@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.config.security;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.xzixi.self.portal.webapp.framework.exception.LogicException;
+import com.xzixi.self.portal.framework.exception.LogicException;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
 import com.xzixi.self.portal.webapp.service.IUserService;

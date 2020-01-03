@@ -2,9 +2,9 @@ package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xzixi.self.portal.webapp.framework.exception.ServerException;
-import com.xzixi.self.portal.webapp.framework.model.Result;
-import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
+import com.xzixi.self.portal.framework.exception.ServerException;
+import com.xzixi.self.portal.framework.model.Result;
+import com.xzixi.self.portal.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.params.RoleSearchParams;
 import com.xzixi.self.portal.webapp.model.po.Role;
 import com.xzixi.self.portal.webapp.model.po.RoleAuthorityLink;

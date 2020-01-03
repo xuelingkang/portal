@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.config.security;
 
-import com.xzixi.self.portal.webapp.framework.util.ResponseUtil;
-import com.xzixi.self.portal.webapp.framework.model.Result;
+import com.xzixi.self.portal.framework.model.Result;
+import com.xzixi.self.portal.webapp.util.ResponseUtil;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;

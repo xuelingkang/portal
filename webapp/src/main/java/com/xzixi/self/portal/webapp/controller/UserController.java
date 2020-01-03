@@ -2,11 +2,11 @@ package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xzixi.self.portal.webapp.framework.exception.LogicException;
-import com.xzixi.self.portal.webapp.framework.exception.ServerException;
-import com.xzixi.self.portal.webapp.framework.model.Result;
-import com.xzixi.self.portal.webapp.framework.service.IBelongingService;
-import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
+import com.xzixi.self.portal.framework.exception.LogicException;
+import com.xzixi.self.portal.framework.exception.ServerException;
+import com.xzixi.self.portal.framework.model.Result;
+import com.xzixi.self.portal.framework.service.IBelongingService;
+import com.xzixi.self.portal.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.params.UserSearchParams;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.po.UserRoleLink;
@@ -35,7 +35,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.RESET_PASSWORD_KEY_EXPIRE_SECOND;
+import static com.xzixi.self.portal.webapp.constant.SecurityConstant.RESET_PASSWORD_KEY_EXPIRE_SECOND;
 
 /**
  * @author 薛凌康

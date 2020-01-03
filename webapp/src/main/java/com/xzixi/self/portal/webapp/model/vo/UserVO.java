@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.model.vo;
 
-import com.xzixi.self.portal.webapp.framework.util.BeanUtils;
+import com.xzixi.self.portal.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.Role;
 import com.xzixi.self.portal.webapp.model.po.User;

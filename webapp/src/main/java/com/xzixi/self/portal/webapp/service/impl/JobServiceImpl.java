@@ -1,9 +1,9 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
+import com.xzixi.self.portal.framework.exception.ProjectException;
+import com.xzixi.self.portal.framework.exception.ServerException;
+import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.data.IJobData;
-import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
-import com.xzixi.self.portal.webapp.framework.exception.ServerException;
-import com.xzixi.self.portal.webapp.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.model.po.Job;
 import com.xzixi.self.portal.webapp.model.po.JobParameter;
 import com.xzixi.self.portal.webapp.model.po.JobTemplate;
@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.xzixi.self.portal.webapp.framework.constant.JobConstant.JOB_PREFIX;
-import static com.xzixi.self.portal.webapp.framework.constant.JobConstant.TRIGGER_PREFIX;
+import static com.xzixi.self.portal.webapp.constant.JobConstant.JOB_PREFIX;
+import static com.xzixi.self.portal.webapp.constant.JobConstant.TRIGGER_PREFIX;
 
 /**
  * @author 薛凌康

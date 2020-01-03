@@ -1,10 +1,10 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.xzixi.self.portal.webapp.framework.exception.LogicException;
-import com.xzixi.self.portal.webapp.framework.model.IBelonging;
-import com.xzixi.self.portal.webapp.framework.service.IBelongingService;
-import com.xzixi.self.portal.webapp.framework.util.SecurityUtil;
+import com.xzixi.self.portal.framework.exception.LogicException;
+import com.xzixi.self.portal.framework.model.IBelonging;
+import com.xzixi.self.portal.framework.service.IBelongingService;
 import com.xzixi.self.portal.webapp.model.po.User;
+import com.xzixi.self.portal.webapp.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 
 /**

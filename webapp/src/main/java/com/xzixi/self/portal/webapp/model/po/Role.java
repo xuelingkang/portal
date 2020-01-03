@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.model.po;
 
-import com.xzixi.self.portal.webapp.framework.model.BaseModel;
+import com.xzixi.self.portal.framework.model.BaseModel;
 import com.xzixi.self.portal.webapp.model.valid.RoleSave;
 import com.xzixi.self.portal.webapp.model.valid.RoleUpdate;
 import io.swagger.annotations.ApiModel;

@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.xzixi.self.portal.webapp.framework.constant.RedisConstant.*;
+import static com.xzixi.self.portal.webapp.constant.RedisConstant.*;
 
 /**
  * 根据id集合生成删除缓存key

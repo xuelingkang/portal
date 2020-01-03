@@ -2,7 +2,7 @@ package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xzixi.self.portal.webapp.framework.model.Result;
+import com.xzixi.self.portal.framework.model.Result;
 import com.xzixi.self.portal.webapp.model.params.JobSearchParams;
 import com.xzixi.self.portal.webapp.model.po.Job;
 import com.xzixi.self.portal.webapp.model.po.JobTrigger;

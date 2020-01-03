@@ -2,8 +2,8 @@ package com.xzixi.self.portal.webapp.model.po;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.xzixi.self.portal.extension.swagger2.annotation.IgnoreSwagger2Parameter;
-import com.xzixi.self.portal.webapp.framework.model.BaseModel;
-import com.xzixi.self.portal.webapp.framework.model.IBelonging;
+import com.xzixi.self.portal.framework.model.BaseModel;
+import com.xzixi.self.portal.framework.model.IBelonging;
 import com.xzixi.self.portal.webapp.model.enums.Sex;
 import com.xzixi.self.portal.webapp.model.enums.UserType;
 import com.xzixi.self.portal.webapp.model.valid.UserSave;

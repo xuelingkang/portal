@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.xzixi.self.portal.webapp.framework.service.IBaseService;
+import com.xzixi.self.portal.framework.service.IBaseService;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.Role;
 import com.xzixi.self.portal.webapp.model.vo.AuthorityVO;

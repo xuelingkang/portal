@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xzixi.self.portal.webapp.framework.model.Result;
+import com.xzixi.self.portal.framework.model.Result;
 import com.xzixi.self.portal.webapp.model.params.JobTemplateSearchParams;
 import com.xzixi.self.portal.webapp.model.po.JobTemplate;
 import com.xzixi.self.portal.webapp.model.valid.JobTemplateSave;

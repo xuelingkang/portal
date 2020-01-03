@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.config.redis;
 
-import com.xzixi.self.portal.webapp.framework.exception.ProjectException;
-import com.xzixi.self.portal.webapp.framework.util.TypeUtil;
+import com.xzixi.self.portal.framework.exception.ProjectException;
+import com.xzixi.self.portal.webapp.util.TypeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.interceptor.KeyGenerator;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.xzixi.self.portal.webapp.framework.constant.RedisConstant.*;
+import static com.xzixi.self.portal.webapp.constant.RedisConstant.*;
 
 /**
  * 根据id或id集合数组生成key

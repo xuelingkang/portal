@@ -20,7 +20,7 @@ import springfox.documentation.swagger2.web.Swagger2Controller;
 
 import java.util.Collections;
 
-import static com.xzixi.self.portal.webapp.framework.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
+import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
 
 /**
  * swagger2配置

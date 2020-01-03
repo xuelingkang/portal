@@ -1,8 +1,8 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.data.IJobParameterData;
-import com.xzixi.self.portal.webapp.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.model.po.JobParameter;
 import com.xzixi.self.portal.webapp.service.IJobParameterService;
 import org.springframework.stereotype.Service;

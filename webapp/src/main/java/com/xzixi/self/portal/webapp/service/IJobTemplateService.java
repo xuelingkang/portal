@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.service;
 
-import com.xzixi.self.portal.webapp.framework.service.IBaseService;
+import com.xzixi.self.portal.framework.service.IBaseService;
 import com.xzixi.self.portal.webapp.model.po.JobTemplate;
 import com.xzixi.self.portal.webapp.model.po.JobTemplateParameter;
 import com.xzixi.self.portal.webapp.model.vo.JobTemplateVO;
