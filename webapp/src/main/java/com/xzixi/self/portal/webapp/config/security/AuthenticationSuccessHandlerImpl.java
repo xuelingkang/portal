@@ -6,7 +6,7 @@ import com.xzixi.self.portal.webapp.model.vo.TokenVO;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
 import com.xzixi.self.portal.webapp.service.ITokenService;
 import com.xzixi.self.portal.webapp.service.IUserService;
-import com.xzixi.self.portal.webapp.util.ResponseUtil;
+import com.xzixi.self.portal.webapp.util.WebUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -39,7 +39,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         user.setPassword(null);
         TokenVO tokenVO = new TokenVO(token).setUser(user);
         Result<TokenVO> result = new Result<>(200, "登录成功！", tokenVO);
-        ResponseUtil.printJson(response, result);
+        WebUtil.printJson(response, result);
 
         // 设置登录时间
         user.setLoginTime(token.getLoginTime());

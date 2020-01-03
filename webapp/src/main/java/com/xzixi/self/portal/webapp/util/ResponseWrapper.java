@@ -18,7 +18,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
     private ServletOutputStream out;
 
-    public ResponseWrapper(HttpServletResponse httpServletResponse) throws IOException {
+    public ResponseWrapper(HttpServletResponse httpServletResponse) {
         super(httpServletResponse);
         buffer = new ByteArrayOutputStream();
         out = new WrapperOutputStream(buffer);
@@ -43,7 +43,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
         return buffer.toByteArray();
     }
 
-    public class WrapperOutputStream extends ServletOutputStream {
+    public static class WrapperOutputStream extends ServletOutputStream {
 
         private ByteArrayOutputStream bos;
 
@@ -52,8 +52,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
         }
 
         @Override
-        public void write(int b)
-                throws IOException {
+        public void write(int b) {
             bos.write(b);
         }
 

@@ -1,14 +1,20 @@
 package com.xzixi.self.portal.webapp.util;
 
+import com.alibaba.fastjson.JSON;
 import com.xzixi.self.portal.framework.exception.ProjectException;
+import com.xzixi.self.portal.framework.model.Result;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 
 /**
  * @author 薛凌康
  */
-public class RequestUtil {
+public class WebUtil {
 
     public static String getHeaderOrParameter(HttpServletRequest request, String headerName, String parameterName) {
         String value = getHeader(request, headerName);
@@ -30,5 +36,20 @@ public class RequestUtil {
             throw new ProjectException("request或参数名不能为空！");
         }
         return request.getHeader(name);
+    }
+
+    public static void printJson(HttpServletResponse response, Result<?> result) {
+        response.setContentType("application/json;charset=utf-8");
+        response.setStatus(result.getCode());
+        OutputStream out = null;
+        try {
+            out = response.getOutputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (out!=null) {
+            PrintWriter writer = new PrintWriter(out, true);
+            writer.println(JSON.toJSONString(result));
+        }
     }
 }

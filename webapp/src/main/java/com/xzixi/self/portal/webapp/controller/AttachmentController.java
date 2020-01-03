@@ -9,10 +9,10 @@ import com.xzixi.self.portal.webapp.model.params.AttachmentSearchParams;
 import com.xzixi.self.portal.webapp.model.po.Attachment;
 import com.xzixi.self.portal.webapp.model.vo.AttachmentVO;
 import com.xzixi.self.portal.webapp.service.IAttachmentService;
-import com.xzixi.self.portal.webapp.util.FileUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 import static com.xzixi.self.portal.webapp.constant.AttachmentConstant.*;
 
@@ -55,11 +56,11 @@ public class AttachmentController {
         if (!rename && StringUtils.isNotBlank(originalFilename)) {
             name = originalFilename;
         } else {
-            String exp = FileUtil.getExp(originalFilename);
+            String exp = FilenameUtils.getExtension(originalFilename);
             if (StringUtils.isNotBlank(exp)) {
-                name = FileUtil.getRandomName() + exp;
+                name = genRandomName() + exp;
             } else {
-                name = FileUtil.getRandomName();
+                name = genRandomName();
             }
         }
         // type小写
@@ -114,5 +115,9 @@ public class AttachmentController {
             sftp.delete(dir, name);
         }));
         return new Result<>();
+    }
+
+    private String genRandomName() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 }

@@ -2,8 +2,7 @@ package com.xzixi.self.portal.webapp.config.security;
 
 import com.xzixi.self.portal.framework.model.Result;
 import com.xzixi.self.portal.webapp.service.ITokenService;
-import com.xzixi.self.portal.webapp.util.RequestUtil;
-import com.xzixi.self.portal.webapp.util.ResponseUtil;
+import com.xzixi.self.portal.webapp.util.WebUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -29,17 +28,17 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        String signature = RequestUtil.getHeaderOrParameter(request, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_NAME);
+        String signature = WebUtil.getHeaderOrParameter(request, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_NAME);
         if (StringUtils.isNotBlank(signature) && !"null".equals(signature)) {
             try {
                 tokenService.deleteToken(signature);
             } catch (Exception e) {
                 Result<?> result = new Result<>(401, "非法认证！", null);
-                ResponseUtil.printJson(response, result);
+                WebUtil.printJson(response, result);
                 return;
             }
         }
         Result<?> result = new Result<>(200, "退出成功！", null);
-        ResponseUtil.printJson(response, result);
+        WebUtil.printJson(response, result);
     }
 }

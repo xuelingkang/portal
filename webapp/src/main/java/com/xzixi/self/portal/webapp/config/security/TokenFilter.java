@@ -6,8 +6,7 @@ import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
 import com.xzixi.self.portal.webapp.service.ITokenService;
 import com.xzixi.self.portal.webapp.service.IUserService;
-import com.xzixi.self.portal.webapp.util.RequestUtil;
-import com.xzixi.self.portal.webapp.util.ResponseUtil;
+import com.xzixi.self.portal.webapp.util.WebUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,7 +37,7 @@ public class TokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String signature = RequestUtil.getHeaderOrParameter(request, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_NAME);
+        String signature = WebUtil.getHeaderOrParameter(request, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_NAME);
         if (StringUtils.isNotEmpty(signature) && !"null".equals(signature)) {
             try {
                 Token token = tokenService.getToken(signature);
@@ -48,7 +47,7 @@ public class TokenFilter extends OncePerRequestFilter {
                 }
             } catch (Exception e) {
                 Result<?> result = new Result<>(401, "非法认证！", null);
-                ResponseUtil.printJson(response, result);
+                WebUtil.printJson(response, result);
                 return;
             }
         }
@@ -66,7 +65,7 @@ public class TokenFilter extends OncePerRequestFilter {
         // 检查是否锁定
         if (user.getLocked()) {
             Result<?> result = new Result<>(401, "账户已被锁定！", null);
-            ResponseUtil.printJson(response, result);
+            WebUtil.printJson(response, result);
         }
 
         UserVO userVO = userService.buildUserVO(user);
