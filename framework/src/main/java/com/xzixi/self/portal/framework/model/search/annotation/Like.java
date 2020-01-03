@@ -1,4 +1,6 @@
-package com.xzixi.self.portal.framework.model.annotation;
+package com.xzixi.self.portal.framework.model.search.annotation;
+
+import com.xzixi.self.portal.framework.model.search.ConditionType;
 
 import java.lang.annotation.*;
 
@@ -10,6 +12,7 @@ import java.lang.annotation.*;
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+@Condition(ConditionType.LIKE)
 public @interface Like {
 
     /** 列名 */

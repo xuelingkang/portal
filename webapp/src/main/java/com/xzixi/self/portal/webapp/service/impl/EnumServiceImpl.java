@@ -42,6 +42,9 @@ public class EnumServiceImpl implements IEnumService {
                 if (!IBaseEnum.class.isAssignableFrom(cls)) {
                     continue;
                 }
+                if (!cls.isEnum()) {
+                    continue;
+                }
                 EnumSet<E> enumSet = EnumSet.allOf(cls);
                 List<EnumItemVO> items = enumSet.stream()
                         .map(e -> new EnumItemVO(e.name(), ((IBaseEnum) e).getValue()))

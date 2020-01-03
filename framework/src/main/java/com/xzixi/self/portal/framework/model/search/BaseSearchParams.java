@@ -1,9 +1,9 @@
-package com.xzixi.self.portal.framework.model;
+package com.xzixi.self.portal.framework.model.search;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.xzixi.self.portal.framework.model.annotation.*;
+import com.xzixi.self.portal.framework.model.search.annotation.*;
 import com.xzixi.self.portal.framework.util.BeanUtils;
 import com.xzixi.self.portal.framework.util.ReflectUtil;
 import lombok.Data;
@@ -85,10 +85,10 @@ public class BaseSearchParams<T> {
     }
 
     private static final Class<?>[] ANNOTATION_CLASSES
-            = new Class<?>[]{Eq.class, Ge.class, Gt.class, Le.class, Lt.class, Like.class};
+            = new Class<?>[]{Eq.class, Ne.class, Gt.class, Ge.class, Lt.class, Le.class, Like.class};
 
     /**
-     * 创建QueryWrapper，忽略带Eq/Ge/Gt/Le/Lt/Like等注解的属性
+     * 创建QueryWrapper，忽略带条件注解的属性
      *
      * @return QueryWrapper
      */
@@ -128,25 +128,23 @@ public class BaseSearchParams<T> {
                 continue;
             }
 
+            Condition condition = annotation.annotationType().getDeclaredAnnotation(Condition.class);
+            if (condition == null) {
+                continue;
+            }
+            ConditionType conditionType = condition.value();
+
             String column = ReflectUtil.invokeMethod(annotation, "value", new Class<?>[0]);
             if (StringUtils.isBlank(column)) {
                 column = field.getName();
             }
+
             Object value = ReflectUtil.getProp(object, field);
 
-            if (Eq.class.isAssignableFrom(annotation.annotationType())) {
-                queryWrapper.eq(column, value);
-            } else if (Ge.class.isAssignableFrom(annotation.annotationType())) {
-                queryWrapper.ge(column, value);
-            } else if (Gt.class.isAssignableFrom(annotation.annotationType())) {
-                queryWrapper.gt(column, value);
-            } else if (Le.class.isAssignableFrom(annotation.annotationType())) {
-                queryWrapper.le(column, value);
-            } else if (Lt.class.isAssignableFrom(annotation.annotationType())) {
-                queryWrapper.lt(column, value);
-            } else if (Like.class.isAssignableFrom(annotation.annotationType())) {
-                queryWrapper.like(column, value);
+            if (value == null && condition.ignoreNull()) {
+                continue;
             }
+            conditionType.parse(queryWrapper, column, value);
         }
     }
 }

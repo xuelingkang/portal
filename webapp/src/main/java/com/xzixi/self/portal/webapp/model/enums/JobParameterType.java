@@ -10,7 +10,7 @@ import org.apache.commons.lang3.math.NumberUtils;
  */
 @Getter
 @AllArgsConstructor
-public enum JobTemplateParameterType implements IBaseEnum {
+public enum JobParameterType implements IBaseEnum {
 
     /** int型整数 */
     INTEGER("int型整数") {

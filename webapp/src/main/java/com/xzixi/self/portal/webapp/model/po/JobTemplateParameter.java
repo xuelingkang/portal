@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.model.po;
 
 import com.xzixi.self.portal.framework.model.BaseModel;
-import com.xzixi.self.portal.webapp.model.enums.JobTemplateParameterType;
+import com.xzixi.self.portal.webapp.model.enums.JobParameterType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -25,7 +25,7 @@ public class JobTemplateParameter extends BaseModel {
     private String name;
 
     @ApiModelProperty(value = "参数类型")
-    private JobTemplateParameterType type;
+    private JobParameterType type;
 
     @ApiModelProperty(value = "参数描述")
     private String description;
