@@ -40,7 +40,7 @@ public class JobController {
     @GetMapping
     @ApiOperation(value = "分页查询定时任务")
     public Result<IPage<JobVO>> page(JobSearchParams searchParams) {
-        searchParams.setDefaultOrderItems(new String[]{"id asc"});
+        searchParams.setDefaultOrderItems("id asc");
         IPage<Job> jobPage = jobService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
         List<Job> jobs = jobPage.getRecords();
         List<JobTrigger> jobTriggers = jobTriggerService.listByJobs(jobs);

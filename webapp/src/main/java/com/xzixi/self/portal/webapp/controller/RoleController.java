@@ -42,7 +42,7 @@ public class RoleController {
     @GetMapping
     @ApiOperation(value = "分页查询角色")
     public Result<IPage<Role>> page(RoleSearchParams searchParams) {
-        searchParams.setDefaultOrderItems(new String[]{"seq asc"});
+        searchParams.setDefaultOrderItems("seq asc");
         IPage<Role> page = roleService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
         return new Result<>(page);
     }

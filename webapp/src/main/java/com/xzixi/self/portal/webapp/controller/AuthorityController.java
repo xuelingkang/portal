@@ -36,7 +36,7 @@ public class AuthorityController {
     @GetMapping
     @ApiOperation(value = "分页查询权限")
     public Result<IPage<Authority>> page(AuthoritySearchParams searchParams) {
-        searchParams.setDefaultOrderItems(new String[]{"category asc", "seq asc"});
+        searchParams.setDefaultOrderItems("category asc", "seq asc");
         IPage<Authority> page = authorityService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
         return new Result<>(page);
     }

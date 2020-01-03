@@ -34,7 +34,7 @@ public class JobTemplateController {
     @GetMapping
     @ApiOperation(value = "分页查询任务模板")
     public Result<IPage<JobTemplate>> page(JobTemplateSearchParams searchParams) {
-        searchParams.setDefaultOrderItems(new String[]{"id asc"});
+        searchParams.setDefaultOrderItems("id asc");
         IPage<JobTemplate> page = jobTemplateService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
         return new Result<>(page);
     }

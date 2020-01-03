@@ -85,7 +85,7 @@ public class AttachmentController {
     @GetMapping
     @ApiOperation(value = "分页查询附件")
     public Result<IPage<Attachment>> page(AttachmentSearchParams searchParams) {
-        searchParams.setDefaultOrderItems(new String[]{"create_time desc"});
+        searchParams.setDefaultOrderItems("create_time desc");
         IPage<Attachment> page = attachmentService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
         return new Result<>(page);
     }

@@ -83,6 +83,10 @@ public class BaseSearchParams<T> {
         return queryWrapper;
     }
 
+    public void setDefaultOrderItems(String... defaultOrderItems) {
+        this.defaultOrderItems = defaultOrderItems;
+    }
+
     private static final Class<?>[] ANNOTATION_CLASSES
             = new Class<?>[]{Eq.class, Ge.class, Gt.class, Le.class, Lt.class, Like.class};
 

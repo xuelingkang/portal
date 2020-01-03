@@ -62,7 +62,7 @@ public class UserController {
     @GetMapping
     @ApiOperation(value = "分页查询用户")
     public Result<IPage<User>> page(UserSearchParams searchParams) {
-        searchParams.setDefaultOrderItems(new String[]{"create_time desc"});
+        searchParams.setDefaultOrderItems("create_time desc");
         IPage<User> page = userService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
         page.getRecords().forEach(user -> user.setPassword(null));
         return new Result<>(page);
