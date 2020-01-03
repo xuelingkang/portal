@@ -5,7 +5,9 @@ import com.xzixi.self.portal.webapp.model.po.JobTemplate;
 import com.xzixi.self.portal.webapp.model.po.JobTemplateParameter;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.Collection;
 
@@ -23,5 +25,11 @@ public class JobTemplateVO extends JobTemplate {
 
     public JobTemplateVO(JobTemplate jobTemplate, String... ignoreProperties) {
         BeanUtils.copyProperties(jobTemplate, this, ignoreProperties);
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class BuildOption {
+        private boolean parameters;
     }
 }

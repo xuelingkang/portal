@@ -31,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("用户名："+ username + "不存在！");
         }
 
-        UserVO userVO = userService.buildUserVO(user);
+        UserVO userVO = userService.buildVO(user);
         return new UserDetailsImpl(userVO);
     }
 }

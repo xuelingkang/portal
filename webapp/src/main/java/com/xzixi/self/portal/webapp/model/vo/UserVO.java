@@ -6,7 +6,9 @@ import com.xzixi.self.portal.webapp.model.po.Role;
 import com.xzixi.self.portal.webapp.model.po.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Collection;
@@ -32,5 +34,12 @@ public class UserVO extends User {
 
     public UserVO(User user, String... ignoreProperties) {
         BeanUtils.copyProperties(user, this, ignoreProperties);
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class BuildOption {
+        private boolean roles;
+        private boolean authorities;
     }
 }

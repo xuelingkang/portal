@@ -32,6 +32,17 @@ public class AuthorityServiceImpl extends BaseServiceImpl<IAuthorityData, Author
     private IRoleAuthorityLinkService roleAuthorityLinkService;
 
     @Override
+    public Collection<Authority> listByRoleId(Integer roleId) {
+        List<RoleAuthorityLink> roleAuthorityLinks = roleAuthorityLinkService.listByRoleId(roleId);
+        if (CollectionUtils.isEmpty(roleAuthorityLinks)) {
+            return null;
+        }
+        List<Integer> authorityIds = roleAuthorityLinks.stream()
+                .map(RoleAuthorityLink::getAuthorityId).collect(Collectors.toList());
+        return listByIds(authorityIds);
+    }
+
+    @Override
     public Collection<Authority> listByRoleIds(Collection<Integer> roleIds) {
         List<RoleAuthorityLink> roleAuthorityLinks = roleAuthorityLinkService.listByRoleIds(roleIds);
         if (CollectionUtils.isEmpty(roleAuthorityLinks)) {
@@ -66,15 +77,21 @@ public class AuthorityServiceImpl extends BaseServiceImpl<IAuthorityData, Author
     }
 
     @Override
-    public AuthorityVO buildAuthorityVO(Integer id) {
-        Authority authority = getById(id);
-        return buildAuthorityVO(authority);
+    public AuthorityVO buildVO(Authority authority, AuthorityVO.BuildOption option) {
+        AuthorityVO authorityVO = new AuthorityVO(authority);
+        authorityVO.setAuthoritySignal(genSignal(authority));
+        return authorityVO;
     }
 
     @Override
-    public AuthorityVO buildAuthorityVO(Authority authority) {
-        AuthorityVO authorityVO = new AuthorityVO(authority);
-        authorityVO.setAuthoritySignal(authority.getProtocol() + "." + authority.getPattern() + "." + authority.getMethod());
-        return authorityVO;
+    public List<AuthorityVO> buildVO(Collection<Authority> authorities, AuthorityVO.BuildOption option) {
+        List<AuthorityVO> authorityVOList = authorities.stream().map(AuthorityVO::new).collect(Collectors.toList());
+        authorityVOList.forEach(authorityVO -> authorityVO.setAuthoritySignal(genSignal(authorityVO)));
+        return authorityVOList;
+    }
+
+    @Override
+    public String genSignal(Authority authority) {
+        return String.format("%s.%s.%s", authority.getProtocol(), authority.getPattern(), authority.getMethod());
     }
 }

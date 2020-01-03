@@ -33,9 +33,10 @@ public class JobTemplateController {
 
     @GetMapping
     @ApiOperation(value = "分页查询任务模板")
-    public Result<IPage<JobTemplate>> page(JobTemplateSearchParams searchParams) {
+    public Result<IPage<JobTemplateVO>> page(JobTemplateSearchParams searchParams) {
         searchParams.setDefaultOrderItems("id asc");
-        IPage<JobTemplate> page = jobTemplateService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
+        IPage<JobTemplate> jobTemplatePage = jobTemplateService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
+        IPage<JobTemplateVO> page = jobTemplateService.buildVO(jobTemplatePage, new JobTemplateVO.BuildOption(false));
         return new Result<>(page);
     }
 
@@ -43,7 +44,7 @@ public class JobTemplateController {
     @ApiOperation(value = "根据id查询任务模板")
     public Result<JobTemplateVO> getById(
             @ApiParam(value = "任务模板id", required = true) @NotNull(message = "任务模板id不能为空！") @PathVariable Integer id) {
-        JobTemplateVO jobTemplateVO = jobTemplateService.buildJobTemplateVO(id);
+        JobTemplateVO jobTemplateVO = jobTemplateService.buildVO(id, new JobTemplateVO.BuildOption(true));
         return new Result<>(jobTemplateVO);
     }
 

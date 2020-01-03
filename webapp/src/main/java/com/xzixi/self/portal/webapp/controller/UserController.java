@@ -61,10 +61,11 @@ public class UserController {
 
     @GetMapping
     @ApiOperation(value = "分页查询用户")
-    public Result<IPage<User>> page(UserSearchParams searchParams) {
+    public Result<IPage<UserVO>> page(UserSearchParams searchParams) {
         searchParams.setDefaultOrderItems("create_time desc");
-        IPage<User> page = userService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
-        page.getRecords().forEach(user -> user.setPassword(null));
+        IPage<User> userPage = userService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
+        userPage.getRecords().forEach(user -> user.setPassword(null));
+        IPage<UserVO> page = userService.buildVO(userPage, new UserVO.BuildOption(false, false));
         return new Result<>(page);
     }
 
@@ -72,7 +73,7 @@ public class UserController {
     @ApiOperation(value = "根据id查询用户")
     public Result<UserVO> getById(
             @ApiParam(value = "用户id", required = true) @NotNull(message = "用户id不能为空！") @PathVariable Integer id) {
-        UserVO userVO = userService.buildUserVO(id);
+        UserVO userVO = userService.buildVO(id, new UserVO.BuildOption(true, true));
         userVO.setPassword(null);
         return new Result<>(userVO);
     }

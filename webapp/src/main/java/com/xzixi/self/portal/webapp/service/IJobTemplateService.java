@@ -1,6 +1,7 @@
 package com.xzixi.self.portal.webapp.service;
 
 import com.xzixi.self.portal.framework.service.IBaseService;
+import com.xzixi.self.portal.framework.service.IVoService;
 import com.xzixi.self.portal.webapp.model.po.JobTemplate;
 import com.xzixi.self.portal.webapp.model.po.JobTemplateParameter;
 import com.xzixi.self.portal.webapp.model.vo.JobTemplateVO;
@@ -10,7 +11,8 @@ import java.util.Collection;
 /**
  * @author 薛凌康
  */
-public interface IJobTemplateService extends IBaseService<JobTemplate> {
+public interface IJobTemplateService extends IBaseService<JobTemplate>,
+        IVoService<JobTemplate, JobTemplateVO, JobTemplateVO.BuildOption> {
 
     /**
      * 保存任务模板和参数
@@ -34,20 +36,4 @@ public interface IJobTemplateService extends IBaseService<JobTemplate> {
      * @param ids 模板id集合
      */
     void removeJobTemplatesByIds(Collection<Integer> ids);
-
-    /**
-     * 构建JobTemplateVO
-     *
-     * @param id 任务模板对象id
-     * @return JobTemplateVO
-     */
-    JobTemplateVO buildJobTemplateVO(Integer id);
-
-    /**
-     * 构建JobTemplateVO
-     *
-     * @param jobTemplate 任务模板对象
-     * @return JobTemplateVO
-     */
-    JobTemplateVO buildJobTemplateVO(JobTemplate jobTemplate);
 }

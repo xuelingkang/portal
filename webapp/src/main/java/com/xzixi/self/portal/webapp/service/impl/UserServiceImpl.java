@@ -64,32 +64,33 @@ public class UserServiceImpl extends BaseServiceImpl<IUserData, User> implements
     }
 
     @Override
-    public UserVO buildUserVO(Integer id) {
-        User user = getById(id);
-        return buildUserVO(user);
-    }
-
-    @Override
-    public UserVO buildUserVO(User user) {
+    public UserVO buildVO(User user, UserVO.BuildOption option) {
         UserVO userVO = new UserVO(user);
-        // 查询角色
-        Collection<Role> roles = roleService.listByUserId(user.getId());
-        if (CollectionUtils.isEmpty(roles)) {
-            return userVO;
+        if (option.isRoles()) {
+            // 查询角色
+            Collection<Role> roles = roleService.listByUserId(user.getId());
+            if (CollectionUtils.isNotEmpty(roles)) {
+                userVO.setRoles(roles);
+            }
+            if (option.isAuthorities() && CollectionUtils.isNotEmpty(roles)) {
+                // 查询权限
+                Collection<Integer> roleIds = roles.stream().map(Role::getId).collect(Collectors.toSet());
+                Collection<Authority> authorities = authorityService.listByRoleIds(roleIds);
+                if (CollectionUtils.isNotEmpty(authorities)) {
+                    userVO.setAuthorities(authorities);
+                    // 权限标识
+                    userVO.setAuthoritySignals(authorities.stream().map(authority -> authorityService.genSignal(authority))
+                            .collect(Collectors.toSet()));
+                }
+            }
         }
-        Collection<Integer> roleIds = roles.stream().map(Role::getId).collect(Collectors.toSet());
-        // 查询权限
-        Collection<Authority> authorities = authorityService.listByRoleIds(roleIds);
-        if (CollectionUtils.isEmpty(authorities)) {
-            return userVO;
-        }
-        userVO.setAuthorities(authorities);
-        // 权限标识
-        userVO.setAuthoritySignals(authorities.stream().map(authority ->
-                authority.getProtocol() + "." + authority.getPattern() + "." + authority.getMethod()).collect(Collectors.toSet()));
         return userVO;
     }
 
+    @Override
+    public List<UserVO> buildVO(Collection<User> users, UserVO.BuildOption option) {
+        return users.stream().map(user -> buildVO(user, option)).collect(Collectors.toList());
+    }
 
     private void checkSaveUserProps(User user) {
         List<User> usersByUsername = list(new QueryWrapper<>(new User().setUsername(user.getUsername())));

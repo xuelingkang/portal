@@ -8,7 +8,6 @@ import com.xzixi.self.portal.webapp.model.valid.JobSave;
 import com.xzixi.self.portal.webapp.model.valid.JobUpdate;
 import com.xzixi.self.portal.webapp.model.vo.JobVO;
 import com.xzixi.self.portal.webapp.service.IJobService;
-import com.xzixi.self.portal.webapp.util.PageUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -37,8 +36,7 @@ public class JobController {
     public Result<IPage<JobVO>> page(JobSearchParams searchParams) {
         searchParams.setDefaultOrderItems("id asc");
         IPage<Job> jobPage = jobService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
-        List<JobVO> jobVOList = jobService.buildJobVO(jobPage.getRecords(), new IJobService.BuildOption(true, false));
-        IPage<JobVO> page = PageUtil.convert(jobPage, jobVOList);
+        IPage<JobVO> page = jobService.buildVO(jobPage, new JobVO.BuildOption(true, false));
         return new Result<>(page);
     }
 
@@ -46,7 +44,7 @@ public class JobController {
     @ApiOperation(value = "根据id查询定时任务")
     public Result<JobVO> getById(
             @ApiParam(value = "定时任务id", required = true) @NotNull(message = "定时任务id不能为空！") @PathVariable Integer id) {
-        JobVO jobVO = jobService.buildJobVO(id, new IJobService.BuildOption(true, true));
+        JobVO jobVO = jobService.buildVO(id, new JobVO.BuildOption(true, true));
         return new Result<>(jobVO);
     }
 

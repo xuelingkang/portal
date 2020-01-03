@@ -74,17 +74,33 @@ public class JobTemplateServiceImpl extends BaseServiceImpl<IJobTemplateData, Jo
     }
 
     @Override
-    public JobTemplateVO buildJobTemplateVO(Integer id) {
-        JobTemplate jobTemplate = getById(id);
-        return buildJobTemplateVO(jobTemplate);
+    public JobTemplateVO buildVO(JobTemplate jobTemplate, JobTemplateVO.BuildOption option) {
+        JobTemplateVO jobTemplateVO = new JobTemplateVO(jobTemplate);
+        if (option.isParameters()) {
+            List<JobTemplateParameter> parameters = jobTemplateParameterService
+                    .list(new QueryWrapper<>(new JobTemplateParameter().setJobTemplateId(jobTemplate.getId())));
+            if (CollectionUtils.isNotEmpty(parameters)) {
+                jobTemplateVO.setParameters(parameters);
+            }
+        }
+        return jobTemplateVO;
     }
 
     @Override
-    public JobTemplateVO buildJobTemplateVO(JobTemplate jobTemplate) {
-        List<JobTemplateParameter> parameters = jobTemplateParameterService
-                .list(new QueryWrapper<>(new JobTemplateParameter().setJobTemplateId(jobTemplate.getId())));
-        JobTemplateVO jobTemplateVO = new JobTemplateVO(jobTemplate);
-        jobTemplateVO.setParameters(parameters);
-        return jobTemplateVO;
+    public List<JobTemplateVO> buildVO(Collection<JobTemplate> jobTemplates, JobTemplateVO.BuildOption option) {
+        List<JobTemplateVO> jobTemplateVOList = jobTemplates.stream().map(JobTemplateVO::new).collect(Collectors.toList());
+        if (option.isParameters()) {
+            List<JobTemplateParameter> parameters = jobTemplateParameterService
+                    .listByJobTemplateIds(jobTemplates.stream().map(JobTemplate::getId).collect(Collectors.toList()));
+            if (CollectionUtils.isNotEmpty(parameters)) {
+                jobTemplateVOList.forEach(jobTemplateVO -> {
+                    List<JobTemplateParameter> params = parameters.stream()
+                            .filter(parameter -> jobTemplateVO.getId().equals(parameter.getJobTemplateId()))
+                            .collect(Collectors.toList());
+                    jobTemplateVO.setParameters(params);
+                });
+            }
+        }
+        return jobTemplateVOList;
     }
 }

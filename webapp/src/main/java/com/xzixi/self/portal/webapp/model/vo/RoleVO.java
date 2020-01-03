@@ -5,7 +5,9 @@ import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.Role;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.Collection;
@@ -28,5 +30,11 @@ public class RoleVO extends Role {
 
     public RoleVO(Role role, String... ignoreProperties) {
         BeanUtils.copyProperties(role, this, ignoreProperties);
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class BuildOption {
+        private boolean authorities;
     }
 }

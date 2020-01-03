@@ -41,9 +41,10 @@ public class RoleController {
 
     @GetMapping
     @ApiOperation(value = "分页查询角色")
-    public Result<IPage<Role>> page(RoleSearchParams searchParams) {
+    public Result<IPage<RoleVO>> page(RoleSearchParams searchParams) {
         searchParams.setDefaultOrderItems("seq asc");
-        IPage<Role> page = roleService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
+        IPage<Role> rolePage = roleService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
+        IPage<RoleVO> page = roleService.buildVO(rolePage, new RoleVO.BuildOption(false));
         return new Result<>(page);
     }
 
@@ -51,7 +52,7 @@ public class RoleController {
     @ApiOperation(value = "根据id查询角色")
     public Result<RoleVO> getById(
             @ApiParam(value = "角色id", required = true) @NotNull(message = "角色id不能为空！") @PathVariable Integer id) {
-        RoleVO roleVO = roleService.buildRoleVO(id);
+        RoleVO roleVO = roleService.buildVO(id, new RoleVO.BuildOption(true));
         return new Result<>(roleVO);
     }
 

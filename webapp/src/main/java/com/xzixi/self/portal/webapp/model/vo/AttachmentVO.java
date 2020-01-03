@@ -3,7 +3,9 @@ package com.xzixi.self.portal.webapp.model.vo;
 import com.xzixi.self.portal.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.po.Attachment;
 import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
 /**
  * @author 薛凌康
@@ -16,5 +18,10 @@ public class AttachmentVO extends Attachment {
 
     public AttachmentVO(Attachment attachment, String... ignoreProperties) {
         BeanUtils.copyProperties(attachment, this, ignoreProperties);
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class BuildOption {
     }
 }

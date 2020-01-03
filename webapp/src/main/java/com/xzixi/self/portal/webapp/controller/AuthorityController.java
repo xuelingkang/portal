@@ -35,9 +35,10 @@ public class AuthorityController {
 
     @GetMapping
     @ApiOperation(value = "分页查询权限")
-    public Result<IPage<Authority>> page(AuthoritySearchParams searchParams) {
+    public Result<IPage<AuthorityVO>> page(AuthoritySearchParams searchParams) {
         searchParams.setDefaultOrderItems("category asc", "seq asc");
-        IPage<Authority> page = authorityService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
+        IPage<Authority> authorityPage = authorityService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
+        IPage<AuthorityVO> page = authorityService.buildVO(authorityPage, new AuthorityVO.BuildOption());
         return new Result<>(page);
     }
 
@@ -45,7 +46,7 @@ public class AuthorityController {
     @ApiOperation(value = "根据id查询权限")
     public Result<AuthorityVO> getById(
             @ApiParam(value = "权限id", required = true) @NotNull(message = "权限id不能为空！") @PathVariable Integer id) {
-        AuthorityVO authorityVO = authorityService.buildAuthorityVO(id);
+        AuthorityVO authorityVO = authorityService.buildVO(id, new AuthorityVO.BuildOption());
         return new Result<>(authorityVO);
     }
 

@@ -7,6 +7,10 @@ import com.xzixi.self.portal.webapp.model.vo.AttachmentVO;
 import com.xzixi.self.portal.webapp.service.IAttachmentService;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * @author 薛凌康
  */
@@ -14,13 +18,12 @@ import org.springframework.stereotype.Service;
 public class AttachmentServiceImpl extends BaseServiceImpl<IAttachmentData, Attachment> implements IAttachmentService {
 
     @Override
-    public AttachmentVO buildAttachmentVO(Integer id) {
-        Attachment attachment = getById(id);
-        return buildAttachmentVO(attachment);
+    public AttachmentVO buildVO(Attachment attachment, AttachmentVO.BuildOption option) {
+        return new AttachmentVO(attachment);
     }
 
     @Override
-    public AttachmentVO buildAttachmentVO(Attachment attachment) {
-        return new AttachmentVO(attachment);
+    public List<AttachmentVO> buildVO(Collection<Attachment> attachments, AttachmentVO.BuildOption option) {
+        return attachments.stream().map(AttachmentVO::new).collect(Collectors.toList());
     }
 }

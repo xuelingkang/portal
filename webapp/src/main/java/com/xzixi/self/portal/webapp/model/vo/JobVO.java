@@ -6,7 +6,9 @@ import com.xzixi.self.portal.webapp.model.po.JobParameter;
 import com.xzixi.self.portal.webapp.model.po.JobTrigger;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
 import java.util.Collection;
 
@@ -27,5 +29,12 @@ public class JobVO extends Job {
 
     public JobVO(Job job, String... ignoreProperties) {
         BeanUtils.copyProperties(job, this, ignoreProperties);
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public static class BuildOption {
+        private boolean trigger;
+        private boolean parameters;
     }
 }

@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,24 +69,23 @@ public class RoleServiceImpl extends BaseServiceImpl<IRoleData, Role> implements
     }
 
     @Override
-    public RoleVO buildRoleVO(Integer id) {
-        Role role = getById(id);
-        return buildRoleVO(role);
+    public RoleVO buildVO(Role role, RoleVO.BuildOption option) {
+        RoleVO roleVO = new RoleVO(role);
+        if (option.isAuthorities()) {
+            // 查询权限
+            Collection<Authority> authorities = authorityService.listByRoleId(role.getId());
+            if (CollectionUtils.isNotEmpty(authorities)) {
+                roleVO.setAuthorities(authorities);
+                // 权限标识
+                roleVO.setAuthoritySignals(authorities.stream().map(authority -> authorityService.genSignal(authority))
+                        .collect(Collectors.toSet()));
+            }
+        }
+        return roleVO;
     }
 
     @Override
-    public RoleVO buildRoleVO(Role role) {
-        RoleVO roleVO = new RoleVO(role);
-        // 查询权限
-        Collection<Authority> authorities = authorityService.listByRoleIds(Collections.singletonList(role.getId()));
-        if (CollectionUtils.isEmpty(authorities)) {
-            return roleVO;
-        }
-        roleVO.setAuthorities(authorities);
-        // 权限标识
-        roleVO.setAuthoritySignals(authorities.stream().map(authority ->
-                authority.getProtocol() + "." + authority.getPattern() + "." + authority.getMethod())
-                .collect(Collectors.toSet()));
-        return roleVO;
+    public List<RoleVO> buildVO(Collection<Role> roles, RoleVO.BuildOption option) {
+        return roles.stream().map(role -> buildVO(role, option)).collect(Collectors.toList());
     }
 }

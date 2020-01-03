@@ -79,15 +79,16 @@ public class AttachmentController {
         attachment.setAddress(absoluteAddress + SEPARATOR + name);
         attachment.setCreateTime(System.currentTimeMillis());
         attachmentService.save(attachment);
-        AttachmentVO attachmentVO = attachmentService.buildAttachmentVO(attachment);
+        AttachmentVO attachmentVO = attachmentService.buildVO(attachment, new AttachmentVO.BuildOption());
         return new Result<>(attachmentVO);
     }
 
     @GetMapping
     @ApiOperation(value = "分页查询附件")
-    public Result<IPage<Attachment>> page(AttachmentSearchParams searchParams) {
+    public Result<IPage<AttachmentVO>> page(AttachmentSearchParams searchParams) {
         searchParams.setDefaultOrderItems("create_time desc");
-        IPage<Attachment> page = attachmentService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
+        IPage<Attachment> attachmentPage = attachmentService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
+        IPage<AttachmentVO> page = attachmentService.buildVO(attachmentPage, new AttachmentVO.BuildOption());
         return new Result<>(page);
     }
 
@@ -95,7 +96,7 @@ public class AttachmentController {
     @ApiOperation(value = "根据id查询附件")
     public Result<AttachmentVO> getById(
         @ApiParam(value = "附件id", required = true) @NotNull(message = "附件id不能为空！") @PathVariable Integer id) {
-        AttachmentVO attachmentVO = attachmentService.buildAttachmentVO(id);
+        AttachmentVO attachmentVO = attachmentService.buildVO(id, new AttachmentVO.BuildOption());
         return new Result<>(attachmentVO);
     }
 

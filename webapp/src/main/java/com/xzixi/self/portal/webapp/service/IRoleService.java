@@ -1,6 +1,7 @@
 package com.xzixi.self.portal.webapp.service;
 
 import com.xzixi.self.portal.framework.service.IBaseService;
+import com.xzixi.self.portal.framework.service.IVoService;
 import com.xzixi.self.portal.webapp.model.po.Role;
 import com.xzixi.self.portal.webapp.model.vo.RoleVO;
 
@@ -9,7 +10,7 @@ import java.util.Collection;
 /**
  * @author 薛凌康
  */
-public interface IRoleService extends IBaseService<Role> {
+public interface IRoleService extends IBaseService<Role>, IVoService<Role, RoleVO, RoleVO.BuildOption> {
 
     /**
      * 根据用户id查询角色集合
@@ -25,20 +26,4 @@ public interface IRoleService extends IBaseService<Role> {
      * @param ids 角色id
      */
     void removeRolesByIds(Collection<Integer> ids);
-
-    /**
-     * 构建RoleVO对象
-     *
-     * @param id 角色id
-     * @return RoleVO
-     */
-    RoleVO buildRoleVO(Integer id);
-
-    /**
-     * 构建RoleVO对象
-     *
-     * @param role 角色
-     * @return RoleVO
-     */
-    RoleVO buildRoleVO(Role role);
 }

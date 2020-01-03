@@ -2,6 +2,7 @@ package com.xzixi.self.portal.webapp.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xzixi.self.portal.framework.service.IBaseService;
+import com.xzixi.self.portal.framework.service.IVoService;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.Role;
 import com.xzixi.self.portal.webapp.model.vo.AuthorityVO;
@@ -11,7 +12,16 @@ import java.util.Collection;
 /**
  * @author 薛凌康
  */
-public interface IAuthorityService extends IBaseService<Authority> {
+public interface IAuthorityService extends IBaseService<Authority>,
+        IVoService<Authority, AuthorityVO, AuthorityVO.BuildOption> {
+
+    /**
+     * 根据角色id查询权限
+     *
+     * @param roleId 角色id
+     * @return 权限
+     */
+    Collection<Authority> listByRoleId(Integer roleId);
 
     /**
      * 根据角色id查询权限
@@ -37,18 +47,10 @@ public interface IAuthorityService extends IBaseService<Authority> {
     void removeAuthoritiesByIds(Collection<Integer> ids);
 
     /**
-     * 构建AuthorityVO
+     * 生成权限签名
      *
-     * @param id 权限id
-     * @return AuthorityVO
+     * @param authority 权限
+     * @return 权限签名
      */
-    AuthorityVO buildAuthorityVO(Integer id);
-
-    /**
-     * 构建AuthorityVO
-     *
-     * @param authority Authority
-     * @return AuthorityVO
-     */
-    AuthorityVO buildAuthorityVO(Authority authority);
+    String genSignal(Authority authority);
 }

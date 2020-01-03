@@ -120,13 +120,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
     }
 
     @Override
-    public JobVO buildJobVO(Integer id, BuildOption option) {
-        Job job = getById(id);
-        return buildJobVO(job, option);
-    }
-
-    @Override
-    public JobVO buildJobVO(Job job, BuildOption option) {
+    public JobVO buildVO(Job job, JobVO.BuildOption option) {
         JobVO jobVO = new JobVO(job);
         if (option.isTrigger()) {
             JobTrigger jobTrigger = jobTriggerService.getByJob(job);
@@ -140,7 +134,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
     }
 
     @Override
-    public List<JobVO> buildJobVO(Collection<Job> jobs, BuildOption option) {
+    public List<JobVO> buildVO(Collection<Job> jobs, JobVO.BuildOption option) {
         List<JobVO> jobVOList = jobs.stream().map(JobVO::new).collect(Collectors.toList());
         if (option.isTrigger()) {
             List<JobTrigger> jobTriggers = jobTriggerService.listByJobs(jobs);
@@ -155,11 +149,13 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
         }
         if (option.isParameters()) {
             List<JobParameter> parameters = jobParameterService.listByJobIds(jobs.stream().map(Job::getId).collect(Collectors.toList()));
-            jobVOList.forEach(jobVO -> {
-                List<JobParameter> params = parameters.stream().filter(parameter -> jobVO.getId().equals(parameter.getJobId()))
-                        .collect(Collectors.toList());
-                jobVO.setParameters(params);
-            });
+            if (CollectionUtils.isNotEmpty(parameters)) {
+                jobVOList.forEach(jobVO -> {
+                    List<JobParameter> params = parameters.stream().filter(parameter -> jobVO.getId().equals(parameter.getJobId()))
+                            .collect(Collectors.toList());
+                    jobVO.setParameters(params);
+                });
+            }
         }
         return jobVOList;
     }
