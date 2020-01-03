@@ -54,13 +54,16 @@ public interface IVoService<PO, VO, O> {
     /**
      * 构建VO分页
      *
-     * @param page PO对象分页
+     * @param poPage PO对象分页
      * @param option 选项
      * @return IPage&lt;VO>
      */
-    default IPage<VO> buildVO(IPage<PO> page, O option) {
-        List<VO> voList = buildVO(page.getRecords(), option);
-        IPage<VO> voPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal(), page.isSearchCount());
+    default IPage<VO> buildVO(IPage<PO> poPage, O option) {
+        if (poPage == null) {
+            return null;
+        }
+        List<VO> voList = buildVO(poPage.getRecords(), option);
+        IPage<VO> voPage = new Page<>(poPage.getCurrent(), poPage.getSize(), poPage.getTotal(), poPage.isSearchCount());
         voPage.setRecords(voList);
         return voPage;
     }
