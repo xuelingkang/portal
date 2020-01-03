@@ -3,4 +3,4 @@
  *
  * @author 薛凌康
  */
-package com.xzixi.self.portal.webapp.mapper;
+package com.xzixi.self.portal.framework.mapper;

@@ -9,4 +9,4 @@
  *
  * @author 薛凌康
  */
-package com.xzixi.self.portal.webapp.data;
+package com.xzixi.self.portal.framework.data;

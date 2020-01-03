@@ -3,4 +3,4 @@
  *
  * @author 薛凌康
  */
-package com.xzixi.self.portal.webapp.service;
+package com.xzixi.self.portal.framework.service;
