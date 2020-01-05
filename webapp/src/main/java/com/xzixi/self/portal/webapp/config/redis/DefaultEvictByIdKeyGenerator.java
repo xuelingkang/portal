@@ -28,6 +28,6 @@ public class DefaultEvictByIdKeyGenerator implements KeyGenerator {
                 KEY_SEPARATOR +
                 LIST_BY_IDS_METHOD_NAME +
                 KEY_SEPARATOR +
-                "*" + params[0] + "*";
+                WILDCARD + params[0] + WILDCARD;
     }
 }
