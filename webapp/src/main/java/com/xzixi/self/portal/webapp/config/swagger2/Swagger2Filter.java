@@ -23,7 +23,7 @@ import static com.xzixi.self.portal.webapp.constant.Swagger2Constant.AUTHENTICAT
  */
 public class Swagger2Filter implements Filter {
 
-    private static JSONObject authenticationTag;
+    private static JSONObject tag;
     private static JSONObject login;
     private static JSONObject logout;
 
@@ -49,7 +49,7 @@ public class Swagger2Filter implements Filter {
             String str = new String(content, StandardCharsets.UTF_8);
             JSONObject swagger = JSONObject.fromObject(str);
             JSONArray tags = swagger.getJSONArray("tags");
-            tags.add(authenticationTag);
+            tags.add(tag);
             JSONObject paths = swagger.getJSONObject("paths");
             paths.put("/login", login);
             paths.put("/logout", logout);
@@ -77,7 +77,7 @@ public class Swagger2Filter implements Filter {
             throw new ProjectException("读取模板失败！", e);
         }
         JSONObject authentication = JSONObject.fromObject(template);
-        authenticationTag = authentication.getJSONObject("tag");
+        tag = authentication.getJSONObject("tag");
         login = authentication.getJSONObject("login");
         logout = authentication.getJSONObject("logout");
     }
