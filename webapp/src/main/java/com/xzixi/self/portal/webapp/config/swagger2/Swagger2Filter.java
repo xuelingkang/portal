@@ -17,7 +17,6 @@ import static com.xzixi.self.portal.webapp.constant.Swagger2Constant.AUTHENTICAT
 
 /**
  * swagger过滤器
- * TODO 将json提取到文本文件，尝试放在resources
  *
  * @author 薛凌康
  */
