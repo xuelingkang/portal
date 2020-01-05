@@ -89,12 +89,17 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    public T getById(Serializable id) {
+    public T getById(Serializable id, boolean throwEx) {
         T entity = baseData.getById(id);
-        if (entity == null) {
+        if (entity == null && throwEx) {
             throw new ClientException(404, String.format("id为%s的记录不存在！", id));
         }
         return entity;
+    }
+
+    @Override
+    public T getById(Serializable id) {
+        return getById(id, true);
     }
 
     @Override

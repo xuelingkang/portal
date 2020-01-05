@@ -60,12 +60,19 @@ public class TokenFilter extends OncePerRequestFilter {
      * @param token token对象
      */
     private void setAuthentication(Token token, HttpServletResponse response) {
-        User user = userService.getById(token.getUserId());
+        User user = userService.getById(token.getUserId(), false);
+
+        if (user == null) {
+            Result<?> result = new Result<>(401, "账户不存在或已被删除！", null);
+            WebUtil.printJson(response, result);
+            return;
+        }
 
         // 检查是否锁定
         if (user.getLocked()) {
             Result<?> result = new Result<>(401, "账户已被锁定！", null);
             WebUtil.printJson(response, result);
+            return;
         }
 
         UserVO userVO = userService.buildVO(user, new UserVO.BuildOption(true, true));

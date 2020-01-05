@@ -4,12 +4,22 @@ import com.xzixi.self.portal.framework.data.IBaseData;
 import com.xzixi.self.portal.framework.model.BaseModel;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  * @author 薛凌康
  */
 public interface IBaseService<T extends BaseModel> extends IBaseData<T> {
+
+    /**
+     * 根据id查询
+     *
+     * @param id id
+     * @param throwEx 查询结果为空时是否抛出异常
+     * @return T
+     */
+    T getById(Serializable id, boolean throwEx);
 
     /**
      * 更新非null属性
