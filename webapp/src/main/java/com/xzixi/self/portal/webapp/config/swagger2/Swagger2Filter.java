@@ -1,16 +1,19 @@
 package com.xzixi.self.portal.webapp.config.swagger2;
 
+import com.xzixi.self.portal.framework.exception.ProjectException;
 import com.xzixi.self.portal.webapp.util.ResponseWrapper;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.springframework.core.io.ClassPathResource;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-import static com.xzixi.self.portal.webapp.constant.Swagger2Constant.AUTHORIZATION_PARAMETER_NAME;
-import static com.xzixi.self.portal.webapp.constant.Swagger2Constant.AUTHORIZATION_SCOPE_NAME;
+import static com.xzixi.self.portal.webapp.constant.Swagger2Constant.AUTHENTICATION_TEMPLATE;
 
 /**
  * swagger过滤器
@@ -19,6 +22,10 @@ import static com.xzixi.self.portal.webapp.constant.Swagger2Constant.AUTHORIZATI
  * @author 薛凌康
  */
 public class Swagger2Filter implements Filter {
+
+    private static JSONObject authenticationTag;
+    private static JSONObject login;
+    private static JSONObject logout;
 
     /**
      * 拦截api信息，动态添加认证接口
@@ -42,10 +49,10 @@ public class Swagger2Filter implements Filter {
             String str = new String(content, StandardCharsets.UTF_8);
             JSONObject swagger = JSONObject.fromObject(str);
             JSONArray tags = swagger.getJSONArray("tags");
-            tags.add(tokenTag());
+            tags.add(authenticationTag);
             JSONObject paths = swagger.getJSONObject("paths");
-            paths.put("/login", loginPath());
-            paths.put("/logout", logoutPath());
+            paths.put("/login", login);
+            paths.put("/logout", logout);
             // 把返回值输出到客户端
             ServletOutputStream out = response.getOutputStream();
             response.setContentLength(-1);
@@ -54,88 +61,24 @@ public class Swagger2Filter implements Filter {
         }
     }
 
-    private JSONObject tokenTag() {
-        return JSONObject.fromObject(
-                        "{" +
-                        "    \"description\": \"Authorization\"," +
-                        "    \"name\": \"认证\"" +
-                        "}");
-    }
-
-    private JSONObject loginPath() {
-        return JSONObject.fromObject(
-                        "{" +
-                        "    \"post\": {" +
-                        "        \"tags\": [\"认证\"]," +
-                        "        \"summary\": \"登录\"," +
-                        "        \"operationId\": \"loginUsingPOST\"," +
-                        "        \"produces\": [\"application/json;charset=UTF-8\"]," +
-                        "        \"responses\": {" +
-                        "            \"200\": {" +
-                        "                \"description\": \"OK\"" +
-                        "            }," +
-                        "            \"401\": {" +
-                        "                \"description\": \"Unauthorized\"" +
-                        "            }," +
-                        "            \"403\": {" +
-                        "                \"description\": \"Forbidden\"" +
-                        "            }," +
-                        "            \"404\": {" +
-                        "                \"description\": \"Not Found\"" +
-                        "            }" +
-                        "        }," +
-                        "        \"parameters\": [{" +
-                        "            \"name\": \"username\"," +
-                        "            \"in\": \"query\"," +
-                        "            \"description\": \"用户名\"," +
-                        "            \"required\": true," +
-                        "            \"type\": \"string\"" +
-                        "        }," +
-                        "        {" +
-                        "            \"name\": \"password\"," +
-                        "            \"in\": \"query\"," +
-                        "            \"description\": \"密码\"," +
-                        "            \"required\": true," +
-                        "            \"type\": \"string\"" +
-                        "        }]" +
-                        "    }" +
-                        "}");
-    }
-
-    private JSONObject logoutPath() {
-        return JSONObject.fromObject(
-                        "{" +
-                        "    \"get\": {" +
-                        "        \"tags\": [\"认证\"]," +
-                        "        \"summary\": \"登出\"," +
-                        "        \"operationId\": \"logoutUsingGET\"," +
-                        "        \"produces\": [\"application/json;charset=UTF-8\"]," +
-                        "        \"security\": [{" +
-                        "            \"" + AUTHORIZATION_PARAMETER_NAME + "\": [\"" + AUTHORIZATION_SCOPE_NAME + "\"]" +
-                        "        }]," +
-                        "        \"responses\": {" +
-                        "            \"200\": {" +
-                        "                \"description\": \"OK\"" +
-                        "            }," +
-                        "            \"401\": {" +
-                        "                \"description\": \"Unauthorized\"" +
-                        "            }," +
-                        "            \"403\": {" +
-                        "                \"description\": \"Forbidden\"" +
-                        "            }," +
-                        "            \"404\": {" +
-                        "                \"description\": \"Not Found\"" +
-                        "            }" +
-                        "        }" +
-                        "    }" +
-                        "}");
-    }
-
-    @Override
-    public void init(FilterConfig filterConfig) {
-    }
-
-    @Override
-    public void destroy() {
+    static {
+        ClassPathResource resource = new ClassPathResource(AUTHENTICATION_TEMPLATE);
+        String template;
+        try {
+            InputStream in = resource.getInputStream();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = in.read(buffer)) != -1) {
+                out.write(buffer, 0, length);
+            }
+            template = out.toString(StandardCharsets.UTF_8.name());
+        } catch (IOException e) {
+            throw new ProjectException("读取模板失败！", e);
+        }
+        JSONObject authentication = JSONObject.fromObject(template);
+        authenticationTag = authentication.getJSONObject("tag");
+        login = authentication.getJSONObject("login");
+        logout = authentication.getJSONObject("logout");
     }
 }

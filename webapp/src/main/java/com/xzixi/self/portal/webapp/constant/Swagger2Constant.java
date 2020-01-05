@@ -5,10 +5,11 @@ package com.xzixi.self.portal.webapp.constant;
  */
 public interface Swagger2Constant {
 
-    String AUTHORIZATION_API_FILTER_NAME = "swaggerFilter";
-    String AUTHORIZATION_PARAMETER_NAME = "Authorization";
-    String AUTHORIZATION_PARAMETER_TYPE = "header";
-    String AUTHORIZATION_EXCLUDE_URL_REG = "^(?!/login).*$";
-    String AUTHORIZATION_SCOPE_NAME = "global";
-    String AUTHORIZATION_SCOPE_DESCRIPTION = "全局";
+    String AUTHENTICATION_API_FILTER_NAME = "swaggerFilter";
+    String AUTHENTICATION_PARAMETER_NAME = "Authorization";
+    String AUTHENTICATION_PARAMETER_TYPE = "header";
+    String AUTHENTICATION_EXCLUDE_URL_REG = "^(?!/login).*$";
+    String AUTHENTICATION_SCOPE_NAME = "global";
+    String AUTHENTICATION_SCOPE_DESCRIPTION = "全局";
+    String AUTHENTICATION_TEMPLATE = "/authentication.json";
 }

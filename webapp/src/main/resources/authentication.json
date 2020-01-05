@@ -1,0 +1,81 @@
+{
+  "tag": {
+    "description": "Authorization",
+    "name": "认证"
+  },
+  "login": {
+    "post": {
+      "tags": [
+        "认证"
+      ],
+      "summary": "登录",
+      "operationId": "loginUsingPOST",
+      "produces": [
+        "application/json;charset=UTF-8"
+      ],
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "401": {
+          "description": "Unauthorized"
+        },
+        "403": {
+          "description": "Forbidden"
+        },
+        "404": {
+          "description": "Not Found"
+        }
+      },
+      "parameters": [
+        {
+          "name": "username",
+          "in": "query",
+          "description": "用户名",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "password",
+          "in": "query",
+          "description": "密码",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    }
+  },
+  "logout": {
+    "get": {
+      "tags": [
+        "认证"
+      ],
+      "summary": "登出",
+      "operationId": "logoutUsingGET",
+      "produces": [
+        "application/json;charset=UTF-8"
+      ],
+      "security": [
+        {
+          "Authorization": [
+            "global"
+          ]
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "401": {
+          "description": "Unauthorized"
+        },
+        "403": {
+          "description": "Forbidden"
+        },
+        "404": {
+          "description": "Not Found"
+        }
+      }
+    }
+  }
+}

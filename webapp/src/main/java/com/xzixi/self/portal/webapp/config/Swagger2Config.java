@@ -63,7 +63,7 @@ public class Swagger2Config {
         FilterRegistrationBean<Swagger2Filter> registration = new FilterRegistrationBean<>();
         registration.setFilter(swagger2Filter);
         registration.addUrlPatterns(Swagger2Controller.DEFAULT_URL);
-        registration.setName(AUTHORIZATION_API_FILTER_NAME);
+        registration.setName(AUTHENTICATION_API_FILTER_NAME);
         return registration;
     }
 
@@ -75,19 +75,19 @@ public class Swagger2Config {
     }
 
     private List<ApiKey> securitySchemes() {
-        return Collections.singletonList(new ApiKey(AUTHORIZATION_PARAMETER_NAME, AUTHENTICATION_HEADER_NAME, AUTHORIZATION_PARAMETER_TYPE));
+        return Collections.singletonList(new ApiKey(AUTHENTICATION_PARAMETER_NAME, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_TYPE));
     }
 
     private List<SecurityContext> securityContexts() {
         return Collections.singletonList(SecurityContext.builder()
                 .securityReferences(securityReferences())
-                .forPaths(PathSelectors.regex(AUTHORIZATION_EXCLUDE_URL_REG))
+                .forPaths(PathSelectors.regex(AUTHENTICATION_EXCLUDE_URL_REG))
                 .build());
     }
 
     private List<SecurityReference> securityReferences() {
         AuthorizationScope[] authorizationScopes
-                = new AuthorizationScope[]{new AuthorizationScope(AUTHORIZATION_SCOPE_NAME, AUTHORIZATION_SCOPE_DESCRIPTION)};
-        return Collections.singletonList(new SecurityReference(AUTHORIZATION_PARAMETER_NAME, authorizationScopes));
+                = new AuthorizationScope[]{new AuthorizationScope(AUTHENTICATION_SCOPE_NAME, AUTHENTICATION_SCOPE_DESCRIPTION)};
+        return Collections.singletonList(new SecurityReference(AUTHENTICATION_PARAMETER_NAME, authorizationScopes));
     }
 }
