@@ -19,6 +19,8 @@ import static com.xzixi.self.portal.webapp.constant.RedisConstant.REGEX_KEY_PREF
  */
 public class FuzzyEvictRedisCache extends RedisCache {
 
+    private static final String KEY_PREFIX_TEMPLATE = "%s::";
+    private static final String KEY_TEMPLATE = KEY_PREFIX_TEMPLATE + "%s";
     private RedisTemplate<String, Object> redisTemplate;
 
     protected FuzzyEvictRedisCache(String name, RedisCacheWriter cacheWriter,
@@ -43,10 +45,13 @@ public class FuzzyEvictRedisCache extends RedisCache {
                 if (keyStr.startsWith(REGEX_KEY_PREFIX)) {
                     keyStr = keyStr.substring(REGEX_KEY_PREFIX.length());
                     // 查询出匹配的key
-                    Set<String> keysSet = redisTemplate.keys(keyStr);
-                    if (CollectionUtils.isNotEmpty(keysSet)) {
+                    Set<String> keySet = redisTemplate.keys(String.format(KEY_TEMPLATE, getName(), keyStr));
+                    if (CollectionUtils.isNotEmpty(keySet)) {
                         // 精确删除
-                        keysSet.forEach(super::evict);
+                        keySet.forEach(fullKey -> {
+                            String shortKey = fullKey.substring(String.format(KEY_PREFIX_TEMPLATE, getName()).length());
+                            super.evict(shortKey);
+                        });
                     }
                 } else {
                     super.evict(keyStr);
