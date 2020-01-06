@@ -1,6 +1,7 @@
 package com.xzixi.self.portal.webapp.model.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.xzixi.self.portal.framework.model.BaseModel;
 import com.xzixi.self.portal.webapp.model.enums.MailStatus;
 import com.xzixi.self.portal.webapp.model.enums.MailType;
@@ -16,10 +17,13 @@ import javax.validation.constraints.Null;
 import java.util.Collection;
 
 /**
+ * {@code @TableName(autoResultMap = true)}查询时使用typehandler
+ *
  * @author 薛凌康
  */
 @Data
 @ApiModel(description = "邮件")
+@TableName(autoResultMap = true)
 public class Mail extends BaseModel {
 
     private static final long serialVersionUID = 1L;

@@ -33,6 +33,9 @@ public enum ConditionType {
     GT() {
         @Override
         public void parse(QueryWrapper<?> wrapper, String column, Object value) {
+            if (value == null) {
+                return;
+            }
             wrapper.gt(column, value);
         }
     },
@@ -40,6 +43,9 @@ public enum ConditionType {
     GE() {
         @Override
         public void parse(QueryWrapper<?> wrapper, String column, Object value) {
+            if (value == null) {
+                return;
+            }
             wrapper.ge(column, value);
         }
     },
@@ -47,6 +53,9 @@ public enum ConditionType {
     LT() {
         @Override
         public void parse(QueryWrapper<?> wrapper, String column, Object value) {
+            if (value == null) {
+                return;
+            }
             wrapper.lt(column, value);
         }
     },
@@ -54,6 +63,9 @@ public enum ConditionType {
     LE() {
         @Override
         public void parse(QueryWrapper<?> wrapper, String column, Object value) {
+            if (value == null) {
+                return;
+            }
             wrapper.le(column, value);
         }
     },
@@ -61,6 +73,9 @@ public enum ConditionType {
     LIKE() {
         @Override
         public void parse(QueryWrapper<?> wrapper, String column, Object value) {
+            if (value == null) {
+                return;
+            }
             wrapper.like(column, value);
         }
     };

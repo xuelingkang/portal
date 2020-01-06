@@ -139,11 +139,17 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
         MailVO mailVO = new MailVO(mail);
         if (option.isSendUser() && mail.getSendUserId() != null) {
             User sendUser = userService.getById(mail.getSendUserId(), false);
+            if (sendUser != null) {
+                sendUser.setPassword(null);
+            }
             mailVO.setSendUser(sendUser);
         }
         if (option.isToUsers() && CollectionUtils.isNotEmpty(mail.getToUserIds())) {
             Collection<User> toUsers = userService.listByIds(mail.getToUserIds());
-            mailVO.setToUsers(toUsers);
+            if (CollectionUtils.isNotEmpty(toUsers)) {
+                toUsers.forEach(user -> user.setPassword(null));
+                mailVO.setToUsers(toUsers);
+            }
         }
         if (option.isAttachments() && CollectionUtils.isNotEmpty(mail.getAttachmentIds())) {
             Collection<Attachment> attachments = attachmentService.listByIds(mail.getAttachmentIds());
@@ -166,6 +172,9 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
                 Collection<User> sendUsers = userService.listByIds(sendUserIds);
                 mailVOList.forEach(mailVO -> {
                     User sendUser = sendUsers.stream().filter(user -> user.getId().equals(mailVO.getSendUserId())).findFirst().orElse(null);
+                    if (sendUser != null) {
+                        sendUser.setPassword(null);
+                    }
                     mailVO.setSendUser(sendUser);
                 });
             }
@@ -180,6 +189,7 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
                             .filter(user -> CollectionUtils.isNotEmpty(mailVO.getToUserIds()) && mailVO.getToUserIds().contains(user.getId()))
                             .collect(Collectors.toList());
                     if (CollectionUtils.isNotEmpty(toUsers)) {
+                        toUsers.forEach(user -> user.setPassword(null));
                         mailVO.setToUsers(toUsers);
                     }
                 });

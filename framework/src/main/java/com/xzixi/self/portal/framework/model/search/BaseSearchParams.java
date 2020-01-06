@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -39,6 +40,14 @@ public class BaseSearchParams<T> {
 
     /** 默认排序规则 */
     private String[] defaultOrderItems;
+
+    @SuppressWarnings("unchecked")
+    public BaseSearchParams() {
+        // 获取泛型类型
+        Class<T> tClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        // 初始化entity，防止空指针异常
+        this.entity = ReflectUtil.newInstance(tClass);
+    }
 
     /**
      * 生成分页查询参数

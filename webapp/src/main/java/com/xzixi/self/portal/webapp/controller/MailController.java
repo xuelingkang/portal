@@ -38,7 +38,7 @@ public class MailController {
     private IMailService mailService;
 
     @GetMapping
-    @ApiOperation(value = "查询邮件列表")
+    @ApiOperation(value = "分页查询邮件")
     public Result<IPage<MailVO>> page(MailSearchParams searchParams) {
         searchParams.setDefaultOrderItems("create_time desc");
         searchParams.getEntity().setType(MailType.PUBLIC);
