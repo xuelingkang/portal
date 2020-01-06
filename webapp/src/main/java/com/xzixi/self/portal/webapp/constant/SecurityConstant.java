@@ -13,6 +13,7 @@ public interface SecurityConstant {
     String RESET_PASSWORD_KEY_TEMPLATE = "resetPassword::%s";
     long RESET_PASSWORD_RETRY_TIMEOUT_SECOND = 60L;
     long RESET_PASSWORD_KEY_EXPIRE_MINUTE = 30L;
+    long RESET_PASSWORD_KEY_EXPIRE_SECOND = RESET_PASSWORD_KEY_EXPIRE_MINUTE * 60L;
     String RESET_PASSWORD_MAIL_TITLE = "重置密码";
     String RESET_PASSWORD_MAIL_CONTENT_TEMPLATE = "<p>尊敬的%s您好：</p>" +
             "<p>您正在进行找回密码的操作，</p>" +

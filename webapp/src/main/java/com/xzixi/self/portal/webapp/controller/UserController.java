@@ -215,7 +215,7 @@ public class UserController {
         redisTemplate.boundValueOps(String.format(RESET_PASSWORD_KEY_TEMPLATE, username))
                 .set(now, RESET_PASSWORD_RETRY_TIMEOUT_SECOND, TimeUnit.SECONDS);
         redisTemplate.boundValueOps(String.format(RESET_PASSWORD_KEY_TEMPLATE, key))
-                .set(user.getId(), RESET_PASSWORD_KEY_EXPIRE_MINUTE * 60L, TimeUnit.SECONDS);
+                .set(user.getId(), RESET_PASSWORD_KEY_EXPIRE_SECOND, TimeUnit.SECONDS);
         return new Result<>();
     }
 
