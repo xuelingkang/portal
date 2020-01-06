@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/website/user", produces="application/json; charset=UTF-8")
+@RequestMapping(value = "/website/user", produces = RESPONSE_MEDIA_TYPE)
 @Api(tags="网站用户")
 public class WebsiteUserController {
 

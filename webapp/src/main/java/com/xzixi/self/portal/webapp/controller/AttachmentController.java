@@ -28,12 +28,13 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.xzixi.self.portal.webapp.constant.AttachmentConstant.*;
+import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/attachment", produces = "application/json; charset=UTF-8")
+@RequestMapping(value = "/attachment", produces = RESPONSE_MEDIA_TYPE)
 @Api(tags = "附件")
 @Validated
 public class AttachmentController {

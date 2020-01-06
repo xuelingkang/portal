@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2020-01-01 01:52:11
+Date: 2020-01-06 11:29:50
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -366,6 +366,40 @@ CREATE TABLE `t_job_template_parameter` (
 
 -- ----------------------------
 -- Records of t_job_template_parameter
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_mail
+-- ----------------------------
+DROP TABLE IF EXISTS `t_mail`;
+CREATE TABLE `t_mail` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `subject` varchar(200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邮件标题',
+  `status` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邮件状态',
+  `create_time` bigint(20) NOT NULL COMMENT '创建时间',
+  `send_user_id` int(11) NOT NULL,
+  `to_user_ids` varchar(200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '接收用户id',
+  `attachment_ids` varchar(200) COLLATE utf8mb4_bin DEFAULT '' COMMENT '附件id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='邮件';
+
+-- ----------------------------
+-- Records of t_mail
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_mail_content
+-- ----------------------------
+DROP TABLE IF EXISTS `t_mail_content`;
+CREATE TABLE `t_mail_content` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mail_id` int(11) NOT NULL COMMENT '邮件id',
+  `content` mediumtext COLLATE utf8mb4_bin COMMENT '邮件内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='邮件内容';
+
+-- ----------------------------
+-- Records of t_mail_content
 -- ----------------------------
 
 -- ----------------------------

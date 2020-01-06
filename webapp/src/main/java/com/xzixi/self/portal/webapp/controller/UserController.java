@@ -35,13 +35,14 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
 import static com.xzixi.self.portal.webapp.constant.SecurityConstant.RESET_PASSWORD_KEY_EXPIRE_SECOND;
 
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/user", produces="application/json; charset=UTF-8")
+@RequestMapping(value = "/user", produces = RESPONSE_MEDIA_TYPE)
 @Api(tags="用户")
 @Validated
 public class UserController {

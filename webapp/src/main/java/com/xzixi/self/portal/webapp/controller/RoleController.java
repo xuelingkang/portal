@@ -25,11 +25,13 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/role", produces="application/json; charset=UTF-8")
+@RequestMapping(value = "/role", produces = RESPONSE_MEDIA_TYPE)
 @Api(tags="角色")
 @Validated
 public class RoleController {

@@ -21,11 +21,13 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/authority", produces="application/json; charset=UTF-8")
+@RequestMapping(value = "/authority", produces = RESPONSE_MEDIA_TYPE)
 @Api(tags="权限")
 @Validated
 public class AuthorityController {

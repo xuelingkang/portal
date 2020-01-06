@@ -19,11 +19,13 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/job-template", produces = "application/json; charset=UTF-8")
+@RequestMapping(value = "/job-template", produces = RESPONSE_MEDIA_TYPE)
 @Api(tags = "任务模板")
 @Validated
 public class JobTemplateController {

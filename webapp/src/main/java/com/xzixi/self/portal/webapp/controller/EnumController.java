@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 
+import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/enum", produces="application/json; charset=UTF-8")
+@RequestMapping(value = "/enum", produces = RESPONSE_MEDIA_TYPE)
 @Api(tags="枚举")
 @Validated
 public class EnumController {
