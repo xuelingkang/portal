@@ -224,7 +224,7 @@ public class UserController {
     public Result<?> resetPassword(
             @ApiParam(value = "重置密码key", required = true) @NotBlank(message = "key不能为空！") @RequestParam String key,
             @ApiParam(value = "密码", required = true) @NotBlank(message = "密码不能为空！") @RequestParam String password) {
-        Integer id = (Integer) redisTemplate.opsForValue().get(key);
+        Integer id = (Integer) redisTemplate.opsForValue().get(String.format(RESET_PASSWORD_KEY_TEMPLATE, key));
         if (id == null) {
             throw new ClientException(404, "key已经失效！");
         }
