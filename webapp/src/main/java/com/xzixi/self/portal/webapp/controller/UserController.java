@@ -7,12 +7,16 @@ import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.model.Result;
 import com.xzixi.self.portal.framework.service.IBelongingService;
 import com.xzixi.self.portal.framework.util.BeanUtils;
+import com.xzixi.self.portal.webapp.model.enums.MailType;
 import com.xzixi.self.portal.webapp.model.params.UserSearchParams;
+import com.xzixi.self.portal.webapp.model.po.Mail;
+import com.xzixi.self.portal.webapp.model.po.MailContent;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.po.UserRoleLink;
 import com.xzixi.self.portal.webapp.model.valid.UserSave;
 import com.xzixi.self.portal.webapp.model.valid.UserUpdate;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
+import com.xzixi.self.portal.webapp.service.IMailService;
 import com.xzixi.self.portal.webapp.service.IUserRoleLinkService;
 import com.xzixi.self.portal.webapp.service.IUserService;
 import io.swagger.annotations.Api;
@@ -30,13 +34,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
-import static com.xzixi.self.portal.webapp.constant.SecurityConstant.RESET_PASSWORD_KEY_EXPIRE_SECOND;
+import static com.xzixi.self.portal.webapp.constant.SecurityConstant.*;
 
 /**
  * @author 薛凌康
@@ -55,6 +60,8 @@ public class UserController {
     private IBelongingService belongingService;
     @Autowired
     private IUserRoleLinkService userRoleLinkService;
+    @Autowired
+    private IMailService mailService;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -185,12 +192,30 @@ public class UserController {
     @ApiOperation(value = "获取重置密码链接")
     public Result<?> generateResultPasswordUrl(
             @ApiParam(value = "用户名", required = true) @NotBlank(message = "用户名不能为空！") @RequestParam String username) {
+        Long time = (Long) redisTemplate.opsForValue().get(String.format(RESET_PASSWORD_KEY_TEMPLATE, username));
+        long now = System.currentTimeMillis();
+        if (time != null && (time + RESET_PASSWORD_RETRY_TIMEOUT_SECOND * 1000L) > now) {
+            throw new ClientException(403, "操作过快，请稍后再试！");
+        }
         User user = userService.getOne(new QueryWrapper<>(new User().setUsername(username)));
         String key = UUID.randomUUID().toString();
         String url = String.format("%s?key=%s", resetPasswordUrl, key);
-        // TODO 发送邮件
+        // 发送邮件
+        Mail mail = new Mail();
+        mail.setSubject(RESET_PASSWORD_MAIL_TITLE);
+        mail.setType(MailType.PRIVATE);
+        mail.setCreateTime(now);
+        mail.setToUserIds(Collections.singletonList(user.getId()));
+        MailContent mailContent = new MailContent();
+        String content = String.format(RESET_PASSWORD_MAIL_CONTENT_TEMPLATE, user.getUsername(), url, url, RESET_PASSWORD_KEY_EXPIRE_MINUTE);
+        mailContent.setContent(content);
+        mailService.saveMail(mail, mailContent);
+        mailService.send(mail, mailContent);
         // 将key保存到redis
-        redisTemplate.boundValueOps(key).set(user.getId(), RESET_PASSWORD_KEY_EXPIRE_SECOND, TimeUnit.SECONDS);
+        redisTemplate.boundValueOps(String.format(RESET_PASSWORD_KEY_TEMPLATE, username))
+                .set(now, RESET_PASSWORD_RETRY_TIMEOUT_SECOND, TimeUnit.SECONDS);
+        redisTemplate.boundValueOps(String.format(RESET_PASSWORD_KEY_TEMPLATE, key))
+                .set(user.getId(), RESET_PASSWORD_KEY_EXPIRE_MINUTE * 60L, TimeUnit.SECONDS);
         return new Result<>();
     }
 
