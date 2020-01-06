@@ -16,6 +16,7 @@ import com.xzixi.self.portal.webapp.service.IAttachmentService;
 import com.xzixi.self.portal.webapp.service.IMailContentService;
 import com.xzixi.self.portal.webapp.service.IMailService;
 import com.xzixi.self.portal.webapp.service.IUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,9 +32,12 @@ import javax.mail.internet.MimeUtility;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.xzixi.self.portal.webapp.constant.MailConstant.SYSTEM_USER_ID;
+
 /**
  * @author 薛凌康
  */
+@Slf4j
 @Service
 public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements IMailService {
 
@@ -53,6 +57,10 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveMail(Mail mail, MailContent content) {
+        mail.setStatus(MailStatus.UNSENT);
+        if (mail.getSendUserId() == null) {
+            mail.setSendUserId(SYSTEM_USER_ID);
+        }
         if (!save(mail)) {
             throw new ServerException(mail, "保存邮件失败！");
         }
@@ -103,6 +111,7 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
             // 这里不能抛异常，抛异常会回滚事务，无法修改邮件的状态
             mail.setStatus(MailStatus.FAILURE);
             updateById(mail);
+            log.error("发送邮件失败！", e);
         }
     }
 
