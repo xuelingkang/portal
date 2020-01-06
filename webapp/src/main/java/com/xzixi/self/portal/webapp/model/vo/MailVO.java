@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 
@@ -16,6 +17,7 @@ import java.util.Collection;
  * @author 薛凌康
  */
 @Data
+@NoArgsConstructor
 @ApiModel(description = "邮件")
 public class MailVO extends Mail {
 

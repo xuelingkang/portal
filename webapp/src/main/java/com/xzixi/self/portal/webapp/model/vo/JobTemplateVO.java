@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 
@@ -15,6 +16,7 @@ import java.util.Collection;
  * @author 薛凌康
  */
 @Data
+@NoArgsConstructor
 @ApiModel(description = "任务模板")
 public class JobTemplateVO extends JobTemplate {
 

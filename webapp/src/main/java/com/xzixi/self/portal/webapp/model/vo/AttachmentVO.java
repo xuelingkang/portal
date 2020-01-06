@@ -6,11 +6,13 @@ import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * @author 薛凌康
  */
 @Data
+@NoArgsConstructor
 @ApiModel(description = "附件")
 public class AttachmentVO extends Attachment {
 

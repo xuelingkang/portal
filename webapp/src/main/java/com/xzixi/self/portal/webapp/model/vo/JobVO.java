@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Collection;
 
@@ -16,6 +17,7 @@ import java.util.Collection;
  * @author 薛凌康
  */
 @Data
+@NoArgsConstructor
 @ApiModel(description = "定时任务")
 public class JobVO extends Job {
 
