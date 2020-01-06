@@ -2,6 +2,7 @@ package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.framework.model.Result;
+import com.xzixi.self.portal.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.params.JobSearchParams;
 import com.xzixi.self.portal.webapp.model.po.Job;
 import com.xzixi.self.portal.webapp.model.valid.JobSave;
@@ -60,7 +61,10 @@ public class JobController {
     @PutMapping
     @ApiOperation("更新定时任务")
     public Result<?> update(@Validated({JobUpdate.class}) @RequestBody JobVO jobVO) {
-        jobService.updateJob(jobVO, jobVO.getParameters());
+        Job jobData = jobService.getById(jobVO.getId());
+        jobData.setEndTime(jobVO.getEndTime());
+        BeanUtils.copyPropertiesIgnoreNull(jobVO, jobData);
+        jobService.updateJob(jobData, jobVO.getParameters());
         return new Result<>();
     }
 
