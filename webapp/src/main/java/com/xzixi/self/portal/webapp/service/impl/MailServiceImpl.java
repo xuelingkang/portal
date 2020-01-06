@@ -1,8 +1,12 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
+import com.xzixi.self.portal.sftp.pool.component.SftpClient;
+import com.xzixi.self.portal.webapp.constant.AttachmentConstant;
 import com.xzixi.self.portal.webapp.data.IMailData;
+import com.xzixi.self.portal.webapp.model.enums.MailStatus;
 import com.xzixi.self.portal.webapp.model.po.Attachment;
 import com.xzixi.self.portal.webapp.model.po.Mail;
 import com.xzixi.self.portal.webapp.model.po.MailContent;
@@ -14,11 +18,15 @@ import com.xzixi.self.portal.webapp.service.IMailService;
 import com.xzixi.self.portal.webapp.service.IUserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import javax.mail.internet.MimeMessage;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,12 +35,108 @@ import java.util.stream.Collectors;
 @Service
 public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements IMailService {
 
+    @Value("${spring.mail.username}")
+    private String mailUsername;
     @Autowired
     private IMailContentService mailContentService;
     @Autowired
     private IUserService userService;
     @Autowired
     private IAttachmentService attachmentService;
+    @Autowired
+    private JavaMailSender javaMailSender;
+    @Autowired
+    private SftpClient sftpClient;
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void saveAndSend(Mail mail, MailContent content) {
+        saveMail(mail, content);
+        send(mail, content);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void saveMail(Mail mail, MailContent content) {
+        if (!save(mail)) {
+            throw new ServerException(mail, "保存邮件失败！");
+        }
+        content.setMailId(mail.getId());
+        if (!mailContentService.save(content)) {
+            throw new ServerException(content, "保存邮件内容失败！");
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void send(Mail mail, MailContent content) {
+        try {
+            Collection<User> toUsers = userService.listByIds(mail.getToUserIds());
+            // 收件地址
+            String[] toMails = toUsers.stream().map(User::getEmail).toArray(String[]::new);
+            // 邮件附件
+            Map<String, ByteArrayResource> resources = new HashMap<>();
+            if (CollectionUtils.isNotEmpty(mail.getAttachmentIds())) {
+                Collection<Attachment> attachments = attachmentService.listByIds(mail.getAttachmentIds());
+                if (CollectionUtils.isNotEmpty(attachments)) {
+                    sftpClient.open(sftp -> attachments.forEach(attachment -> {
+                        String address = attachment.getAddress();
+                        String dir = address.substring(0, address.lastIndexOf(AttachmentConstant.SEPARATOR));
+                        String name = address.substring(address.lastIndexOf(AttachmentConstant.SEPARATOR) + 1);
+                        ByteArrayResource resource = new ByteArrayResource(sftp.download(dir, name));
+                        resources.put(attachment.getName(), resource);
+                    }));
+                }
+            }
+            // 发送邮件
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper messageHelper = new MimeMessageHelper(message, true);
+            messageHelper.setFrom(mailUsername);
+            messageHelper.setTo(toMails);
+            messageHelper.setSubject(mail.getSubject());
+            messageHelper.setText(content.getContent(), true);
+            if (resources.size() > 0) {
+                for (Map.Entry<String, ByteArrayResource> entry: resources.entrySet()) {
+                    messageHelper.addAttachment(entry.getKey(), entry.getValue());
+                }
+            }
+            javaMailSender.send(message);
+            mail.setStatus(MailStatus.SUCCESS);
+            updateById(mail);
+        } catch (Exception e) {
+            // 这里不能抛异常，抛异常会回滚事务，无法修改邮件的状态
+            mail.setStatus(MailStatus.FAILURE);
+            updateById(mail);
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void removeMailsByIds(Collection<Integer> ids) {
+        Collection<Mail> mails = listByIds(ids);
+        if (!removeByIds(ids)) {
+            throw new ServerException(ids, "删除邮件失败！");
+        }
+        List<Integer> attachmentIds = new ArrayList<>();
+        mails.forEach(mail -> {
+            Collection<Integer> attachmentIdList = mail.getAttachmentIds();
+            if (CollectionUtils.isNotEmpty(attachmentIdList)) {
+                attachmentIds.addAll(attachmentIdList);
+            }
+        });
+        if (CollectionUtils.isNotEmpty(attachmentIds)) {
+            if (!attachmentService.removeByIds(attachmentIds)) {
+                throw new ServerException(attachmentIds, "删除邮件附件失败！");
+            }
+        }
+        List<MailContent> contents = mailContentService.listByMailIds(ids);
+        if (CollectionUtils.isNotEmpty(contents)) {
+            List<Integer> contentIds = contents.stream().map(MailContent::getId).collect(Collectors.toList());
+            if (!mailContentService.removeByIds(contentIds)) {
+                throw new ServerException(contentIds, "删除邮件内容失败！");
+            }
+        }
+    }
 
     @Override
     public MailVO buildVO(Mail mail, MailVO.BuildOption option) {

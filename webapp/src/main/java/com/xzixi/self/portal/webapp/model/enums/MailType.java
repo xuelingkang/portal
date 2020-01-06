@@ -9,14 +9,12 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum MailStatus implements IBaseEnum {
+public enum MailType implements IBaseEnum {
 
-    /** 未发送 */
-    UNSENT("未发送"),
-    /** 成功 */
-    SUCCESS("成功"),
-    /** 失败 */
-    FAILURE("失败");
+    /** 公开的 */
+    PUBLIC("公开的"),
+    /** 私人的 */
+    PRIVATE("私人的");
 
     private String value;
 }
