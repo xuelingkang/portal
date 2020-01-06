@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2020-01-06 11:29:50
+Date: 2020-01-06 16:46:13
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -375,6 +375,7 @@ DROP TABLE IF EXISTS `t_mail`;
 CREATE TABLE `t_mail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `subject` varchar(200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邮件标题',
+  `type` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邮件类型',
   `status` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邮件状态',
   `create_time` bigint(20) NOT NULL COMMENT '创建时间',
   `send_user_id` int(11) NOT NULL,
