@@ -59,7 +59,7 @@ public class AttachmentController {
         } else {
             String exp = FilenameUtils.getExtension(originalFilename);
             if (StringUtils.isNotBlank(exp)) {
-                name = genRandomName() + exp;
+                name = genRandomName() + "." + exp;
             } else {
                 name = genRandomName();
             }
