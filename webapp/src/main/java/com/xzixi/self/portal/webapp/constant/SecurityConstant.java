@@ -9,7 +9,7 @@ public interface SecurityConstant {
     String AUTHENTICATION_PARAMETER_NAME = "_access";
     long AUTHENTICATION_EXPIRE_SECOND = 7 * 24 * 60 * 60L;
     String AUTHENTICATION_JWT_SECRET = "S!E@L#F$P%O^R&T*A(L";
-    String AUTHENTICATION_REDIS_KEY_PREFIX = "tokens:";
+    String AUTHENTICATION_REDIS_KEY_TEMPLATE = "tokens::%s";
     String RESET_PASSWORD_KEY_TEMPLATE = "resetPassword::%s";
     long RESET_PASSWORD_RETRY_TIMEOUT_SECOND = 60L;
     long RESET_PASSWORD_KEY_EXPIRE_MINUTE = 30L;

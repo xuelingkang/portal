@@ -70,7 +70,7 @@ public class TokenServiceImpl implements ITokenService {
     }
 
     private String getTokenKey(String uuid) {
-        return AUTHENTICATION_REDIS_KEY_PREFIX + uuid;
+        return String.format(AUTHENTICATION_REDIS_KEY_TEMPLATE, uuid);
     }
 
     /**
