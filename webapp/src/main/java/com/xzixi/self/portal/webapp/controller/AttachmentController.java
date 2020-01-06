@@ -1,7 +1,6 @@
 package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.model.Result;
 import com.xzixi.self.portal.sftp.pool.component.SftpClient;
 import com.xzixi.self.portal.webapp.model.enums.AttachmentType;
@@ -23,7 +22,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -105,17 +103,7 @@ public class AttachmentController {
     @ApiOperation(value = "删除附件")
     public Result<?> remove(
         @ApiParam(value = "附件id", required = true) @NotEmpty(message = "附件id不能为空！") @RequestParam List<Integer> ids) {
-        Collection<Attachment> attachments = attachmentService.listByIds(ids);
-        if (!attachmentService.removeByIds(ids)) {
-            throw new ServerException(ids, "删除附件失败！");
-        }
-        sftpClient.open(sftp -> attachments.forEach(attachment -> {
-            String address = attachment.getAddress();
-            int lastSeparatorIndex = address.lastIndexOf(SEPARATOR);
-            String dir = address.substring(0, lastSeparatorIndex);
-            String name = address.substring(lastSeparatorIndex + 1);
-            sftp.delete(dir, name);
-        }));
+        attachmentService.removeByIds(ids);
         return new Result<>();
     }
 

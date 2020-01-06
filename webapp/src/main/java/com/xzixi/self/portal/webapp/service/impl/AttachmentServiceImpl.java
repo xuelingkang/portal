@@ -1,21 +1,65 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
+import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
+import com.xzixi.self.portal.sftp.pool.component.SftpClient;
 import com.xzixi.self.portal.webapp.data.IAttachmentData;
 import com.xzixi.self.portal.webapp.model.po.Attachment;
 import com.xzixi.self.portal.webapp.model.vo.AttachmentVO;
 import com.xzixi.self.portal.webapp.service.IAttachmentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.xzixi.self.portal.webapp.constant.AttachmentConstant.SEPARATOR;
 
 /**
  * @author 薛凌康
  */
 @Service
 public class AttachmentServiceImpl extends BaseServiceImpl<IAttachmentData, Attachment> implements IAttachmentService {
+
+    @Autowired
+    private SftpClient sftpClient;
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean removeById(Serializable id) {
+        Attachment attachment = getById(id);
+        if (!super.removeById(id)) {
+            throw new ServerException(id, "删除附件失败！");
+        }
+        sftpClient.open(sftp -> {
+            String address = attachment.getAddress();
+            int lastSeparatorIndex = address.lastIndexOf(SEPARATOR);
+            String dir = address.substring(0, lastSeparatorIndex);
+            String name = address.substring(lastSeparatorIndex + 1);
+            sftp.delete(dir, name);
+        });
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean removeByIds(Collection<? extends Serializable> idList) {
+        Collection<Attachment> attachments = listByIds(idList);
+        if (!super.removeByIds(idList)) {
+            throw new ServerException(idList, "删除附件失败！");
+        }
+        sftpClient.open(sftp -> attachments.forEach(attachment -> {
+            String address = attachment.getAddress();
+            int lastSeparatorIndex = address.lastIndexOf(SEPARATOR);
+            String dir = address.substring(0, lastSeparatorIndex);
+            String name = address.substring(lastSeparatorIndex + 1);
+            sftp.delete(dir, name);
+        }));
+        return true;
+    }
 
     @Override
     public AttachmentVO buildVO(Attachment attachment, AttachmentVO.BuildOption option) {

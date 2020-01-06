@@ -104,6 +104,10 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
 
     @Override
     public Collection<T> listByIds(Collection<? extends Serializable> idList) {
+        idList = idList.stream().filter(Objects::nonNull).distinct().collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(idList)) {
+            throw new ProjectException("idList不能为空！");
+        }
         return baseData.listByIds(idList);
     }
 
@@ -209,7 +213,7 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean removeByIds(Collection<? extends Serializable> idList) {
-        idList = idList.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        idList = idList.stream().filter(Objects::nonNull).distinct().collect(Collectors.toList());
         if (CollectionUtils.isEmpty(idList)) {
             throw new ProjectException("idList不能为空！");
         }
