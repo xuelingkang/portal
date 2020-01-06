@@ -23,6 +23,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.self.portal.webapp.constant.MailConstant.SYSTEM_USER_ID;
 
 /**
  * @author 薛凌康
@@ -60,11 +61,14 @@ public class MailController {
         User currentUser = SecurityUtil.getCurrentUser();
         if (currentUser != null) {
             mailVO.setSendUserId(currentUser.getId());
+        } else {
+            mailVO.setSendUserId(SYSTEM_USER_ID);
         }
         mailVO.setType(MailType.PUBLIC);
         mailVO.setStatus(MailStatus.UNSENT);
         mailVO.setCreateTime(System.currentTimeMillis());
-        mailService.saveAndSend(mailVO, mailVO.getContent());
+        mailService.saveMail(mailVO, mailVO.getContent());
+        mailService.send(mailVO, mailVO.getContent());
         return new Result<>();
     }
 

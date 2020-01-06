@@ -22,10 +22,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -50,13 +52,6 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveAndSend(Mail mail, MailContent content) {
-        saveMail(mail, content);
-        send(mail, content);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
     public void saveMail(Mail mail, MailContent content) {
         if (!save(mail)) {
             throw new ServerException(mail, "保存邮件失败！");
@@ -68,6 +63,7 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
     }
 
     @Override
+    @Async
     @Transactional(rollbackFor = Exception.class)
     public void send(Mail mail, MailContent content) {
         try {
@@ -97,7 +93,7 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
             messageHelper.setText(content.getContent(), true);
             if (resources.size() > 0) {
                 for (Map.Entry<String, ByteArrayResource> entry: resources.entrySet()) {
-                    messageHelper.addAttachment(entry.getKey(), entry.getValue());
+                    messageHelper.addAttachment(MimeUtility.decodeText(entry.getKey()), entry.getValue());
                 }
             }
             javaMailSender.send(message);

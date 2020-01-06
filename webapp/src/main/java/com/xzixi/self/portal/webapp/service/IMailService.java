@@ -14,14 +14,6 @@ import java.util.Collection;
 public interface IMailService extends IBaseService<Mail>, IVoService<Mail, MailVO, MailVO.BuildOption> {
 
     /**
-     * 保存并发送邮件
-     *
-     * @param mail 邮件
-     * @param content 邮件内容
-     */
-    void saveAndSend(Mail mail, MailContent content);
-
-    /**
      * 保存邮件
      *
      * @param mail 邮件
