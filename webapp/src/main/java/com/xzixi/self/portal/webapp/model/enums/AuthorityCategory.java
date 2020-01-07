@@ -33,12 +33,10 @@ public enum AuthorityCategory implements IBaseEnum {
     JOB("定时任务"),
     /** 邮件 */
     MAIL("邮件"),
-    /** 博客 */
-    BLOG("博客"),
-    /** 新闻 */
-    NEWS("新闻"),
-    /** 留言 */
-    LETTER("留言");
+    /** 文章 */
+    ARTICLE("文章"),
+    /** 回复 */
+    REPLY("回复");
 
     private String value;
 }
