@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2020-01-07 09:38:41
+Date: 2020-01-07 21:20:27
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -166,7 +166,7 @@ CREATE TABLE `qrtz_scheduler_state` (
 -- ----------------------------
 -- Records of qrtz_scheduler_state
 -- ----------------------------
-INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-HSBTA8Q1578360971141', '1578361085893', '10000');
+INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-RKG4OBL1578402646252', '1578403214418', '10000');
 
 -- ----------------------------
 -- Table structure for qrtz_simple_triggers
@@ -286,7 +286,7 @@ CREATE TABLE `t_authority` (
   `method` varchar(20) COLLATE utf8mb4_bin DEFAULT '' COMMENT '请求方法',
   `description` varchar(200) COLLATE utf8mb4_bin DEFAULT '' COMMENT '权限描述',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='权限';
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='权限';
 
 -- ----------------------------
 -- Records of t_authority
@@ -324,22 +324,26 @@ INSERT INTO `t_authority` VALUES ('30', 'HTTP', 'ATTACHMENT', '100', '/attachmen
 INSERT INTO `t_authority` VALUES ('31', 'HTTP', 'ATTACHMENT', '200', '/attachment', 'GET', '分页查询附件');
 INSERT INTO `t_authority` VALUES ('32', 'HTTP', 'ATTACHMENT', '300', '/attachment/*', 'GET', '根据id查询附件');
 INSERT INTO `t_authority` VALUES ('33', 'HTTP', 'ATTACHMENT', '400', '/attachment', 'DELETE', '删除附件');
-INSERT INTO `t_authority` VALUES ('34', 'HTTP', 'JOB', '100', '/job-template', 'GET', '分页查询任务模板');
-INSERT INTO `t_authority` VALUES ('35', 'HTTP', 'JOB', '200', '/job-template/*', 'GET', '根据id查询任务模板');
-INSERT INTO `t_authority` VALUES ('36', 'HTTP', 'JOB', '300', '/job-template', 'POST', '保存任务模板');
-INSERT INTO `t_authority` VALUES ('37', 'HTTP', 'JOB', '400', '/job-template', 'PUT', '更新任务模板');
-INSERT INTO `t_authority` VALUES ('38', 'HTTP', 'JOB', '500', '/job-template', 'DELETE', '删除任务模板');
-INSERT INTO `t_authority` VALUES ('39', 'HTTP', 'JOB', '600', '/job', 'GET', '分页查询定时任务');
-INSERT INTO `t_authority` VALUES ('40', 'HTTP', 'JOB', '700', '/job/*', 'GET', '根据id查询定时任务');
-INSERT INTO `t_authority` VALUES ('41', 'HTTP', 'JOB', '800', '/job', 'POST', '保存定时任务');
-INSERT INTO `t_authority` VALUES ('42', 'HTTP', 'JOB', '900', '/job', 'PUT', '更新定时任务');
-INSERT INTO `t_authority` VALUES ('43', 'HTTP', 'JOB', '1000', '/job', 'DELETE', '删除定时任务');
-INSERT INTO `t_authority` VALUES ('44', 'HTTP', 'JOB', '1100', '/job/pause', 'PATCH', '暂停定时任务');
-INSERT INTO `t_authority` VALUES ('45', 'HTTP', 'JOB', '1200', '/job/resume', 'PATCH', '恢复定时任务');
+INSERT INTO `t_authority` VALUES ('34', 'HTTP', 'JOB_TEMPLATE', '100', '/job-template', 'GET', '分页查询任务模板');
+INSERT INTO `t_authority` VALUES ('35', 'HTTP', 'JOB_TEMPLATE', '200', '/job-template/*', 'GET', '根据id查询任务模板');
+INSERT INTO `t_authority` VALUES ('36', 'HTTP', 'JOB_TEMPLATE', '300', '/job-template', 'POST', '保存任务模板');
+INSERT INTO `t_authority` VALUES ('37', 'HTTP', 'JOB_TEMPLATE', '400', '/job-template', 'PUT', '更新任务模板');
+INSERT INTO `t_authority` VALUES ('38', 'HTTP', 'JOB_TEMPLATE', '500', '/job-template', 'DELETE', '删除任务模板');
+INSERT INTO `t_authority` VALUES ('39', 'HTTP', 'JOB', '100', '/job', 'GET', '分页查询定时任务');
+INSERT INTO `t_authority` VALUES ('40', 'HTTP', 'JOB', '200', '/job/*', 'GET', '根据id查询定时任务');
+INSERT INTO `t_authority` VALUES ('41', 'HTTP', 'JOB', '300', '/job', 'POST', '保存定时任务');
+INSERT INTO `t_authority` VALUES ('42', 'HTTP', 'JOB', '400', '/job', 'PUT', '更新定时任务');
+INSERT INTO `t_authority` VALUES ('43', 'HTTP', 'JOB', '500', '/job', 'DELETE', '删除定时任务');
+INSERT INTO `t_authority` VALUES ('44', 'HTTP', 'JOB', '600', '/job/pause', 'PATCH', '暂停定时任务');
+INSERT INTO `t_authority` VALUES ('45', 'HTTP', 'JOB', '700', '/job/resume', 'PATCH', '恢复定时任务');
 INSERT INTO `t_authority` VALUES ('46', 'HTTP', 'MAIL', '100', '/mail', 'GET', '分页查询邮件');
 INSERT INTO `t_authority` VALUES ('47', 'HTTP', 'MAIL', '200', '/mail/*', 'GET', '根据id查询邮件');
 INSERT INTO `t_authority` VALUES ('48', 'HTTP', 'MAIL', '300', '/mail', 'POST', '发送邮件');
 INSERT INTO `t_authority` VALUES ('49', 'HTTP', 'MAIL', '400', '/mail', 'DELETE', '删除邮件');
+INSERT INTO `t_authority` VALUES ('50', 'HTTP', 'USER_LINK', '100', '/user-link/idols', 'GET', '查询当前用户的偶像');
+INSERT INTO `t_authority` VALUES ('51', 'HTTP', 'USER_LINK', '200', '/user-link/followers', 'GET', '查询当前用户的粉丝');
+INSERT INTO `t_authority` VALUES ('52', 'HTTP', 'USER_LINK', '300', '/user-link/*', 'POST', '添加关注');
+INSERT INTO `t_authority` VALUES ('53', 'HTTP', 'USER_LINK', '400', '/user-link/*', 'DELETE', '取消关注');
 
 -- ----------------------------
 -- Table structure for t_job
@@ -459,7 +463,7 @@ CREATE TABLE `t_role` (
   `description` varchar(200) COLLATE utf8mb4_bin DEFAULT '' COMMENT '角色描述',
   PRIMARY KEY (`id`),
   UNIQUE KEY `t_role_uk_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='角色';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='角色';
 
 -- ----------------------------
 -- Records of t_role
@@ -471,8 +475,9 @@ INSERT INTO `t_role` VALUES ('4', 'ROLE_USER', '400', '0', '0', '用户管理员
 INSERT INTO `t_role` VALUES ('5', 'ROLE_ROLE', '500', '0', '0', '角色管理员');
 INSERT INTO `t_role` VALUES ('6', 'ROLE_AUTHORITY', '600', '0', '0', '权限管理员');
 INSERT INTO `t_role` VALUES ('7', 'ROLE_ATTACHMENT', '700', '0', '0', '附件管理员');
-INSERT INTO `t_role` VALUES ('8', 'ROLE_JOB', '800', '0', '0', '任务管理员');
-INSERT INTO `t_role` VALUES ('9', 'ROLE_MAIL', '900', '0', '0', '邮件管理员');
+INSERT INTO `t_role` VALUES ('8', 'ROLE_JOB_TEMPLATE', '800', '0', '0', '任务模板管理员');
+INSERT INTO `t_role` VALUES ('9', 'ROLE_JOB', '900', '0', '0', '定时任务管理员');
+INSERT INTO `t_role` VALUES ('10', 'ROLE_MAIL', '1000', '0', '0', '邮件管理员');
 
 -- ----------------------------
 -- Table structure for t_role_authority_link
@@ -483,7 +488,7 @@ CREATE TABLE `t_role_authority_link` (
   `role_id` int(11) NOT NULL COMMENT '角色id',
   `authority_id` int(11) NOT NULL COMMENT '权限id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='角色权限关联';
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='角色权限关联';
 
 -- ----------------------------
 -- Records of t_role_authority_link
@@ -525,17 +530,25 @@ INSERT INTO `t_role_authority_link` VALUES ('37', '8', '35');
 INSERT INTO `t_role_authority_link` VALUES ('38', '8', '36');
 INSERT INTO `t_role_authority_link` VALUES ('39', '8', '37');
 INSERT INTO `t_role_authority_link` VALUES ('40', '8', '38');
-INSERT INTO `t_role_authority_link` VALUES ('41', '8', '39');
-INSERT INTO `t_role_authority_link` VALUES ('42', '8', '40');
-INSERT INTO `t_role_authority_link` VALUES ('43', '8', '41');
-INSERT INTO `t_role_authority_link` VALUES ('44', '8', '42');
-INSERT INTO `t_role_authority_link` VALUES ('45', '8', '43');
-INSERT INTO `t_role_authority_link` VALUES ('46', '8', '44');
-INSERT INTO `t_role_authority_link` VALUES ('47', '8', '45');
-INSERT INTO `t_role_authority_link` VALUES ('48', '9', '46');
-INSERT INTO `t_role_authority_link` VALUES ('49', '9', '47');
-INSERT INTO `t_role_authority_link` VALUES ('50', '9', '48');
-INSERT INTO `t_role_authority_link` VALUES ('51', '9', '49');
+INSERT INTO `t_role_authority_link` VALUES ('41', '9', '39');
+INSERT INTO `t_role_authority_link` VALUES ('42', '9', '40');
+INSERT INTO `t_role_authority_link` VALUES ('43', '9', '41');
+INSERT INTO `t_role_authority_link` VALUES ('44', '9', '42');
+INSERT INTO `t_role_authority_link` VALUES ('45', '9', '43');
+INSERT INTO `t_role_authority_link` VALUES ('46', '9', '44');
+INSERT INTO `t_role_authority_link` VALUES ('47', '9', '45');
+INSERT INTO `t_role_authority_link` VALUES ('48', '10', '46');
+INSERT INTO `t_role_authority_link` VALUES ('49', '10', '47');
+INSERT INTO `t_role_authority_link` VALUES ('50', '10', '48');
+INSERT INTO `t_role_authority_link` VALUES ('51', '10', '49');
+INSERT INTO `t_role_authority_link` VALUES ('52', '2', '50');
+INSERT INTO `t_role_authority_link` VALUES ('53', '2', '51');
+INSERT INTO `t_role_authority_link` VALUES ('54', '2', '52');
+INSERT INTO `t_role_authority_link` VALUES ('55', '2', '53');
+INSERT INTO `t_role_authority_link` VALUES ('56', '3', '50');
+INSERT INTO `t_role_authority_link` VALUES ('57', '3', '51');
+INSERT INTO `t_role_authority_link` VALUES ('58', '3', '52');
+INSERT INTO `t_role_authority_link` VALUES ('59', '3', '53');
 
 -- ----------------------------
 -- Table structure for t_user
@@ -562,7 +575,22 @@ CREATE TABLE `t_user` (
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
-INSERT INTO `t_user` VALUES ('1', 'admin', '$2a$10$CzHneRYV6fE6cS2BOQaf.OUzaYPQBsVOPNQExcsZNg3Gp4HKMOcBe', 'xuelingkang@163.com', '系统管理员', 'MALE', '655833600000', 'SYSTEM', '1578326122478', '1578360312389', '0', '0');
+INSERT INTO `t_user` VALUES ('1', 'admin', '$2a$10$CzHneRYV6fE6cS2BOQaf.OUzaYPQBsVOPNQExcsZNg3Gp4HKMOcBe', 'xuelingkang@163.com', '系统管理员', 'MALE', '655833600000', 'SYSTEM', '1578326122478', '1578402706784', '0', '0');
+
+-- ----------------------------
+-- Table structure for t_user_link
+-- ----------------------------
+DROP TABLE IF EXISTS `t_user_link`;
+CREATE TABLE `t_user_link` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `idol_id` int(11) NOT NULL COMMENT '偶像id',
+  `follower_id` int(11) NOT NULL COMMENT '粉丝id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='关注';
+
+-- ----------------------------
+-- Records of t_user_link
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for t_user_role_link

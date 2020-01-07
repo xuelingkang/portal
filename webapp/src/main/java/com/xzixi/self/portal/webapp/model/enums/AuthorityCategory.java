@@ -19,14 +19,18 @@ public enum AuthorityCategory implements IBaseEnum {
     AUTHORIZATION("认证"),
     /** 用户 */
     USER("用户"),
+    /** 关注 */
+    USER_LINK("关注"),
     /** 角色 */
     ROLE("角色"),
     /** 权限 */
     AUTHORITY("权限"),
     /** 附件 */
     ATTACHMENT("附件"),
-    /** 任务 */
-    JOB("任务"),
+    /** 任务模板 */
+    JOB_TEMPLATE("任务模板"),
+    /** 定时任务 */
+    JOB("定时任务"),
     /** 邮件 */
     MAIL("邮件"),
     /** 博客 */
