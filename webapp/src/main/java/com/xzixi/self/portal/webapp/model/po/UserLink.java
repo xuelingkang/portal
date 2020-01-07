@@ -23,6 +23,9 @@ public class UserLink extends BaseModel {
     /** 粉丝id */
     private Integer followerId;
 
+    /** 关注时间 */
+    private Long followTime;
+
     public UserLink(Integer idolId, Integer followerId) {
         this.idolId = idolId;
         this.followerId = followerId;
