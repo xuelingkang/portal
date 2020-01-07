@@ -32,7 +32,7 @@ import javax.mail.internet.MimeUtility;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.xzixi.self.portal.webapp.constant.MailConstant.SYSTEM_USER_ID;
+import static com.xzixi.self.portal.webapp.constant.SecurityConstant.SYSTEM_USER_ID;
 
 /**
  * @author 薛凌康

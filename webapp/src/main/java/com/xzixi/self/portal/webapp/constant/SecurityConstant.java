@@ -5,6 +5,7 @@ package com.xzixi.self.portal.webapp.constant;
  */
 public interface SecurityConstant {
 
+    Integer SYSTEM_USER_ID = 1;
     String AUTHENTICATION_HEADER_NAME = "x-access-token";
     String AUTHENTICATION_PARAMETER_NAME = "_access";
     long AUTHENTICATION_EXPIRE_SECOND = 7 * 24 * 60 * 60L;
