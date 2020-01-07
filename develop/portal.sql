@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2020-01-07 21:20:27
+Date: 2020-01-08 00:20:55
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -166,7 +166,7 @@ CREATE TABLE `qrtz_scheduler_state` (
 -- ----------------------------
 -- Records of qrtz_scheduler_state
 -- ----------------------------
-INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-RKG4OBL1578402646252', '1578403214418', '10000');
+INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-RKG4OBL1578412689553', '1578412709257', '10000');
 
 -- ----------------------------
 -- Table structure for qrtz_simple_triggers
@@ -253,6 +253,107 @@ CREATE TABLE `qrtz_triggers` (
 
 -- ----------------------------
 -- Records of qrtz_triggers
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_article
+-- ----------------------------
+DROP TABLE IF EXISTS `t_article`;
+CREATE TABLE `t_article` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `access` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '访问限制',
+  `type` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '类型',
+  `category` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '栏目',
+  `title` varchar(200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '标题',
+  `outline` varchar(500) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '摘要',
+  `visit_times` int(11) NOT NULL DEFAULT '0' COMMENT '访问次数',
+  `source` varchar(20) COLLATE utf8mb4_bin DEFAULT '' COMMENT '来源',
+  `source_url` varchar(200) COLLATE utf8mb4_bin DEFAULT '' COMMENT '来源网址',
+  `create_time` bigint(20) NOT NULL COMMENT '创建时间',
+  `update_time` bigint(20) NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='文章';
+
+-- ----------------------------
+-- Records of t_article
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_article_collection
+-- ----------------------------
+DROP TABLE IF EXISTS `t_article_collection`;
+CREATE TABLE `t_article_collection` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `name` varchar(20) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '收藏夹名称',
+  `create_time` bigint(20) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='文章收藏夹';
+
+-- ----------------------------
+-- Records of t_article_collection
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_article_content
+-- ----------------------------
+DROP TABLE IF EXISTS `t_article_content`;
+CREATE TABLE `t_article_content` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `article_id` int(11) NOT NULL COMMENT '文章id',
+  `content` mediumtext COLLATE utf8mb4_bin NOT NULL COMMENT '文章内容',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='文章内容';
+
+-- ----------------------------
+-- Records of t_article_content
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_article_favorite
+-- ----------------------------
+DROP TABLE IF EXISTS `t_article_favorite`;
+CREATE TABLE `t_article_favorite` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `article_id` int(11) NOT NULL COMMENT '文章id',
+  `favorite_time` bigint(20) NOT NULL COMMENT '收藏时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='文章收藏';
+
+-- ----------------------------
+-- Records of t_article_favorite
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_article_tag
+-- ----------------------------
+DROP TABLE IF EXISTS `t_article_tag`;
+CREATE TABLE `t_article_tag` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `name` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '标签名称',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='文章标签';
+
+-- ----------------------------
+-- Records of t_article_tag
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for t_article_tag_link
+-- ----------------------------
+DROP TABLE IF EXISTS `t_article_tag_link`;
+CREATE TABLE `t_article_tag_link` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `article_id` int(11) NOT NULL COMMENT '文章id',
+  `tag_id` int(11) NOT NULL COMMENT '标签id',
+  `seq` int(1) NOT NULL COMMENT '显示顺序',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='文章标签关联';
+
+-- ----------------------------
+-- Records of t_article_tag_link
 -- ----------------------------
 
 -- ----------------------------
@@ -575,7 +676,7 @@ CREATE TABLE `t_user` (
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
-INSERT INTO `t_user` VALUES ('1', 'admin', '$2a$10$CzHneRYV6fE6cS2BOQaf.OUzaYPQBsVOPNQExcsZNg3Gp4HKMOcBe', 'xuelingkang@163.com', '系统管理员', 'MALE', '655833600000', 'SYSTEM', '1578326122478', '1578402706784', '0', '0');
+INSERT INTO `t_user` VALUES ('1', 'admin', '$2a$10$CzHneRYV6fE6cS2BOQaf.OUzaYPQBsVOPNQExcsZNg3Gp4HKMOcBe', 'xuelingkang@163.com', '系统管理员', 'MALE', '655833600000', 'SYSTEM', '1578326122478', '1578408401295', '0', '0');
 
 -- ----------------------------
 -- Table structure for t_user_link
@@ -585,6 +686,7 @@ CREATE TABLE `t_user_link` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `idol_id` int(11) NOT NULL COMMENT '偶像id',
   `follower_id` int(11) NOT NULL COMMENT '粉丝id',
+  `follow_time` bigint(20) NOT NULL COMMENT '关注时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='关注';
 
