@@ -18,8 +18,6 @@ public class FuzzyEvictRedisCacheManager extends RedisCacheManager {
 
     private final RedisCacheWriter cacheWriter;
     private final RedisCacheConfiguration defaultCacheConfig;
-    private final Map<String, RedisCacheConfiguration> initialCacheConfiguration;
-    private final boolean allowInFlightCacheCreation;
     private RedisTemplate<String, Object> redisTemplate;
 
     /**
@@ -43,8 +41,6 @@ public class FuzzyEvictRedisCacheManager extends RedisCacheManager {
         super(cacheWriter, defaultCacheConfiguration, initialCacheConfigurations, allowInFlightCacheCreation);
         this.cacheWriter = cacheWriter;
         this.defaultCacheConfig = defaultCacheConfiguration;
-        this.initialCacheConfiguration = initialCacheConfigurations;
-        this.allowInFlightCacheCreation = allowInFlightCacheCreation;
         this.redisTemplate = redisTemplate;
     }
 }

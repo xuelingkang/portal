@@ -32,8 +32,11 @@ public class FuzzyEvictRedisCache extends RedisCache {
 
     /**
      * 重写evict，支持模糊匹配
+     * RedisCacheWriter有个clean方法应该可以按照pattern删除缓存，
+     * 但是没有成功删除，原因不明，以后再优化
      *
      * @param key the key whose mapping is to be removed from the cache
+     * @see RedisCacheWriter#clean(String, byte[])
      */
     @Override
     public void evict(Object key) {
