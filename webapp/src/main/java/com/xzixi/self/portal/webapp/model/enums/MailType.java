@@ -11,10 +11,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum MailType implements IBaseEnum {
 
-    /** 公开的 */
-    PUBLIC("公开的"),
-    /** 私人的 */
-    PRIVATE("私人的");
+    /** 公开 */
+    PUBLIC("公开"),
+    /** 私人 */
+    PRIVATE("个人");
 
     private String value;
 }
