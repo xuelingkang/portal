@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
@@ -97,7 +98,7 @@ public class RoleController {
                 .collect(Collectors.toList());
         List<RoleAuthorityLink> oldLinks = roleAuthorityLinkService.list(new QueryWrapper<>(new RoleAuthorityLink().setRoleId(id)));
         boolean result = roleAuthorityLinkService.merge(newLinks, oldLinks, (sources, target) -> sources.stream()
-                .filter(source -> source.getAuthorityId() != null && source.getAuthorityId().equals(target.getAuthorityId()))
+                .filter(source -> Objects.equals(source.getAuthorityId(), target.getAuthorityId()))
                 .findFirst().orElse(null));
         if (result) {
             return new Result<>();

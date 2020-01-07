@@ -33,10 +33,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -244,7 +241,7 @@ public class UserController {
         List<UserRoleLink> newLinks = roleIds.stream().map(roleId -> new UserRoleLink(id, roleId)).collect(Collectors.toList());
         List<UserRoleLink> oldLinks = userRoleLinkService.list(new QueryWrapper<>(new UserRoleLink().setUserId(id)));
         boolean result = userRoleLinkService.merge(newLinks, oldLinks, (sources, target) -> sources.stream()
-                .filter(source -> source.getRoleId() != null && source.getRoleId().equals(target.getRoleId()))
+                .filter(source -> Objects.equals(source.getRoleId(), target.getRoleId()))
                 .findFirst().orElse(null));
         if (result) {
             return new Result<>();

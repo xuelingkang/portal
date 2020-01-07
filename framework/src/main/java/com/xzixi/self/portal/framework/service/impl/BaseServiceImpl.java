@@ -43,7 +43,7 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
         Collection<T> entities = listByIds(idList);
         entities.forEach(entityData -> {
             Optional<T> entityOptional = entityList.stream()
-                .filter(entity -> entityData.getId().equals(entity.getId())).findFirst();
+                .filter(entity -> Objects.equals(entityData.getId(), entity.getId())).findFirst();
             entityOptional.ifPresent(entity -> BeanUtils.copyPropertiesIgnoreNull(entity, entityData));
         });
         return updateBatchById(entities, batchSize);

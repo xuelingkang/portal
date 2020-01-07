@@ -15,6 +15,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -109,7 +110,7 @@ public class TokenServiceImpl implements ITokenService {
      * @return uuid，用来获取redis中的token对象
      */
     private String getUuidFromSignature(String signature) {
-        if (StringUtils.isEmpty(signature) || "null".equals(signature)) {
+        if (StringUtils.isEmpty(signature) || Objects.equals(NULL_TOKEN, signature)) {
             throw new ClientException(401, "认证信息无效！");
         }
         Map<String, Object> jwtClaims;

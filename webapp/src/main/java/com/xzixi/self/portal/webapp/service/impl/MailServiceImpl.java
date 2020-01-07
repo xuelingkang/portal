@@ -180,7 +180,7 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
             if (CollectionUtils.isNotEmpty(sendUserIds)) {
                 Collection<User> sendUsers = userService.listByIds(sendUserIds);
                 mailVOList.forEach(mailVO -> {
-                    User sendUser = sendUsers.stream().filter(user -> user.getId().equals(mailVO.getSendUserId())).findFirst().orElse(null);
+                    User sendUser = sendUsers.stream().filter(user -> Objects.equals(user.getId(), mailVO.getSendUserId())).findFirst().orElse(null);
                     if (sendUser != null) {
                         sendUser.setPassword(null);
                     }
@@ -224,7 +224,7 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
             List<MailContent> contents = mailContentService.listByMailIds(mailIds);
             if (CollectionUtils.isNotEmpty(contents)) {
                 mailVOList.forEach(mailVO -> contents.stream()
-                        .filter(mailContent -> mailContent.getMailId().equals(mailVO.getId()))
+                        .filter(mailContent -> Objects.equals(mailVO.getId(), mailContent.getMailId()))
                         .findFirst().ifPresent(mailVO::setContent));
             }
         }

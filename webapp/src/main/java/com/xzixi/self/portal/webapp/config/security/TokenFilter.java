@@ -19,9 +19,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Objects;
 
-import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
-import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICATION_PARAMETER_NAME;
+import static com.xzixi.self.portal.webapp.constant.SecurityConstant.*;
 
 /**
  * @author 薛凌康
@@ -38,7 +38,7 @@ public class TokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String signature = WebUtil.getHeaderOrParameter(request, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_NAME);
-        if (StringUtils.isNotEmpty(signature) && !"null".equals(signature)) {
+        if (StringUtils.isNotEmpty(signature) && !Objects.equals(NULL_TOKEN, signature)) {
             try {
                 Token token = tokenService.getToken(signature);
                 if (token != null) {

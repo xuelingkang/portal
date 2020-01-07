@@ -5,21 +5,17 @@ import com.xzixi.self.portal.framework.exception.ProjectException;
 import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.data.IJobData;
-import com.xzixi.self.portal.webapp.model.po.*;
 import com.xzixi.self.portal.webapp.model.po.Job;
+import com.xzixi.self.portal.webapp.model.po.*;
 import com.xzixi.self.portal.webapp.model.vo.JobVO;
 import com.xzixi.self.portal.webapp.service.*;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.xzixi.self.portal.webapp.constant.JobConstant.JOB_PREFIX;
@@ -70,7 +66,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
         parameters.forEach(parameter -> parameter.setJobId(job.getId()));
         List<JobParameter> oldParameters = jobParameterService.listByJobId(job.getId());
         boolean mergeResult = jobParameterService.merge(parameters, oldParameters, (sources, target) -> sources.stream()
-                .filter(source -> source.getId() != null && source.getId().equals(target.getId())).findFirst().orElse(null));
+                .filter(source -> Objects.equals(source.getId(), target.getId())).findFirst().orElse(null));
         if (!mergeResult) {
             throw new ServerException(parameters, "更新定时任务参数失败！");
         }
@@ -140,9 +136,9 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
             List<JobTrigger> jobTriggers = jobTriggerService.listByJobs(jobs);
             jobVOList.forEach(jobVO -> {
                 JobTrigger jobTrigger = jobTriggers.stream().filter(trigger ->
-                        jobVO.getSchedName() != null && jobVO.getSchedName().equals(trigger.getSchedName())
-                        && jobVO.getTriggerName() != null && jobVO.getTriggerName().equals(trigger.getTriggerName())
-                        && jobVO.getTriggerGroup() != null && jobVO.getTriggerGroup().equals(trigger.getTriggerGroup()))
+                        Objects.equals(jobVO.getSchedName(), trigger.getSchedName())
+                        && Objects.equals(jobVO.getTriggerName(), trigger.getTriggerName())
+                        && Objects.equals(jobVO.getTriggerGroup(), trigger.getTriggerGroup()))
                         .findFirst().orElse(null);
                 jobVO.setJobTrigger(jobTrigger);
             });
@@ -151,7 +147,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
             List<JobParameter> parameters = jobParameterService.listByJobIds(jobs.stream().map(Job::getId).collect(Collectors.toList()));
             if (CollectionUtils.isNotEmpty(parameters)) {
                 jobVOList.forEach(jobVO -> {
-                    List<JobParameter> params = parameters.stream().filter(parameter -> jobVO.getId().equals(parameter.getJobId()))
+                    List<JobParameter> params = parameters.stream().filter(parameter -> Objects.equals(jobVO.getId(), parameter.getJobId()))
                             .collect(Collectors.toList());
                     jobVO.setParameters(params);
                 });
@@ -181,7 +177,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
         }
         for (JobTemplateParameter templateParameter : templateParameters) {
             JobParameter parameter = parameters.stream()
-                    .filter(param -> StringUtils.isNotBlank(param.getName()) && param.getName().equals(templateParameter.getName()))
+                    .filter(param -> Objects.equals(param.getName(), templateParameter.getName()))
                     .findFirst().orElse(null);
             if (parameter == null) {
                 checkError(String.format("缺少参数(%s)!", templateParameter.getName()));

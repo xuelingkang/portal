@@ -12,8 +12,9 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
-import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICATION_PARAMETER_NAME;
+import java.util.Objects;
+
+import static com.xzixi.self.portal.webapp.constant.SecurityConstant.*;
 
 /**
  * 退出登录
@@ -29,7 +30,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String signature = WebUtil.getHeaderOrParameter(request, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_NAME);
-        if (StringUtils.isNotBlank(signature) && !"null".equals(signature)) {
+        if (StringUtils.isNotBlank(signature) && !Objects.equals(NULL_TOKEN, signature)) {
             try {
                 tokenService.deleteToken(signature);
             } catch (Exception e) {

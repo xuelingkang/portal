@@ -3,6 +3,7 @@ package com.xzixi.self.portal.webapp.service;
 import com.xzixi.self.portal.webapp.model.vo.EnumVO;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -29,6 +30,6 @@ public interface IEnumService {
      * @return 枚举项集合
      */
     default EnumVO listByName(String name) {
-        return ENUMS.stream().filter(enumVO -> name.equals(enumVO.getName())).findFirst().orElse(null);
+        return ENUMS.stream().filter(enumVO -> Objects.equals(name, enumVO.getName())).findFirst().orElse(null);
     }
 }

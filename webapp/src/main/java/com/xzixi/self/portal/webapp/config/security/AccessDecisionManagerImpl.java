@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.xzixi.self.portal.webapp.constant.UserConstant.SYSTEM_ADMIN_USER_ID;
@@ -52,10 +53,10 @@ public class AccessDecisionManagerImpl implements AccessDecisionManager {
         } else {
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             // 系统管理员直接跳过
-            if (SYSTEM_ADMIN_USER_ID.equals(userDetails.getUser().getId())) {
+            if (Objects.equals(SYSTEM_ADMIN_USER_ID, userDetails.getUser().getId())) {
                 return;
             }
-            if (UserType.WEBSITE.equals(userDetails.getUser().getType())) {
+            if (Objects.equals(UserType.WEBSITE, userDetails.getUser().getType())) {
                 // 网站用户权限
                 Collection<Authority> websiteAuthorities = authorityService
                         .listByRoleWrapper(new QueryWrapper<>(new Role().setWebsite(true)));

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -51,7 +52,7 @@ public class JobTemplateServiceImpl extends BaseServiceImpl<IJobTemplateData, Jo
         List<JobTemplateParameter> oldParameters = jobTemplateParameterService
                 .list(new QueryWrapper<>(new JobTemplateParameter().setJobTemplateId(jobTemplate.getId())));
         boolean mergeResult = jobTemplateParameterService.merge(parameters, oldParameters, ((sources, target) ->
-                sources.stream().filter(source -> source.getId() != null && source.getId().equals(target.getId())).findFirst().orElse(null)));
+                sources.stream().filter(source -> Objects.equals(source.getId(), target.getId())).findFirst().orElse(null)));
         if (!mergeResult) {
             throw new ServerException(parameters, "更新定时任务模板参数失败！");
         }
@@ -95,7 +96,7 @@ public class JobTemplateServiceImpl extends BaseServiceImpl<IJobTemplateData, Jo
             if (CollectionUtils.isNotEmpty(parameters)) {
                 jobTemplateVOList.forEach(jobTemplateVO -> {
                     List<JobTemplateParameter> params = parameters.stream()
-                            .filter(parameter -> jobTemplateVO.getId().equals(parameter.getJobTemplateId()))
+                            .filter(parameter -> Objects.equals(jobTemplateVO.getId(), parameter.getJobTemplateId()))
                             .collect(Collectors.toList());
                     jobTemplateVO.setParameters(params);
                 });
