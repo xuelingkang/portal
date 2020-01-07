@@ -9,6 +9,7 @@ import com.xzixi.self.portal.webapp.model.valid.AuthorityUpdate;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
@@ -41,6 +42,7 @@ public class Authority extends BaseModel {
 
     @ApiModelProperty(value = "权限路径")
     @NotNull(groups = {AuthoritySave.class}, message = "权限路径不能为空！")
+    @Length(groups = {AuthoritySave.class, AuthorityUpdate.class}, max = 50, message = "权限路径不能超过50字！")
     private String pattern;
 
     @ApiModelProperty(value = "请求方法")
@@ -48,5 +50,6 @@ public class Authority extends BaseModel {
 
     @ApiModelProperty(value = "权限描述")
     @NotNull(groups = {AuthoritySave.class}, message = "权限描述不能为空！")
+    @Length(groups = {AuthoritySave.class, AuthorityUpdate.class}, max = 200, message = "权限描述不能超过200字！")
     private String description;
 }

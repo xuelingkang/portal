@@ -6,6 +6,7 @@ import com.xzixi.self.portal.webapp.model.valid.RoleUpdate;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
@@ -26,6 +27,7 @@ public class Role extends BaseModel {
 
     @ApiModelProperty(value = "角色名称")
     @NotNull(groups = {RoleSave.class}, message = "角色名称不能为空！")
+    @Length(groups = {RoleSave.class, RoleUpdate.class}, max = 20, message = "角色名称不能超过20字！")
     private String name;
 
     @ApiModelProperty(value = "角色顺序")
@@ -42,5 +44,6 @@ public class Role extends BaseModel {
 
     @ApiModelProperty(value = "角色描述")
     @NotNull(groups = {RoleSave.class}, message = "角色描述不能为空！")
+    @Length(groups = {RoleSave.class, RoleUpdate.class}, max = 200, message = "角色描述不能超过20字！")
     private String description;
 }

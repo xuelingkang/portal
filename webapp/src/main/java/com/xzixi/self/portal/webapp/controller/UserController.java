@@ -101,7 +101,7 @@ public class UserController {
         User userData = userService.getById(user.getId());
         // 清除不可更新的属性
         String[] ignoreProperties = {"createTime", "loginTime", "locked", "deleted", "password", "type"};
-        BeanUtils.copyProperties(user, userData, ignoreProperties);
+        BeanUtils.copyPropertiesIgnoreNull(user, userData, ignoreProperties);
         if (userService.updateById(userData)) {
             return new Result<>();
         }
@@ -115,7 +115,7 @@ public class UserController {
         User userData = userService.getById(user.getId());
         // 清除不可更新的属性
         String[] ignoreProperties = {"createTime", "loginTime", "locked", "deleted", "password", "type"};
-        BeanUtils.copyProperties(user, userData, ignoreProperties);
+        BeanUtils.copyPropertiesIgnoreNull(user, userData, ignoreProperties);
         if (userService.updateById(userData)) {
             return new Result<>();
         }

@@ -12,6 +12,7 @@ import com.xzixi.self.portal.webapp.model.valid.WebsiteUserSave;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.*;
 
@@ -33,19 +34,24 @@ public class User extends BaseModel implements IBelonging {
 
     @ApiModelProperty(value = "用户名")
     @NotBlank(groups = {WebsiteUserSave.class, UserSave.class}, message = "用户名不能为空！")
+    @Null(groups = {UserUpdate.class}, message = "用户名必须为空！")
     private String username;
 
     @ApiModelProperty(value = "密码")
     @NotEmpty(groups = {WebsiteUserSave.class, UserSave.class}, message = "密码不能为空！")
+    @Length(groups = {WebsiteUserSave.class, UserSave.class}, min = 6, max = 16, message = "密码不能小于6位且不能大于16位！")
     private String password;
 
     @ApiModelProperty(value = "邮箱")
     @NotBlank(groups = {WebsiteUserSave.class, UserSave.class}, message = "邮箱不能为空！")
     @Email(groups = {WebsiteUserSave.class, UserSave.class}, message = "邮箱格式不正确！")
+    @Null(groups = {UserUpdate.class}, message = "邮箱必须为空！")
+    @Length(groups = {WebsiteUserSave.class, UserSave.class}, max = 50, message = "邮箱不能大于50字！")
     private String email;
 
     @ApiModelProperty(value = "昵称")
     @NotBlank(groups = {WebsiteUserSave.class, UserSave.class}, message = "昵称不能为空！")
+    @Length(groups = {WebsiteUserSave.class, UserSave.class}, max = 50, message = "昵称不能大于50字！")
     private String nickname;
 
     @ApiModelProperty(value = "性别")

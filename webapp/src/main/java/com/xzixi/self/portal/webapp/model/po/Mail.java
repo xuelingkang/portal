@@ -10,6 +10,7 @@ import com.xzixi.self.portal.webapp.typehandler.IntegerListTypeHandler;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.*;
 import java.util.Collection;
@@ -32,6 +33,7 @@ public class Mail extends BaseModel {
 
     @ApiModelProperty(value = "邮件标题")
     @NotBlank(groups = {MailSave.class}, message = "邮件标题不能为空！")
+    @Length(groups = {MailSave.class}, max = 200, message = "邮件标题不能超过200字！")
     private String subject;
 
     @ApiModelProperty(value = "邮件类型")

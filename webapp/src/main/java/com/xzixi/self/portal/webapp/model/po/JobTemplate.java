@@ -6,6 +6,7 @@ import com.xzixi.self.portal.webapp.model.valid.JobTemplateUpdate;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -27,13 +28,16 @@ public class JobTemplate extends BaseModel {
 
     @ApiModelProperty(value = "任务模板名称")
     @NotBlank(groups = {JobTemplateSave.class}, message = "任务模板名称不能为空！")
+    @Length(groups = {JobTemplateSave.class, JobTemplateUpdate.class}, max = 50, message = "任务模板名称不能超过50字！")
     private String name;
 
     @ApiModelProperty(value = "任务模板类名")
     @NotBlank(groups = {JobTemplateSave.class}, message = "任务模板类名不能为空！")
+    @Length(groups = {JobTemplateSave.class, JobTemplateUpdate.class}, max = 200, message = "任务模板类名不能超过200字！")
     private String className;
 
     @ApiModelProperty(value = "任务模板描述")
     @NotBlank(groups = {JobTemplateSave.class}, message = "任务模板描述不能为空！")
+    @Length(groups = {JobTemplateSave.class, JobTemplateUpdate.class}, max = 200, message = "任务模板描述不能超过200字！")
     private String description;
 }

@@ -7,6 +7,7 @@ import com.xzixi.self.portal.webapp.model.valid.JobUpdate;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
@@ -38,10 +39,12 @@ public class Job extends BaseModel {
 
     @ApiModelProperty(value = "cron表达式")
     @NotNull(groups = {JobSave.class, JobUpdate.class}, message = "cron表达式不能为空！")
+    @Length(groups = {JobSave.class, JobUpdate.class}, max = 20, message = "cron表达式不能超过20字！")
     private String cronExpression;
 
     @ApiModelProperty(value = "任务描述")
     @NotNull(groups = {JobSave.class, JobUpdate.class}, message = "任务描述不能为空！")
+    @Length(groups = {JobSave.class, JobUpdate.class}, max = 200, message = "任务描述不能超过200字！")
     private String description;
 
     @ApiModelProperty(value = "调度器名称")

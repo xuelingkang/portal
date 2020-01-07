@@ -1,9 +1,11 @@
 package com.xzixi.self.portal.webapp.model.po;
 
 import com.xzixi.self.portal.framework.model.BaseModel;
+import com.xzixi.self.portal.webapp.model.valid.MailSave;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * @author 薛凌康
@@ -21,5 +23,6 @@ public class MailContent extends BaseModel {
     private Integer mailId;
 
     @ApiModelProperty(value = "邮件内容")
+    @Length(groups = {MailSave.class}, max = 10000, message = "邮件内容不能超过10000字！")
     private String content;
 }
