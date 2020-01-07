@@ -32,7 +32,7 @@ import javax.mail.internet.MimeUtility;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.xzixi.self.portal.webapp.constant.SecurityConstant.SYSTEM_USER_ID;
+import static com.xzixi.self.portal.webapp.constant.UserConstant.SYSTEM_ADMIN_USER_ID;
 
 /**
  * @author 薛凌康
@@ -59,7 +59,7 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
     public void saveMail(Mail mail, MailContent content) {
         mail.setStatus(MailStatus.UNSENT);
         if (mail.getSendUserId() == null) {
-            mail.setSendUserId(SYSTEM_USER_ID);
+            mail.setSendUserId(SYSTEM_ADMIN_USER_ID);
         }
         if (!save(mail)) {
             throw new ServerException(mail, "保存邮件失败！");

@@ -5,7 +5,6 @@ import com.xzixi.self.portal.framework.model.Result;
 import com.xzixi.self.portal.webapp.model.enums.MailType;
 import com.xzixi.self.portal.webapp.model.params.MailSearchParams;
 import com.xzixi.self.portal.webapp.model.po.Mail;
-import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.valid.MailSave;
 import com.xzixi.self.portal.webapp.model.vo.MailVO;
 import com.xzixi.self.portal.webapp.service.IMailService;
@@ -56,10 +55,7 @@ public class MailController {
     @PostMapping
     @ApiOperation(value = "发送邮件")
     public Result<?> send(@Validated({MailSave.class}) @RequestBody MailVO mailVO) {
-        User currentUser = SecurityUtil.getCurrentUser();
-        if (currentUser != null) {
-            mailVO.setSendUserId(currentUser.getId());
-        }
+        mailVO.setSendUserId(SecurityUtil.getCurrentUserId());
         mailVO.setType(MailType.PUBLIC);
         mailVO.setCreateTime(System.currentTimeMillis());
         mailService.saveMail(mailVO, mailVO.getContent());

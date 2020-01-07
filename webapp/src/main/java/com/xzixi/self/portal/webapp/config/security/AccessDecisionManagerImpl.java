@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.xzixi.self.portal.webapp.constant.SecurityConstant.SYSTEM_USER_ID;
+import static com.xzixi.self.portal.webapp.constant.UserConstant.SYSTEM_ADMIN_USER_ID;
 
 /**
  * 自定义授权决策
@@ -52,7 +52,7 @@ public class AccessDecisionManagerImpl implements AccessDecisionManager {
         } else {
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
             // 系统管理员直接跳过
-            if (SYSTEM_USER_ID.equals(userDetails.getUser().getId())) {
+            if (SYSTEM_ADMIN_USER_ID.equals(userDetails.getUser().getId())) {
                 return;
             }
             if (UserType.WEBSITE.equals(userDetails.getUser().getType())) {
