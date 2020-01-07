@@ -41,6 +41,8 @@ import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_
 import static com.xzixi.self.portal.webapp.constant.SecurityConstant.*;
 
 /**
+ * TODO 注册时验证邮箱验证码，增加更换邮箱接口，研究微信扫码登录
+ *
  * @author 薛凌康
  */
 @RestController
@@ -165,6 +167,7 @@ public class UserController {
     @PatchMapping("/password")
     @ApiOperation(value = "修改用户账户密码")
     public Result<?> updatePassword(@Validated({UserUpdate.class}) User user) {
+        // TODO 缺少验证密码的逻辑
         User userData = userService.getById(user.getId());
         userData.setPassword(passwordEncoder.encode(user.getPassword()));
         if (userService.updateById(userData)) {
