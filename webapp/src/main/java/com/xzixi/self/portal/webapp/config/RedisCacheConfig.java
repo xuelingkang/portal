@@ -59,8 +59,7 @@ public class RedisCacheConfig {
             RedisConnectionFactory connectionFactory,
             CacheProperties cacheProperties,
             RedisSerializer<String> stringRedisSerializer,
-            RedisSerializer<Object> objectRedisSerializer,
-            RedisTemplate<String, Object> redisTemplate) {
+            RedisSerializer<Object> objectRedisSerializer) {
         // 配置序列化
         CacheProperties.Redis redisProperties = cacheProperties.getRedis();
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
@@ -76,8 +75,7 @@ public class RedisCacheConfig {
 
         RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory);
 
-        return new FuzzyEvictRedisCacheManager(redisCacheWriter, config,
-                new LinkedHashMap<>(), true, redisTemplate);
+        return new FuzzyEvictRedisCacheManager(redisCacheWriter, config, new LinkedHashMap<>(), true);
     }
 
     /**

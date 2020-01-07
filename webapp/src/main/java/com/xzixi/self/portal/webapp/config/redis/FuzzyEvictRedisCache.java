@@ -1,65 +1,56 @@
 package com.xzixi.self.portal.webapp.config.redis;
 
-import org.apache.commons.collections.CollectionUtils;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheWriter;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Arrays;
-import java.util.Set;
 
 import static com.xzixi.self.portal.webapp.constant.RedisConstant.KEYS_SEPARATOR;
 import static com.xzixi.self.portal.webapp.constant.RedisConstant.REGEX_KEY_PREFIX;
 
 /**
- * evict支持模糊匹配key
+ * evict支持删除模糊匹配key
  *
  * @author 薛凌康
  */
 public class FuzzyEvictRedisCache extends RedisCache {
 
-    private static final String KEY_PREFIX_TEMPLATE = "%s::";
-    private static final String KEY_TEMPLATE = KEY_PREFIX_TEMPLATE + "%s";
-    private RedisTemplate<String, Object> redisTemplate;
+    private final String name;
+    private final RedisCacheWriter cacheWriter;
+    private final ConversionService conversionService;
 
-    protected FuzzyEvictRedisCache(String name, RedisCacheWriter cacheWriter,
-                                   RedisCacheConfiguration cacheConfig,
-                                   RedisTemplate<String, Object> redisTemplate) {
+    protected FuzzyEvictRedisCache(String name,
+                                   RedisCacheWriter cacheWriter,
+                                   RedisCacheConfiguration cacheConfig) {
         super(name, cacheWriter, cacheConfig);
-        this.redisTemplate = redisTemplate;
+        this.name = name;
+        this.cacheWriter = cacheWriter;
+        this.conversionService = cacheConfig.getConversionService();
     }
 
     /**
      * 重写evict，支持模糊匹配
-     * RedisCacheWriter有个clean方法应该可以按照pattern删除缓存，
-     * 与当前使用的redisTemplate先查询再删除相比，少了一步查询，效率应该会更高
-     * 但是没有调试成功，原因不明，以后再优化
      *
      * @param key the key whose mapping is to be removed from the cache
-     * @see RedisTemplate#keys(Object)
-     * @see RedisCache#evict(Object)
      * @see RedisCacheWriter#clean(String, byte[])
      */
     @Override
     public void evict(Object key) {
         if (key instanceof String) {
             String[] keys = ((String) key).split(KEYS_SEPARATOR);
-            Arrays.stream(keys).forEach(keyStr -> {
+            Arrays.stream(keys).forEach(keyItem -> {
                 // 根据前缀验证是否模糊key
-                if (keyStr.startsWith(REGEX_KEY_PREFIX)) {
-                    keyStr = keyStr.substring(REGEX_KEY_PREFIX.length());
-                    // 查询出匹配的key
-                    Set<String> keySet = redisTemplate.keys(String.format(KEY_TEMPLATE, getName(), keyStr));
-                    if (CollectionUtils.isNotEmpty(keySet)) {
-                        // 精确删除
-                        keySet.forEach(fullKey -> {
-                            String shortKey = fullKey.substring(String.format(KEY_PREFIX_TEMPLATE, getName()).length());
-                            super.evict(shortKey);
-                        });
+                if (keyItem.startsWith(REGEX_KEY_PREFIX)) {
+                    // 调用cacheWriter的clean方法清除匹配的缓存
+                    String shortKey = keyItem.substring(REGEX_KEY_PREFIX.length());
+                    byte[] pattern = conversionService.convert(createCacheKey(shortKey), byte[].class);
+                    if (pattern != null) {
+                        cacheWriter.clean(name, pattern);
                     }
                 } else {
-                    super.evict(keyStr);
+                    super.evict(keyItem);
                 }
             });
         } else {
