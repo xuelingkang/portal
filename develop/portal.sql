@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2020-01-08 00:20:55
+Date: 2020-01-08 00:40:53
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -543,7 +543,7 @@ DROP TABLE IF EXISTS `t_mail_content`;
 CREATE TABLE `t_mail_content` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `mail_id` int(11) NOT NULL COMMENT '邮件id',
-  `content` mediumtext COLLATE utf8mb4_bin COMMENT '邮件内容',
+  `content` text COLLATE utf8mb4_bin COMMENT '邮件内容',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='邮件内容';
 
