@@ -48,7 +48,7 @@ import static com.xzixi.self.portal.webapp.constant.SecurityConstant.*;
  */
 @RestController
 @RequestMapping(value = "/user", produces = RESPONSE_MEDIA_TYPE)
-@Api(tags="用户")
+@Api(tags = "用户")
 @Validated
 public class UserController {
 

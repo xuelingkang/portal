@@ -28,7 +28,7 @@ import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_
  */
 @RestController
 @RequestMapping(value = "/authority", produces = RESPONSE_MEDIA_TYPE)
-@Api(tags="权限")
+@Api(tags = "权限")
 @Validated
 public class AuthorityController {
 

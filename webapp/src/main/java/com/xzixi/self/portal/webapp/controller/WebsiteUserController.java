@@ -21,7 +21,7 @@ import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_
  */
 @RestController
 @RequestMapping(value = "/website/user", produces = RESPONSE_MEDIA_TYPE)
-@Api(tags="网站用户")
+@Api(tags = "网站用户")
 public class WebsiteUserController {
 
     @Autowired

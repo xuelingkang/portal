@@ -32,7 +32,7 @@ import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_
  */
 @RestController
 @RequestMapping(value = "/role", produces = RESPONSE_MEDIA_TYPE)
-@Api(tags="角色")
+@Api(tags = "角色")
 @Validated
 public class RoleController {
 

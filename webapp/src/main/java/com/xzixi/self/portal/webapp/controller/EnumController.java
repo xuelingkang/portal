@@ -24,7 +24,7 @@ import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_
  */
 @RestController
 @RequestMapping(value = "/enum", produces = RESPONSE_MEDIA_TYPE)
-@Api(tags="枚举")
+@Api(tags = "枚举")
 @Validated
 public class EnumController {
 
