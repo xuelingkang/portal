@@ -1,6 +1,7 @@
 package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.xzixi.self.portal.framework.exception.ClientException;
 import com.xzixi.self.portal.framework.model.Result;
 import com.xzixi.self.portal.webapp.model.enums.MailType;
 import com.xzixi.self.portal.webapp.model.params.MailSearchParams;
@@ -12,12 +13,14 @@ import com.xzixi.self.portal.webapp.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 import java.util.List;
 
 import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
@@ -55,6 +58,14 @@ public class MailController {
     @PostMapping
     @ApiOperation(value = "发送邮件")
     public Result<?> send(@Validated({MailSave.class}) @RequestBody MailVO mailVO) {
+        Collection<Integer> toUserIds = mailVO.getToUserIds();
+        if (CollectionUtils.isNotEmpty(toUserIds) && toUserIds.size() > 100) {
+            throw new ClientException(400, "收件人个数不能超过100个！");
+        }
+        Collection<Integer> attachmentIds = mailVO.getAttachmentIds();
+        if (CollectionUtils.isNotEmpty(attachmentIds) && attachmentIds.size() > 100) {
+            throw new ClientException(400, "附件个数不能超过100个！");
+        }
         mailVO.setSendUserId(SecurityUtil.getCurrentUserId());
         mailVO.setType(MailType.PUBLIC);
         mailVO.setCreateTime(System.currentTimeMillis());
