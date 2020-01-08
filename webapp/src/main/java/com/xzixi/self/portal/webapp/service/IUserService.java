@@ -13,11 +13,32 @@ import java.util.Collection;
 public interface IUserService extends IBaseService<User>, IVoService<User, UserVO, UserVO.BuildOption> {
 
     /**
+     * 检查用户名
+     *
+     * @param username 用户名
+     */
+    void checkUsername(String username);
+
+    /**
+     * 检查邮箱
+     *
+     * @param email 邮箱
+     */
+    void checkEmail(String email);
+
+    /**
      * 保存用户
      *
      * @param user User
      */
     void saveUser(User user);
+
+    /**
+     * 发送激活账户邮件
+     *
+     * @param user 用户
+     */
+    void sendActivateUserMail(User user);
 
     /**
      * 根据用户id删除用户，同时删除与角色的关联

@@ -68,6 +68,13 @@ public class TokenFilter extends OncePerRequestFilter {
             return;
         }
 
+        // 检查是否激活
+        if (!user.getActivated()) {
+            Result<?> result = new Result<>(401, "账户未激活！", null);
+            WebUtil.printJson(response, result);
+            return;
+        }
+
         // 检查是否锁定
         if (user.getLocked()) {
             Result<?> result = new Result<>(401, "账户已被锁定！", null);

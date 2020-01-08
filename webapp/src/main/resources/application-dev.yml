@@ -74,3 +74,5 @@ swagger2:
   enable: true # 启用swagger2
 
 reset-password-url: http://localhost:3000/reset-password.html
+
+user-activate-url: http://localhost:3000/user-activate.html

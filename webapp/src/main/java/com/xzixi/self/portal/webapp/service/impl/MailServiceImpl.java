@@ -75,9 +75,14 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
     @Transactional(rollbackFor = Exception.class)
     public void send(Mail mail, MailContent content) {
         try {
-            Collection<User> toUsers = userService.listByIds(mail.getToUserIds());
-            // 收件地址
-            String[] toMails = toUsers.stream().map(User::getEmail).toArray(String[]::new);
+            String[] toMails;
+            if (CollectionUtils.isNotEmpty(mail.getToUserIds())) {
+                Collection<User> toUsers = userService.listByIds(mail.getToUserIds());
+                // 收件地址
+                toMails = toUsers.stream().map(User::getEmail).toArray(String[]::new);
+            } else {
+                toMails = new String[]{mail.getToEmail()};
+            }
             // 邮件附件
             Map<String, ByteArrayResource> resources = new HashMap<>();
             if (CollectionUtils.isNotEmpty(mail.getAttachmentIds())) {

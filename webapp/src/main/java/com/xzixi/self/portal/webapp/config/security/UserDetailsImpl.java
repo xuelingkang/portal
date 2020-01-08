@@ -74,6 +74,9 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
+        if (user != null) {
+            return user.getActivated();
+        }
         return true;
     }
 }

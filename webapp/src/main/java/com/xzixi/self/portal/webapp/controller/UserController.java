@@ -24,6 +24,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -31,6 +34,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -40,6 +44,7 @@ import java.util.stream.Collectors;
 
 import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
 import static com.xzixi.self.portal.webapp.constant.SecurityConstant.*;
+import static com.xzixi.self.portal.webapp.constant.UserConstant.*;
 
 /**
  * @author 薛凌康
@@ -88,12 +93,14 @@ public class UserController {
     @ApiOperation(value = "保存用户")
     public Result<?> save(@Validated({UserSave.class}) User user) {
         user.setCreateTime(System.currentTimeMillis())
-                .setLoginTime(null).setLocked(false).setDeleted(false);
+                .setLoginTime(null).setLocked(false).setActivated(false).setDeleted(false);
         // 加密密码
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // 保存用户
         userService.saveUser(user);
-        return new Result<>();
+        // 发送激活链接邮件
+        userService.sendActivateUserMail(user);
+        return new Result<>().setMessage(String.format(USER_ACTIVATE_MESSAGE_TEMPLATE, user.getEmail(), USER_ACTIVATE_EXPIRE_DAY));
     }
 
     @PutMapping
@@ -196,7 +203,7 @@ public class UserController {
             @ApiParam(value = "用户名", required = true) @NotBlank(message = "用户名不能为空！") @RequestParam String username) {
         Long time = (Long) redisTemplate.opsForValue().get(String.format(RESET_PASSWORD_KEY_TEMPLATE, username));
         long now = System.currentTimeMillis();
-        if (time != null && (time + RESET_PASSWORD_RETRY_TIMEOUT_SECOND * 1000L) > now) {
+        if (time != null && (time + RESET_PASSWORD_RETRY_TIMEOUT_MILLISECOND) > now) {
             throw new ClientException(403, "操作过快，请稍后再试！");
         }
         User user = userService.getOne(new QueryWrapper<>(new User().setUsername(username)));
@@ -218,26 +225,100 @@ public class UserController {
                 .set(now, RESET_PASSWORD_RETRY_TIMEOUT_SECOND, TimeUnit.SECONDS);
         redisTemplate.boundValueOps(String.format(RESET_PASSWORD_KEY_TEMPLATE, key))
                 .set(user.getId(), RESET_PASSWORD_KEY_EXPIRE_SECOND, TimeUnit.SECONDS);
-        return new Result<>();
+        return new Result<>().setMessage(String.format(RESET_PASSWORD_MESSAGE_TEMPLATE, user.getEmail(), RESET_PASSWORD_KEY_EXPIRE_MINUTE));
     }
 
     @PatchMapping("/reset-password")
     @ApiOperation(value = "重置账户密码")
     public Result<?> resetPassword(
-            @ApiParam(value = "重置密码key", required = true) @NotBlank(message = "key不能为空！") @RequestParam String key,
+            @ApiParam(value = "重置密码key", required = true) @NotBlank(message = "重置密码key不能为空！") @RequestParam String key,
             @ApiParam(value = "密码", required = true) @NotBlank(message = "密码不能为空！") @RequestParam String password) {
         String cacheKey = String.format(RESET_PASSWORD_KEY_TEMPLATE, key);
         Integer id = (Integer) redisTemplate.opsForValue().get(cacheKey);
         if (id == null) {
-            throw new ClientException(404, "key已经失效！");
+            throw new ClientException(404, "链接已经失效！");
         }
-        redisTemplate.delete(cacheKey);
         User userData = userService.getById(id);
         userData.setPassword(passwordEncoder.encode(password));
         if (userService.updateById(userData)) {
+            redisTemplate.delete(cacheKey);
             return new Result<>();
         }
         throw new ServerException(String.format("key = %s, password = %s", key, password), "修改个人账户密码失败！");
+    }
+
+    @PatchMapping("/activate")
+    @ApiOperation(value = "激活账户")
+    public Result<?> activate(
+            @ApiParam(value = "激活账户key", required = true) @NotBlank(message = "激活账户key不能为空！") @RequestParam String key) {
+        String cacheKey = String.format(USER_ACTIVATE_KEY_TEMPLATE, key);
+        Integer id = (Integer) redisTemplate.opsForValue().get(cacheKey);
+        if (id == null) {
+            throw new ClientException(404, "链接已经失效！");
+        }
+        User userData = userService.getById(id);
+        userData.setActivated(true);
+        if (userService.updateById(userData)) {
+            redisTemplate.delete(cacheKey);
+            return new Result<>();
+        }
+        throw new ServerException(String.format("key = %s", key), "激活账户失败！");
+    }
+
+    @GetMapping("/rebind-email-code")
+    @ApiOperation(value = "生成重新绑定邮箱验证码")
+    public Result<?> rebindEmailCode(
+            @ApiParam(value = "新邮箱", required = true) @NotBlank(message = "邮箱不能为空！")
+            @Email(message = "邮箱格式不正确！") @Length(max = 50, message = "邮箱不能大于50字！")
+            @RequestParam String email) {
+        User user = SecurityUtil.getCurrentUser();
+        Long time = (Long) redisTemplate.opsForValue().get(String.format(REBIND_EMAIL_CODE_RETRY_TIMEOUT_KEY_TEMPLATE, user.getId()));
+        long now = System.currentTimeMillis();
+        if (time != null && (time + REBIND_EMAIL_CODE_RETRY_TIMEOUT_MILLISECOND) > now) {
+            throw new ClientException(403, "操作过快，请稍后再试！");
+        }
+        String code = RandomStringUtils.randomAlphanumeric(REBIND_EMAIL_CODE_LENGTH);
+        // 发送邮件
+        Mail mail = new Mail();
+        mail.setSubject(REBIND_EMAIL_CODE_MAIL_TITLE);
+        mail.setType(MailType.PRIVATE);
+        mail.setCreateTime(now);
+        mail.setToEmail(email);
+        MailContent mailContent = new MailContent();
+        String content = String.format(REBIND_EMAIL_CODE_MAIL_CONTENT_TEMPLATE, user.getUsername(), code, REBIND_EMAIL_CODE_KEY_EXPIRE_MINUTE);
+        mailContent.setContent(content);
+        mailService.saveMail(mail, mailContent);
+        mailService.send(mail, mailContent);
+        // 将验证码保存到redis
+        redisTemplate.boundValueOps(String.format(REBIND_EMAIL_CODE_RETRY_TIMEOUT_KEY_TEMPLATE, user.getId()))
+                .set(now, REBIND_EMAIL_CODE_RETRY_TIMEOUT_SECOND, TimeUnit.SECONDS);
+        redisTemplate.boundValueOps(String.format(REBIND_EMAIL_CODE_KEY_TEMPLATE, user.getId(), email))
+                .set(code, REBIND_EMAIL_CODE_KEY_EXPIRE_SECOND, TimeUnit.SECONDS);
+        return new Result<>().setMessage(String.format(REBIND_EMAIL_MESSAGE_TEMPLATE, email, REBIND_EMAIL_CODE_KEY_EXPIRE_MINUTE));
+    }
+
+    @PatchMapping("/rebind-email")
+    @ApiOperation(value = "重新绑定邮箱")
+    public Result<?> rebindEmail(
+            @ApiParam(value = "验证码", required = true) @NotBlank(message = "验证码不能为空！") @RequestParam String code,
+            @ApiParam(value = "新邮箱", required = true) @NotBlank(message = "邮箱不能为空！")
+            @Email(message = "邮箱格式不正确！") @Length(max = 50, message = "邮箱不能大于50字！")
+            @RequestParam String email) {
+        User user = SecurityUtil.getCurrentUser();
+        String cacheKey = String.format(REBIND_EMAIL_CODE_KEY_TEMPLATE, user.getId(), email);
+        String cacheCode = (String) redisTemplate.opsForValue().get(cacheKey);
+        if (StringUtils.isEmpty(cacheCode)) {
+            throw new ClientException(404, "验证码已经失效！");
+        }
+        if (!Objects.equals(cacheCode, code)) {
+            throw new ClientException(400, "验证码错误！");
+        }
+        user.setEmail(email);
+        if (userService.updateById(user)) {
+            redisTemplate.delete(cacheKey);
+            return new Result<>();
+        }
+        throw new ServerException(String.format("email = %s", email), "重新绑定邮箱失败！");
     }
 
     @PostMapping("/{id}/role")

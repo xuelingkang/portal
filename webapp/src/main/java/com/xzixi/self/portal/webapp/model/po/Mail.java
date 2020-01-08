@@ -48,11 +48,16 @@ public class Mail extends BaseModel {
     @ApiModelProperty(value = "发送用户id")
     private Integer sendUserId;
 
-    @ApiModelProperty(value = "接收用户id")
+    @ApiModelProperty(value = "接收用户id，优先级大于接收邮箱")
     @TableField(typeHandler = IntegerListTypeHandler.class)
     @NotEmpty(groups = {MailSave.class}, message = "接收用户id不能为空！")
     @Size(groups = {MailSave.class}, max = 100, message = "接受用户个数不能超过100个！")
     private Collection<Integer> toUserIds;
+
+    @ApiModelProperty(value = "接收邮箱")
+    @Email(groups = {MailSave.class}, message = "接收邮箱格式不正确！")
+    @Length(groups = {MailSave.class}, max = 50, message = "接收邮箱不能大于50字！")
+    private String toEmail;
 
     @ApiModelProperty(value = "附件id")
     @TableField(typeHandler = IntegerListTypeHandler.class)

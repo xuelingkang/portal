@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2020-01-08 13:51:14
+Date: 2020-01-09 00:32:33
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -166,7 +166,7 @@ CREATE TABLE `qrtz_scheduler_state` (
 -- ----------------------------
 -- Records of qrtz_scheduler_state
 -- ----------------------------
-INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-RKG4OBL1578412689553', '1578412709257', '10000');
+INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-RKG4OBL1578500790194', '1578501148513', '10000');
 
 -- ----------------------------
 -- Table structure for qrtz_simple_triggers
@@ -393,7 +393,7 @@ CREATE TABLE `t_authority` (
   `method` char(10) COLLATE utf8mb4_bin DEFAULT '' COMMENT '请求方法',
   `description` varchar(200) COLLATE utf8mb4_bin DEFAULT '' COMMENT '权限描述',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='权限';
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='权限';
 
 -- ----------------------------
 -- Records of t_authority
@@ -451,6 +451,9 @@ INSERT INTO `t_authority` VALUES ('50', 'HTTP', 'USER_LINK', '100', '/user-link/
 INSERT INTO `t_authority` VALUES ('51', 'HTTP', 'USER_LINK', '200', '/user-link/followers', 'GET', '查询当前用户的粉丝');
 INSERT INTO `t_authority` VALUES ('52', 'HTTP', 'USER_LINK', '300', '/user-link/*', 'POST', '添加关注');
 INSERT INTO `t_authority` VALUES ('53', 'HTTP', 'USER_LINK', '400', '/user-link/*', 'DELETE', '取消关注');
+INSERT INTO `t_authority` VALUES ('54', 'HTTP', 'AUTHORIZATION', '600', '/user/activate', 'PATCH', '激活账户');
+INSERT INTO `t_authority` VALUES ('55', 'HTTP', 'USER', '1200', '/user/rebind-email-code', 'GET', '生成重新绑定邮箱验证码');
+INSERT INTO `t_authority` VALUES ('56', 'HTTP', 'USER', '1300', '/user/rebind-email', 'PATCH', '重新绑定邮箱');
 
 -- ----------------------------
 -- Table structure for t_job
@@ -533,7 +536,8 @@ CREATE TABLE `t_mail` (
   `status` char(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邮件状态',
   `create_time` bigint(20) NOT NULL COMMENT '创建时间',
   `send_user_id` int(11) NOT NULL COMMENT '发送用户id',
-  `to_user_ids` varchar(1200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '接收用户id，最多100个',
+  `to_user_ids` varchar(1200) COLLATE utf8mb4_bin DEFAULT '' COMMENT '接收用户id，最多100个，优先级大于接收邮箱',
+  `to_email` varchar(50) COLLATE utf8mb4_bin DEFAULT '' COMMENT '接收邮箱',
   `attachment_ids` varchar(1200) COLLATE utf8mb4_bin DEFAULT '' COMMENT '附件id，最多100个',
   PRIMARY KEY (`id`),
   KEY `t_mail_idx_type` (`type`),
@@ -599,7 +603,7 @@ CREATE TABLE `t_role_authority_link` (
   `role_id` int(11) NOT NULL COMMENT '角色id',
   `authority_id` int(11) NOT NULL COMMENT '权限id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='角色权限关联';
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='角色权限关联';
 
 -- ----------------------------
 -- Records of t_role_authority_link
@@ -660,6 +664,11 @@ INSERT INTO `t_role_authority_link` VALUES ('56', '3', '50');
 INSERT INTO `t_role_authority_link` VALUES ('57', '3', '51');
 INSERT INTO `t_role_authority_link` VALUES ('58', '3', '52');
 INSERT INTO `t_role_authority_link` VALUES ('59', '3', '53');
+INSERT INTO `t_role_authority_link` VALUES ('60', '1', '54');
+INSERT INTO `t_role_authority_link` VALUES ('61', '2', '55');
+INSERT INTO `t_role_authority_link` VALUES ('62', '2', '56');
+INSERT INTO `t_role_authority_link` VALUES ('63', '3', '55');
+INSERT INTO `t_role_authority_link` VALUES ('64', '3', '56');
 
 -- ----------------------------
 -- Table structure for t_user
@@ -668,7 +677,7 @@ DROP TABLE IF EXISTS `t_user`;
 CREATE TABLE `t_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(20) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '用户名',
-  `password` varchar(200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '密码',
+  `password` varchar(60) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '密码',
   `email` varchar(50) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT 'email',
   `nickname` varchar(50) COLLATE utf8mb4_bin DEFAULT '' COMMENT '昵称',
   `sex` char(10) COLLATE utf8mb4_bin DEFAULT '' COMMENT '性别',
@@ -677,6 +686,7 @@ CREATE TABLE `t_user` (
   `create_time` bigint(20) NOT NULL COMMENT '创建时间',
   `login_time` bigint(20) DEFAULT NULL COMMENT '最后登录时间',
   `locked` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否锁定',
+  `activated` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否激活',
   `deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
   UNIQUE KEY `t_user_uk_username` (`username`),
@@ -687,7 +697,7 @@ CREATE TABLE `t_user` (
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
-INSERT INTO `t_user` VALUES ('1', 'admin', '$2a$10$CzHneRYV6fE6cS2BOQaf.OUzaYPQBsVOPNQExcsZNg3Gp4HKMOcBe', 'xuelingkang@163.com', '系统管理员', 'MALE', '655833600000', 'SYSTEM', '1578326122478', '1578408401295', '0', '0');
+INSERT INTO `t_user` VALUES ('1', 'admin', '$2a$10$Fi6PLQ1AKP6xKTNwlJDQZ.FKhi8UPIleMrCXKTnIt9/epvABZKyVe', 'xuelingkang@163.com', '系统管理员', 'MALE', '655833600000', 'SYSTEM', '1578326122478', '1578500831158', '0', '1', '0');
 
 -- ----------------------------
 -- Table structure for t_user_link

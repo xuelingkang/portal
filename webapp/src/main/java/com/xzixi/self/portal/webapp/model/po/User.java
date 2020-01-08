@@ -34,6 +34,7 @@ public class User extends BaseModel implements IBelonging {
 
     @ApiModelProperty(value = "用户名")
     @NotBlank(groups = {WebsiteUserSave.class, UserSave.class}, message = "用户名不能为空！")
+    @Length(groups = {WebsiteUserSave.class, UserSave.class}, min = 6, max = 20, message = "用户名不能小于6位且不能大于20位！")
     @Null(groups = {UserUpdate.class}, message = "用户名必须为空！")
     private String username;
 
@@ -51,7 +52,7 @@ public class User extends BaseModel implements IBelonging {
 
     @ApiModelProperty(value = "昵称")
     @NotBlank(groups = {WebsiteUserSave.class, UserSave.class}, message = "昵称不能为空！")
-    @Length(groups = {WebsiteUserSave.class, UserSave.class}, max = 50, message = "昵称不能大于50字！")
+    @Length(groups = {WebsiteUserSave.class, UserSave.class, UserUpdate.class}, max = 50, message = "昵称不能大于50字！")
     private String nickname;
 
     @ApiModelProperty(value = "性别")
@@ -71,6 +72,9 @@ public class User extends BaseModel implements IBelonging {
 
     @ApiModelProperty(value = "登录时间")
     private Long loginTime;
+
+    @ApiModelProperty(value = "是否激活")
+    private Boolean activated;
 
     @ApiModelProperty(value = "是否锁定")
     private Boolean locked;

@@ -74,3 +74,5 @@ swagger2:
   enable: false # 关闭swagger2
 
 reset-password-url: https://xzixi.com/reset-password.html
+
+user-activate-url: https://xzixi.com/user-activate.html

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.self.portal.webapp.constant.UserConstant.USER_ACTIVATE_EXPIRE_DAY;
+import static com.xzixi.self.portal.webapp.constant.UserConstant.USER_ACTIVATE_MESSAGE_TEMPLATE;
 
 /**
  * @author 薛凌康
@@ -33,11 +35,13 @@ public class WebsiteUserController {
     @ApiOperation(value = "注册")
     public Result<?> save(@Validated({WebsiteUserSave.class}) User user) {
         user.setType(UserType.WEBSITE).setCreateTime(System.currentTimeMillis())
-                .setLoginTime(null).setLocked(false).setDeleted(false);
+                .setLoginTime(null).setLocked(false).setActivated(false).setDeleted(false);
         // 加密密码
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         // 保存用户
         userService.saveUser(user);
-        return new Result<>();
+        // 发送激活链接邮件
+        userService.sendActivateUserMail(user);
+        return new Result<>().setMessage(String.format(USER_ACTIVATE_MESSAGE_TEMPLATE, user.getEmail(), USER_ACTIVATE_EXPIRE_DAY));
     }
 }

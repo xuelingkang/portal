@@ -5,23 +5,25 @@ import com.xzixi.self.portal.framework.exception.ClientException;
 import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.data.IUserData;
-import com.xzixi.self.portal.webapp.model.po.Authority;
-import com.xzixi.self.portal.webapp.model.po.Role;
-import com.xzixi.self.portal.webapp.model.po.User;
-import com.xzixi.self.portal.webapp.model.po.UserRoleLink;
+import com.xzixi.self.portal.webapp.model.enums.MailType;
+import com.xzixi.self.portal.webapp.model.po.*;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
-import com.xzixi.self.portal.webapp.service.IAuthorityService;
-import com.xzixi.self.portal.webapp.service.IRoleService;
-import com.xzixi.self.portal.webapp.service.IUserRoleLinkService;
-import com.xzixi.self.portal.webapp.service.IUserService;
+import com.xzixi.self.portal.webapp.service.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import static com.xzixi.self.portal.webapp.constant.UserConstant.*;
 
 /**
  * @author 薛凌康
@@ -29,22 +31,66 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl extends BaseServiceImpl<IUserData, User> implements IUserService {
 
+    @Value("${user-activate-url}")
+    private String userActivateUrl;
     @Autowired
     private IRoleService roleService;
     @Autowired
     private IAuthorityService authorityService;
     @Autowired
     private IUserRoleLinkService userRoleLinkService;
+    @Autowired
+    private IMailService mailService;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Override
+    public void checkUsername(String username) {
+        List<User> usersByUsername = list(new QueryWrapper<>(new User().setUsername(username)));
+        if (CollectionUtils.isNotEmpty(usersByUsername)) {
+            throw new ClientException(400, "用户名重复！");
+        }
+    }
+
+    @Override
+    public void checkEmail(String email) {
+        List<User> usersByEmail = list(new QueryWrapper<>(new User().setEmail(email)));
+        if (CollectionUtils.isNotEmpty(usersByEmail)) {
+            throw new ClientException(400, "邮箱重复！");
+        }
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveUser(User user) {
         // 检查属性
-        checkSaveUserProps(user);
+        checkUsername(user.getUsername());
+        checkEmail(user.getEmail());
         // 保存用户
         if (!save(user)) {
             throw new ServerException(user, "保存用户失败！");
         }
+    }
+
+    @Override
+    public void sendActivateUserMail(User user) {
+        String key = UUID.randomUUID().toString();
+        String url = String.format("%s?key=%s", userActivateUrl, key);
+        long now = System.currentTimeMillis();
+        // 发送邮件
+        Mail mail = new Mail();
+        mail.setSubject(USER_ACTIVATE_MAIL_TITLE);
+        mail.setType(MailType.PRIVATE);
+        mail.setCreateTime(now);
+        mail.setToUserIds(Collections.singletonList(user.getId()));
+        MailContent mailContent = new MailContent();
+        String content = String.format(USER_ACTIVATE_MAIL_CONTENT_TEMPLATE, user.getUsername(), url, url, USER_ACTIVATE_EXPIRE_DAY);
+        mailContent.setContent(content);
+        mailService.saveMail(mail, mailContent);
+        mailService.send(mail, mailContent);
+        // 将key保存到redis
+        redisTemplate.boundValueOps(String.format(USER_ACTIVATE_KEY_TEMPLATE, key))
+                .set(user.getId(), USER_ACTIVATE_EXPIRE_SECOND, TimeUnit.SECONDS);
     }
 
     @Override
@@ -90,16 +136,5 @@ public class UserServiceImpl extends BaseServiceImpl<IUserData, User> implements
     @Override
     public List<UserVO> buildVO(Collection<User> users, UserVO.BuildOption option) {
         return users.stream().map(user -> buildVO(user, option)).collect(Collectors.toList());
-    }
-
-    private void checkSaveUserProps(User user) {
-        List<User> usersByUsername = list(new QueryWrapper<>(new User().setUsername(user.getUsername())));
-        if (CollectionUtils.isNotEmpty(usersByUsername)) {
-            throw new ClientException(400, "用户名重复！");
-        }
-        List<User> usersByEmail = list(new QueryWrapper<>(new User().setEmail(user.getEmail())));
-        if (CollectionUtils.isNotEmpty(usersByEmail)) {
-            throw new ClientException(400, "邮箱重复！");
-        }
     }
 }
