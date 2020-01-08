@@ -44,6 +44,6 @@ public class Role extends BaseModel {
 
     @ApiModelProperty(value = "角色描述")
     @NotNull(groups = {RoleSave.class}, message = "角色描述不能为空！")
-    @Length(groups = {RoleSave.class, RoleUpdate.class}, max = 200, message = "角色描述不能超过20字！")
+    @Length(groups = {RoleSave.class, RoleUpdate.class}, max = 20, message = "角色描述不能超过20字！")
     private String description;
 }

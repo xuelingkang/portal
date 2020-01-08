@@ -51,11 +51,11 @@ public class Mail extends BaseModel {
     @ApiModelProperty(value = "接收用户id")
     @TableField(typeHandler = IntegerListTypeHandler.class)
     @NotEmpty(groups = {MailSave.class}, message = "接收用户id不能为空！")
-    @Size(groups = {MailSave.class}, max = 100, message = "接受用户个数必须大于等于1且小于等于100！")
+    @Size(groups = {MailSave.class}, max = 100, message = "接受用户个数不能超过100个！")
     private Collection<Integer> toUserIds;
 
     @ApiModelProperty(value = "附件id")
     @TableField(typeHandler = IntegerListTypeHandler.class)
-    @Size(groups = {MailSave.class}, max = 100, message = "附件个数必须小于等于100！")
+    @Size(groups = {MailSave.class}, max = 100, message = "附件个数不能超过100个！")
     private Collection<Integer> attachmentIds;
 }
