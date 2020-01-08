@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2020-01-08 11:06:06
+Date: 2020-01-08 11:34:22
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -272,7 +272,8 @@ CREATE TABLE `t_article` (
   `source_url` varchar(200) COLLATE utf8mb4_bin DEFAULT '' COMMENT '来源网址',
   `create_time` bigint(20) NOT NULL COMMENT '创建时间',
   `update_time` bigint(20) NOT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `t_article_idx_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='文章';
 
 -- ----------------------------
@@ -303,7 +304,8 @@ CREATE TABLE `t_article_content` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `article_id` int(11) NOT NULL COMMENT '文章id',
   `content` mediumtext COLLATE utf8mb4_bin NOT NULL COMMENT '文章内容',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `t_article_content_idx_article_id` (`article_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='文章内容';
 
 -- ----------------------------
@@ -349,7 +351,9 @@ CREATE TABLE `t_article_tag_link` (
   `article_id` int(11) NOT NULL COMMENT '文章id',
   `tag_id` int(11) NOT NULL COMMENT '标签id',
   `seq` int(1) NOT NULL COMMENT '显示顺序',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `t_article_tag_link_idx_article_id` (`article_id`),
+  KEY `t_article_tag_link_idx_tag_id` (`tag_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='文章标签关联';
 
 -- ----------------------------
@@ -526,10 +530,13 @@ CREATE TABLE `t_mail` (
   `type` char(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邮件类型',
   `status` char(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邮件状态',
   `create_time` bigint(20) NOT NULL COMMENT '创建时间',
-  `send_user_id` int(11) NOT NULL,
+  `send_user_id` int(11) NOT NULL COMMENT '发送用户id',
   `to_user_ids` varchar(1200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '接收用户id，最多100个',
   `attachment_ids` varchar(1200) COLLATE utf8mb4_bin DEFAULT '' COMMENT '附件id，最多100个',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `t_mail_idx_type` (`type`),
+  KEY `t_mail_idx_status` (`status`),
+  KEY `t_mail_idx_create_time` (`create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='邮件';
 
 -- ----------------------------
@@ -544,7 +551,8 @@ CREATE TABLE `t_mail_content` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `mail_id` int(11) NOT NULL COMMENT '邮件id',
   `content` text COLLATE utf8mb4_bin COMMENT '邮件内容',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `t_mail_content_idx_mail_id` (`mail_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='邮件内容';
 
 -- ----------------------------
@@ -687,7 +695,9 @@ CREATE TABLE `t_user_link` (
   `idol_id` int(11) NOT NULL COMMENT '偶像id',
   `follower_id` int(11) NOT NULL COMMENT '粉丝id',
   `follow_time` bigint(20) NOT NULL COMMENT '关注时间',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `t_user_link_idx_idol_id` (`idol_id`),
+  KEY `t_user_link_idx_follower_id` (`follower_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='关注';
 
 -- ----------------------------
