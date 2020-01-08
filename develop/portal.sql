@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2020-01-08 00:40:53
+Date: 2020-01-08 11:06:06
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -262,9 +262,9 @@ DROP TABLE IF EXISTS `t_article`;
 CREATE TABLE `t_article` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL COMMENT '用户id',
-  `access` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '访问限制',
-  `type` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '类型',
-  `category` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '栏目',
+  `access` char(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '访问限制',
+  `type` char(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '类型',
+  `category` char(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '栏目',
   `title` varchar(200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '标题',
   `outline` varchar(500) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '摘要',
   `visit_times` int(11) NOT NULL DEFAULT '0' COMMENT '访问次数',
@@ -362,7 +362,7 @@ CREATE TABLE `t_article_tag_link` (
 DROP TABLE IF EXISTS `t_attachment`;
 CREATE TABLE `t_attachment` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '附件类型',
+  `type` char(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '附件类型',
   `name` varchar(260) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '附件名称',
   `url` varchar(500) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '访问路径',
   `address` varchar(500) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '磁盘路径',
@@ -380,11 +380,11 @@ CREATE TABLE `t_attachment` (
 DROP TABLE IF EXISTS `t_authority`;
 CREATE TABLE `t_authority` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `protocol` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '协议类型',
-  `category` varchar(15) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '权限分组',
+  `protocol` char(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '协议类型',
+  `category` char(15) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '权限分组',
   `seq` int(5) NOT NULL DEFAULT '0' COMMENT '权限顺序',
   `pattern` varchar(50) COLLATE utf8mb4_bin DEFAULT '' COMMENT '权限的ant path',
-  `method` varchar(20) COLLATE utf8mb4_bin DEFAULT '' COMMENT '请求方法',
+  `method` char(10) COLLATE utf8mb4_bin DEFAULT '' COMMENT '请求方法',
   `description` varchar(200) COLLATE utf8mb4_bin DEFAULT '' COMMENT '权限描述',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='权限';
@@ -455,7 +455,7 @@ CREATE TABLE `t_job` (
   `job_template_id` int(11) NOT NULL COMMENT '任务模板id',
   `start_time` bigint(20) NOT NULL COMMENT '开始时间',
   `end_time` bigint(20) DEFAULT NULL COMMENT '结束时间',
-  `cron_expression` varchar(20) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT 'cron表达式',
+  `cron_expression` char(20) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT 'cron表达式',
   `description` varchar(200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '任务描述',
   `sched_name` varchar(120) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '调度器名称',
   `trigger_name` varchar(190) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '触发器名称',
@@ -523,8 +523,8 @@ DROP TABLE IF EXISTS `t_mail`;
 CREATE TABLE `t_mail` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `subject` varchar(200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邮件标题',
-  `type` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邮件类型',
-  `status` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邮件状态',
+  `type` char(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邮件类型',
+  `status` char(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '邮件状态',
   `create_time` bigint(20) NOT NULL COMMENT '创建时间',
   `send_user_id` int(11) NOT NULL,
   `to_user_ids` varchar(1200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '接收用户id，最多100个',
@@ -561,7 +561,7 @@ CREATE TABLE `t_role` (
   `seq` int(5) NOT NULL DEFAULT '0' COMMENT '角色顺序',
   `guest` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否游客用户的默认角色',
   `website` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否网站用户的默认角色',
-  `description` varchar(200) COLLATE utf8mb4_bin DEFAULT '' COMMENT '角色描述',
+  `description` varchar(20) COLLATE utf8mb4_bin DEFAULT '' COMMENT '角色描述',
   PRIMARY KEY (`id`),
   UNIQUE KEY `t_role_uk_name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='角色';
@@ -661,9 +661,9 @@ CREATE TABLE `t_user` (
   `password` varchar(200) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '密码',
   `email` varchar(50) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT 'email',
   `nickname` varchar(50) COLLATE utf8mb4_bin DEFAULT '' COMMENT '昵称',
-  `sex` varchar(10) COLLATE utf8mb4_bin DEFAULT '' COMMENT '性别',
+  `sex` char(10) COLLATE utf8mb4_bin DEFAULT '' COMMENT '性别',
   `birth` bigint(20) DEFAULT NULL COMMENT '生日',
-  `type` varchar(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '用户类型',
+  `type` char(10) COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '用户类型',
   `create_time` bigint(20) NOT NULL COMMENT '创建时间',
   `login_time` bigint(20) DEFAULT NULL COMMENT '最后登录时间',
   `locked` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否锁定',
