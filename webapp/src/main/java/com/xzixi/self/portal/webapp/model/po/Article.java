@@ -1,5 +1,7 @@
 package com.xzixi.self.portal.webapp.model.po;
 
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.xzixi.self.portal.extension.swagger2.annotation.IgnoreSwagger2Parameter;
 import com.xzixi.self.portal.framework.model.BaseModel;
 import com.xzixi.self.portal.framework.model.IBelonging;
 import com.xzixi.self.portal.webapp.model.enums.ArticleAccess;
@@ -74,6 +76,11 @@ public class Article extends BaseModel implements IBelonging {
     @ApiModelProperty(value = "更新时间")
     @Null(groups = {ArticleSave.class, ArticleUpdate.class}, message = "更新时间必须为空！")
     private Long updateTime;
+
+    @ApiModelProperty(value = "是否删除")
+    @TableLogic
+    @IgnoreSwagger2Parameter
+    private Boolean deleted;
 
     @Override
     public Integer ownerId() {

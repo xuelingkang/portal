@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2020-01-08 11:34:22
+Date: 2020-01-08 13:51:14
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -272,8 +272,10 @@ CREATE TABLE `t_article` (
   `source_url` varchar(200) COLLATE utf8mb4_bin DEFAULT '' COMMENT '来源网址',
   `create_time` bigint(20) NOT NULL COMMENT '创建时间',
   `update_time` bigint(20) NOT NULL COMMENT '更新时间',
+  `deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  KEY `t_article_idx_user_id` (`user_id`)
+  KEY `t_article_idx_user_id` (`user_id`),
+  KEY `t_article_idx_deleted` (`deleted`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='文章';
 
 -- ----------------------------
@@ -678,7 +680,8 @@ CREATE TABLE `t_user` (
   `deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
   UNIQUE KEY `t_user_uk_username` (`username`),
-  UNIQUE KEY `t_user_uk_email` (`email`)
+  UNIQUE KEY `t_user_uk_email` (`email`),
+  KEY `t_user_idx_deleted` (`deleted`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='用户';
 
 -- ----------------------------
