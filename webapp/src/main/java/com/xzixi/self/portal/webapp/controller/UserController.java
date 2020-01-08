@@ -19,6 +19,7 @@ import com.xzixi.self.portal.webapp.model.vo.UserVO;
 import com.xzixi.self.portal.webapp.service.IMailService;
 import com.xzixi.self.portal.webapp.service.IUserRoleLinkService;
 import com.xzixi.self.portal.webapp.service.IUserService;
+import com.xzixi.self.portal.webapp.util.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -41,7 +42,7 @@ import static com.xzixi.self.portal.webapp.constant.ControllerConstant.RESPONSE_
 import static com.xzixi.self.portal.webapp.constant.SecurityConstant.*;
 
 /**
- * TODO 注册时验证邮箱验证码，增加更换邮箱接口，研究微信扫码登录
+ * TODO 注册时验证邮箱验证码，增加更换邮箱接口
  *
  * @author 薛凌康
  */
@@ -167,7 +168,6 @@ public class UserController {
     @PatchMapping("/password")
     @ApiOperation(value = "修改用户账户密码")
     public Result<?> updatePassword(@Validated({UserUpdate.class}) User user) {
-        // TODO 缺少验证密码的逻辑
         User userData = userService.getById(user.getId());
         userData.setPassword(passwordEncoder.encode(user.getPassword()));
         if (userService.updateById(userData)) {
@@ -178,11 +178,15 @@ public class UserController {
 
     @PatchMapping("/personal/password")
     @ApiOperation(value = "修改个人账户密码")
-    public Result<?> updatePersonalPassword(@Validated({UserUpdate.class}) User user) {
-        belongingService.checkOwner(user);
-        User userData = userService.getById(user.getId());
-        userData.setPassword(passwordEncoder.encode(user.getPassword()));
-        if (userService.updateById(userData)) {
+    public Result<?> updatePersonalPassword(
+            @ApiParam(value = "原密码", required = true) @NotBlank(message = "原密码不能为空！") @RequestParam String originalPwd,
+            @ApiParam(value = "新密码", required = true) @NotBlank(message = "新密码不能为空！") @RequestParam String password) {
+        User user = SecurityUtil.getCurrentUser();
+        if (!passwordEncoder.matches(originalPwd, user.getPassword())) {
+            throw new ClientException(400, "原密码错误！");
+        }
+        user.setPassword(passwordEncoder.encode(password));
+        if (userService.updateById(user)) {
             return new Result<>();
         }
         throw new ServerException(user, "修改个人账户密码失败！");
