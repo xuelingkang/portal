@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50726
 File Encoding         : 65001
 
-Date: 2020-01-09 00:32:33
+Date: 2020-01-10 01:02:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -166,7 +166,7 @@ CREATE TABLE `qrtz_scheduler_state` (
 -- ----------------------------
 -- Records of qrtz_scheduler_state
 -- ----------------------------
-INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-RKG4OBL1578500790194', '1578501148513', '10000');
+INSERT INTO `qrtz_scheduler_state` VALUES ('clusteredScheduler', 'DESKTOP-RKG4OBL1578588682737', '1578588731885', '10000');
 
 -- ----------------------------
 -- Table structure for qrtz_simple_triggers
@@ -697,7 +697,7 @@ CREATE TABLE `t_user` (
 -- ----------------------------
 -- Records of t_user
 -- ----------------------------
-INSERT INTO `t_user` VALUES ('1', 'admin', '$2a$10$Fi6PLQ1AKP6xKTNwlJDQZ.FKhi8UPIleMrCXKTnIt9/epvABZKyVe', 'xuelingkang@163.com', '系统管理员', 'MALE', '655833600000', 'SYSTEM', '1578326122478', '1578500831158', '0', '1', '0');
+INSERT INTO `t_user` VALUES ('1', 'admin', '$2a$10$Fi6PLQ1AKP6xKTNwlJDQZ.FKhi8UPIleMrCXKTnIt9/epvABZKyVe', 'xuelingkang@163.com', '系统管理员', 'MALE', '655833600000', 'SYSTEM', '1578326122478', '1578588709375', '0', '1', '0');
 
 -- ----------------------------
 -- Table structure for t_user_link
