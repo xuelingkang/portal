@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -25,7 +26,7 @@ import java.util.LinkedHashMap;
  *
  * @author 薛凌康
  */
-@EnableCaching
+@EnableCaching(mode = AdviceMode.ASPECTJ)
 @Configuration
 @EnableConfigurationProperties(CacheProperties.class)
 public class RedisCacheConfig {

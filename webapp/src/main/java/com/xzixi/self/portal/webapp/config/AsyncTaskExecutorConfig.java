@@ -1,5 +1,6 @@
 package com.xzixi.self.portal.webapp.config;
 
+import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
@@ -13,7 +14,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
  *
  * @author 薛凌康
  */
-@EnableAsync(proxyTargetClass = true)
+@EnableAsync(mode = AdviceMode.ASPECTJ)
 @Configuration
 public class AsyncTaskExecutorConfig {
 
