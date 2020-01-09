@@ -103,7 +103,7 @@ public class AttachmentController {
     @ApiOperation(value = "删除附件")
     public Result<?> remove(
         @ApiParam(value = "附件id", required = true) @NotEmpty(message = "附件id不能为空！") @RequestParam List<Integer> ids) {
-        attachmentService.removeByIds(ids);
+        attachmentService.removeAttachmentsByIds(ids);
         return new Result<>();
     }
 

@@ -135,9 +135,7 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
             }
         });
         if (CollectionUtils.isNotEmpty(attachmentIds)) {
-            if (!attachmentService.removeByIds(attachmentIds)) {
-                throw new ServerException(attachmentIds, "删除邮件附件失败！");
-            }
+            attachmentService.removeAttachmentsByIds(attachmentIds);
         }
         List<MailContent> contents = mailContentService.listByMailIds(ids);
         if (CollectionUtils.isNotEmpty(contents)) {

@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,9 +28,9 @@ public class AttachmentServiceImpl extends BaseServiceImpl<IAttachmentData, Atta
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean removeById(Serializable id) {
+    public void removeAttachmentById(Integer id) {
         Attachment attachment = getById(id);
-        if (!super.removeById(id)) {
+        if (!removeById(id)) {
             throw new ServerException(id, "删除附件失败！");
         }
         sftpClient.open(sftp -> {
@@ -41,14 +40,13 @@ public class AttachmentServiceImpl extends BaseServiceImpl<IAttachmentData, Atta
             String name = address.substring(lastSeparatorIndex + 1);
             sftp.delete(dir, name);
         });
-        return true;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean removeByIds(Collection<? extends Serializable> idList) {
+    public void removeAttachmentsByIds(Collection<Integer> idList) {
         Collection<Attachment> attachments = listByIds(idList);
-        if (!super.removeByIds(idList)) {
+        if (!removeByIds(idList)) {
             throw new ServerException(idList, "删除附件失败！");
         }
         sftpClient.open(sftp -> attachments.forEach(attachment -> {
@@ -58,7 +56,6 @@ public class AttachmentServiceImpl extends BaseServiceImpl<IAttachmentData, Atta
             String name = address.substring(lastSeparatorIndex + 1);
             sftp.delete(dir, name);
         }));
-        return true;
     }
 
     @Override
