@@ -22,15 +22,6 @@ public class DefaultEvictByEntityKeyGenerator implements KeyGenerator {
                 KEY_SEPARATOR +
                 GET_BY_ID_METHOD_NAME +
                 KEY_SEPARATOR +
-                id +
-
-                KEYS_SEPARATOR +
-
-                REGEX_KEY_PREFIX +
-                target.getClass().getName() +
-                KEY_SEPARATOR +
-                LIST_BY_IDS_METHOD_NAME +
-                KEY_SEPARATOR +
-                WILDCARD + id + WILDCARD;
+                id;
     }
 }

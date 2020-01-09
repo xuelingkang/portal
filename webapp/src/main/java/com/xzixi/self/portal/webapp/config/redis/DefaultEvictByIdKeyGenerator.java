@@ -19,15 +19,6 @@ public class DefaultEvictByIdKeyGenerator implements KeyGenerator {
                 KEY_SEPARATOR +
                 GET_BY_ID_METHOD_NAME +
                 KEY_SEPARATOR +
-                params[0] +
-
-                KEYS_SEPARATOR +
-
-                REGEX_KEY_PREFIX +
-                target.getClass().getName() +
-                KEY_SEPARATOR +
-                LIST_BY_IDS_METHOD_NAME +
-                KEY_SEPARATOR +
-                WILDCARD + params[0] + WILDCARD;
+                params[0];
     }
 }
