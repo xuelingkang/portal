@@ -15,12 +15,9 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * 用来扩展公共的service方法
- * 禁用不根据id做更新和删除操作的方法，以便更好控制缓存
- *
  * @author 薛凌康
  */
-public class BaseDataImpl<M extends IBaseMapper<T>, T extends BaseModel> extends ServiceImpl<M, T> implements IBaseData<T> {
+public class AbstractDataImpl<M extends IBaseMapper<T>, T extends BaseModel> extends ServiceImpl<M, T> implements IBaseData<T> {
 
     @Override
     public final boolean removeByMap(Map<String, Object> columnMap) {
@@ -43,7 +40,7 @@ public class BaseDataImpl<M extends IBaseMapper<T>, T extends BaseModel> extends
     }
 
     @Override
-    public final boolean saveOrUpdate(T entity, Wrapper<T> updateWrapper) {
+    public final List<Map<String, Object>> listMaps(Wrapper<T> queryWrapper) {
         throw new ProjectException("禁止调用！");
     }
 
@@ -99,6 +96,11 @@ public class BaseDataImpl<M extends IBaseMapper<T>, T extends BaseModel> extends
 
     @Override
     public final LambdaUpdateChainWrapper<T> lambdaUpdate() {
+        throw new ProjectException("禁止调用！");
+    }
+
+    @Override
+    public final M getBaseMapper() {
         throw new ProjectException("禁止调用！");
     }
 }

@@ -5,8 +5,10 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.xzixi.self.portal.webapp.util.TypeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.util.DigestUtils;
 
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import static com.xzixi.self.portal.webapp.constant.RedisConstant.*;
@@ -33,7 +35,7 @@ public class DefaultCasualKeyGenerator implements KeyGenerator {
                 if (TypeUtil.isSimpleValueType(param.getClass())) {
                     return param;
                 } else {
-                    return toJson(param).hashCode();
+                    return DigestUtils.md5DigestAsHex(toJson(param).getBytes(StandardCharsets.UTF_8));
                 }
             }).toArray(), PARAM_SEPARATOR);
         }

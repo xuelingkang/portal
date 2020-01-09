@@ -34,9 +34,7 @@ public interface IBaseService<T extends BaseModel> extends IBaseData<T> {
      * @param entityList 实体对象集合
      * @return {@code true} 更新成功 {@code false} 更新失败
      */
-    default boolean updateBatchByIdIgnoreNullProps(Collection<T> entityList) {
-        return updateBatchByIdIgnoreNullProps(entityList, 1000);
-    }
+    boolean updateBatchByIdIgnoreNullProps(Collection<T> entityList);
 
     /**
      * 根据ID 批量更新非null属性

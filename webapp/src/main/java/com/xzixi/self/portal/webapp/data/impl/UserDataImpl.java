@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.data.impl;
 
 import com.xzixi.self.portal.enhance.annotation.CacheEnhance;
-import com.xzixi.self.portal.framework.data.impl.BaseDataImpl;
+import com.xzixi.self.portal.framework.data.impl.MybatisPlusDataImpl;
 import com.xzixi.self.portal.webapp.data.IUserData;
 import com.xzixi.self.portal.webapp.mapper.UserMapper;
 import com.xzixi.self.portal.webapp.model.po.User;
@@ -12,5 +12,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @CacheEnhance(baseCacheName = "user:base", casualCacheName = "user:casual")
-public class UserDataImpl extends BaseDataImpl<UserMapper, User> implements IUserData {
+public class UserDataImpl extends MybatisPlusDataImpl<UserMapper, User> implements IUserData {
 }
