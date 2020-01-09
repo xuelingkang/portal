@@ -33,7 +33,7 @@ public class DefaultCasualKeyGenerator implements KeyGenerator {
         if (params.length > 0) {
             return StringUtils.join(Arrays.stream(params).map(param -> {
                 if (param == null) {
-                    return "null";
+                    return NULL_PARAM;
                 }
                 if (TypeUtil.isSimpleValueType(param.getClass())) {
                     return param;

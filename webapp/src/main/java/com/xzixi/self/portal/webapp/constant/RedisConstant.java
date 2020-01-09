@@ -13,6 +13,8 @@ public interface RedisConstant {
     String KEY_SEPARATOR = ":";
     /** getById方法名 */
     String GET_BY_ID_METHOD_NAME = "getById";
+    /** 值为null的参数 */
+    String NULL_PARAM = "null";
     /** 无参方法key */
     String EMPTY_PARAM = "emptyParam";
     /** 参数分隔符 */
