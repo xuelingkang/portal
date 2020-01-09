@@ -2,7 +2,6 @@ package com.xzixi.self.portal.framework.service;
 
 import com.xzixi.self.portal.framework.data.IBaseData;
 import com.xzixi.self.portal.framework.model.BaseModel;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -35,7 +34,6 @@ public interface IBaseService<T extends BaseModel> extends IBaseData<T> {
      * @param entityList 实体对象集合
      * @return {@code true} 更新成功 {@code false} 更新失败
      */
-    @Transactional(rollbackFor = Exception.class)
     default boolean updateBatchByIdIgnoreNullProps(Collection<T> entityList) {
         return updateBatchByIdIgnoreNullProps(entityList, 1000);
     }

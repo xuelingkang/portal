@@ -29,7 +29,6 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     private D baseData;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateByIdIgnoreNullProps(T entity) {
         T entityData = getById(entity.getId());
         BeanUtils.copyPropertiesIgnoreNull(entity, entityData);
@@ -37,14 +36,13 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateBatchByIdIgnoreNullProps(Collection<T> entityList, int batchSize) {
         Collection<Integer> idList = entityList.stream().map(BaseModel::getId).collect(Collectors.toList());
         Collection<T> entities = listByIds(idList);
         entities.forEach(entityData -> {
-            Optional<T> entityOptional = entityList.stream()
-                .filter(entity -> Objects.equals(entityData.getId(), entity.getId())).findFirst();
-            entityOptional.ifPresent(entity -> BeanUtils.copyPropertiesIgnoreNull(entity, entityData));
+            entityList.stream()
+                    .filter(entity -> Objects.equals(entityData.getId(), entity.getId())).findFirst()
+                    .ifPresent(entity -> BeanUtils.copyPropertiesIgnoreNull(entity, entityData));
         });
         return updateBatchById(entities, batchSize);
     }
@@ -146,7 +144,6 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateById(T entity) {
         if (entity.getId() == null) {
             throw new ProjectException("id不能为null！");
@@ -155,7 +152,6 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateBatchById(Collection<T> entityList, int batchSize) {
         for (T entity : entityList) {
             if (entity.getId() == null) {
@@ -166,7 +162,6 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean save(T entity) {
         if (entity == null) {
             throw new ProjectException("entity不能为null！");
@@ -175,7 +170,6 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean saveBatch(Collection<T> entityList, int batchSize) {
         if (CollectionUtils.isEmpty(entityList)) {
             throw new ProjectException("entityList不能为空！");
@@ -184,7 +178,6 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean saveOrUpdate(T entity) {
         if (entity == null) {
             throw new ProjectException("entity不能为null！");
@@ -193,7 +186,6 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean saveOrUpdateBatch(Collection<T> entityList, int batchSize) {
         if (CollectionUtils.isEmpty(entityList)) {
             throw new ProjectException("entityList不能为空！");
@@ -202,7 +194,6 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean removeById(Serializable id) {
         if (id == null) {
             throw new ProjectException("id不能为null！");
@@ -211,7 +202,6 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean removeByIds(Collection<? extends Serializable> idList) {
         idList = idList.stream().filter(Objects::nonNull).distinct().collect(Collectors.toList());
         if (CollectionUtils.isEmpty(idList)) {
