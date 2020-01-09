@@ -566,6 +566,9 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         return treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), getNameFromString(name), memberAccess(modelClassName), null);
     }
 
+    /**
+     * Collection&lt;innerClassName>
+     */
     private JCTree.JCVariableDecl collectionParamDecl(String name, String innerClassName) {
         return treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), getNameFromString(name), collectionType(innerClassName), null);
     }
