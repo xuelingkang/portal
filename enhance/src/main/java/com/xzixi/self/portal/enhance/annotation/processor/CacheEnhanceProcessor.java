@@ -174,18 +174,18 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         JCTree.JCExpression returnType = collectionType(modelClassName);
         // 参数列表
         List<JCTree.JCVariableDecl> parameters = List.of(extendsWildCollectionParamDecl(idList, SERIALIZABLE));
-        // 方法体
-        // Stream<? extends Serializable> stream = idList.stream();
+        // Stream<? extends Serializable> stream = idList.stream()
         JCTree.JCStatement defStreamStat = treeMaker.VarDef(treeMaker.Modifiers(0), getNameFromString(stream), extendsWildStreamType(SERIALIZABLE),
             treeMaker.Apply(List.nil(), memberAccess(idListCallStream), List.nil()));
-        // Stream<T> tStream = stream.map(id -> this.getById(id));
+        // Stream<T> tStream = stream.map(id -> this.getById(id))
         JCTree.JCStatement defTStreamStat = treeMaker.VarDef(treeMaker.Modifiers(0), getNameFromString(tStream), streamType(modelClassName),
             treeMaker.Apply(List.nil(), memberAccess(streamCallMap),
                 List.of(treeMaker.Lambda(List.of(typeParamDecl(id, SERIALIZABLE)),
                     treeMaker.Apply(List.nil(), memberAccess(thisCallGetById), List.of(memberAccess(id)))))));
-        // return tStream.collect(Collectors.toList());
+        // return tStream.collect(Collectors.toList())
         JCTree.JCStatement returnStat = treeMaker.Return(treeMaker.Apply(List.nil(), memberAccess(tStreamCallCollect),
             List.of(treeMaker.Apply(List.nil(), memberAccess(collectorsCallToList), List.nil()))));
+        // 方法体
         JCTree.JCBlock block = treeMaker.Block(0, List.of(defStreamStat, defTStreamStat, returnStat));
         return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
     }
