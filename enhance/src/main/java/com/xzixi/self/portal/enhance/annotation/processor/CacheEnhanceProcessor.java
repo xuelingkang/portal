@@ -50,7 +50,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
                 classDecl.defs = classDecl.defs.append(getByIdDecl(cacheEnhance, modelClassName));
             }
             if (cacheEnhance.listByIds()) {
-                classDecl.defs = classDecl.defs.append(listByIdsDecl(cacheEnhance, modelClassName));
+                classDecl.defs = classDecl.defs.append(listByIdsDecl(modelClassName));
             }
             if (cacheEnhance.getOne()) {
                 classDecl.defs = classDecl.defs.append(getOneDecl(cacheEnhance, modelClassName));
@@ -106,6 +106,8 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     private static final String STRING = "java.lang.String";
     private static final String OBJECT = "java.lang.Object";
     private static final String SERIALIZABLE = "java.io.Serializable";
+    private static final String STREAM = "java.util.stream.Stream";
+    private static final String COLLECTORS = "java.util.stream.Collectors";
     private static final String COLLECTION = "java.util.Collection";
     private static final String LIST = "java.util.List";
     private static final String MAP = "java.util.Map";
@@ -149,13 +151,21 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
 
     /**
      * listByIds
+     * 这个方法不加缓存，调用getById方法提高缓存的利用率
      */
-    public JCTree.JCMethodDecl listByIdsDecl(CacheEnhance cacheEnhance, String modelClassName) {
+    public JCTree.JCMethodDecl listByIdsDecl(String modelClassName) {
         final String method = "listByIds";
-        final String superMethod = "super.listByIds";
         final String idList = "idList";
+        final String idListCallStream = "idList.stream";
+        final String stream = "stream";
+        final String streamCallMap = "stream.map";
+        final String tStream = "tStream";
+        final String id = "id";
+        final String thisCallGetById = "this.getById";
+        final String tStreamCallCollect = "tStream.collect";
+        final String collectorsCallToList = String.format("%s.toList", COLLECTORS);
         // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), baseCache(cacheEnhance.baseCacheName()));
+        List<JCTree.JCAnnotation> annotationList = List.of(override());
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
@@ -165,7 +175,18 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 参数列表
         List<JCTree.JCVariableDecl> parameters = List.of(extendsWildCollectionParamDecl(idList, SERIALIZABLE));
         // 方法体
-        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, idList)));
+        // Stream<? extends Serializable> stream = idList.stream();
+        JCTree.JCStatement defStreamStat = treeMaker.VarDef(treeMaker.Modifiers(0), getNameFromString(stream), extendsWildStreamType(SERIALIZABLE),
+            treeMaker.Apply(List.nil(), memberAccess(idListCallStream), List.nil()));
+        // Stream<T> tStream = stream.map(id -> this.getById(id));
+        JCTree.JCStatement defTStreamStat = treeMaker.VarDef(treeMaker.Modifiers(0), getNameFromString(tStream), streamType(modelClassName),
+            treeMaker.Apply(List.nil(), memberAccess(streamCallMap),
+                List.of(treeMaker.Lambda(List.of(typeParamDecl(id, SERIALIZABLE)),
+                    treeMaker.Apply(List.nil(), memberAccess(thisCallGetById), List.of(memberAccess(id)))))));
+        // return tStream.collect(Collectors.toList());
+        JCTree.JCStatement returnStat = treeMaker.Return(treeMaker.Apply(List.nil(), memberAccess(tStreamCallCollect),
+            List.of(treeMaker.Apply(List.nil(), memberAccess(collectorsCallToList), List.nil()))));
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(defStreamStat, defTStreamStat, returnStat));
         return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
     }
 
@@ -474,11 +495,26 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     }
 
     /**
-     * Collection&lt;innerClassName>
+     * Collection&lt;? extends innerClassName>
      */
     private JCTree.JCTypeApply extendsWildCollectionType(String innerClassName) {
         return treeMaker.TypeApply(memberAccess(COLLECTION),
                 List.of(treeMaker.Wildcard(treeMaker.TypeBoundKind(BoundKind.EXTENDS), memberAccess(innerClassName))));
+    }
+
+    /**
+     * Stream&lt;innerClassName>
+     */
+    private JCTree.JCTypeApply streamType(String innerClassName) {
+        return treeMaker.TypeApply(memberAccess(STREAM), List.of(memberAccess(innerClassName)));
+    }
+
+    /**
+     * Stream&lt;? extends innerClassName>
+     */
+    private JCTree.JCTypeApply extendsWildStreamType(String innerClassName) {
+        return treeMaker.TypeApply(memberAccess(STREAM),
+            List.of(treeMaker.Wildcard(treeMaker.TypeBoundKind(BoundKind.EXTENDS), memberAccess(innerClassName))));
     }
 
     /**
