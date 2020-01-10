@@ -11,7 +11,7 @@ import static org.apache.commons.pool2.impl.GenericObjectPoolConfig.*;
  * @author 薛凌康
  */
 @Data
-@ConfigurationProperties(prefix = "sftp-pool")
+@ConfigurationProperties(prefix = "sftp-client")
 public class SftpClientProperties {
 
     /**

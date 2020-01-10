@@ -48,7 +48,7 @@ spring:
         enabled: true
 
 # sftp
-sftp-pool:
+sftp-client:
   # 主机ip
   host: docker
   # 端口号

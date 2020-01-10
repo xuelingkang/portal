@@ -141,7 +141,7 @@ mybatis-plus:
       update-strategy: ignored
 
 # sftp配置
-sftp-pool:
+sftp-client:
   # 连接池配置
   pool:
     # 对象最大数量
