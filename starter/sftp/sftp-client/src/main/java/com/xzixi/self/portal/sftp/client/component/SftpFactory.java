@@ -1,7 +1,7 @@
-package com.xzixi.self.portal.sftp.pool.component;
+package com.xzixi.self.portal.sftp.client.component;
 
 import com.jcraft.jsch.*;
-import com.xzixi.self.portal.sftp.pool.exception.SftpClientException;
+import com.xzixi.self.portal.sftp.client.exception.SftpClientException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

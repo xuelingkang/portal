@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.sftp.pool.component;
+package com.xzixi.self.portal.sftp.client.component;
 
 import org.apache.commons.pool2.impl.AbandonedConfig;
 

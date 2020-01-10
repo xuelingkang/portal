@@ -1,10 +1,10 @@
-package com.xzixi.self.portal.sftp.pool.component;
+package com.xzixi.self.portal.sftp.client.component;
 
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.SftpATTRS;
 import com.jcraft.jsch.SftpException;
-import com.xzixi.self.portal.sftp.pool.exception.SftpClientException;
-import com.xzixi.self.portal.sftp.pool.util.ByteUtil;
+import com.xzixi.self.portal.sftp.client.exception.SftpClientException;
+import com.xzixi.self.portal.sftp.client.util.ByteUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

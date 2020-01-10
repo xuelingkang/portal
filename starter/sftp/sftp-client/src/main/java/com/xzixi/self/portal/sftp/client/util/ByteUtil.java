@@ -1,6 +1,6 @@
-package com.xzixi.self.portal.sftp.pool.util;
+package com.xzixi.self.portal.sftp.client.util;
 
-import com.xzixi.self.portal.sftp.pool.exception.SftpClientException;
+import com.xzixi.self.portal.sftp.client.exception.SftpClientException;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;

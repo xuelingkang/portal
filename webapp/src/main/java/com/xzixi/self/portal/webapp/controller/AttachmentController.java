@@ -2,7 +2,7 @@ package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.framework.model.Result;
-import com.xzixi.self.portal.sftp.pool.component.SftpClient;
+import com.xzixi.self.portal.sftp.client.component.SftpClient;
 import com.xzixi.self.portal.webapp.model.enums.AttachmentType;
 import com.xzixi.self.portal.webapp.model.params.AttachmentSearchParams;
 import com.xzixi.self.portal.webapp.model.po.Attachment;

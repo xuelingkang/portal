@@ -1,6 +1,6 @@
-package com.xzixi.self.portal.sftp.starter.autoconfigure;
+package com.xzixi.self.portal.sftp.client.starter.autoconfigure;
 
-import com.xzixi.self.portal.sftp.pool.component.*;
+import com.xzixi.self.portal.sftp.client.component.*;
 import org.apache.commons.pool2.impl.DefaultEvictionPolicy;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -17,24 +17,24 @@ import java.io.PrintWriter;
  */
 @Configuration
 @ConditionalOnClass(SftpPool.class)
-@EnableConfigurationProperties(SftpPoolProperties.class)
-public class SftpPoolAutoConfiguration {
+@EnableConfigurationProperties(SftpClientProperties.class)
+public class SftpClientAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SftpFactory sftpFactory(SftpPoolProperties sftpPoolProperties) {
+    public SftpFactory sftpFactory(SftpClientProperties sftpClientProperties) {
         return new SftpFactory.Builder()
-                .host(sftpPoolProperties.getHost())
-                .port(sftpPoolProperties.getPort())
-                .username(sftpPoolProperties.getUsername())
-                .password(sftpPoolProperties.getPassword())
+                .host(sftpClientProperties.getHost())
+                .port(sftpClientProperties.getPort())
+                .username(sftpClientProperties.getUsername())
+                .password(sftpClientProperties.getPassword())
                 .build();
     }
 
     @Bean
     @ConditionalOnMissingBean
-    public SftpPoolConfig sftpPoolConfig(SftpPoolProperties sftpPoolProperties) {
-        SftpPoolProperties.Pool pool = sftpPoolProperties.getPool();
+    public SftpPoolConfig sftpPoolConfig(SftpClientProperties sftpClientProperties) {
+        SftpClientProperties.Pool pool = sftpClientProperties.getPool();
         return new SftpPoolConfig.Builder()
                 .maxTotal(pool.getMaxTotal())
                 .maxIdle(pool.getMaxIdle())
@@ -62,8 +62,8 @@ public class SftpPoolAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SftpAbandonedConfig sftpAbandonedConfig(SftpPoolProperties sftpPoolProperties) {
-        SftpPoolProperties.Abandoned abandoned = sftpPoolProperties.getAbandoned();
+    public SftpAbandonedConfig sftpAbandonedConfig(SftpClientProperties sftpClientProperties) {
+        SftpClientProperties.Abandoned abandoned = sftpClientProperties.getAbandoned();
         return new SftpAbandonedConfig.Builder()
                 .removeAbandonedOnBorrow(abandoned.isRemoveAbandonedOnBorrow())
                 .removeAbandonedOnMaintenance(abandoned.isRemoveAbandonedOnMaintenance())

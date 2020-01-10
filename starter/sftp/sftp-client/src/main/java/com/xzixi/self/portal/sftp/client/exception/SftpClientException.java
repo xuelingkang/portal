@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.sftp.pool.exception;
+package com.xzixi.self.portal.sftp.client.exception;
 
 /**
  * @author 薛凌康

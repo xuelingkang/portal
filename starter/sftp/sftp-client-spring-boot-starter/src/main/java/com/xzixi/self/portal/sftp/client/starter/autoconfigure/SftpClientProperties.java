@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.sftp.starter.autoconfigure;
+package com.xzixi.self.portal.sftp.client.starter.autoconfigure;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -12,7 +12,7 @@ import static org.apache.commons.pool2.impl.GenericObjectPoolConfig.*;
  */
 @Data
 @ConfigurationProperties(prefix = "sftp-pool")
-public class SftpPoolProperties {
+public class SftpClientProperties {
 
     /**
      * 主机ip
