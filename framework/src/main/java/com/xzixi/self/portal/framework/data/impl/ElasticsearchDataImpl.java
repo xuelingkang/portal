@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 适配ElasticsearchTemplate
+ *
  * @author 薛凌康
  */
 public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel> extends AbstractDataImpl<M, T> implements IBaseData<T> {

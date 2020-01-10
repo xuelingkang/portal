@@ -66,7 +66,7 @@ public class DefaultCasualKeyGenerator implements KeyGenerator {
                  * QueryWrapper类型参数如果调用了in等链式方法，
                  * 如queryWrapper.in("id", ids)
                  * 虽然每次设置相同的参数，最终生成的缓存key也相同，但是无法命中缓存，
-                 * 暂时使用这种方式可以解决，以后再调查真相
+                 * 暂时使用这种方式可以解决，但是效率有点低，以后再调查真相
                  */
                 if (QueryWrapper.class.isAssignableFrom(param.getClass())) {
                     QueryWrapper<?> queryWrapper = (QueryWrapper<?>) param;
