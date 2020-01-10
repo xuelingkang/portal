@@ -1,4 +1,4 @@
-package com.xzixi.self.portal;
+package com.xzixi.self.portal.webapp;
 
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
