@@ -2,6 +2,8 @@ package com.xzixi.self.portal.webapp.config.redis;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.xzixi.self.portal.webapp.util.TypeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.interceptor.KeyGenerator;
@@ -10,6 +12,8 @@ import org.springframework.util.DigestUtils;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.xzixi.self.portal.webapp.constant.RedisConstant.*;
 
@@ -19,6 +23,11 @@ import static com.xzixi.self.portal.webapp.constant.RedisConstant.*;
  * @author 薛凌康
  */
 public class DefaultCasualKeyGenerator implements KeyGenerator {
+
+    private static final String ORDER_INFO_TEMPLATE = "%s" + PARAM_SEPARATOR + "%s";
+    private static final String PAGE_PARAM_TEMPLATE = "%s" + PARAM_SEPARATOR + "%s" + PARAM_SEPARATOR + "%s";
+    private static final String ASC = "asc";
+    private static final String DESC = "desc";
 
     @Override
     public Object generate(Object target, Method method, Object... params) {
@@ -39,6 +48,21 @@ public class DefaultCasualKeyGenerator implements KeyGenerator {
                     return param;
                 }
                 /*
+                 * IPage类型的参数按照current_size_orderItem的格式生成key
+                 */
+                if (IPage.class.isAssignableFrom(param.getClass())) {
+                    IPage<?> page = (IPage<?>) param;
+                    long current = page.getCurrent();
+                    long size = page.getSize();
+                    List<OrderItem> orderItems = page.orders();
+                    String orderInfo = StringUtils.join(
+                        orderItems.stream()
+                            .map(item -> String.format(ORDER_INFO_TEMPLATE, item.getColumn(), item.isAsc()? ASC: DESC))
+                            .collect(Collectors.toList()),
+                        PARAM_SEPARATOR);
+                    return String.format(PAGE_PARAM_TEMPLATE, current, size, orderInfo);
+                }
+                /*
                  * QueryWrapper类型参数如果调用了in等链式方法，
                  * 如queryWrapper.in("id", ids)
                  * 虽然每次设置相同的参数，最终生成的缓存key也相同，但是无法命中缓存，
@@ -52,7 +76,7 @@ public class DefaultCasualKeyGenerator implements KeyGenerator {
                     return DigestUtils.md5DigestAsHex(info.getBytes(StandardCharsets.UTF_8));
                 }
                 return DigestUtils.md5DigestAsHex(toJson(param).getBytes(StandardCharsets.UTF_8));
-            }).toArray(), PARAM_SEPARATOR);
+            }).collect(Collectors.toList()), PARAM_SEPARATOR);
         }
         return EMPTY_PARAM;
     }
