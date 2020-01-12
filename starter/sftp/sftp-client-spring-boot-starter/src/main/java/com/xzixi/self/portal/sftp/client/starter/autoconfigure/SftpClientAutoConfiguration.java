@@ -22,19 +22,37 @@ public class SftpClientAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public SftpFactory sftpFactory(SftpClientProperties sftpClientProperties) {
+    public ISftpClient sftpClient(SftpClientProperties sftpClientProperties) {
+        if (sftpClientProperties.isMultiple()) {
+            MultipleSftpClient multipleSftpClient = new MultipleSftpClient();
+            sftpClientProperties.getClients().forEach((name, properties) -> {
+                SftpFactory sftpFactory = createSftpFactory(properties);
+                SftpPoolConfig sftpPoolConfig = createSftpPoolConfig(properties);
+                SftpAbandonedConfig sftpAbandonedConfig = createSftpAbandonedConfig(properties);
+                SftpPool sftpPool = new SftpPool(sftpFactory, sftpPoolConfig, sftpAbandonedConfig);
+                ISftpClient sftpClient = new SftpClient(sftpPool);
+                multipleSftpClient.put(name, sftpClient);
+            });
+            return multipleSftpClient;
+        }
+        SftpFactory sftpFactory = createSftpFactory(sftpClientProperties);
+        SftpPoolConfig sftpPoolConfig = createSftpPoolConfig(sftpClientProperties);
+        SftpAbandonedConfig sftpAbandonedConfig = createSftpAbandonedConfig(sftpClientProperties);
+        SftpPool sftpPool = new SftpPool(sftpFactory, sftpPoolConfig, sftpAbandonedConfig);
+        return new SftpClient(sftpPool);
+    }
+
+    public SftpFactory createSftpFactory(CommonProperties properties) {
         return new SftpFactory.Builder()
-                .host(sftpClientProperties.getHost())
-                .port(sftpClientProperties.getPort())
-                .username(sftpClientProperties.getUsername())
-                .password(sftpClientProperties.getPassword())
+                .host(properties.getHost())
+                .port(properties.getPort())
+                .username(properties.getUsername())
+                .password(properties.getPassword())
                 .build();
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public SftpPoolConfig sftpPoolConfig(SftpClientProperties sftpClientProperties) {
-        SftpClientProperties.Pool pool = sftpClientProperties.getPool();
+    public SftpPoolConfig createSftpPoolConfig(CommonProperties properties) {
+        CommonProperties.Pool pool = properties.getPool();
         return new SftpPoolConfig.Builder()
                 .maxTotal(pool.getMaxTotal())
                 .maxIdle(pool.getMaxIdle())
@@ -60,10 +78,8 @@ public class SftpClientAutoConfiguration {
                 .build();
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public SftpAbandonedConfig sftpAbandonedConfig(SftpClientProperties sftpClientProperties) {
-        SftpClientProperties.Abandoned abandoned = sftpClientProperties.getAbandoned();
+    public SftpAbandonedConfig createSftpAbandonedConfig(CommonProperties properties) {
+        CommonProperties.Abandoned abandoned = properties.getAbandoned();
         return new SftpAbandonedConfig.Builder()
                 .removeAbandonedOnBorrow(abandoned.isRemoveAbandonedOnBorrow())
                 .removeAbandonedOnMaintenance(abandoned.isRemoveAbandonedOnMaintenance())
@@ -73,19 +89,5 @@ public class SftpClientAutoConfiguration {
                 .logWriter(new PrintWriter(System.out))
                 .useUsageTracking(abandoned.isUseUsageTracking())
                 .build();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public SftpPool sftpPool(SftpFactory sftpFactory,
-                             SftpPoolConfig sftpPoolConfig,
-                             SftpAbandonedConfig sftpAbandonedConfig) {
-        return new SftpPool(sftpFactory, sftpPoolConfig, sftpAbandonedConfig);
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public SftpClient sftpClient(SftpPool sftpPool) {
-        return new SftpClient(sftpPool);
     }
 }

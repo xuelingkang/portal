@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SftpClient {
+public class SftpClient implements ISftpClient {
 
     private SftpPool sftpPool;
 
@@ -20,11 +20,12 @@ public class SftpClient {
      *
      * @param handler sftp操作
      */
-    public void open(Handler handler) {
+    @Override
+    public void open(ISftpClient.Handler handler) {
         Sftp sftp = null;
         try {
             sftp = sftpPool.borrowObject();
-            Handler policyHandler = new DelegateHandler(handler);
+            ISftpClient.Handler policyHandler = new DelegateHandler(handler);
             policyHandler.doHandle(sftp);
         } catch (SftpClientException e) {
             throw e;
@@ -38,9 +39,9 @@ public class SftpClient {
     }
 
     @AllArgsConstructor
-    static class DelegateHandler implements Handler {
+    static class DelegateHandler implements ISftpClient.Handler {
 
-        private Handler target;
+        private ISftpClient.Handler target;
 
         @Override
         public void doHandle(Sftp sftp) {
@@ -51,17 +52,5 @@ public class SftpClient {
                 throw new SftpClientException("执行sftp操作出错！", e);
             }
         }
-    }
-
-    public interface Handler {
-
-        /**
-         * 执行sftp操作
-         *
-         * @param sftp Sftp实例
-         * @see Sftp
-         * @throws Exception sftp操作可能抛出的任何异常
-         */
-        void doHandle(Sftp sftp) throws Exception;
     }
 }
