@@ -42,7 +42,7 @@ public class SftpClientAutoConfiguration {
         return new SftpClient(sftpPool);
     }
 
-    public SftpFactory createSftpFactory(CommonProperties properties) {
+    public SftpFactory createSftpFactory(SftpClientProperties properties) {
         return new SftpFactory.Builder()
                 .host(properties.getHost())
                 .port(properties.getPort())
@@ -51,8 +51,8 @@ public class SftpClientAutoConfiguration {
                 .build();
     }
 
-    public SftpPoolConfig createSftpPoolConfig(CommonProperties properties) {
-        CommonProperties.Pool pool = properties.getPool();
+    public SftpPoolConfig createSftpPoolConfig(SftpClientProperties properties) {
+        SftpClientProperties.Pool pool = properties.getPool();
         return new SftpPoolConfig.Builder()
                 .maxTotal(pool.getMaxTotal())
                 .maxIdle(pool.getMaxIdle())
@@ -78,8 +78,8 @@ public class SftpClientAutoConfiguration {
                 .build();
     }
 
-    public SftpAbandonedConfig createSftpAbandonedConfig(CommonProperties properties) {
-        CommonProperties.Abandoned abandoned = properties.getAbandoned();
+    public SftpAbandonedConfig createSftpAbandonedConfig(SftpClientProperties properties) {
+        SftpClientProperties.Abandoned abandoned = properties.getAbandoned();
         return new SftpAbandonedConfig.Builder()
                 .removeAbandonedOnBorrow(abandoned.isRemoveAbandonedOnBorrow())
                 .removeAbandonedOnMaintenance(abandoned.isRemoveAbandonedOnMaintenance())

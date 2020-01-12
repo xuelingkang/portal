@@ -2,7 +2,7 @@ package com.xzixi.self.portal.webapp.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.framework.model.Result;
-import com.xzixi.self.portal.sftp.client.component.SftpClient;
+import com.xzixi.self.portal.sftp.client.component.ISftpClient;
 import com.xzixi.self.portal.webapp.model.enums.AttachmentType;
 import com.xzixi.self.portal.webapp.model.params.AttachmentSearchParams;
 import com.xzixi.self.portal.webapp.model.po.Attachment;
@@ -41,7 +41,7 @@ public class AttachmentController {
     @Autowired
     private IAttachmentService attachmentService;
     @Autowired
-    private SftpClient sftpClient;
+    private ISftpClient sftpClient;
 
     @PostMapping("/{type}")
     @ApiOperation(value = "上传附件")

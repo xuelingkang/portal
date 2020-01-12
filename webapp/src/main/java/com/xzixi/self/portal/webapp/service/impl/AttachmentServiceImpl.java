@@ -2,7 +2,7 @@ package com.xzixi.self.portal.webapp.service.impl;
 
 import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
-import com.xzixi.self.portal.sftp.client.component.SftpClient;
+import com.xzixi.self.portal.sftp.client.component.ISftpClient;
 import com.xzixi.self.portal.webapp.data.IAttachmentData;
 import com.xzixi.self.portal.webapp.model.po.Attachment;
 import com.xzixi.self.portal.webapp.model.vo.AttachmentVO;
@@ -24,7 +24,7 @@ import static com.xzixi.self.portal.webapp.constant.AttachmentConstant.SEPARATOR
 public class AttachmentServiceImpl extends BaseServiceImpl<IAttachmentData, Attachment> implements IAttachmentService {
 
     @Autowired
-    private SftpClient sftpClient;
+    private ISftpClient sftpClient;
 
     @Override
     @Transactional(rollbackFor = Exception.class)

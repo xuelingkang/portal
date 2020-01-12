@@ -3,7 +3,7 @@ package com.xzixi.self.portal.webapp.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
-import com.xzixi.self.portal.sftp.client.component.SftpClient;
+import com.xzixi.self.portal.sftp.client.component.ISftpClient;
 import com.xzixi.self.portal.webapp.constant.AttachmentConstant;
 import com.xzixi.self.portal.webapp.data.IMailData;
 import com.xzixi.self.portal.webapp.model.enums.MailStatus;
@@ -52,7 +52,7 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
     @Autowired
     private JavaMailSender javaMailSender;
     @Autowired
-    private SftpClient sftpClient;
+    private ISftpClient sftpClient;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
