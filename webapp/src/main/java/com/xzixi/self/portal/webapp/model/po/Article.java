@@ -13,16 +13,20 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+
+import static com.xzixi.self.portal.webapp.constant.ProjectConstant.INDEX_NAME;
 
 /**
  * @author 薛凌康
  */
 @Data
 @ApiModel(description = "文章")
+@Document(indexName = INDEX_NAME, type = "article")
 public class Article extends BaseModel implements IBelonging {
 
     private static final long serialVersionUID = 1L;
