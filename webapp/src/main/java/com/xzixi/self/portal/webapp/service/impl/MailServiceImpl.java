@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xzixi.self.portal.framework.exception.ServerException;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.sftp.client.component.ISftpClient;
 import com.xzixi.self.portal.webapp.constant.AttachmentConstant;
@@ -168,7 +168,7 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
             mailVO.setAttachments(attachments);
         }
         if (option.isContent()) {
-            MailContent content = mailContentService.getOne(new QueryWrapper<>(new MailContent().setMailId(mail.getId())));
+            MailContent content = mailContentService.getOne(new QueryParams<>(new MailContent().setMailId(mail.getId())));
             mailVO.setContent(content);
         }
         return mailVO;

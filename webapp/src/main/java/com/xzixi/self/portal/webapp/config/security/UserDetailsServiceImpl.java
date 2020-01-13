@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.config.security;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xzixi.self.portal.framework.exception.ClientException;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
 import com.xzixi.self.portal.webapp.service.IUserService;
@@ -26,7 +26,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (StringUtils.isEmpty(username)) {
             throw new ClientException(400, "用户名username不能为空！");
         }
-        User user = userService.getOne(new QueryWrapper<>(new User().setUsername(username)));
+        User user = userService.getOne(new QueryParams<>(new User().setUsername(username)));
         if (user==null) {
             throw new UsernameNotFoundException("用户名："+ username + "不存在！");
         }

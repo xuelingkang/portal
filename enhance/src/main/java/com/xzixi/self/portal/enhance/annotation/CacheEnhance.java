@@ -18,7 +18,6 @@ public @interface CacheEnhance {
     boolean listByIds() default true;
     boolean getOne() default true;
     boolean list() default true;
-    boolean listByMap() default true;
     boolean page() default true;
     boolean count() default true;
     boolean updateById() default true;

@@ -1,8 +1,6 @@
 package com.xzixi.self.portal.framework.model.search;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xzixi.self.portal.framework.model.BaseModel;
 import com.xzixi.self.portal.framework.model.search.annotation.*;
 import com.xzixi.self.portal.framework.util.BeanUtils;
 import com.xzixi.self.portal.framework.util.ReflectUtil;
@@ -14,15 +12,13 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * @author 薛凌康
  */
 @Data
-public class BaseSearchParams<T> {
+public class BaseSearchParams<T extends BaseModel> {
 
     private static final Pattern ASC_REG = Pattern.compile("\\s*[Aa][Ss][Cc]\\s*");
 
@@ -54,27 +50,14 @@ public class BaseSearchParams<T> {
      *
      * @return Page&lt;T>
      */
-    public Page<T> buildPageParams() {
-        Page<T> page = new Page<>(this.current, this.size);
-        String[] orderItems = this.orderItems;
+    public Pagination<T> buildPagination() {
+        Pagination<T> pagination = new Pagination<>(current, size);
         if (ArrayUtils.isEmpty(orderItems)) {
-            orderItems = this.defaultOrderItems;
+            pagination.setOrders(defaultOrderItems);
+        } else {
+            pagination.setOrders(orderItems);
         }
-        List<OrderItem> orderItemList = Arrays.stream(orderItems)
-            // 按空白拆分
-            .map(item -> item.split("\\s+"))
-            // 过滤出长度为2的数组
-            .filter(arr -> arr.length == 2)
-            .map(arr -> {
-                String column = arr[0];
-                boolean asc = ASC_REG.matcher(arr[1]).matches();
-                if (asc) {
-                    return OrderItem.asc(column);
-                }
-                return OrderItem.desc(column);
-            }).collect(Collectors.toList());
-        page.addOrder(orderItemList);
-        return page;
+        return pagination;
     }
 
     /**
@@ -82,11 +65,11 @@ public class BaseSearchParams<T> {
      *
      * @return QueryWrapper&lt;T>
      */
-    public QueryWrapper<T> buildQueryWrapper() {
-        QueryWrapper<T> queryWrapper = newQueryWrapper();
-        parseAnnotation(queryWrapper, this);
-        parseAnnotation(queryWrapper, this.entity);
-        return queryWrapper;
+    public QueryParams<T> buildQueryParams() {
+        QueryParams<T> queryParams = newQueryParams();
+        parseAnnotation(queryParams, this);
+        parseAnnotation(queryParams, this.entity);
+        return queryParams;
     }
 
     public void setDefaultOrderItems(String... defaultOrderItems) {
@@ -102,16 +85,16 @@ public class BaseSearchParams<T> {
      * @return QueryWrapper
      */
     @SuppressWarnings("unchecked")
-    private QueryWrapper<T> newQueryWrapper() {
+    private QueryParams<T> newQueryParams() {
         if (this.entity == null) {
-            return new QueryWrapper<>();
+            return new QueryParams<>();
         }
         Class<T> cls = (Class<T>) this.entity.getClass();
         Field[] fields = ReflectUtil.getDeclaredFields(cls);
         T instance = ReflectUtil.newInstance(cls);
         BeanUtils.copyPropertiesIgnoreNull(this.entity, instance, Arrays.stream(fields).filter(field ->
             findAnnotation(field) != null).map(Field::getName).toArray(String[]::new));
-        return new QueryWrapper<>(instance);
+        return new QueryParams<>(instance);
     }
 
     @SuppressWarnings("unchecked")
@@ -126,7 +109,7 @@ public class BaseSearchParams<T> {
         return null;
     }
 
-    private void parseAnnotation(QueryWrapper<T> queryWrapper, Object object) {
+    private void parseAnnotation(QueryParams<T> queryParams, Object object) {
         if (object == null) {
             return;
         }
@@ -153,7 +136,7 @@ public class BaseSearchParams<T> {
             if (value == null && condition.ignoreNull()) {
                 continue;
             }
-            conditionType.parse(queryWrapper, column, value);
+            conditionType.parse(queryParams, column, value);
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.framework.model.Result;
+import com.xzixi.self.portal.framework.model.search.Pagination;
 import com.xzixi.self.portal.webapp.model.enums.MailType;
 import com.xzixi.self.portal.webapp.model.params.MailSearchParams;
 import com.xzixi.self.portal.webapp.model.po.Mail;
@@ -36,11 +36,11 @@ public class MailController {
 
     @GetMapping
     @ApiOperation(value = "分页查询邮件")
-    public Result<IPage<MailVO>> page(MailSearchParams searchParams) {
+    public Result<Pagination<MailVO>> page(MailSearchParams searchParams) {
         searchParams.setDefaultOrderItems("create_time desc");
         searchParams.getEntity().setType(MailType.PUBLIC);
-        IPage<Mail> mailPage = mailService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
-        IPage<MailVO> page = mailService.buildVO(mailPage, new MailVO.BuildOption(true, true, false, false));
+        Pagination<Mail> mailPage = mailService.page(searchParams.buildPagination(), searchParams.buildQueryParams());
+        Pagination<MailVO> page = mailService.buildVO(mailPage, new MailVO.BuildOption(true, true, false, false));
         return new Result<>(page);
     }
 

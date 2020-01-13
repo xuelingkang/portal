@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.config.security;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import com.xzixi.self.portal.webapp.model.enums.UserType;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.model.po.Role;
@@ -46,7 +46,7 @@ public class AccessDecisionManagerImpl implements AccessDecisionManager {
         if (authentication instanceof AnonymousAuthenticationToken) {
             // 游客权限
             Collection<Authority> guestAuthorities = authorityService
-                    .listByRoleWrapper(new QueryWrapper<>(new Role().setGuest(true)));
+                    .listByRoleParams(new QueryParams<>(new Role().setGuest(true)));
             authorities = guestAuthorities.stream()
                     .map(authority -> new SimpleGrantedAuthority(String.valueOf(authority.getId())))
                     .collect(Collectors.toSet());
@@ -59,7 +59,7 @@ public class AccessDecisionManagerImpl implements AccessDecisionManager {
             if (Objects.equals(UserType.WEBSITE, userDetails.getUser().getType())) {
                 // 网站用户权限
                 Collection<Authority> websiteAuthorities = authorityService
-                        .listByRoleWrapper(new QueryWrapper<>(new Role().setWebsite(true)));
+                        .listByRoleParams(new QueryParams<>(new Role().setWebsite(true)));
                 authorities = websiteAuthorities.stream()
                         .map(authority -> new SimpleGrantedAuthority(String.valueOf(authority.getId())))
                         .collect(Collectors.toSet());

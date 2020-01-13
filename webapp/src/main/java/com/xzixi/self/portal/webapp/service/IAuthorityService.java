@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import com.xzixi.self.portal.framework.service.IBaseService;
 import com.xzixi.self.portal.framework.service.IVoService;
 import com.xzixi.self.portal.webapp.model.po.Authority;
@@ -34,10 +34,10 @@ public interface IAuthorityService extends IBaseService<Authority>,
     /**
      * 根据角色条件查询权限集合
      *
-     * @param queryWrapper 角色条件
+     * @param queryParams 角色条件
      * @return List&lt;Authority>
      */
-    Collection<Authority> listByRoleWrapper(QueryWrapper<Role> queryWrapper);
+    Collection<Authority> listByRoleParams(QueryParams<Role> queryParams);
 
     /**
      * 根据权限id删除权限，同时删除与角色的关联

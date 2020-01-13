@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.data.IUserRoleLinkData;
 import com.xzixi.self.portal.webapp.model.po.UserRoleLink;
@@ -18,21 +18,21 @@ public class UserRoleLinkServiceImpl extends BaseServiceImpl<IUserRoleLinkData, 
 
     @Override
     public List<UserRoleLink> listByUserId(Integer userId) {
-        return list(new QueryWrapper<>(new UserRoleLink().setUserId(userId)));
+        return list(new QueryParams<>(new UserRoleLink().setUserId(userId)));
     }
 
     @Override
     public List<UserRoleLink> listByUserIds(Collection<Integer> userIds) {
-        return list(new QueryWrapper<UserRoleLink>().in("user_id", userIds));
+        return list(new QueryParams<UserRoleLink>().in("userId", userIds));
     }
 
     @Override
     public List<UserRoleLink> listByRoleId(Integer roleId) {
-        return list(new QueryWrapper<>(new UserRoleLink().setRoleId(roleId)));
+        return list(new QueryParams<>(new UserRoleLink().setRoleId(roleId)));
     }
 
     @Override
     public List<UserRoleLink> listByRoleIds(Collection<Integer> roleIds) {
-        return list(new QueryWrapper<UserRoleLink>().in("role_id", roleIds));
+        return list(new QueryParams<UserRoleLink>().in("roleId", roleIds));
     }
 }

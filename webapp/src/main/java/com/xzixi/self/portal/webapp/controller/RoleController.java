@@ -1,9 +1,9 @@
 package com.xzixi.self.portal.webapp.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.model.Result;
+import com.xzixi.self.portal.framework.model.search.Pagination;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import com.xzixi.self.portal.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.params.RoleSearchParams;
 import com.xzixi.self.portal.webapp.model.po.Role;
@@ -44,10 +44,10 @@ public class RoleController {
 
     @GetMapping
     @ApiOperation(value = "分页查询角色")
-    public Result<IPage<RoleVO>> page(RoleSearchParams searchParams) {
+    public Result<Pagination<RoleVO>> page(RoleSearchParams searchParams) {
         searchParams.setDefaultOrderItems("seq asc");
-        IPage<Role> rolePage = roleService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
-        IPage<RoleVO> page = roleService.buildVO(rolePage, new RoleVO.BuildOption(false));
+        Pagination<Role> rolePage = roleService.page(searchParams.buildPagination(), searchParams.buildQueryParams());
+        Pagination<RoleVO> page = roleService.buildVO(rolePage, new RoleVO.BuildOption(false));
         return new Result<>(page);
     }
 
@@ -96,7 +96,7 @@ public class RoleController {
         List<RoleAuthorityLink> newLinks = authorityIds.stream()
                 .map(authorityId -> new RoleAuthorityLink(id, authorityId))
                 .collect(Collectors.toList());
-        List<RoleAuthorityLink> oldLinks = roleAuthorityLinkService.list(new QueryWrapper<>(new RoleAuthorityLink().setRoleId(id)));
+        List<RoleAuthorityLink> oldLinks = roleAuthorityLinkService.list(new QueryParams<>(new RoleAuthorityLink().setRoleId(id)));
         boolean result = roleAuthorityLinkService.merge(newLinks, oldLinks, (sources, target) -> sources.stream()
                 .filter(source -> Objects.equals(source.getAuthorityId(), target.getAuthorityId()))
                 .findFirst().orElse(null));

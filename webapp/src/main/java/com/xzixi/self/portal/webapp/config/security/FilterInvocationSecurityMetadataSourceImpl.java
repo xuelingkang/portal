@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.config.security;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import com.xzixi.self.portal.webapp.model.enums.AuthorityProtocol;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.service.IAuthorityService;
@@ -34,7 +34,7 @@ public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocat
 
         // 查询所有http类型的权限
         List<Authority> authorities = authorityService
-                .list(new QueryWrapper<>(new Authority().setProtocol(AuthorityProtocol.HTTP)));
+                .list(new QueryParams<>(new Authority().setProtocol(AuthorityProtocol.HTTP)));
 
         // 匹配权限
         Optional<Authority> authorityOptional = authorities.stream().filter(authority ->

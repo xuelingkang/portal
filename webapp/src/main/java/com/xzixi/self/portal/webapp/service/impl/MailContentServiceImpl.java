@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.data.IMailContentData;
 import com.xzixi.self.portal.webapp.model.po.MailContent;
@@ -18,6 +18,6 @@ public class MailContentServiceImpl extends BaseServiceImpl<IMailContentData, Ma
 
     @Override
     public List<MailContent> listByMailIds(Collection<Integer> mailIds) {
-        return list(new QueryWrapper<MailContent>().in("mail_id", mailIds));
+        return list(new QueryParams<MailContent>().in("mailId", mailIds));
     }
 }

@@ -1,12 +1,13 @@
 package com.xzixi.self.portal.framework.data.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xzixi.self.portal.framework.data.IBaseData;
 import com.xzixi.self.portal.framework.exception.ProjectException;
 import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.mapper.IBaseMapper;
 import com.xzixi.self.portal.framework.model.BaseModel;
+import com.xzixi.self.portal.framework.model.search.Pagination;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -21,15 +22,14 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 适配ElasticsearchTemplate
+ * elasticsearch实现
  *
  * @author 薛凌康
  */
-public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel> extends AbstractDataImpl<M, T> implements IBaseData<T> {
+public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel> extends ServiceImpl<M, T> implements IBaseData<T> {
 
     private Class<T> clazz;
     private String type;
@@ -53,32 +53,100 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     }
 
     @Override
+    public T getById(Serializable id) {
+        GetQuery getQuery = new GetQuery();
+        getQuery.setId(String.valueOf(id));
+        return elasticsearchTemplate.queryForObject(getQuery, clazz);
+    }
+
+    @Override
+    public Collection<T> listByIds(Collection<? extends Serializable> idList) {
+        Collection<String> ids = idList.stream().map(String::valueOf).collect(Collectors.toList());
+        SearchQuery query = new NativeSearchQueryBuilder().withIds(ids).build();
+        return elasticsearchTemplate.queryForList(query, clazz);
+    }
+
+    @Override
+    public T getOne(QueryParams<T> params) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    public List<T> list(QueryParams<T> params) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    public Pagination<T> page(Pagination<T> pagination, QueryParams<T> params) {
+        // TODO
+        return null;
+    }
+
+    @Override
+    public int count(QueryParams<T> params) {
+        // TODO
+        return 0;
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean save(T entity) {
-        if (!super.save(entity)) {
-            throw new ServerException(entity, "数据库写入失败！");
+    public boolean save(T model) {
+        if (!super.save(model)) {
+            throw new ServerException(model, "数据库写入失败！");
         }
-        index(entity);
+        index(model);
         return true;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean saveBatch(Collection<T> entityList, int batchSize) {
-        if (!super.saveBatch(entityList, batchSize)) {
-            throw new ServerException(entityList, "数据库写入失败！");
+    public boolean saveBatch(Collection<T> models, int batchSize) {
+        if (!super.saveBatch(models, batchSize)) {
+            throw new ServerException(models, "数据库写入失败！");
         }
-        index(entityList, batchSize);
+        index(models, batchSize);
         return true;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean saveOrUpdateBatch(Collection<T> entityList, int batchSize) {
-        if (!super.saveOrUpdateBatch(entityList, batchSize)) {
-            throw new ServerException(entityList, "数据库写入失败！");
+    public boolean saveOrUpdate(T model) {
+        if (!super.saveOrUpdate(model)) {
+            throw new ServerException(model, "数据库写入失败！");
         }
-        index(entityList, batchSize);
+        index(model);
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean saveOrUpdateBatch(Collection<T> models, int batchSize) {
+        if (!super.saveOrUpdateBatch(models, batchSize)) {
+            throw new ServerException(models, "数据库写入失败！");
+        }
+        index(models, batchSize);
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateById(T model) {
+        if (!super.updateById(model)) {
+            throw new ServerException(model, "数据库写入失败！");
+        }
+        index(model);
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateBatchById(Collection<T> models, int batchSize) {
+        if (!super.updateBatchById(models, batchSize)) {
+            throw new ServerException(models, "数据库写入失败！");
+        }
+        index(models, batchSize);
         return true;
     }
 
@@ -104,72 +172,23 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean updateById(T entity) {
-        if (!super.updateById(entity)) {
-            throw new ServerException(entity, "数据库写入失败！");
-        }
-        index(entity);
-        return true;
+    public boolean saveBatch(Collection<T> models) {
+        return saveBatch(models, 1000);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean updateBatchById(Collection<T> entityList, int batchSize) {
-        if (!super.updateBatchById(entityList, batchSize)) {
-            throw new ServerException(entityList, "数据库写入失败！");
-        }
-        index(entityList, batchSize);
-        return true;
+    public boolean saveOrUpdateBatch(Collection<T> models) {
+        return saveOrUpdateBatch(models, 1000);
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean saveOrUpdate(T entity) {
-        if (!super.saveOrUpdate(entity)) {
-            throw new ServerException(entity, "数据库写入失败！");
-        }
-        index(entity);
-        return true;
+    public boolean updateBatchById(Collection<T> models) {
+        return updateBatchById(models, 1000);
     }
 
     @Override
-    public T getById(Serializable id) {
-        GetQuery getQuery = new GetQuery();
-        getQuery.setId(String.valueOf(id));
-        return elasticsearchTemplate.queryForObject(getQuery, clazz);
-    }
-
-    @Override
-    public Collection<T> listByIds(Collection<? extends Serializable> idList) {
-        Collection<String> ids = idList.stream().map(String::valueOf).collect(Collectors.toList());
-        SearchQuery query = new NativeSearchQueryBuilder().withIds(ids).build();
-        return elasticsearchTemplate.queryForList(query, clazz);
-    }
-
-    @Override
-    public Collection<T> listByMap(Map<String, Object> columnMap) {
-        return null;
-    }
-
-    @Override
-    public T getOne(Wrapper<T> queryWrapper, boolean throwEx) {
-        return null;
-    }
-
-    @Override
-    public int count(Wrapper<T> queryWrapper) {
-        return 0;
-    }
-
-    @Override
-    public List<T> list(Wrapper<T> queryWrapper) {
-        return null;
-    }
-
-    @Override
-    public IPage<T> page(IPage<T> page, Wrapper<T> queryWrapper) {
-        return null;
+    public int count() {
+        return count(new QueryParams<>());
     }
 
     private void index(T entity) {

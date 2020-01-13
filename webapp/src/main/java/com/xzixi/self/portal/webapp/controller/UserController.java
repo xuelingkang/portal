@@ -1,10 +1,10 @@
 package com.xzixi.self.portal.webapp.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.framework.exception.ClientException;
 import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.model.Result;
+import com.xzixi.self.portal.framework.model.search.Pagination;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import com.xzixi.self.portal.framework.service.IBelongingService;
 import com.xzixi.self.portal.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.enums.MailType;
@@ -72,11 +72,11 @@ public class UserController {
 
     @GetMapping
     @ApiOperation(value = "分页查询用户")
-    public Result<IPage<UserVO>> page(UserSearchParams searchParams) {
+    public Result<Pagination<UserVO>> page(UserSearchParams searchParams) {
         searchParams.setDefaultOrderItems("create_time desc");
-        IPage<User> userPage = userService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
+        Pagination<User> userPage = userService.page(searchParams.buildPagination(), searchParams.buildQueryParams());
         userPage.getRecords().forEach(user -> user.setPassword(null));
-        IPage<UserVO> page = userService.buildVO(userPage, new UserVO.BuildOption(false, false));
+        Pagination<UserVO> page = userService.buildVO(userPage, new UserVO.BuildOption(false, false));
         return new Result<>(page);
     }
 
@@ -206,7 +206,7 @@ public class UserController {
         if (time != null && (time + RESET_PASSWORD_RETRY_TIMEOUT_MILLISECOND) > now) {
             throw new ClientException(403, "操作过快，请稍后再试！");
         }
-        User user = userService.getOne(new QueryWrapper<>(new User().setUsername(username)));
+        User user = userService.getOne(new QueryParams<>(new User().setUsername(username)));
         String key = UUID.randomUUID().toString();
         String url = String.format("%s?key=%s", resetPasswordUrl, key);
         // 发送邮件
@@ -327,7 +327,7 @@ public class UserController {
             @ApiParam(value = "用户id", required = true) @NotNull(message = "用户id不能为空！") @PathVariable Integer id,
             @ApiParam(value = "角色id", required = true) @NotEmpty(message = "角色id不能为空！") @RequestParam List<Integer> roleIds) {
         List<UserRoleLink> newLinks = roleIds.stream().map(roleId -> new UserRoleLink(id, roleId)).collect(Collectors.toList());
-        List<UserRoleLink> oldLinks = userRoleLinkService.list(new QueryWrapper<>(new UserRoleLink().setUserId(id)));
+        List<UserRoleLink> oldLinks = userRoleLinkService.list(new QueryParams<>(new UserRoleLink().setUserId(id)));
         boolean result = userRoleLinkService.merge(newLinks, oldLinks, (sources, target) -> sources.stream()
                 .filter(source -> Objects.equals(source.getRoleId(), target.getRoleId()))
                 .findFirst().orElse(null));

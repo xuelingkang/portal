@@ -1,8 +1,8 @@
 package com.xzixi.self.portal.webapp.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.model.Result;
+import com.xzixi.self.portal.framework.model.search.Pagination;
 import com.xzixi.self.portal.framework.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.params.AuthoritySearchParams;
 import com.xzixi.self.portal.webapp.model.po.Authority;
@@ -37,10 +37,10 @@ public class AuthorityController {
 
     @GetMapping
     @ApiOperation(value = "分页查询权限")
-    public Result<IPage<AuthorityVO>> page(AuthoritySearchParams searchParams) {
+    public Result<Pagination<AuthorityVO>> page(AuthoritySearchParams searchParams) {
         searchParams.setDefaultOrderItems("category asc", "seq asc");
-        IPage<Authority> authorityPage = authorityService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
-        IPage<AuthorityVO> page = authorityService.buildVO(authorityPage, new AuthorityVO.BuildOption());
+        Pagination<Authority> authorityPage = authorityService.page(searchParams.buildPagination(), searchParams.buildQueryParams());
+        Pagination<AuthorityVO> page = authorityService.buildVO(authorityPage, new AuthorityVO.BuildOption());
         return new Result<>(page);
     }
 

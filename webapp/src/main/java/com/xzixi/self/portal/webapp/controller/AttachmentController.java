@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.framework.model.Result;
+import com.xzixi.self.portal.framework.model.search.Pagination;
 import com.xzixi.self.portal.sftp.client.component.ISftpClient;
 import com.xzixi.self.portal.webapp.model.enums.AttachmentType;
 import com.xzixi.self.portal.webapp.model.params.AttachmentSearchParams;
@@ -84,10 +84,10 @@ public class AttachmentController {
 
     @GetMapping
     @ApiOperation(value = "分页查询附件")
-    public Result<IPage<AttachmentVO>> page(AttachmentSearchParams searchParams) {
+    public Result<Pagination<AttachmentVO>> page(AttachmentSearchParams searchParams) {
         searchParams.setDefaultOrderItems("create_time desc");
-        IPage<Attachment> attachmentPage = attachmentService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
-        IPage<AttachmentVO> page = attachmentService.buildVO(attachmentPage, new AttachmentVO.BuildOption());
+        Pagination<Attachment> attachmentPage = attachmentService.page(searchParams.buildPagination(), searchParams.buildQueryParams());
+        Pagination<AttachmentVO> page = attachmentService.buildVO(attachmentPage, new AttachmentVO.BuildOption());
         return new Result<>(page);
     }
 

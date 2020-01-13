@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.job;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class TestJob extends QuartzJobBean {
         JobDataMap jobDataMap = context.getJobDetail().getJobDataMap();
         String username = jobDataMap.getString("username");
         log.info("查询username="+username+"的用户信息，并打印");
-        User user = userService.getOne(new QueryWrapper<>(new User().setUsername(username)));
+        User user = userService.getOne(new QueryParams<>(new User().setUsername(username)));
         log.info(user.toString());
         log.info("----------logUserJob结束了----------");
     }

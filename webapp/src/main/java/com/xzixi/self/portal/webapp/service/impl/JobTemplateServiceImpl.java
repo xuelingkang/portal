@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xzixi.self.portal.framework.exception.ServerException;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.data.IJobTemplateData;
 import com.xzixi.self.portal.webapp.model.po.JobTemplate;
@@ -50,7 +50,7 @@ public class JobTemplateServiceImpl extends BaseServiceImpl<IJobTemplateData, Jo
         }
         parameters.forEach(parameter -> parameter.setJobTemplateId(jobTemplate.getId()));
         List<JobTemplateParameter> oldParameters = jobTemplateParameterService
-                .list(new QueryWrapper<>(new JobTemplateParameter().setJobTemplateId(jobTemplate.getId())));
+                .list(new QueryParams<>(new JobTemplateParameter().setJobTemplateId(jobTemplate.getId())));
         boolean mergeResult = jobTemplateParameterService.merge(parameters, oldParameters, ((sources, target) ->
                 sources.stream().filter(source -> Objects.equals(source.getId(), target.getId())).findFirst().orElse(null)));
         if (!mergeResult) {
@@ -79,7 +79,7 @@ public class JobTemplateServiceImpl extends BaseServiceImpl<IJobTemplateData, Jo
         JobTemplateVO jobTemplateVO = new JobTemplateVO(jobTemplate);
         if (option.isParameters()) {
             List<JobTemplateParameter> parameters = jobTemplateParameterService
-                    .list(new QueryWrapper<>(new JobTemplateParameter().setJobTemplateId(jobTemplate.getId())));
+                    .list(new QueryParams<>(new JobTemplateParameter().setJobTemplateId(jobTemplate.getId())));
             if (CollectionUtils.isNotEmpty(parameters)) {
                 jobTemplateVO.setParameters(parameters);
             }

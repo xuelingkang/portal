@@ -1,8 +1,8 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xzixi.self.portal.framework.exception.ClientException;
 import com.xzixi.self.portal.framework.exception.ServerException;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.data.IUserData;
 import com.xzixi.self.portal.webapp.model.enums.MailType;
@@ -46,7 +46,7 @@ public class UserServiceImpl extends BaseServiceImpl<IUserData, User> implements
 
     @Override
     public void checkUsername(String username) {
-        List<User> usersByUsername = list(new QueryWrapper<>(new User().setUsername(username)));
+        List<User> usersByUsername = list(new QueryParams<>(new User().setUsername(username)));
         if (CollectionUtils.isNotEmpty(usersByUsername)) {
             throw new ClientException(400, "用户名重复！");
         }
@@ -54,7 +54,7 @@ public class UserServiceImpl extends BaseServiceImpl<IUserData, User> implements
 
     @Override
     public void checkEmail(String email) {
-        List<User> usersByEmail = list(new QueryWrapper<>(new User().setEmail(email)));
+        List<User> usersByEmail = list(new QueryParams<>(new User().setEmail(email)));
         if (CollectionUtils.isNotEmpty(usersByEmail)) {
             throw new ClientException(400, "邮箱重复！");
         }

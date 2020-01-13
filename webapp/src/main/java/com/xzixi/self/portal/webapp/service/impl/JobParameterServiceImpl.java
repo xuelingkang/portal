@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.data.IJobParameterData;
 import com.xzixi.self.portal.webapp.model.po.JobParameter;
@@ -18,11 +18,11 @@ public class JobParameterServiceImpl extends BaseServiceImpl<IJobParameterData, 
 
     @Override
     public List<JobParameter> listByJobId(Integer jobId) {
-        return list(new QueryWrapper<>(new JobParameter().setJobId(jobId)));
+        return list(new QueryParams<>(new JobParameter().setJobId(jobId)));
     }
 
     @Override
     public List<JobParameter> listByJobIds(Collection<Integer> jobIds) {
-        return list(new QueryWrapper<JobParameter>().in("job_id", jobIds));
+        return list(new QueryParams<JobParameter>().in("jobId", jobIds));
     }
 }

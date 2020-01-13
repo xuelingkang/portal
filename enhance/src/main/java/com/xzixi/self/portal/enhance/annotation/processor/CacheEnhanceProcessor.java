@@ -58,9 +58,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
             if (cacheEnhance.list()) {
                 classDecl.defs = classDecl.defs.append(listDecl(cacheEnhance, modelClassName));
             }
-            if (cacheEnhance.listByMap()) {
-                classDecl.defs = classDecl.defs.append(listByMapDecl(cacheEnhance, modelClassName));
-            }
             if (cacheEnhance.page()) {
                 classDecl.defs = classDecl.defs.append(pageDecl(cacheEnhance, modelClassName));
             }
@@ -103,16 +100,13 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     private static final String CACHING = "org.springframework.cache.annotation.Caching";
 
     private static final String EXCEPTION = "java.lang.Exception.class";
-    private static final String STRING = "java.lang.String";
-    private static final String OBJECT = "java.lang.Object";
     private static final String SERIALIZABLE = "java.io.Serializable";
     private static final String STREAM = "java.util.stream.Stream";
     private static final String COLLECTORS = "java.util.stream.Collectors";
     private static final String COLLECTION = "java.util.Collection";
     private static final String LIST = "java.util.List";
-    private static final String MAP = "java.util.Map";
-    private static final String I_PAGE = "com.baomidou.mybatisplus.core.metadata.IPage";
-    private static final String WRAPPER = "com.baomidou.mybatisplus.core.conditions.Wrapper";
+    private static final String PAGINATION = "com.xzixi.self.portal.framework.model.search.Pagination";
+    private static final String QUERY_PARAMS = "com.xzixi.self.portal.framework.model.search.QueryParams";
 
     private static final String ROLLBACK_FOR = "rollbackFor";
     private static final String CACHE_NAMES = "cacheNames";
@@ -196,7 +190,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     public JCTree.JCMethodDecl getOneDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "getOne";
         final String superMethod = "super.getOne";
-        final String queryWrapper = "queryWrapper";
+        final String queryParams = "queryParams";
         final String throwEx = "throwEx";
         // 注解列表
         List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache(cacheEnhance.casualCacheName()));
@@ -207,9 +201,9 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 返回值类型
         JCTree.JCExpression returnType = memberAccess(modelClassName);
         // 参数列表
-        List<JCTree.JCVariableDecl> parameters = List.of(wrapperParamDecl(queryWrapper, modelClassName), booleanParamDecl(throwEx));
+        List<JCTree.JCVariableDecl> parameters = List.of(queryParamsParamDecl(queryParams, modelClassName), booleanParamDecl(throwEx));
         // 方法体
-        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, queryWrapper, throwEx)));
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, queryParams, throwEx)));
         return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
     }
 
@@ -219,7 +213,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     public JCTree.JCMethodDecl listDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "list";
         final String superMethod = "super.list";
-        final String queryWrapper = "queryWrapper";
+        final String queryParams = "queryParams";
         // 注解列表
         List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache(cacheEnhance.casualCacheName()));
         // 访问修饰词和注解列表
@@ -229,31 +223,9 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 返回值类型
         JCTree.JCExpression returnType = listType(modelClassName);
         // 参数列表
-        List<JCTree.JCVariableDecl> parameters = List.of(wrapperParamDecl(queryWrapper, modelClassName));
+        List<JCTree.JCVariableDecl> parameters = List.of(queryParamsParamDecl(queryParams, modelClassName));
         // 方法体
-        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, queryWrapper)));
-        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
-    }
-
-    /**
-     * listByMap
-     */
-    public JCTree.JCMethodDecl listByMapDecl(CacheEnhance cacheEnhance, String modelClassName) {
-        final String method = "listByMap";
-        final String superMethod = "super.listByMap";
-        final String columnMap = "columnMap";
-        // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache(cacheEnhance.casualCacheName()));
-        // 访问修饰词和注解列表
-        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
-        // 方法名
-        Name name = getNameFromString(method);
-        // 返回值类型
-        JCTree.JCExpression returnType = collectionType(modelClassName);
-        // 参数列表
-        List<JCTree.JCVariableDecl> parameters = List.of(mapParamDecl(columnMap, STRING, OBJECT));
-        // 方法体
-        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, columnMap)));
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, queryParams)));
         return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
     }
 
@@ -264,7 +236,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         final String method = "page";
         final String superMethod = "super.page";
         final String page = "page";
-        final String queryWrapper = "queryWrapper";
+        final String queryParams = "queryParams";
         // 注解列表
         List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache(cacheEnhance.casualCacheName()));
         // 访问修饰词和注解列表
@@ -272,11 +244,11 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 方法名
         Name name = getNameFromString(method);
         // 返回值类型
-        JCTree.JCExpression returnType = iPageType(modelClassName);
+        JCTree.JCExpression returnType = paginationType(modelClassName);
         // 参数列表
-        List<JCTree.JCVariableDecl> parameters = List.of(iPageParamDecl(page, modelClassName), wrapperParamDecl(queryWrapper, modelClassName));
+        List<JCTree.JCVariableDecl> parameters = List.of(paginationParamDecl(page, modelClassName), queryParamsParamDecl(queryParams, modelClassName));
         // 方法体
-        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, page, queryWrapper)));
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, page, queryParams)));
         return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
     }
 
@@ -286,7 +258,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     private JCTree.JCMethodDecl countDecl(CacheEnhance cacheEnhance, String modelClassName) {
         final String method = "count";
         final String superMethod = "super.count";
-        final String queryWrapper = "queryWrapper";
+        final String queryParams = "queryParams";
         // 注解列表
         List<JCTree.JCAnnotation> annotationList = List.of(override(), casualCache(cacheEnhance.casualCacheName()));
         // 访问修饰词和注解列表
@@ -296,9 +268,9 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 返回值类型
         JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.INT);
         // 参数列表
-        List<JCTree.JCVariableDecl> parameters = List.of(wrapperParamDecl(queryWrapper, modelClassName));
+        List<JCTree.JCVariableDecl> parameters = List.of(queryParamsParamDecl(queryParams, modelClassName));
         // 方法体
-        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, queryWrapper)));
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(superReturn(superMethod, queryParams)));
         return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
     }
 
@@ -527,22 +499,15 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * Wrapper&lt;innerClassName>
      */
-    private JCTree.JCTypeApply wrapperType(String innerClassName) {
-        return treeMaker.TypeApply(memberAccess(WRAPPER), List.of(memberAccess(innerClassName)));
-    }
-
-    /**
-     * Map&lt;keyClassName, valueClassName>
-     */
-    private JCTree.JCTypeApply mapType(String keyClassName, String valueClassName) {
-        return treeMaker.TypeApply(memberAccess(MAP), List.of(memberAccess(keyClassName), memberAccess(valueClassName)));
+    private JCTree.JCTypeApply queryParamsType(String innerClassName) {
+        return treeMaker.TypeApply(memberAccess(QUERY_PARAMS), List.of(memberAccess(innerClassName)));
     }
 
     /**
      * IPage&lt;innerClassName>
      */
-    private JCTree.JCTypeApply iPageType(String innerClassName) {
-        return treeMaker.TypeApply(memberAccess(I_PAGE), List.of(memberAccess(innerClassName)));
+    private JCTree.JCTypeApply paginationType(String innerClassName) {
+        return treeMaker.TypeApply(memberAccess(PAGINATION), List.of(memberAccess(innerClassName)));
     }
 
     /**
@@ -583,22 +548,15 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     /**
      * Wrapper&lt;innerClassName>
      */
-    private JCTree.JCVariableDecl wrapperParamDecl(String name, String innerClassName) {
-        return treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), getNameFromString(name), wrapperType(innerClassName), null);
-    }
-
-    /**
-     * Map&lt;keyClassName, valueClassName>
-     */
-    private JCTree.JCVariableDecl mapParamDecl(String name, String keyClassName, String valueClassName) {
-        return treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), getNameFromString(name), mapType(keyClassName, valueClassName), null);
+    private JCTree.JCVariableDecl queryParamsParamDecl(String name, String innerClassName) {
+        return treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), getNameFromString(name), queryParamsType(innerClassName), null);
     }
 
     /**
      * IPage&lt;innerClassName>
      */
-    private JCTree.JCVariableDecl iPageParamDecl(String name, String innerClassName) {
-        return treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), getNameFromString(name), iPageType(innerClassName), null);
+    private JCTree.JCVariableDecl paginationParamDecl(String name, String innerClassName) {
+        return treeMaker.VarDef(treeMaker.Modifiers(Flags.PARAMETER), getNameFromString(name), paginationType(innerClassName), null);
     }
 
     /**

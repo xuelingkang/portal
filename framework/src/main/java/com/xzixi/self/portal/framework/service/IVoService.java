@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.framework.service;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xzixi.self.portal.framework.model.BaseModel;
+import com.xzixi.self.portal.framework.model.search.Pagination;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author 薛凌康
  */
-public interface IVoService<PO, VO, O> {
+public interface IVoService<PO extends BaseModel, VO extends BaseModel, O> {
 
     /**
      * 根据id查询
@@ -58,12 +58,12 @@ public interface IVoService<PO, VO, O> {
      * @param option 选项
      * @return IPage&lt;VO>
      */
-    default IPage<VO> buildVO(IPage<PO> poPage, O option) {
+    default Pagination<VO> buildVO(Pagination<PO> poPage, O option) {
         if (poPage == null) {
             return null;
         }
         List<VO> voList = buildVO(poPage.getRecords(), option);
-        IPage<VO> voPage = new Page<>(poPage.getCurrent(), poPage.getSize(), poPage.getTotal(), poPage.isSearchCount());
+        Pagination<VO> voPage = new Pagination<>(poPage.getCurrent(), poPage.getSize(), poPage.getTotal(), poPage.isSearchCount());
         voPage.setRecords(voList);
         return voPage;
     }

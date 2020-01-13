@@ -1,16 +1,11 @@
 package com.xzixi.self.portal.framework.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.service.additional.query.impl.LambdaQueryChainWrapper;
-import com.baomidou.mybatisplus.extension.service.additional.query.impl.QueryChainWrapper;
-import com.baomidou.mybatisplus.extension.service.additional.update.impl.LambdaUpdateChainWrapper;
-import com.baomidou.mybatisplus.extension.service.additional.update.impl.UpdateChainWrapper;
 import com.xzixi.self.portal.framework.data.IBaseData;
 import com.xzixi.self.portal.framework.exception.ClientException;
 import com.xzixi.self.portal.framework.exception.ProjectException;
 import com.xzixi.self.portal.framework.model.BaseModel;
+import com.xzixi.self.portal.framework.model.search.Pagination;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import com.xzixi.self.portal.framework.service.IBaseService;
 import com.xzixi.self.portal.framework.util.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -20,9 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -122,55 +115,28 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    public final T getOne(Wrapper<T> queryWrapper) {
-        T entity = getOne(queryWrapper, false);
-        if (entity == null) {
-            throw new ClientException(404, "记录不存在！");
-        }
-        return entity;
+    public T getOne(QueryParams<T> params) {
+        return baseData.getOne(params);
     }
 
     @Override
-    public final T getOne(Wrapper<T> queryWrapper, boolean throwEx) {
-        return baseData.getOne(queryWrapper, throwEx);
+    public List<T> list(QueryParams<T> params) {
+        return baseData.list(params);
     }
 
     @Override
-    public final List<T> list(Wrapper<T> queryWrapper) {
-        return baseData.list(queryWrapper);
+    public Pagination<T> page(Pagination<T> pagination, QueryParams<T> params) {
+        return baseData.page(pagination, params);
     }
 
     @Override
-    public final Collection<T> listByMap(Map<String, Object> columnMap) {
-        return baseData.listByMap(columnMap);
+    public final int count() {
+        return baseData.count();
     }
 
     @Override
-    public final IPage<T> page(IPage<T> page, Wrapper<T> queryWrapper) {
-        return baseData.page(page, queryWrapper);
-    }
-
-    @Override
-    public final int count(Wrapper<T> queryWrapper) {
-        return baseData.count(queryWrapper);
-    }
-
-    @Override
-    public final boolean updateById(T entity) {
-        if (entity.getId() == null) {
-            throw new ProjectException("id不能为null！");
-        }
-        return baseData.updateById(entity);
-    }
-
-    @Override
-    public final boolean updateBatchById(Collection<T> entityList, int batchSize) {
-        for (T entity : entityList) {
-            if (entity.getId() == null) {
-                throw new ProjectException("id不能为null！");
-            }
-        }
-        return baseData.updateBatchById(entityList, batchSize);
+    public int count(QueryParams<T> params) {
+        return baseData.count(params);
     }
 
     @Override
@@ -179,6 +145,11 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
             throw new ProjectException("entity不能为null！");
         }
         return baseData.save(entity);
+    }
+
+    @Override
+    public final boolean saveBatch(Collection<T> entityList) {
+        return baseData.saveBatch(entityList);
     }
 
     @Override
@@ -198,11 +169,39 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
+    public final boolean saveOrUpdateBatch(Collection<T> entityList) {
+        return baseData.saveOrUpdateBatch(entityList);
+    }
+
+    @Override
     public final boolean saveOrUpdateBatch(Collection<T> entityList, int batchSize) {
         if (CollectionUtils.isEmpty(entityList)) {
             throw new ProjectException("entityList不能为空！");
         }
         return baseData.saveOrUpdateBatch(entityList, batchSize);
+    }
+
+    @Override
+    public final boolean updateById(T entity) {
+        if (entity.getId() == null) {
+            throw new ProjectException("id不能为null！");
+        }
+        return baseData.updateById(entity);
+    }
+
+    @Override
+    public final boolean updateBatchById(Collection<T> entityList) {
+        return baseData.updateBatchById(entityList);
+    }
+
+    @Override
+    public final boolean updateBatchById(Collection<T> entityList, int batchSize) {
+        for (T entity : entityList) {
+            if (entity.getId() == null) {
+                throw new ProjectException("id不能为null！");
+            }
+        }
+        return baseData.updateBatchById(entityList, batchSize);
     }
 
     @Override
@@ -220,135 +219,5 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
             throw new ProjectException("idList不能为空！");
         }
         return baseData.removeByIds(idList);
-    }
-
-    @Override
-    public final Map<String, Object> getMap(Wrapper<T> queryWrapper) {
-        return baseData.getMap(queryWrapper);
-    }
-
-    @Override
-    public final <V> V getObj(Wrapper<T> queryWrapper, Function<? super Object, V> mapper) {
-        return baseData.getObj(queryWrapper, mapper);
-    }
-
-    @Override
-    public final List<Map<String, Object>> listMaps(Wrapper<T> queryWrapper) {
-        return baseData.listMaps(queryWrapper);
-    }
-
-    @Override
-    public final <V> List<V> listObjs(Wrapper<T> queryWrapper, Function<? super Object, V> mapper) {
-        return baseData.listObjs(queryWrapper, mapper);
-    }
-
-    @Override
-    public final IPage<Map<String, Object>> pageMaps(IPage<T> page, Wrapper<T> queryWrapper) {
-        return baseData.pageMaps(page, queryWrapper);
-    }
-
-    @Override
-    public final BaseMapper<T> getBaseMapper() {
-        return baseData.getBaseMapper();
-    }
-
-    @Override
-    public final boolean update(T entity, Wrapper<T> updateWrapper) {
-        return baseData.update(entity, updateWrapper);
-    }
-
-    @Override
-    public final boolean removeByMap(Map<String, Object> columnMap) {
-        return baseData.removeByMap(columnMap);
-    }
-
-    @Override
-    public final boolean remove(Wrapper<T> queryWrapper) {
-        return baseData.remove(queryWrapper);
-    }
-
-    @Override
-    public final boolean update(Wrapper<T> updateWrapper) {
-        return baseData.update(updateWrapper);
-    }
-
-    @Override
-    public final boolean saveOrUpdate(T entity, Wrapper<T> updateWrapper) {
-        return baseData.saveOrUpdate(entity, updateWrapper);
-    }
-
-    @Override
-    public final List<Map<String, Object>> listMaps() {
-        return baseData.listMaps();
-    }
-
-    @Override
-    public final List<Object> listObjs() {
-        return baseData.listObjs();
-    }
-
-    @Override
-    public final <V> List<V> listObjs(Function<? super Object, V> mapper) {
-        return baseData.listObjs(mapper);
-    }
-
-    @Override
-    public final List<Object> listObjs(Wrapper<T> queryWrapper) {
-        return baseData.listObjs(queryWrapper);
-    }
-
-    @Override
-    public final IPage<Map<String, Object>> pageMaps(IPage<T> page) {
-        return baseData.pageMaps(page);
-    }
-
-    @Override
-    public final UpdateChainWrapper<T> update() {
-        return baseData.update();
-    }
-
-    @Override
-    public final LambdaUpdateChainWrapper<T> lambdaUpdate() {
-        return baseData.lambdaUpdate();
-    }
-
-    @Override
-    public final boolean saveBatch(Collection<T> entityList) {
-        return baseData.saveBatch(entityList);
-    }
-
-    @Override
-    public final boolean saveOrUpdateBatch(Collection<T> entityList) {
-        return baseData.saveOrUpdateBatch(entityList);
-    }
-
-    @Override
-    public final boolean updateBatchById(Collection<T> entityList) {
-        return baseData.updateBatchById(entityList);
-    }
-
-    @Override
-    public final int count() {
-        return baseData.count();
-    }
-
-    @Override
-    public final List<T> list() {
-        return baseData.list();
-    }
-
-    @Override
-    public final IPage<T> page(IPage<T> page) {
-        return baseData.page(page);
-    }
-
-    @Override
-    public final QueryChainWrapper<T> query() {
-        return baseData.query();
-    }
-
-    @Override
-    public final LambdaQueryChainWrapper<T> lambdaQuery() {
-        return baseData.lambdaQuery();
     }
 }

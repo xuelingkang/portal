@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.xzixi.self.portal.framework.model.Result;
+import com.xzixi.self.portal.framework.model.search.Pagination;
 import com.xzixi.self.portal.webapp.model.params.JobTemplateSearchParams;
 import com.xzixi.self.portal.webapp.model.po.JobTemplate;
 import com.xzixi.self.portal.webapp.model.valid.JobTemplateSave;
@@ -35,10 +35,10 @@ public class JobTemplateController {
 
     @GetMapping
     @ApiOperation(value = "分页查询任务模板")
-    public Result<IPage<JobTemplateVO>> page(JobTemplateSearchParams searchParams) {
+    public Result<Pagination<JobTemplateVO>> page(JobTemplateSearchParams searchParams) {
         searchParams.setDefaultOrderItems("id asc");
-        IPage<JobTemplate> jobTemplatePage = jobTemplateService.page(searchParams.buildPageParams(), searchParams.buildQueryWrapper());
-        IPage<JobTemplateVO> page = jobTemplateService.buildVO(jobTemplatePage, new JobTemplateVO.BuildOption(false));
+        Pagination<JobTemplate> jobTemplatePage = jobTemplateService.page(searchParams.buildPagination(), searchParams.buildQueryParams());
+        Pagination<JobTemplateVO> page = jobTemplateService.buildVO(jobTemplatePage, new JobTemplateVO.BuildOption(false));
         return new Result<>(page);
     }
 

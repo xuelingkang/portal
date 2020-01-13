@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xzixi.self.portal.framework.exception.ServerException;
+import com.xzixi.self.portal.framework.model.search.QueryParams;
 import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.data.IAuthorityData;
 import com.xzixi.self.portal.webapp.model.po.Authority;
@@ -54,8 +54,8 @@ public class AuthorityServiceImpl extends BaseServiceImpl<IAuthorityData, Author
     }
 
     @Override
-    public Collection<Authority> listByRoleWrapper(QueryWrapper<Role> queryWrapper) {
-        List<Role> roles = roleService.list(queryWrapper);
+    public Collection<Authority> listByRoleParams(QueryParams<Role> queryParams) {
+        List<Role> roles = roleService.list(queryParams);
         List<Integer> roleIds = roles.stream().map(Role::getId).collect(Collectors.toList());
         return listByRoleIds(roleIds);
     }
