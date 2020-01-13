@@ -43,7 +43,7 @@ public class DefaultCasualKeyGenerator implements KeyGenerator {
                     return param;
                 }
                 /*
-                 * IPage类型的参数按照current_size_orderItem的格式生成key
+                 * Pagination类型的参数按照current_size_orders的格式生成key
                  */
                 if (Pagination.class.isAssignableFrom(param.getClass())) {
                     Pagination<?> page = (Pagination<?>) param;
