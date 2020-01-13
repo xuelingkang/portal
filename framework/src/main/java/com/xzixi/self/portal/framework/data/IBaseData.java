@@ -63,6 +63,13 @@ public interface IBaseData<T extends BaseModel> {
     T getOne(QueryParams<T> params);
 
     /**
+     * 查询所有记录
+     *
+     * @return 所有记录
+     */
+    List<T> list();
+
+    /**
      * 根据条件查询
      *
      * @param params 查询条件
