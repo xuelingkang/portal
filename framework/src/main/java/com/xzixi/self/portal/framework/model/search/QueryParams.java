@@ -206,12 +206,24 @@ public class QueryParams<T extends BaseModel> {
     }
 
     public QueryParams<T> and(QueryParams<T> params) {
-        this.ands.add(params);
+        return and(true, params);
+    }
+
+    public QueryParams<T> and(boolean condition, QueryParams<T> params) {
+        if (condition) {
+            this.ands.add(params);
+        }
         return this;
     }
 
     public QueryParams<T> or(QueryParams<T> params) {
-        this.ors.add(params);
+        return or(true, params);
+    }
+
+    public QueryParams<T> or(boolean condition, QueryParams<T> params) {
+        if (condition) {
+            this.ors.add(params);
+        }
         return this;
     }
 }
