@@ -172,21 +172,6 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     }
 
     @Override
-    public boolean saveBatch(Collection<T> models) {
-        return saveBatch(models, 1000);
-    }
-
-    @Override
-    public boolean saveOrUpdateBatch(Collection<T> models) {
-        return saveOrUpdateBatch(models, 1000);
-    }
-
-    @Override
-    public boolean updateBatchById(Collection<T> models) {
-        return updateBatchById(models, 1000);
-    }
-
-    @Override
     public List<T> list() {
         return list(new QueryParams<>());
     }
@@ -194,6 +179,24 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     @Override
     public int count() {
         return count(new QueryParams<>());
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean saveBatch(Collection<T> models) {
+        return saveBatch(models, 1000);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean saveOrUpdateBatch(Collection<T> models) {
+        return saveOrUpdateBatch(models, 1000);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateBatchById(Collection<T> models) {
+        return updateBatchById(models, 1000);
     }
 
     private void index(T entity) {
