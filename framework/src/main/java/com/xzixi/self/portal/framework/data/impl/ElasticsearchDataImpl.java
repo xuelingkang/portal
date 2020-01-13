@@ -68,7 +68,7 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
 
     @Override
     public T getOne(QueryParams<T> params) {
-        // TODO
+        // TODO 结果是多个的情况抛出TooManyResultsException
         return null;
     }
 
@@ -184,6 +184,11 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     @Override
     public boolean updateBatchById(Collection<T> models) {
         return updateBatchById(models, 1000);
+    }
+
+    @Override
+    public List<T> list() {
+        return list(new QueryParams<>());
     }
 
     @Override
