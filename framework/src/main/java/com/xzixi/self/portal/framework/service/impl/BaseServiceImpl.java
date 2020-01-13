@@ -115,8 +115,18 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
+    public T getOne(QueryParams<T> params, boolean throwEx) {
+        return baseData.getOne(params, throwEx);
+    }
+
+    @Override
     public T getOne(QueryParams<T> params) {
         return baseData.getOne(params);
+    }
+
+    @Override
+    public List<T> list() {
+        return baseData.list();
     }
 
     @Override
