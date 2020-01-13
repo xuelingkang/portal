@@ -85,7 +85,7 @@ public class AttachmentController {
     @GetMapping
     @ApiOperation(value = "分页查询附件")
     public Result<Pagination<AttachmentVO>> page(AttachmentSearchParams searchParams) {
-        searchParams.setDefaultOrderItems("create_time desc");
+        searchParams.setDefaultOrders("create_time desc");
         Pagination<Attachment> attachmentPage = attachmentService.page(searchParams.buildPagination(), searchParams.buildQueryParams());
         Pagination<AttachmentVO> page = attachmentService.buildVO(attachmentPage, new AttachmentVO.BuildOption());
         return new Result<>(page);

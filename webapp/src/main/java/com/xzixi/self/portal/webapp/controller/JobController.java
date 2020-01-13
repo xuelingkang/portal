@@ -37,7 +37,7 @@ public class JobController {
     @GetMapping
     @ApiOperation(value = "分页查询定时任务")
     public Result<Pagination<JobVO>> page(JobSearchParams searchParams) {
-        searchParams.setDefaultOrderItems("id asc");
+        searchParams.setDefaultOrders("id asc");
         Pagination<Job> jobPage = jobService.page(searchParams.buildPagination(), searchParams.buildQueryParams());
         Pagination<JobVO> page = jobService.buildVO(jobPage, new JobVO.BuildOption(true, false));
         return new Result<>(page);

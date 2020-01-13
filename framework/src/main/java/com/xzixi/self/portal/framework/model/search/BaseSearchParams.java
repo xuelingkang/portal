@@ -3,6 +3,7 @@ package com.xzixi.self.portal.framework.model.search;
 import com.xzixi.self.portal.framework.model.BaseModel;
 import com.xzixi.self.portal.framework.model.search.annotation.*;
 import com.xzixi.self.portal.framework.util.BeanUtils;
+import com.xzixi.self.portal.framework.util.OrderUtil;
 import com.xzixi.self.portal.framework.util.ReflectUtil;
 import lombok.Data;
 import org.apache.commons.lang3.ArrayUtils;
@@ -12,15 +13,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.Arrays;
-import java.util.regex.Pattern;
 
 /**
  * @author 薛凌康
  */
 @Data
 public class BaseSearchParams<T extends BaseModel> {
-
-    private static final Pattern ASC_REG = Pattern.compile("\\s*[Aa][Ss][Cc]\\s*");
 
     /** 实体类参数 */
     private T entity;
@@ -32,10 +30,10 @@ public class BaseSearchParams<T extends BaseModel> {
     private Long size = 10L;
 
     /** 排序规则 */
-    private String[] orderItems;
+    private String[] orders;
 
     /** 默认排序规则 */
-    private String[] defaultOrderItems;
+    private String[] defaultOrders;
 
     @SuppressWarnings("unchecked")
     public BaseSearchParams() {
@@ -52,10 +50,12 @@ public class BaseSearchParams<T extends BaseModel> {
      */
     public Pagination<T> buildPagination() {
         Pagination<T> pagination = new Pagination<>(current, size);
-        if (ArrayUtils.isEmpty(orderItems)) {
-            pagination.setOrders(defaultOrderItems);
+        String[] orders = Arrays.stream(this.orders)
+                .filter(order -> OrderUtil.parse(order) != null).toArray(String[]::new);
+        if (ArrayUtils.isEmpty(orders)) {
+            pagination.setOrders(defaultOrders);
         } else {
-            pagination.setOrders(orderItems);
+            pagination.setOrders(orders);
         }
         return pagination;
     }
@@ -72,8 +72,8 @@ public class BaseSearchParams<T extends BaseModel> {
         return queryParams;
     }
 
-    public void setDefaultOrderItems(String... defaultOrderItems) {
-        this.defaultOrderItems = defaultOrderItems;
+    public void setDefaultOrders(String... defaultOrders) {
+        this.defaultOrders = defaultOrders;
     }
 
     private static final Class<?>[] ANNOTATION_CLASSES

@@ -38,7 +38,7 @@ public class AuthorityController {
     @GetMapping
     @ApiOperation(value = "分页查询权限")
     public Result<Pagination<AuthorityVO>> page(AuthoritySearchParams searchParams) {
-        searchParams.setDefaultOrderItems("category asc", "seq asc");
+        searchParams.setDefaultOrders("category asc", "seq asc");
         Pagination<Authority> authorityPage = authorityService.page(searchParams.buildPagination(), searchParams.buildQueryParams());
         Pagination<AuthorityVO> page = authorityService.buildVO(authorityPage, new AuthorityVO.BuildOption());
         return new Result<>(page);

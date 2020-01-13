@@ -36,7 +36,7 @@ public class JobTemplateController {
     @GetMapping
     @ApiOperation(value = "分页查询任务模板")
     public Result<Pagination<JobTemplateVO>> page(JobTemplateSearchParams searchParams) {
-        searchParams.setDefaultOrderItems("id asc");
+        searchParams.setDefaultOrders("id asc");
         Pagination<JobTemplate> jobTemplatePage = jobTemplateService.page(searchParams.buildPagination(), searchParams.buildQueryParams());
         Pagination<JobTemplateVO> page = jobTemplateService.buildVO(jobTemplatePage, new JobTemplateVO.BuildOption(false));
         return new Result<>(page);

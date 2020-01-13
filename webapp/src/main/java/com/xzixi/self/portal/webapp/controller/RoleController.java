@@ -45,7 +45,7 @@ public class RoleController {
     @GetMapping
     @ApiOperation(value = "分页查询角色")
     public Result<Pagination<RoleVO>> page(RoleSearchParams searchParams) {
-        searchParams.setDefaultOrderItems("seq asc");
+        searchParams.setDefaultOrders("seq asc");
         Pagination<Role> rolePage = roleService.page(searchParams.buildPagination(), searchParams.buildQueryParams());
         Pagination<RoleVO> page = roleService.buildVO(rolePage, new RoleVO.BuildOption(false));
         return new Result<>(page);
