@@ -3,8 +3,8 @@ package com.xzixi.self.portal.framework.model.search;
 import com.xzixi.self.portal.framework.model.BaseModel;
 import com.xzixi.self.portal.framework.model.search.annotation.*;
 import com.xzixi.self.portal.framework.util.BeanUtils;
-import com.xzixi.self.portal.framework.util.OrderUtil;
-import com.xzixi.self.portal.framework.util.ReflectUtil;
+import com.xzixi.self.portal.framework.util.OrderUtils;
+import com.xzixi.self.portal.framework.util.ReflectUtils;
 import lombok.Data;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -40,7 +40,7 @@ public class BaseSearchParams<T extends BaseModel> {
         // 获取泛型类型
         Class<T> tClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         // 初始化entity，防止空指针异常
-        this.entity = ReflectUtil.newInstance(tClass);
+        this.entity = ReflectUtils.newInstance(tClass);
     }
 
     /**
@@ -53,7 +53,7 @@ public class BaseSearchParams<T extends BaseModel> {
         String[] orders = null;
         if (this.orders != null && ArrayUtils.isNotEmpty(this.orders)) {
             orders = Arrays.stream(this.orders)
-                .filter(order -> OrderUtil.parse(order) != null).toArray(String[]::new);
+                .filter(order -> OrderUtils.parse(order) != null).toArray(String[]::new);
         }
         if (orders != null && ArrayUtils.isNotEmpty(orders)) {
             pagination.setOrders(orders);
@@ -93,8 +93,8 @@ public class BaseSearchParams<T extends BaseModel> {
             return new QueryParams<>();
         }
         Class<T> cls = (Class<T>) this.entity.getClass();
-        Field[] fields = ReflectUtil.getDeclaredFields(cls);
-        T instance = ReflectUtil.newInstance(cls);
+        Field[] fields = ReflectUtils.getDeclaredFields(cls);
+        T instance = ReflectUtils.newInstance(cls);
         BeanUtils.copyPropertiesIgnoreNull(this.entity, instance, Arrays.stream(fields).filter(field ->
             findAnnotation(field) != null).map(Field::getName).toArray(String[]::new));
         return new QueryParams<>(instance);
@@ -116,7 +116,7 @@ public class BaseSearchParams<T extends BaseModel> {
         if (object == null) {
             return;
         }
-        Field[] fields = ReflectUtil.getDeclaredFields(object.getClass());
+        Field[] fields = ReflectUtils.getDeclaredFields(object.getClass());
         for (Field field : fields) {
             Annotation annotation = findAnnotation(field);
             if (annotation == null) {
@@ -129,12 +129,12 @@ public class BaseSearchParams<T extends BaseModel> {
             }
             ConditionType conditionType = condition.value();
 
-            String column = ReflectUtil.invokeMethod(annotation, "value", new Class<?>[0]);
+            String column = ReflectUtils.invokeMethod(annotation, "value", new Class<?>[0]);
             if (StringUtils.isBlank(column)) {
                 column = field.getName();
             }
 
-            Object value = ReflectUtil.getProp(object, field);
+            Object value = ReflectUtils.getProp(object, field);
 
             if (value == null && condition.ignoreNull()) {
                 continue;

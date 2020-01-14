@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  *
  * @author 薛凌康
  */
-public class ReflectUtil {
+public class ReflectUtils {
 
     /**
      * 反射创建实例

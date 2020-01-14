@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.enums.SqlKeyword;
 import com.baomidou.mybatisplus.core.enums.WrapperKeyword;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xzixi.self.portal.framework.data.IBaseData;
@@ -12,8 +13,7 @@ import com.xzixi.self.portal.framework.mapper.IBaseMapper;
 import com.xzixi.self.portal.framework.model.BaseModel;
 import com.xzixi.self.portal.framework.model.search.Pagination;
 import com.xzixi.self.portal.framework.model.search.QueryParams;
-import com.xzixi.self.portal.framework.util.HumpNameUtil;
-import com.xzixi.self.portal.framework.util.OrderUtil;
+import com.xzixi.self.portal.framework.util.OrderUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static com.xzixi.self.portal.framework.util.HumpNameUtil.humpToLine;
+import static com.baomidou.mybatisplus.core.toolkit.StringUtils.camelToUnderline;
 
 /**
  * mybatis-plus实现
@@ -88,9 +88,9 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
         if (orders != null && ArrayUtils.isNotEmpty(orders)) {
             List<OrderItem> orderItems = new ArrayList<>();
             Arrays.stream(orders).forEach(order -> {
-                String[] arr = OrderUtil.parse(order);
+                String[] arr = OrderUtils.parse(order);
                 if (arr != null && ArrayUtils.isNotEmpty(arr)) {
-                    if (OrderUtil.isAsc(arr[1])) {
+                    if (OrderUtils.isAsc(arr[1])) {
                         orderItems.add(OrderItem.asc(arr[0]));
                     } else {
                         orderItems.add(OrderItem.desc(arr[0]));
@@ -109,53 +109,53 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
         }
         String[] columns = params.getColumns();
         if (columns != null && ArrayUtils.isNotEmpty(columns)) {
-            columns = Arrays.stream(columns).map(HumpNameUtil::humpToLine).toArray(String[]::new);
+            columns = Arrays.stream(columns).map(StringUtils::camelToUnderline).toArray(String[]::new);
             queryWrapper.select(columns);
         }
         if (MapUtils.isNotEmpty(params.getEqMap())) {
-            params.getEqMap().forEach((name, value) -> queryWrapper.eq(humpToLine(name), value));
+            params.getEqMap().forEach((name, value) -> queryWrapper.eq(camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getNeMap())) {
-            params.getNeMap().forEach((name, value) -> queryWrapper.ne(humpToLine(name), value));
+            params.getNeMap().forEach((name, value) -> queryWrapper.ne(camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getLtMap())) {
-            params.getLtMap().forEach((name, value) -> queryWrapper.lt(humpToLine(name), value));
+            params.getLtMap().forEach((name, value) -> queryWrapper.lt(camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getLeMap())) {
-            params.getLeMap().forEach((name, value) -> queryWrapper.le(humpToLine(name), value));
+            params.getLeMap().forEach((name, value) -> queryWrapper.le(camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getGtMap())) {
-            params.getGtMap().forEach((name, value) -> queryWrapper.gt(humpToLine(name), value));
+            params.getGtMap().forEach((name, value) -> queryWrapper.gt(camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getGeMap())) {
-            params.getGeMap().forEach((name, value) -> queryWrapper.ge(humpToLine(name), value));
+            params.getGeMap().forEach((name, value) -> queryWrapper.ge(camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getLikeMap())) {
-            params.getLikeMap().forEach((name, value) -> queryWrapper.like(humpToLine(name), value));
+            params.getLikeMap().forEach((name, value) -> queryWrapper.like(camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getNotLikeMap())) {
-            params.getNotLikeMap().forEach((name, value) -> queryWrapper.notLike(humpToLine(name), value));
+            params.getNotLikeMap().forEach((name, value) -> queryWrapper.notLike(camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getInMap())) {
-            params.getInMap().forEach((name, value) -> queryWrapper.in(humpToLine(name), value));
+            params.getInMap().forEach((name, value) -> queryWrapper.in(camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getNotInMap())) {
-            params.getNotInMap().forEach((name, value) -> queryWrapper.notIn(humpToLine(name), value));
+            params.getNotInMap().forEach((name, value) -> queryWrapper.notIn(camelToUnderline(name), value));
         }
         if (CollectionUtils.isNotEmpty(params.getNulls())) {
-            params.getNulls().forEach(name -> queryWrapper.isNull(humpToLine(name)));
+            params.getNulls().forEach(name -> queryWrapper.isNull(camelToUnderline(name)));
         }
         if (CollectionUtils.isNotEmpty(params.getNotNulls())) {
-            params.getNotNulls().forEach(name -> queryWrapper.isNotNull(humpToLine(name)));
+            params.getNotNulls().forEach(name -> queryWrapper.isNotNull(camelToUnderline(name)));
         }
         if (CollectionUtils.isNotEmpty(params.getOrders())) {
             params.getOrders().forEach(order -> {
-                String[] arr = OrderUtil.parse(order);
+                String[] arr = OrderUtils.parse(order);
                 if (arr != null && ArrayUtils.isNotEmpty(arr)) {
-                    if (OrderUtil.isAsc(arr[1])) {
-                        queryWrapper.orderByAsc(humpToLine(arr[0]));
+                    if (OrderUtils.isAsc(arr[1])) {
+                        queryWrapper.orderByAsc(camelToUnderline(arr[0]));
                     } else {
-                        queryWrapper.orderByDesc(humpToLine(arr[0]));
+                        queryWrapper.orderByDesc(camelToUnderline(arr[0]));
                     }
                 }
             });

@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 /**
  * @author 薛凌康
  */
-public class OrderUtil {
+public class OrderUtils {
 
     private static final Pattern ASC_REG = Pattern.compile("\\s*[Aa][Ss][Cc]\\s*");
     private static final String SPACE_REG = "\\s+";
