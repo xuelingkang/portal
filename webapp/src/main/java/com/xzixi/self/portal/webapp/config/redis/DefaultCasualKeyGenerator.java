@@ -42,17 +42,16 @@ public class DefaultCasualKeyGenerator implements KeyGenerator {
                 if (TypeUtil.isSimpleValueType(param.getClass())) {
                     return param;
                 }
-                /*
-                 * Pagination类型的参数按照current_size_orders的格式生成key
-                 */
+                // Pagination类型的参数按照current_size_orders的格式生成key
                 if (Pagination.class.isAssignableFrom(param.getClass())) {
                     Pagination<?> page = (Pagination<?>) param;
                     long current = page.getCurrent();
                     long size = page.getSize();
                     String[] orders = page.getOrders();
                     String orderInfo = StringUtils.join(
-                            Arrays.stream(orders).map(order -> order.replaceAll(SPACE_REG, PARAM_SEPARATOR)).collect(Collectors.toList()),
-                            PARAM_SEPARATOR);
+                        Arrays.stream(orders).map(order -> order.replaceAll(SPACE_REG, PARAM_SEPARATOR))
+                            .collect(Collectors.toList()),
+                        PARAM_SEPARATOR);
                     return String.format(PAGE_PARAM_TEMPLATE, current, size, orderInfo);
                 }
                 return DigestUtils.md5DigestAsHex(toJson(param).getBytes(StandardCharsets.UTF_8));
