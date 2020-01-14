@@ -8,7 +8,7 @@ import com.xzixi.self.portal.framework.mapper.IBaseMapper;
 import com.xzixi.self.portal.framework.model.BaseModel;
 import com.xzixi.self.portal.framework.model.search.Pagination;
 import com.xzixi.self.portal.framework.model.search.QueryParams;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +47,6 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         }
         // Document注解的type属性
         this.type = document.type();
-        if (StringUtils.isBlank(type)) {
-            throw new ProjectException(String.format("类(%s)必须设置@Document注解的type属性", clazz.getName()));
-        }
     }
 
     @Override
@@ -67,17 +64,6 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     }
 
     @Override
-    public T getOne(QueryParams<T> params) {
-        // TODO 结果是多个的情况抛出TooManyResultsException
-        return null;
-    }
-
-    @Override
-    public List<T> list() {
-        return list(new QueryParams<>());
-    }
-
-    @Override
     public List<T> list(QueryParams<T> params) {
         // TODO
         return null;
@@ -87,11 +73,6 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     public Pagination<T> page(Pagination<T> pagination, QueryParams<T> params) {
         // TODO
         return null;
-    }
-
-    @Override
-    public int count() {
-        return count(new QueryParams<>());
     }
 
     @Override
@@ -108,12 +89,6 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         }
         index(model);
         return true;
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean saveBatch(Collection<T> models) {
-        return saveBatch(models, 1000);
     }
 
     @Override
@@ -138,12 +113,6 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean saveOrUpdateBatch(Collection<T> models) {
-        return saveOrUpdateBatch(models, 1000);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean saveOrUpdateBatch(Collection<T> models, int batchSize) {
         if (!super.saveOrUpdateBatch(models, batchSize)) {
             throw new ServerException(models, "数据库写入失败！");
@@ -160,12 +129,6 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         }
         index(model);
         return true;
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean updateBatchById(Collection<T> models) {
-        return updateBatchById(models, 1000);
     }
 
     @Override
@@ -199,6 +162,11 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         return true;
     }
 
+    @Override
+    public int defaultBatchSize() {
+        return 1000;
+    }
+
     private void index(T entity) {
         try {
             IndexQuery indexQuery = new IndexQueryBuilder()
@@ -214,17 +182,19 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     private void index(Collection<T> entityList, int batchSize) {
         try {
             List<T> entities = new ArrayList<>(entityList);
+            List<IndexQuery> queries = null;
             int fromIndex = 0;
             int toIndex = fromIndex + batchSize;
             while (toIndex < entities.size()) {
-                List<T> subList = entities.subList(fromIndex, toIndex);
-                List<IndexQuery> queries = subList.stream()
+                queries = entities.subList(fromIndex, toIndex).stream()
                     .map(entity -> new IndexQueryBuilder()
                         .withId(String.valueOf(entity.getId())).withObject(entity).build())
                     .collect(Collectors.toList());
-                elasticsearchTemplate.bulkIndex(queries);
                 fromIndex = toIndex;
                 toIndex += batchSize;
+            }
+            if (CollectionUtils.isNotEmpty(queries)) {
+                elasticsearchTemplate.bulkIndex(queries);
             }
         } catch (Exception e) {
             throw new ServerException(entityList, "搜索引擎写入失败！", e);
