@@ -73,6 +73,11 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     }
 
     @Override
+    public List<T> list() {
+        return list(new QueryParams<>());
+    }
+
+    @Override
     public List<T> list(QueryParams<T> params) {
         // TODO
         return null;
@@ -82,6 +87,11 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     public Pagination<T> page(Pagination<T> pagination, QueryParams<T> params) {
         // TODO
         return null;
+    }
+
+    @Override
+    public int count() {
+        return count(new QueryParams<>());
     }
 
     @Override
@@ -98,6 +108,12 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         }
         index(model);
         return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean saveBatch(Collection<T> models) {
+        return saveBatch(models, 1000);
     }
 
     @Override
@@ -122,6 +138,12 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    public boolean saveOrUpdateBatch(Collection<T> models) {
+        return saveOrUpdateBatch(models, 1000);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean saveOrUpdateBatch(Collection<T> models, int batchSize) {
         if (!super.saveOrUpdateBatch(models, batchSize)) {
             throw new ServerException(models, "数据库写入失败！");
@@ -138,6 +160,12 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         }
         index(model);
         return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateBatchById(Collection<T> models) {
+        return updateBatchById(models, 1000);
     }
 
     @Override
@@ -169,34 +197,6 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         String[] ids = idList.stream().map(String::valueOf).toArray(String[]::new);
         remove(QueryBuilders.idsQuery(type).addIds(ids));
         return true;
-    }
-
-    @Override
-    public List<T> list() {
-        return list(new QueryParams<>());
-    }
-
-    @Override
-    public int count() {
-        return count(new QueryParams<>());
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean saveBatch(Collection<T> models) {
-        return saveBatch(models, 1000);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean saveOrUpdateBatch(Collection<T> models) {
-        return saveOrUpdateBatch(models, 1000);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean updateBatchById(Collection<T> models) {
-        return updateBatchById(models, 1000);
     }
 
     private void index(T entity) {

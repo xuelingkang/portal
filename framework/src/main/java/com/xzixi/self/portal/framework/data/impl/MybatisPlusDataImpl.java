@@ -31,7 +31,7 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
 
     @Override
     public T getOne(QueryParams<T> params) {
-        return super.getOne(buildQueryWrapper(params), true);
+        return super.getOne(parseQueryWrapper(params), true);
     }
 
     @Override
@@ -41,12 +41,12 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
 
     @Override
     public List<T> list(QueryParams<T> params) {
-        return super.list(buildQueryWrapper(params));
+        return super.list(parseQueryWrapper(params));
     }
 
     @Override
     public Pagination<T> page(Pagination<T> pagination, QueryParams<T> params) {
-        IPage<T> page = super.page(buildPage(pagination), buildQueryWrapper(params));
+        IPage<T> page = super.page(parsePage(pagination), parseQueryWrapper(params));
         pagination.setCurrent(page.getCurrent());
         pagination.setSize(page.getSize());
         pagination.setTotal(page.getTotal());
@@ -61,7 +61,7 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
 
     @Override
     public int count(QueryParams<T> params) {
-        return super.count(buildQueryWrapper(params));
+        return super.count(parseQueryWrapper(params));
     }
 
     @Override
@@ -79,7 +79,7 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
         return updateBatchById(models, 1000);
     }
 
-    public Page<T> buildPage(Pagination<T> pagination) {
+    private Page<T> parsePage(Pagination<T> pagination) {
         Page<T> page = new Page<>(pagination.getCurrent(), pagination.getSize(), pagination.getTotal(), pagination.isSearchCount());
         String[] orders = pagination.getOrders();
         if (orders != null && ArrayUtils.isNotEmpty(orders)) {
@@ -99,7 +99,7 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
         return page;
     }
 
-    public QueryWrapper<T> buildQueryWrapper(QueryParams<T> params) {
+    private QueryWrapper<T> parseQueryWrapper(QueryParams<T> params) {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         if (params.getModel() != null) {
             queryWrapper.setEntity(params.getModel());
@@ -158,11 +158,11 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
         }
         if (CollectionUtils.isNotEmpty(params.getAnds())) {
             params.getAnds().forEach(queryParams -> queryWrapper.getExpression()
-                    .add(SqlKeyword.AND, WrapperKeyword.LEFT_BRACKET, buildQueryWrapper(queryParams), WrapperKeyword.RIGHT_BRACKET));
+                    .add(SqlKeyword.AND, WrapperKeyword.LEFT_BRACKET, parseQueryWrapper(queryParams), WrapperKeyword.RIGHT_BRACKET));
         }
         if (CollectionUtils.isNotEmpty(params.getOrs())) {
             params.getOrs().forEach(queryParams -> queryWrapper.getExpression()
-                    .add(SqlKeyword.OR, WrapperKeyword.LEFT_BRACKET, buildQueryWrapper(queryParams), WrapperKeyword.RIGHT_BRACKET));
+                    .add(SqlKeyword.OR, WrapperKeyword.LEFT_BRACKET, parseQueryWrapper(queryParams), WrapperKeyword.RIGHT_BRACKET));
         }
         return queryWrapper;
     }

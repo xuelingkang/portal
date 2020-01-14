@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * 查询参数
@@ -205,24 +206,28 @@ public class QueryParams<T extends BaseModel> {
         return this;
     }
 
-    public QueryParams<T> and(QueryParams<T> params) {
-        return and(true, params);
+    public QueryParams<T> and(Consumer<QueryParams<T>> consumer) {
+        return and(true, consumer);
     }
 
-    public QueryParams<T> and(boolean condition, QueryParams<T> params) {
+    public QueryParams<T> and(boolean condition, Consumer<QueryParams<T>> consumer) {
         if (condition) {
+            QueryParams<T> params = new QueryParams<>();
             this.ands.add(params);
+            consumer.accept(params);
         }
         return this;
     }
 
-    public QueryParams<T> or(QueryParams<T> params) {
-        return or(true, params);
+    public QueryParams<T> or(Consumer<QueryParams<T>> consumer) {
+        return or(true, consumer);
     }
 
-    public QueryParams<T> or(boolean condition, QueryParams<T> params) {
+    public QueryParams<T> or(boolean condition, Consumer<QueryParams<T>> consumer) {
         if (condition) {
+            QueryParams<T> params = new QueryParams<>();
             this.ors.add(params);
+            consumer.accept(params);
         }
         return this;
     }
