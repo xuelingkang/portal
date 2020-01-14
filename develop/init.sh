@@ -182,6 +182,16 @@ http {
 }
 EOF
 
+# elasticsearch配置文件
+mkdir -p /etc/elasticsearch
+tee /etc/elasticsearch/elasticsearch.yml <<-'EOF'
+cluster.name: "docker-cluster"
+network.host: 0.0.0.0
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+discovery.zen.minimum_master_nodes: 1
+EOF
+
 # 容器脚本
 # mysql
 tee mysql.sh <<-'EOF'
@@ -263,6 +273,7 @@ docker run -d --name elasticsearch \
 -e "discovery.type=single-node" \
 -v /etc/localtime:/etc/localtime \
 -v /etc/timezone:/etc/timezone \
+-v /etc/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml \
 -v /etc/elasticsearch/plugins/ik:/usr/share/elasticsearch/plugins/ik \
 -p 9200:9200 \
 -p 9300:9300 \
