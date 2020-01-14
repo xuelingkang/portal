@@ -50,12 +50,15 @@ public class BaseSearchParams<T extends BaseModel> {
      */
     public Pagination<T> buildPagination() {
         Pagination<T> pagination = new Pagination<>(current, size);
-        String[] orders = Arrays.stream(this.orders)
+        String[] orders = null;
+        if (this.orders != null && ArrayUtils.isNotEmpty(this.orders)) {
+            orders = Arrays.stream(this.orders)
                 .filter(order -> OrderUtil.parse(order) != null).toArray(String[]::new);
-        if (ArrayUtils.isEmpty(orders)) {
-            pagination.setOrders(defaultOrders);
-        } else {
+        }
+        if (orders != null && ArrayUtils.isNotEmpty(orders)) {
             pagination.setOrders(orders);
+        } else {
+            pagination.setOrders(defaultOrders);
         }
         return pagination;
     }
