@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * 查询参数
+ * 查询参数，<b>列名一律使用实体类的属性名</b><br>
  * 对mybatis-plus和elasticsearch等具体的实现解耦
  *
  * @author 薛凌康
