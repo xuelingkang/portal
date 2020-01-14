@@ -12,6 +12,7 @@ import java.util.function.Consumer;
 
 /**
  * 查询参数
+ * 对mybatis-plus和elasticsearch解耦
  *
  * @author 薛凌康
  */
