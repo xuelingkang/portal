@@ -51,7 +51,7 @@ public class DefaultCasualKeyGenerator implements KeyGenerator {
                     long size = page.getSize();
                     String[] orders = page.getOrders();
                     String orderInfo = StringUtils.join(
-                            Arrays.stream(orders).map(order -> order.replaceAll(SPACE_REG, PARAM_SEPARATOR)),
+                            Arrays.stream(orders).map(order -> order.replaceAll(SPACE_REG, PARAM_SEPARATOR)).collect(Collectors.toList()),
                             PARAM_SEPARATOR);
                     return String.format(PAGE_PARAM_TEMPLATE, current, size, orderInfo);
                 }

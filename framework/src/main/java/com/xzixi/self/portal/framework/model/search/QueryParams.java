@@ -2,8 +2,8 @@ package com.xzixi.self.portal.framework.model.search;
 
 import com.xzixi.self.portal.framework.model.BaseModel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -12,11 +12,12 @@ import java.util.function.Consumer;
 
 /**
  * 查询参数
- * 对mybatis-plus和elasticsearch解耦
+ * 对mybatis-plus和elasticsearch等具体的实现解耦
  *
  * @author 薛凌康
  */
 @Data
+@NoArgsConstructor
 public class QueryParams<T extends BaseModel> {
 
     private T model;
@@ -55,13 +56,7 @@ public class QueryParams<T extends BaseModel> {
 
     private Collection<QueryParams<T>> ors = new LinkedList<>();
 
-    @SuppressWarnings("unchecked")
-    public QueryParams() {
-        this.modelClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    }
-
     public QueryParams(T model) {
-        this();
         this.model = model;
     }
 

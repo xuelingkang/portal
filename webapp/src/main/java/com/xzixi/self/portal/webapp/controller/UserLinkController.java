@@ -42,7 +42,7 @@ public class UserLinkController {
     @ApiOperation(value = "查询当前用户的偶像")
     public Result<Collection<User>> idols() {
         Integer currentUserId = SecurityUtil.getCurrentUserId();
-        List<UserLink> links = userLinkService.list(new QueryParams<>(new UserLink().setFollowerId(currentUserId)).orderBy("follow_time asc"));
+        List<UserLink> links = userLinkService.list(new QueryParams<>(new UserLink().setFollowerId(currentUserId)).orderBy("followTime asc"));
         if (CollectionUtils.isEmpty(links)) {
             return new Result<>(new ArrayList<>());
         }
@@ -58,7 +58,7 @@ public class UserLinkController {
     @ApiOperation(value = "查询当前用户的粉丝")
     public Result<Collection<User>> followers() {
         Integer currentUserId = SecurityUtil.getCurrentUserId();
-        List<UserLink> links = userLinkService.list(new QueryParams<>(new UserLink().setIdolId(currentUserId)).orderBy("follow_time asc"));
+        List<UserLink> links = userLinkService.list(new QueryParams<>(new UserLink().setIdolId(currentUserId)).orderBy("followTime asc"));
         if (CollectionUtils.isEmpty(links)) {
             return new Result<>(new ArrayList<>());
         }

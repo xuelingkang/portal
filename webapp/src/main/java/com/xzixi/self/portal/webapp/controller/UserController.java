@@ -73,7 +73,7 @@ public class UserController {
     @GetMapping
     @ApiOperation(value = "分页查询用户")
     public Result<Pagination<UserVO>> page(UserSearchParams searchParams) {
-        searchParams.setDefaultOrders("create_time desc");
+        searchParams.setDefaultOrders("createTime desc");
         Pagination<User> userPage = userService.page(searchParams.buildPagination(), searchParams.buildQueryParams());
         userPage.getRecords().forEach(user -> user.setPassword(null));
         Pagination<UserVO> page = userService.buildVO(userPage, new UserVO.BuildOption(false, false));

@@ -12,6 +12,7 @@ import com.xzixi.self.portal.framework.mapper.IBaseMapper;
 import com.xzixi.self.portal.framework.model.BaseModel;
 import com.xzixi.self.portal.framework.model.search.Pagination;
 import com.xzixi.self.portal.framework.model.search.QueryParams;
+import com.xzixi.self.portal.framework.util.HumpNameUtil;
 import com.xzixi.self.portal.framework.util.OrderUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -21,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import static com.xzixi.self.portal.framework.util.HumpNameUtil.humpToLine;
 
 /**
  * mybatis-plus实现
@@ -106,52 +109,53 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
         }
         String[] columns = params.getColumns();
         if (columns != null && ArrayUtils.isNotEmpty(columns)) {
-            queryWrapper.select(params.getColumns());
+            columns = Arrays.stream(columns).map(HumpNameUtil::humpToLine).toArray(String[]::new);
+            queryWrapper.select(columns);
         }
         if (MapUtils.isNotEmpty(params.getEqMap())) {
-            params.getEqMap().forEach(queryWrapper::eq);
+            params.getEqMap().forEach((name, value) -> queryWrapper.eq(humpToLine(name), value));
         }
         if (MapUtils.isNotEmpty(params.getNeMap())) {
-            params.getNeMap().forEach(queryWrapper::ne);
+            params.getNeMap().forEach((name, value) -> queryWrapper.ne(humpToLine(name), value));
         }
         if (MapUtils.isNotEmpty(params.getLtMap())) {
-            params.getLtMap().forEach(queryWrapper::lt);
+            params.getLtMap().forEach((name, value) -> queryWrapper.lt(humpToLine(name), value));
         }
         if (MapUtils.isNotEmpty(params.getLeMap())) {
-            params.getLeMap().forEach(queryWrapper::le);
+            params.getLeMap().forEach((name, value) -> queryWrapper.le(humpToLine(name), value));
         }
         if (MapUtils.isNotEmpty(params.getGtMap())) {
-            params.getGtMap().forEach(queryWrapper::gt);
+            params.getGtMap().forEach((name, value) -> queryWrapper.gt(humpToLine(name), value));
         }
         if (MapUtils.isNotEmpty(params.getGeMap())) {
-            params.getGeMap().forEach(queryWrapper::ge);
+            params.getGeMap().forEach((name, value) -> queryWrapper.ge(humpToLine(name), value));
         }
         if (MapUtils.isNotEmpty(params.getLikeMap())) {
-            params.getLikeMap().forEach(queryWrapper::like);
+            params.getLikeMap().forEach((name, value) -> queryWrapper.like(humpToLine(name), value));
         }
         if (MapUtils.isNotEmpty(params.getNotLikeMap())) {
-            params.getNotLikeMap().forEach(queryWrapper::notLike);
+            params.getNotLikeMap().forEach((name, value) -> queryWrapper.notLike(humpToLine(name), value));
         }
         if (MapUtils.isNotEmpty(params.getInMap())) {
-            params.getInMap().forEach(queryWrapper::in);
+            params.getInMap().forEach((name, value) -> queryWrapper.in(humpToLine(name), value));
         }
         if (MapUtils.isNotEmpty(params.getNotInMap())) {
-            params.getNotInMap().forEach(queryWrapper::notIn);
+            params.getNotInMap().forEach((name, value) -> queryWrapper.notIn(humpToLine(name), value));
         }
         if (CollectionUtils.isNotEmpty(params.getNulls())) {
-            params.getNulls().forEach(queryWrapper::isNull);
+            params.getNulls().forEach(name -> queryWrapper.isNull(humpToLine(name)));
         }
         if (CollectionUtils.isNotEmpty(params.getNotNulls())) {
-            params.getNotNulls().forEach(queryWrapper::isNotNull);
+            params.getNotNulls().forEach(name -> queryWrapper.isNotNull(humpToLine(name)));
         }
         if (CollectionUtils.isNotEmpty(params.getOrders())) {
             params.getOrders().forEach(order -> {
                 String[] arr = OrderUtil.parse(order);
                 if (arr != null && ArrayUtils.isNotEmpty(arr)) {
                     if (OrderUtil.isAsc(arr[1])) {
-                        queryWrapper.orderByAsc(arr[0]);
+                        queryWrapper.orderByAsc(humpToLine(arr[0]));
                     } else {
-                        queryWrapper.orderByDesc(arr[0]);
+                        queryWrapper.orderByDesc(humpToLine(arr[0]));
                     }
                 }
             });
