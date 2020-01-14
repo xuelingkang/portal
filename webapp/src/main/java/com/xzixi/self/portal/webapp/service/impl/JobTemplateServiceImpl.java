@@ -36,7 +36,7 @@ public class JobTemplateServiceImpl extends BaseServiceImpl<IJobTemplateData, Jo
         }
         parameters.forEach(parameter -> parameter.setJobTemplateId(jobTemplate.getId()));
         if (CollectionUtils.isNotEmpty(parameters)) {
-            if (!jobTemplateParameterService.saveBatch(parameters)) {
+            if (!jobTemplateParameterService.defaultSaveBatch(parameters)) {
                 throw new ServerException(parameters, "保存定时任务模板参数失败！");
             }
         }

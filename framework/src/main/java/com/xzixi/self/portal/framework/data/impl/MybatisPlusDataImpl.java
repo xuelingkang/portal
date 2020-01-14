@@ -20,7 +20,6 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import static com.baomidou.mybatisplus.core.toolkit.StringUtils.camelToUnderline;
@@ -31,16 +30,6 @@ import static com.baomidou.mybatisplus.core.toolkit.StringUtils.camelToUnderline
  * @author 薛凌康
  */
 public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> extends ServiceImpl<M, T> implements IBaseData<T> {
-
-    @Override
-    public T getOne(QueryParams<T> params) {
-        return super.getOne(parseQueryWrapper(params), true);
-    }
-
-    @Override
-    public List<T> list() {
-        return list(new QueryParams<>());
-    }
 
     @Override
     public List<T> list(QueryParams<T> params) {
@@ -58,28 +47,13 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
     }
 
     @Override
-    public int count() {
-        return count(new QueryParams<>());
-    }
-
-    @Override
     public int count(QueryParams<T> params) {
         return super.count(parseQueryWrapper(params));
     }
 
     @Override
-    public boolean saveBatch(Collection<T> models) {
-        return saveBatch(models, 1000);
-    }
-
-    @Override
-    public boolean saveOrUpdateBatch(Collection<T> models) {
-        return saveOrUpdateBatch(models, 1000);
-    }
-
-    @Override
-    public boolean updateBatchById(Collection<T> models) {
-        return updateBatchById(models, 1000);
+    public int defaultBatchSize() {
+        return 1000;
     }
 
     private Page<T> parsePage(Pagination<T> pagination) {

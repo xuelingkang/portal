@@ -5,7 +5,6 @@ import com.xzixi.self.portal.framework.model.BaseModel;
 import com.xzixi.self.portal.framework.model.search.Pagination;
 import com.xzixi.self.portal.framework.model.search.QueryParams;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.ibatis.exceptions.TooManyResultsException;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -40,34 +39,34 @@ public interface IBaseData<T extends BaseModel> {
      * @return 实体对象
      */
     default T getOne(QueryParams<T> params, boolean throwEx) {
-        if (throwEx) {
-            try {
-                return getOne(params);
-            } catch (TooManyResultsException e) {
-                throw new ServerException(params, "查询结果应该为1个，却查询到多个");
-            }
-        }
         List<T> models = list(params);
-        if (CollectionUtils.isNotEmpty(models)) {
-            return models.get(0);
+        if (CollectionUtils.isEmpty(models)) {
+            return null;
         }
-        return null;
+        if (throwEx && models.size() > 1) {
+            throw new ServerException(params, String.format("查询结果应该为1个，却查询到%s个", models.size()));
+        }
+        return models.get(0);
     }
 
     /**
-     * 根据条件查询一个
+     * 根据条件查询一个，当查询结果是多个时抛出异常
      *
      * @param params 查询条件
      * @return 实体对象
      */
-    T getOne(QueryParams<T> params);
+    default T getOne(QueryParams<T> params) {
+        return getOne(params, true);
+    }
 
     /**
      * 查询所有记录
      *
      * @return 所有记录
      */
-    List<T> list();
+    default List<T> listAll() {
+        return list(new QueryParams<>());
+    }
 
     /**
      * 根据条件查询
@@ -91,7 +90,9 @@ public interface IBaseData<T extends BaseModel> {
      *
      * @return 所有记录个数
      */
-    int count();
+    default int countAll() {
+        return count(new QueryParams<>());
+    }
 
     /**
      * 根据条件查询个数
@@ -115,7 +116,9 @@ public interface IBaseData<T extends BaseModel> {
      * @param models 实体集合
      * @return {@code true} 成功 {@code false} 失败
      */
-    boolean saveBatch(Collection<T> models);
+    default boolean defaultSaveBatch(Collection<T> models) {
+        return saveOrUpdateBatch(models, defaultBatchSize());
+    }
 
     /**
      * 批量保存
@@ -140,7 +143,9 @@ public interface IBaseData<T extends BaseModel> {
      * @param models 实体集合
      * @return {@code true} 成功 {@code false} 失败
      */
-    boolean saveOrUpdateBatch(Collection<T> models);
+    default boolean defaultSaveOrUpdateBatch(Collection<T> models) {
+        return saveOrUpdateBatch(models, defaultBatchSize());
+    }
 
     /**
      * 批量保存或更新
@@ -165,7 +170,9 @@ public interface IBaseData<T extends BaseModel> {
      * @param models 实体集合
      * @return {@code true} 成功 {@code false} 失败
      */
-    boolean updateBatchById(Collection<T> models);
+    default boolean defaultUpdateBatchById(Collection<T> models) {
+        return updateBatchById(models, defaultBatchSize());
+    }
 
     /**
      * 根据id批量更新
@@ -191,4 +198,11 @@ public interface IBaseData<T extends BaseModel> {
      * @return {@code true} 成功 {@code false} 失败
      */
     boolean removeByIds(Collection<? extends Serializable> ids);
+
+    /**
+     * 默认批次大小
+     *
+     * @return int
+     */
+    int defaultBatchSize();
 }

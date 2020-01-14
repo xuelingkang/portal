@@ -140,7 +140,7 @@ public class UserController {
         }
         // 锁定
         users.forEach(user -> user.setLocked(true));
-        if (userService.updateBatchById(users)) {
+        if (userService.defaultUpdateBatchById(users)) {
             return new Result<>();
         }
         throw new ServerException(ids, "锁定用户账户失败！");
@@ -156,7 +156,7 @@ public class UserController {
         }
         // 解锁
         users.forEach(user -> user.setLocked(false));
-        if (userService.updateBatchById(users)) {
+        if (userService.defaultUpdateBatchById(users)) {
             return new Result<>();
         }
         throw new ServerException(ids, "解锁用户账户失败！");

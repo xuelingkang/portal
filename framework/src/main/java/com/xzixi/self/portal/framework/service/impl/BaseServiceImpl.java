@@ -76,7 +76,7 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
                 })
                 .collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(modelsForSave)) {
-            if (!saveBatch(modelsForSave)) {
+            if (!defaultSaveBatch(modelsForSave)) {
                 return false;
             }
         }
@@ -86,7 +86,7 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
             }
         }
         if (CollectionUtils.isNotEmpty(modelsForUpdate)) {
-            return updateBatchById(modelsForUpdate);
+            return defaultUpdateBatchById(modelsForUpdate);
         }
         return true;
     }
@@ -125,8 +125,8 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    public List<T> list() {
-        return baseData.list();
+    public List<T> listAll() {
+        return baseData.listAll();
     }
 
     @Override
@@ -140,8 +140,8 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    public final int count() {
-        return baseData.count();
+    public final int countAll() {
+        return baseData.countAll();
     }
 
     @Override
@@ -158,8 +158,8 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    public final boolean saveBatch(Collection<T> entityList) {
-        return baseData.saveBatch(entityList);
+    public final boolean defaultSaveBatch(Collection<T> entityList) {
+        return baseData.defaultSaveBatch(entityList);
     }
 
     @Override
@@ -179,8 +179,8 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    public final boolean saveOrUpdateBatch(Collection<T> entityList) {
-        return baseData.saveOrUpdateBatch(entityList);
+    public final boolean defaultSaveOrUpdateBatch(Collection<T> entityList) {
+        return baseData.defaultSaveOrUpdateBatch(entityList);
     }
 
     @Override
@@ -200,8 +200,8 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    public final boolean updateBatchById(Collection<T> entityList) {
-        return baseData.updateBatchById(entityList);
+    public final boolean defaultUpdateBatchById(Collection<T> entityList) {
+        return baseData.defaultUpdateBatchById(entityList);
     }
 
     @Override
@@ -229,5 +229,10 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
             throw new ProjectException("idList不能为空！");
         }
         return baseData.removeByIds(idList);
+    }
+
+    @Override
+    public int defaultBatchSize() {
+        return baseData.defaultBatchSize();
     }
 }

@@ -47,7 +47,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, Job> implements IJ
             throw new ServerException(job, "保存定时任务失败！");
         }
         parameters.forEach(parameter -> parameter.setJobId(job.getId()));
-        if (!jobParameterService.saveBatch(parameters)) {
+        if (!jobParameterService.defaultSaveBatch(parameters)) {
             throw new ServerException(parameters, "保存定时任务参数失败！");
         }
     }
