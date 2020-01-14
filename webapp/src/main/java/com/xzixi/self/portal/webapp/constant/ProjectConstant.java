@@ -5,5 +5,5 @@ package com.xzixi.self.portal.webapp.constant;
  */
 public interface ProjectConstant {
 
-    String INDEX_NAME = "PORTAL";
+    String INDEX_NAME_PREFIX = "portal-";
 }
