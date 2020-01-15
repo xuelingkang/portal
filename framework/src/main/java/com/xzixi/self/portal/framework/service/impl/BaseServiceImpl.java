@@ -44,11 +44,9 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     public final boolean updateBatchByIdIgnoreNullProps(Collection<T> entityList, int batchSize) {
         Collection<Integer> idList = entityList.stream().map(BaseModel::getId).collect(Collectors.toList());
         Collection<T> entities = listByIds(idList);
-        entities.forEach(entityData -> {
-            entityList.stream()
-                    .filter(entity -> Objects.equals(entityData.getId(), entity.getId())).findFirst()
-                    .ifPresent(entity -> BeanUtils.copyPropertiesIgnoreNull(entity, entityData));
-        });
+        entities.forEach(entityData -> entityList.stream()
+            .filter(entity -> Objects.equals(entityData.getId(), entity.getId())).findFirst()
+            .ifPresent(entity -> BeanUtils.copyPropertiesIgnoreNull(entity, entityData)));
         return updateBatchById(entities, batchSize);
     }
 
