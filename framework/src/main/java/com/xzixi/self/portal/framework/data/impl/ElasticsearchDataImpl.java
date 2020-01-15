@@ -216,18 +216,15 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
             List<T> entities = new ArrayList<>(entityList);
             int fromIndex = 0;
             int toIndex = fromIndex + batchSize;
-            while (true) {
+            while (fromIndex < entities.size()) {
                 if (toIndex > entities.size()) {
                     toIndex = entities.size();
                 }
                 List<IndexQuery> queries = entities.subList(fromIndex, toIndex).stream()
-                    .map(entity -> new IndexQueryBuilder()
-                        .withId(String.valueOf(entity.getId())).withObject(entity).build())
-                    .collect(Collectors.toList());
+                        .map(entity -> new IndexQueryBuilder()
+                                .withId(String.valueOf(entity.getId())).withObject(entity).build())
+                        .collect(Collectors.toList());
                 elasticsearchTemplate.bulkIndex(queries);
-                if (toIndex == entities.size()) {
-                    break;
-                }
                 fromIndex = toIndex;
                 toIndex += batchSize;
             }
