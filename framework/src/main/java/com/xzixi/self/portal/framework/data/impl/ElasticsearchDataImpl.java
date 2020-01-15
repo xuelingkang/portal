@@ -2,6 +2,7 @@ package com.xzixi.self.portal.framework.data.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xzixi.self.portal.framework.data.IBaseData;
+import com.xzixi.self.portal.framework.data.ISearchEngine;
 import com.xzixi.self.portal.framework.exception.ProjectException;
 import com.xzixi.self.portal.framework.exception.ServerException;
 import com.xzixi.self.portal.framework.mapper.IBaseMapper;
@@ -29,7 +30,8 @@ import java.util.stream.Collectors;
  *
  * @author 薛凌康
  */
-public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel> extends ServiceImpl<M, T> implements IBaseData<T> {
+public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel> extends ServiceImpl<M, T>
+    implements IBaseData<T>, ISearchEngine {
 
     private Class<T> clazz;
     private String type;
@@ -165,6 +167,16 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     @Override
     public int defaultBatchSize() {
         return 1000;
+    }
+
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public void sync() {
+
     }
 
     private void index(T entity) {

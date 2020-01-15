@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implements IBaseService<T> {
 
     @Autowired
-    private D baseData;
+    protected D baseData;
 
     @Override
     public final boolean updateByIdIgnoreNullProps(T entity) {
@@ -115,27 +115,27 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    public T getOne(QueryParams<T> params, boolean throwEx) {
+    public final T getOne(QueryParams<T> params, boolean throwEx) {
         return baseData.getOne(params, throwEx);
     }
 
     @Override
-    public T getOne(QueryParams<T> params) {
+    public final T getOne(QueryParams<T> params) {
         return baseData.getOne(params);
     }
 
     @Override
-    public List<T> listAll() {
+    public final List<T> listAll() {
         return baseData.listAll();
     }
 
     @Override
-    public List<T> list(QueryParams<T> params) {
+    public final List<T> list(QueryParams<T> params) {
         return baseData.list(params);
     }
 
     @Override
-    public Pagination<T> page(Pagination<T> pagination, QueryParams<T> params) {
+    public final Pagination<T> page(Pagination<T> pagination, QueryParams<T> params) {
         return baseData.page(pagination, params);
     }
 
@@ -145,7 +145,7 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    public int count(QueryParams<T> params) {
+    public final int count(QueryParams<T> params) {
         return baseData.count(params);
     }
 
@@ -232,7 +232,7 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    public int defaultBatchSize() {
+    public final int defaultBatchSize() {
         return baseData.defaultBatchSize();
     }
 }
