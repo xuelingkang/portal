@@ -14,6 +14,10 @@ public class ServerException extends RuntimeException {
 
     private Object data;
 
+    public ServerException(String message) {
+        super(message);
+    }
+
     public ServerException(Object data, String message) {
         super(message);
         this.data = data;

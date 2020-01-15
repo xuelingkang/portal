@@ -21,4 +21,6 @@ public interface RedisConstant {
     String PARAM_SEPARATOR = "_";
     /** 正则key通配符 */
     String WILDCARD = "*";
+    /** redis锁模板 */
+    String LOCK_PREFIX = "locks::";
 }

@@ -8,6 +8,8 @@ import com.xzixi.self.portal.framework.data.IBaseData;
 import com.xzixi.self.portal.framework.data.ISearchEngine;
 import com.xzixi.self.portal.framework.exception.ProjectException;
 import com.xzixi.self.portal.framework.exception.ServerException;
+import com.xzixi.self.portal.framework.lock.ILock;
+import com.xzixi.self.portal.framework.lock.impl.LocalLock;
 import com.xzixi.self.portal.framework.mapper.IBaseMapper;
 import com.xzixi.self.portal.framework.model.BaseModel;
 import com.xzixi.self.portal.framework.model.search.Pagination;
@@ -25,6 +27,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -33,7 +36,7 @@ import java.util.stream.Collectors;
  * @author 薛凌康
  */
 public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel> extends ServiceImpl<M, T>
-    implements IBaseData<T>, ISearchEngine {
+        implements IBaseData<T>, ISearchEngine {
 
     private Class<T> clazz;
     private String type;
@@ -51,6 +54,33 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         }
         // Document注解的type属性
         this.type = document.type();
+    }
+
+    /**
+     * 获取删除操作锁
+     *
+     * @return ILock
+     */
+    protected ILock getRemoveLock() {
+        return new LocalLock();
+    }
+
+    /**
+     * 获取初始化操作锁
+     *
+     * @return ILock
+     */
+    protected ILock getInitLock() {
+        return new LocalLock();
+    }
+
+    /**
+     * 获取同步操作锁
+     *
+     * @return ILock
+     */
+    protected ILock getSyncLock() {
+        return new LocalLock();
     }
 
     @Override
@@ -148,6 +178,25 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean removeById(Serializable id) {
+        // 删除操作不等待初始化和同步，冲突直接返回异常
+        // 检查是否正在进行初始化或同步
+        checkInit();
+        checkSync();
+        String node = randomNode();
+        try {
+            // 挂载节点
+            getRemoveLock().mount(node);
+            // 二次检查
+            checkInit();
+            checkSync();
+            // 执行删除
+            return doRemoveById(id);
+        } finally {
+            getRemoveLock().unmount(node);
+        }
+    }
+
+    private boolean doRemoveById(Serializable id) {
         if (!super.removeById(id)) {
             throw new ServerException(id, "数据库写入失败！");
         }
@@ -158,6 +207,24 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean removeByIds(Collection<? extends Serializable> idList) {
+        // 检查是否正在进行初始化或同步
+        checkInit();
+        checkSync();
+        String node = randomNode();
+        try {
+            // 挂载节点
+            getRemoveLock().mount(node);
+            // 二次检查
+            checkInit();
+            checkSync();
+            // 执行删除
+            return doRemoveByIds(idList);
+        } finally {
+            getRemoveLock().unmount(node);
+        }
+    }
+
+    private boolean doRemoveByIds(Collection<? extends Serializable> idList) {
         if (!super.removeByIds(idList)) {
             throw new ServerException(idList, "数据库写入失败！");
         }
@@ -173,6 +240,30 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
 
     @Override
     public void init() {
+        // 初始化操作不等待同步操作，冲突就返回异常，如果有未完成的删除操作就等待
+        // 检查是否正在进行同步
+        checkInit();
+        checkSync();
+        String node = randomNode();
+        try {
+            // 挂载节点
+            getInitLock().mount(node);
+            // 二次检查
+            checkInit();
+            checkSync();
+            // 注册监听
+            getRemoveLock().register(this::doInit);
+        } catch (Exception e) {
+            throw new ServerException(null, "执行初始化失败！", e);
+        } finally {
+            getInitLock().unmount(node);
+        }
+    }
+
+    /**
+     * 执行初始化
+     */
+    private void doInit() {
         // 删除索引，同时会清空数据
         elasticsearchTemplate.deleteIndex(clazz);
         // 创建索引和映射
@@ -196,7 +287,46 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
 
     @Override
     public void sync() {
-        // 批量比对数据库和搜索引擎中的数据
+        // 同步操作不等待初始化操作，冲突就返回异常，如果有未完成的删除操作就等待
+        // 检查是否正在进行初始化
+        checkInit();
+        checkSync();
+        String node = randomNode();
+        try {
+            // 挂载节点
+            getSyncLock().mount(node);
+            // 二次检查
+            checkInit();
+            checkSync();
+            // 注册监听
+            getRemoveLock().register(this::doSync);
+        } catch (Exception e) {
+            throw new ServerException(null, "执行同步失败！", e);
+        } finally {
+            getSyncLock().unmount(node);
+        }
+    }
+
+    private void doSync() {
+        // TODO 批量比对数据库和搜索引擎中的数据
+    }
+
+    /**
+     * 检查是否正在进行初始化
+     */
+    private void checkInit() {
+        if (getInitLock().isNotEmpty()) {
+            throw new ServerException("搜索引擎正在进行初始化，请稍后再试！");
+        }
+    }
+
+    /**
+     * 检查是否正在进行同步
+     */
+    private void checkSync() {
+        if (getSyncLock().isNotEmpty()) {
+            throw new ServerException("搜索引擎正在进行同步，请稍后再试！");
+        }
     }
 
     private void index(T entity) {
@@ -241,5 +371,9 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         } catch (Exception e) {
             throw new ServerException(queryBuilder, "搜索引擎写入失败！", e);
         }
+    }
+
+    private String randomNode() {
+        return UUID.randomUUID().toString();
     }
 }
