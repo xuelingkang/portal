@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.xzixi.self.portal.framework.exception.ProjectException;
 import com.xzixi.self.portal.framework.model.Result;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -39,7 +40,7 @@ public class WebUtil {
     }
 
     public static void printJson(HttpServletResponse response, Result<?> result) {
-        response.setContentType("application/json;charset=utf-8");
+        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
         response.setStatus(result.getCode());
         OutputStream out = null;
         try {
