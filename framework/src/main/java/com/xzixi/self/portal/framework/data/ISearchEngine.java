@@ -13,7 +13,7 @@ public interface ISearchEngine {
     void init();
 
     /**
-     * 同步数据
+     * 同步数据，以数据库为准
      */
     void sync();
 }

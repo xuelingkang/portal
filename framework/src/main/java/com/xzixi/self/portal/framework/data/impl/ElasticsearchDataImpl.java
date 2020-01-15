@@ -1,5 +1,8 @@
 package com.xzixi.self.portal.framework.data.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xzixi.self.portal.framework.data.IBaseData;
 import com.xzixi.self.portal.framework.data.ISearchEngine;
@@ -9,7 +12,6 @@ import com.xzixi.self.portal.framework.mapper.IBaseMapper;
 import com.xzixi.self.portal.framework.model.BaseModel;
 import com.xzixi.self.portal.framework.model.search.Pagination;
 import com.xzixi.self.portal.framework.model.search.QueryParams;
-import org.apache.commons.collections.CollectionUtils;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,12 +173,30 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
 
     @Override
     public void init() {
-
+        // 删除索引，同时会清空数据
+        elasticsearchTemplate.deleteIndex(clazz);
+        // 创建索引和映射
+        elasticsearchTemplate.createIndex(clazz);
+        elasticsearchTemplate.putMapping(clazz);
+        // 批量导入数据库的数据
+        int size = 1000;
+        int current = 1;
+        while (true) {
+            IPage<T> page = super.page(new Page<T>(current, size).addOrder(OrderItem.asc("id")));
+            List<T> list = page.getRecords();
+            index(list, size);
+            // 已经导入的数据个数
+            int imported = (current - 1) * size + list.size();
+            if (imported >= page.getTotal()) {
+                break;
+            }
+            current++;
+        }
     }
 
     @Override
     public void sync() {
-
+        // 批量比对数据库和搜索引擎中的数据
     }
 
     private void index(T entity) {
@@ -194,19 +214,22 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     private void index(Collection<T> entityList, int batchSize) {
         try {
             List<T> entities = new ArrayList<>(entityList);
-            List<IndexQuery> queries = null;
             int fromIndex = 0;
             int toIndex = fromIndex + batchSize;
-            while (toIndex < entities.size()) {
-                queries = entities.subList(fromIndex, toIndex).stream()
+            while (true) {
+                if (toIndex > entities.size()) {
+                    toIndex = entities.size();
+                }
+                List<IndexQuery> queries = entities.subList(fromIndex, toIndex).stream()
                     .map(entity -> new IndexQueryBuilder()
                         .withId(String.valueOf(entity.getId())).withObject(entity).build())
                     .collect(Collectors.toList());
+                elasticsearchTemplate.bulkIndex(queries);
+                if (toIndex == entities.size()) {
+                    break;
+                }
                 fromIndex = toIndex;
                 toIndex += batchSize;
-            }
-            if (CollectionUtils.isNotEmpty(queries)) {
-                elasticsearchTemplate.bulkIndex(queries);
             }
         } catch (Exception e) {
             throw new ServerException(entityList, "搜索引擎写入失败！", e);
