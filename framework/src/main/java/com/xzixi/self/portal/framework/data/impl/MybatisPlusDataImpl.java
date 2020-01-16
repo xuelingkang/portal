@@ -47,7 +47,7 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
     }
 
     @Override
-    public int count(QueryParams<T> params) {
+    public long count(QueryParams<T> params) {
         return super.count(parseQueryWrapper(params));
     }
 

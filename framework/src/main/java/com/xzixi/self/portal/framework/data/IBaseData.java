@@ -40,7 +40,7 @@ public interface IBaseData<T extends BaseModel> {
      */
     default T getOne(QueryParams<T> params, boolean throwEx) {
         if (throwEx) {
-            int count = count(params);
+            long count = count(params);
             if (count > 1) {
                 throw new ServerException(params, String.format("查询结果应该为1个，却查询到%s个", count));
             }
@@ -95,7 +95,7 @@ public interface IBaseData<T extends BaseModel> {
      *
      * @return 所有记录个数
      */
-    default int countAll() {
+    default long countAll() {
         return count(new QueryParams<>());
     }
 
@@ -105,7 +105,7 @@ public interface IBaseData<T extends BaseModel> {
      * @param params 查询条件
      * @return 个数
      */
-    int count(QueryParams<T> params);
+    long count(QueryParams<T> params);
 
     /**
      * 保存

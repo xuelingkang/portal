@@ -138,12 +138,12 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    public final int countAll() {
+    public final long countAll() {
         return baseData.countAll();
     }
 
     @Override
-    public final int count(QueryParams<T> params) {
+    public final long count(QueryParams<T> params) {
         return baseData.count(params);
     }
 

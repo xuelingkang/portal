@@ -70,4 +70,16 @@ public class Pagination<T extends BaseModel> {
         this.total = total;
         this.isSearchCount = isSearchCount;
     }
+
+    @SuppressWarnings("unused")
+    public long getPages() {
+        if (size == 0) {
+            return 0L;
+        }
+        long pages = total / size;
+        if (total % size != 0) {
+            pages++;
+        }
+        return pages;
+    }
 }
