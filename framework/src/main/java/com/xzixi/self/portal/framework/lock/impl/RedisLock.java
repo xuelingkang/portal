@@ -3,8 +3,10 @@ package com.xzixi.self.portal.framework.lock.impl;
 import com.xzixi.self.portal.framework.lock.ILock;
 import com.xzixi.self.portal.framework.lock.LockException;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -46,35 +48,46 @@ public class RedisLock implements ILock {
 
     @Override
     public boolean acquire(String value) {
-        Boolean result = redisTemplate.opsForValue().setIfAbsent(parentNode, value, lockExpire, TimeUnit.SECONDS);
-        if (result == null) {
-            return false;
+        if (StringUtils.isBlank(value)) {
+            throw new LockException("锁的值不能为空！");
         }
-        return result;
+        // 往队列中追加值
+        redisTemplate.opsForList().rightPush(parentNode, value);
+        redisTemplate.expire(parentNode, lockExpire, TimeUnit.SECONDS);
+        // 当前锁的值和value相等表示加锁成功
+        return Objects.equals(value, lockValue());
     }
 
     @Override
     public void release(String value) {
-        if (check(value)) {
-            redisTemplate.delete(parentNode);
+        if (StringUtils.isBlank(value)) {
+            throw new LockException("锁的值不能为空！");
         }
+        redisTemplate.opsForList().remove(parentNode, 1, value);
     }
 
     @Override
     public void mount(String node) {
+        if (StringUtils.isBlank(node)) {
+            throw new LockException("节点不能为空！");
+        }
         String key = parentNode + NODE_SEPARATOR + node;
         redisTemplate.opsForValue().set(key, 1, nodeExpire, TimeUnit.SECONDS);
     }
 
     @Override
     public void unmount(String node) {
+        if (StringUtils.isBlank(node)) {
+            throw new LockException("节点不能为空！");
+        }
         String key = parentNode + NODE_SEPARATOR + node;
         redisTemplate.delete(key);
     }
 
     @Override
     public String lockValue() {
-        return (String) redisTemplate.opsForValue().get(parentNode);
+        // 返回队列的第一个元素
+        return (String) redisTemplate.opsForList().index(parentNode, 0);
     }
 
     @Override
@@ -87,12 +100,32 @@ public class RedisLock implements ILock {
     }
 
     @Override
-    public void register(Listener listener) {
+    public void waitLock(String value, Listener listener) {
+        if (listener == null) {
+            throw new LockException("监听器不能为空！");
+        }
+        while (check(value)) {
+            // 如果与期望的值不同就循环等待
+            try {
+                Thread.sleep(listenInterval);
+            } catch (Exception e) {
+                throw new LockException("监听器等待执行期间出现错误！", e);
+            }
+        }
+        // 执行监听器
+        listener.execute();
+    }
+
+    @Override
+    public void waitNode(Listener listener) {
+        if (listener == null) {
+            throw new LockException("监听器不能为空！");
+        }
         while (check(0)) {
             // 如果节点不为空就循环等待
             try {
                 Thread.sleep(listenInterval);
-            } catch (InterruptedException e) {
+            } catch (Exception e) {
                 throw new LockException("监听器等待执行期间出现错误！", e);
             }
         }
