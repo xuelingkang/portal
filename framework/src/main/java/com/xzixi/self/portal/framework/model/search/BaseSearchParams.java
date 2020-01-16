@@ -21,7 +21,7 @@ import java.util.Arrays;
 public class BaseSearchParams<T extends BaseModel> {
 
     /** 实体类参数 */
-    private T entity;
+    private T model;
 
     /** 当前页 */
     private Long current = 1L;
@@ -40,7 +40,7 @@ public class BaseSearchParams<T extends BaseModel> {
         // 获取泛型类型
         Class<T> tClass = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         // 初始化entity，防止空指针异常
-        this.entity = ReflectUtils.newInstance(tClass);
+        this.model = ReflectUtils.newInstance(tClass);
     }
 
     /**
@@ -71,7 +71,7 @@ public class BaseSearchParams<T extends BaseModel> {
     public QueryParams<T> buildQueryParams() {
         QueryParams<T> queryParams = newQueryParams();
         parseAnnotation(queryParams, this);
-        parseAnnotation(queryParams, this.entity);
+        parseAnnotation(queryParams, this.model);
         return queryParams;
     }
 
@@ -89,13 +89,13 @@ public class BaseSearchParams<T extends BaseModel> {
      */
     @SuppressWarnings("unchecked")
     private QueryParams<T> newQueryParams() {
-        if (this.entity == null) {
+        if (this.model == null) {
             return new QueryParams<>();
         }
-        Class<T> cls = (Class<T>) this.entity.getClass();
+        Class<T> cls = (Class<T>) this.model.getClass();
         Field[] fields = ReflectUtils.getDeclaredFields(cls);
         T instance = ReflectUtils.newInstance(cls);
-        BeanUtils.copyPropertiesIgnoreNull(this.entity, instance, Arrays.stream(fields).filter(field ->
+        BeanUtils.copyPropertiesIgnoreNull(this.model, instance, Arrays.stream(fields).filter(field ->
             findAnnotation(field) != null).map(Field::getName).toArray(String[]::new));
         return new QueryParams<>(instance);
     }
