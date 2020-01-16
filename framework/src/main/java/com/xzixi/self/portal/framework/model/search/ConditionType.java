@@ -1,5 +1,9 @@
 package com.xzixi.self.portal.framework.model.search;
 
+import org.apache.commons.collections.CollectionUtils;
+
+import java.util.Collection;
+
 /**
  * @author 薛凌康
  */
@@ -75,6 +79,35 @@ public enum ConditionType {
                 return;
             }
             params.like(column, value);
+        }
+    },
+    NOT_LIKE() {
+        @Override
+        public void parse(QueryParams<?> params, String column, Object value) {
+            if (value == null) {
+                return;
+            }
+            params.notLike(column, value);
+        }
+    },
+    IN() {
+        @Override
+        public void parse(QueryParams<?> params, String column, Object value) {
+            Collection<?> collection = (Collection<?>) value;
+            if (CollectionUtils.isEmpty(collection)) {
+                return;
+            }
+            params.in(column, collection);
+        }
+    },
+    NOT_IN() {
+        @Override
+        public void parse(QueryParams<?> params, String column, Object value) {
+            Collection<?> collection = (Collection<?>) value;
+            if (CollectionUtils.isEmpty(collection)) {
+                return;
+            }
+            params.notIn(column, collection);
         }
     };
 

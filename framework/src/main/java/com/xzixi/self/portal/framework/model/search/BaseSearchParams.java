@@ -80,7 +80,7 @@ public class BaseSearchParams<T extends BaseModel> {
     }
 
     private static final Class<?>[] ANNOTATION_CLASSES
-            = new Class<?>[]{Eq.class, Ne.class, Gt.class, Ge.class, Lt.class, Le.class, Like.class};
+            = new Class<?>[]{Eq.class, Ne.class, Gt.class, Ge.class, Lt.class, Le.class, Like.class, NotLike.class, In.class, NotIn.class};
 
     /**
      * 创建QueryWrapper，忽略带条件注解的属性
