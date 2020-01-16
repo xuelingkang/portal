@@ -1,5 +1,12 @@
 # 个人门户服务端
 
+## 启动开发环境
+
+1. 准备一个centOS7虚拟机，3G内存以上，有root权限
+2. 将`develop`目录下的`init.sh`和`portal.sql`转为unix格式，拷贝到虚拟机上
+3. 执行`init.sh`，等待安装完成
+4. `webapp`项目设置VM参数：`-javaagent:目录路径\aspectjweaver-1.9.4.jar`
+
 ## 架构设计
 
 `Talk is cheap. Show me the code.`
