@@ -39,14 +39,19 @@ public interface IBaseData<T extends BaseModel> {
      * @return 实体对象
      */
     default T getOne(QueryParams<T> params, boolean throwEx) {
-        List<T> models = list(params);
-        if (CollectionUtils.isEmpty(models)) {
+        if (throwEx) {
+            int count = count(params);
+            if (count > 1) {
+                throw new ServerException(params, String.format("查询结果应该为1个，却查询到%s个", count));
+            }
+        }
+        Pagination<T> pagination = new Pagination<>(1, 1);
+        pagination = page(pagination, params);
+        List<T> records = pagination.getRecords();
+        if (CollectionUtils.isEmpty(records)) {
             return null;
         }
-        if (throwEx && models.size() > 1) {
-            throw new ServerException(params, String.format("查询结果应该为1个，却查询到%s个", models.size()));
-        }
-        return models.get(0);
+        return records.get(0);
     }
 
     /**
