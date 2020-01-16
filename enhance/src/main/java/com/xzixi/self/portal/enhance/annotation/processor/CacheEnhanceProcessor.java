@@ -266,7 +266,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 方法名
         Name name = getNameFromString(method);
         // 返回值类型
-        JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.INT);
+        JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.LONG);
         // 参数列表
         List<JCTree.JCVariableDecl> parameters = List.of(queryParamsParamDecl(queryParams, modelClassName));
         // 方法体
