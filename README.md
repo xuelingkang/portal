@@ -1,5 +1,7 @@
 # 个人门户服务端
 
+`Talk is cheap. Show me the code.`
+
 ## 启动开发环境
 
 1. 准备一个centOS7虚拟机，3G内存以上，有root权限
@@ -8,10 +10,6 @@
 4. `webapp`项目设置VM参数：`-javaagent:目录路径\aspectjweaver-1.9.4.jar`
 
 ## 架构设计
-
-`Talk is cheap. Show me the code.`
-
-设计方向：
 
 - **模块化**
 - **面向接口**
