@@ -9,7 +9,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 薛凌康
@@ -24,6 +27,8 @@ public class PortalApplicationTests {
     private IArticleService articleService;
     @Autowired
     private IArticleContentService articleContentService;
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Test
     public void deleteArticleIndex() {
@@ -59,5 +64,27 @@ public class PortalApplicationTests {
         content.setArticleId(1);
         content.setContent("作用在成员变量，标记为文档的字段，并指定字段映射属性");
         articleContentService.save(content);
+    }
+
+    @Test
+    public void testList() {
+        redisTemplate.opsForList().rightPush("123", 1);
+        redisTemplate.opsForList().rightPush("123", 1);
+        redisTemplate.opsForList().rightPush("123", 2);
+        redisTemplate.opsForList().rightPush("123", 3);
+        redisTemplate.opsForList().rightPush("123", 1);
+        redisTemplate.expire("123", 1800, TimeUnit.SECONDS);
+        Object value = redisTemplate.opsForList().index("123", 0);
+        System.out.println(value);
+    }
+
+    @Test
+    public void testRemove() {
+        redisTemplate.opsForList().remove("123", 1, 1);
+    }
+
+    @Test
+    public void testValue() {
+        redisTemplate.opsForValue().set("123::456", 2, 1800, TimeUnit.SECONDS);
     }
 }
