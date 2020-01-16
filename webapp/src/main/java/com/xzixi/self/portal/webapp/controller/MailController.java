@@ -38,7 +38,7 @@ public class MailController {
     @ApiOperation(value = "分页查询邮件")
     public Result<Pagination<MailVO>> page(MailSearchParams searchParams) {
         searchParams.setDefaultOrders("createTime desc");
-        searchParams.getEntity().setType(MailType.PUBLIC);
+        searchParams.getModel().setType(MailType.PUBLIC);
         Pagination<Mail> mailPage = mailService.page(searchParams.buildPagination(), searchParams.buildQueryParams());
         Pagination<MailVO> page = mailService.buildVO(mailPage, new MailVO.BuildOption(true, true, false, false));
         return new Result<>(page);
