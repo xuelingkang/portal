@@ -8,10 +8,13 @@ import org.apache.commons.lang3.StringUtils;
 public interface ILock {
 
     /**
-     * 获得锁
+     * 尝试加锁<br>
+     * 如果加锁失败，不会释放锁，可以自行选择等待，或者释放锁
      *
      * @param value 值
      * @return {@code true} 加锁成功 {@code false} 加锁失败
+     * @see #waitLock(String, Listener)
+     * @see #release(String)
      */
     boolean acquire(String value);
 
@@ -83,11 +86,19 @@ public interface ILock {
     }
 
     /**
+     * 监听锁，当锁被释放时触发监听器操作
+     *
+     * @param value 期望的值
+     * @param listener 监听器
+     */
+    void waitLock(String value, Listener listener);
+
+    /**
      * 监听节点，当节点个数为0时触发监听器操作
      *
      * @param listener 监听器
      */
-    void register(Listener listener);
+    void waitNode(Listener listener);
 
     /**
      * 监听器
