@@ -20,6 +20,9 @@ import java.util.function.Consumer;
 @NoArgsConstructor
 public class QueryParams<T extends BaseModel> {
 
+    /** 分值 */
+    public static final String SCORE = "_score";
+
     private T model;
 
     private String[] columns;

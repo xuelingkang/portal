@@ -14,21 +14,34 @@ import com.xzixi.self.portal.framework.mapper.IBaseMapper;
 import com.xzixi.self.portal.framework.model.BaseModel;
 import com.xzixi.self.portal.framework.model.search.Pagination;
 import com.xzixi.self.portal.framework.model.search.QueryParams;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
+import com.xzixi.self.portal.framework.util.OrderUtils;
+import com.xzixi.self.portal.framework.util.ReflectUtils;
+import com.xzixi.self.portal.framework.util.TypeUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.elasticsearch.index.query.*;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.ScoreSortBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.xzixi.self.portal.framework.model.search.QueryParams.SCORE;
 
 /**
  * elasticsearch实现
@@ -99,20 +112,37 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
 
     @Override
     public List<T> list(QueryParams<T> params) {
-        // TODO
-        return null;
+        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+        builder.withQuery(parseQueryBuilder(params, true));
+        List<SortBuilder<?>> sortBuilders = parseSortBuilders(params);
+        if (CollectionUtils.isNotEmpty(sortBuilders)) {
+            sortBuilders.forEach(builder::withSort);
+        }
+        return elasticsearchTemplate.queryForList(builder.build(), clazz);
     }
 
     @Override
     public Pagination<T> page(Pagination<T> pagination, QueryParams<T> params) {
-        // TODO
-        return null;
+        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+        builder.withQuery(parseQueryBuilder(params, true));
+        List<SortBuilder<?>> sortBuilders = parseSortBuilders(params);
+        if (CollectionUtils.isNotEmpty(sortBuilders)) {
+            sortBuilders.forEach(builder::withSort);
+        }
+        builder.withPageable(parsePageRequest(pagination));
+        AggregatedPage<T> page = elasticsearchTemplate.queryForPage(builder.build(), clazz);
+        pagination.setCurrent(page.getNumber() + 1);
+        pagination.setSize(page.getSize());
+        pagination.setTotal(page.getTotalElements());
+        pagination.setRecords(page.getContent());
+        return pagination;
     }
 
     @Override
-    public int count(QueryParams<T> params) {
-        // TODO
-        return 0;
+    public long count(QueryParams<T> params) {
+        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+        builder.withQuery(parseQueryBuilder(params, true));
+        return elasticsearchTemplate.count(builder.build(), clazz);
     }
 
     @Override
@@ -378,6 +408,158 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
             elasticsearchTemplate.delete(deleteQuery, clazz);
         } catch (Exception e) {
             throw new ServerException(queryBuilder, "搜索引擎写入失败！", e);
+        }
+    }
+
+    private PageRequest parsePageRequest(Pagination<T> pagination) {
+        // PageRequest的第一页从0开始
+        int page = (int) (pagination.getCurrent() - 1);
+        int size = (int) pagination.getSize();
+        String[] orders = pagination.getOrders();
+        // 排序条件
+        List<Sort.Order> orderList = new ArrayList<>();
+        if (orders != null && ArrayUtils.isNotEmpty(orders)) {
+            Arrays.stream(orders).forEach(order -> {
+                String[] arr = OrderUtils.parse(order);
+                if (arr != null && ArrayUtils.isNotEmpty(arr)) {
+                    if (OrderUtils.isAsc(arr[1])) {
+                        orderList.add(Sort.Order.asc(arr[0]));
+                    } else {
+                        orderList.add(Sort.Order.desc(arr[1]));
+                    }
+                }
+            });
+        }
+        return PageRequest.of(page, size, Sort.by(orderList));
+    }
+
+    private List<SortBuilder<?>> parseSortBuilders(QueryParams<T> params) {
+        List<SortBuilder<?>> builders = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(params.getOrders())) {
+            params.getOrders().forEach(order -> {
+                String[] arr = OrderUtils.parse(order);
+                if (arr != null && ArrayUtils.isNotEmpty(arr)) {
+                    String name = arr[0];
+                    if (OrderUtils.isAsc(arr[1])) {
+                        if (StringUtils.equals(SCORE, name)) {
+                            builders.add(new ScoreSortBuilder().order(SortOrder.ASC));
+                        } else {
+                            builders.add(new FieldSortBuilder(name).order(SortOrder.ASC));
+                        }
+                    } else {
+                        if (StringUtils.equals(SCORE, name)) {
+                            builders.add(new ScoreSortBuilder().order(SortOrder.DESC));
+                        } else {
+                            builders.add(new FieldSortBuilder(name).order(SortOrder.DESC));
+                        }
+                    }
+                }
+            });
+        }
+        return builders;
+    }
+
+    private QueryBuilder parseQueryBuilder(QueryParams<T> params, boolean parseModel) {
+        BoolQueryBuilder builder = QueryBuilders.boolQuery();
+        // 处理实体类的属性
+        T model = params.getModel();
+        if (parseModel && model != null) {
+            parseModelProps(builder, model);
+        }
+        // 处理QueryParams的属性
+        parseParamsProps(builder, params);
+        // 递归
+        if (CollectionUtils.isNotEmpty(params.getAnds())) {
+            params.getAnds().forEach(queryParams -> builder.must(parseQueryBuilder(params, false)));
+        }
+        if (CollectionUtils.isNotEmpty(params.getOrs())) {
+            params.getOrs().forEach(queryParams -> builder.should(parseQueryBuilder(params, false)));
+        }
+        return builder;
+    }
+
+    private void parseModelProps(BoolQueryBuilder builder, T model) {
+        java.lang.reflect.Field[] fields = ReflectUtils.getDeclaredFields(clazz);
+        Arrays.stream(fields).forEach(field -> {
+            Object value = ReflectUtils.getProp(model, field);
+            if (value == null) {
+                return;
+            }
+            org.springframework.data.elasticsearch.annotations.Field esField = field.getDeclaredAnnotation(Field.class);
+            if (esField == null) {
+                return;
+            }
+            String name = field.getName();
+            switch (esField.type()) {
+                case Integer:
+                case Long:
+                case Float:
+                case Double:
+                case Boolean:
+                case Keyword:
+                case Ip:
+                case Date:
+                    builder.must(new TermQueryBuilder(name, value));
+                    break;
+                case Auto:
+                    Class<?> type = field.getType();
+                    if (TypeUtils.isSimpleValueType(type)) {
+                        builder.must(new TermQueryBuilder(name, value));
+                    } else {
+                        builder.must(new MatchQueryBuilder(name, value));
+                    }
+                    break;
+                default:
+                    builder.must(new MatchQueryBuilder(name, value));
+                    break;
+            }
+        });
+    }
+
+    private void parseParamsProps(BoolQueryBuilder builder, QueryParams<T> params) {
+        if (MapUtils.isNotEmpty(params.getEqMap())) {
+            params.getEqMap().forEach((name, value) -> builder.must(new TermQueryBuilder(name, value)));
+        }
+        if (MapUtils.isNotEmpty(params.getNeMap())) {
+            params.getNeMap().forEach((name, value) -> builder.mustNot(new TermQueryBuilder(name, value)));
+        }
+        if (MapUtils.isNotEmpty(params.getLtMap())) {
+            params.getLtMap().forEach((name, value) -> builder.must(new RangeQueryBuilder(name).lt(value)));
+        }
+        if (MapUtils.isNotEmpty(params.getLeMap())) {
+            params.getLeMap().forEach((name, value) -> builder.must(new RangeQueryBuilder(name).lte(value)));
+        }
+        if (MapUtils.isNotEmpty(params.getGtMap())) {
+            params.getGtMap().forEach((name, value) -> builder.must(new RangeQueryBuilder(name).gt(value)));
+        }
+        if (MapUtils.isNotEmpty(params.getGeMap())) {
+            params.getGeMap().forEach((name, value) -> builder.must(new RangeQueryBuilder(name).gte(value)));
+        }
+        if (MapUtils.isNotEmpty(params.getLikeMap())) {
+            params.getLikeMap().forEach((name, value) -> builder.must(new MatchQueryBuilder(name, value)));
+        }
+        if (MapUtils.isNotEmpty(params.getNotLikeMap())) {
+            params.getNotLikeMap().forEach((name, value) -> builder.mustNot(new MatchQueryBuilder(name, value)));
+        }
+        if (MapUtils.isNotEmpty(params.getInMap())) {
+            params.getInMap().forEach((name, collection) -> {
+                BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+                collection.forEach(value -> boolQueryBuilder.should(new TermQueryBuilder(name, value)));
+                builder.must(boolQueryBuilder);
+            });
+        }
+        if (MapUtils.isNotEmpty(params.getNotInMap())) {
+            params.getNotInMap().forEach((name, collection) -> {
+                BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+                collection.forEach(value -> boolQueryBuilder.mustNot(new TermQueryBuilder(name, value)));
+                builder.must(boolQueryBuilder);
+            });
+        }
+        if (CollectionUtils.isNotEmpty(params.getNulls())) {
+            params.getNulls().forEach(name -> builder.mustNot(new ExistsQueryBuilder(name)));
+        }
+        if (CollectionUtils.isNotEmpty(params.getNotNulls())) {
+            params.getNotNulls().forEach(name -> builder.must(new ExistsQueryBuilder(name)));
         }
     }
 
