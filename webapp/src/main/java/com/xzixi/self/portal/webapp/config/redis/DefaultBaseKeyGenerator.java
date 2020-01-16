@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.config.redis;
 
 import com.xzixi.self.portal.framework.exception.ProjectException;
-import com.xzixi.self.portal.webapp.util.TypeUtil;
+import com.xzixi.self.portal.framework.util.TypeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.interceptor.KeyGenerator;
 
@@ -43,11 +43,11 @@ public class DefaultBaseKeyGenerator implements KeyGenerator {
                 continue;
             }
             Class<?> clazz = param.getClass();
-            if (TypeUtil.isArrayType(clazz)) {
+            if (TypeUtils.isArrayType(clazz)) {
                 list.addAll(toList(param));
-            } else if (TypeUtil.isCollectionType(clazz)) {
+            } else if (TypeUtils.isCollectionType(clazz)) {
                 list.addAll(toList(((Collection<?>) param).toArray()));
-            } else if (TypeUtil.isSimpleValueType(clazz)) {
+            } else if (TypeUtils.isSimpleValueType(clazz)) {
                 list.add(param);
             } else {
                 throw new ProjectException("无法处理数组、集合、基本类型以外的参数");

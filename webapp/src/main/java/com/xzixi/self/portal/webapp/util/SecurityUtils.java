@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 /**
  * @author 薛凌康
  */
-public class SecurityUtil {
+public class SecurityUtils {
 
     public static UserVO getCurrentUser() {
         UserDetailsImpl userDetails =

@@ -15,7 +15,7 @@ import java.io.PrintWriter;
 /**
  * @author 薛凌康
  */
-public class WebUtil {
+public class WebUtils {
 
     public static String getHeaderOrParameter(HttpServletRequest request, String headerName, String parameterName) {
         String value = getHeader(request, headerName);

@@ -2,7 +2,7 @@ package com.xzixi.self.portal.webapp.config.redis;
 
 import com.alibaba.fastjson.JSON;
 import com.xzixi.self.portal.framework.model.search.Pagination;
-import com.xzixi.self.portal.webapp.util.TypeUtil;
+import com.xzixi.self.portal.framework.util.TypeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.util.DigestUtils;
@@ -39,7 +39,7 @@ public class DefaultCasualKeyGenerator implements KeyGenerator {
                 if (param == null) {
                     return NULL_PARAM;
                 }
-                if (TypeUtil.isSimpleValueType(param.getClass())) {
+                if (TypeUtils.isSimpleValueType(param.getClass())) {
                     return param;
                 }
                 // Pagination类型的参数按照current_size_orders的格式生成key

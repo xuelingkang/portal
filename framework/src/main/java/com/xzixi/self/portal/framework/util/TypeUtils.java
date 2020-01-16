@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.util;
+package com.xzixi.self.portal.framework.util;
 
 import org.springframework.util.ClassUtils;
 
@@ -11,7 +11,7 @@ import java.util.Locale;
 /**
  * @author 薛凌康
  */
-public class TypeUtil {
+public class TypeUtils {
 
     /**
      * 判断是否基本类型或字面量类型

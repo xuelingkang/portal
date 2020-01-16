@@ -7,7 +7,7 @@ import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.po.UserLink;
 import com.xzixi.self.portal.webapp.service.IUserLinkService;
 import com.xzixi.self.portal.webapp.service.IUserService;
-import com.xzixi.self.portal.webapp.util.SecurityUtil;
+import com.xzixi.self.portal.webapp.util.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -41,7 +41,7 @@ public class UserLinkController {
     @GetMapping("/idols")
     @ApiOperation(value = "查询当前用户的偶像")
     public Result<Collection<User>> idols() {
-        Integer currentUserId = SecurityUtil.getCurrentUserId();
+        Integer currentUserId = SecurityUtils.getCurrentUserId();
         List<UserLink> links = userLinkService.list(new QueryParams<>(new UserLink().setFollowerId(currentUserId)).orderBy("followTime asc"));
         if (CollectionUtils.isEmpty(links)) {
             return new Result<>(new ArrayList<>());
@@ -57,7 +57,7 @@ public class UserLinkController {
     @GetMapping("/followers")
     @ApiOperation(value = "查询当前用户的粉丝")
     public Result<Collection<User>> followers() {
-        Integer currentUserId = SecurityUtil.getCurrentUserId();
+        Integer currentUserId = SecurityUtils.getCurrentUserId();
         List<UserLink> links = userLinkService.list(new QueryParams<>(new UserLink().setIdolId(currentUserId)).orderBy("followTime asc"));
         if (CollectionUtils.isEmpty(links)) {
             return new Result<>(new ArrayList<>());
@@ -74,7 +74,7 @@ public class UserLinkController {
     @ApiOperation(value = "添加关注")
     public Result<?> follow(
             @ApiParam(value = "偶像id", required = true) @NotNull(message = "偶像id不能为空！") @PathVariable Integer idolId) {
-        Integer currentUserId = SecurityUtil.getCurrentUserId();
+        Integer currentUserId = SecurityUtils.getCurrentUserId();
         UserLink link = new UserLink(idolId, currentUserId);
         UserLink checkLink = userLinkService.getOne(new QueryParams<>(link), false);
         if (checkLink != null) {
@@ -91,7 +91,7 @@ public class UserLinkController {
     @ApiOperation(value = "取消关注")
     public Result<?> cancelFollow(
             @ApiParam(value = "偶像id", required = true) @NotNull(message = "偶像id不能为空！") @PathVariable Integer idolId) {
-        Integer currentUserId = SecurityUtil.getCurrentUserId();
+        Integer currentUserId = SecurityUtils.getCurrentUserId();
         UserLink link = userLinkService.getOne(new QueryParams<>(new UserLink(idolId, currentUserId)), false);
         if (link == null) {
             return new Result<>();

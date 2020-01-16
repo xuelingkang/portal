@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.config.security;
 
 import com.xzixi.self.portal.framework.model.Result;
-import com.xzixi.self.portal.webapp.util.WebUtil;
+import com.xzixi.self.portal.webapp.util.WebUtils;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
@@ -31,6 +31,6 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
             message = "登录失败！";
         }
         Result<?> result = new Result<>(401, message, null);
-        WebUtil.printJson(response, result);
+        WebUtils.printJson(response, result);
     }
 }

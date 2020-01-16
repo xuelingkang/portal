@@ -8,7 +8,7 @@ import com.xzixi.self.portal.webapp.model.po.Mail;
 import com.xzixi.self.portal.webapp.model.valid.MailSave;
 import com.xzixi.self.portal.webapp.model.vo.MailVO;
 import com.xzixi.self.portal.webapp.service.IMailService;
-import com.xzixi.self.portal.webapp.util.SecurityUtil;
+import com.xzixi.self.portal.webapp.util.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -55,7 +55,7 @@ public class MailController {
     @PostMapping
     @ApiOperation(value = "发送邮件")
     public Result<?> send(@Validated({MailSave.class}) @RequestBody MailVO mailVO) {
-        mailVO.setSendUserId(SecurityUtil.getCurrentUserId());
+        mailVO.setSendUserId(SecurityUtils.getCurrentUserId());
         mailVO.setType(MailType.PUBLIC);
         mailVO.setCreateTime(System.currentTimeMillis());
         mailService.saveMail(mailVO, mailVO.getContent());

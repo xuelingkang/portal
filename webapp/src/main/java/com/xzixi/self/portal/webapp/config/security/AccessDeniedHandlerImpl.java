@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.config.security;
 
 import com.xzixi.self.portal.framework.model.Result;
-import com.xzixi.self.portal.webapp.util.WebUtil;
+import com.xzixi.self.portal.webapp.util.WebUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -20,6 +20,6 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException exception) {
         Result<?> result = new Result<>(403, exception.getMessage(), null);
-        WebUtil.printJson(response, result);
+        WebUtils.printJson(response, result);
     }
 }

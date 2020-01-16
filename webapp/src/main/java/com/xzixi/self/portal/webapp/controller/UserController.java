@@ -19,7 +19,7 @@ import com.xzixi.self.portal.webapp.model.vo.UserVO;
 import com.xzixi.self.portal.webapp.service.IMailService;
 import com.xzixi.self.portal.webapp.service.IUserRoleLinkService;
 import com.xzixi.self.portal.webapp.service.IUserService;
-import com.xzixi.self.portal.webapp.util.SecurityUtil;
+import com.xzixi.self.portal.webapp.util.SecurityUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -186,7 +186,7 @@ public class UserController {
     public Result<?> updatePersonalPassword(
             @ApiParam(value = "原密码", required = true) @NotBlank(message = "原密码不能为空！") @RequestParam String originalPwd,
             @ApiParam(value = "新密码", required = true) @NotBlank(message = "新密码不能为空！") @RequestParam String password) {
-        User user = SecurityUtil.getCurrentUser();
+        User user = SecurityUtils.getCurrentUser();
         if (!passwordEncoder.matches(originalPwd, user.getPassword())) {
             throw new ClientException(400, "原密码错误！");
         }
@@ -271,7 +271,7 @@ public class UserController {
             @ApiParam(value = "新邮箱", required = true) @NotBlank(message = "邮箱不能为空！")
             @Email(message = "邮箱格式不正确！") @Length(max = 50, message = "邮箱不能大于50字！")
             @RequestParam String email) {
-        User user = SecurityUtil.getCurrentUser();
+        User user = SecurityUtils.getCurrentUser();
         Long time = (Long) redisTemplate.opsForValue().get(String.format(REBIND_EMAIL_CODE_RETRY_TIMEOUT_KEY_TEMPLATE, user.getId()));
         long now = System.currentTimeMillis();
         if (time != null && (time + REBIND_EMAIL_CODE_RETRY_TIMEOUT_MILLISECOND) > now) {
@@ -304,7 +304,7 @@ public class UserController {
             @ApiParam(value = "新邮箱", required = true) @NotBlank(message = "邮箱不能为空！")
             @Email(message = "邮箱格式不正确！") @Length(max = 50, message = "邮箱不能大于50字！")
             @RequestParam String email) {
-        User user = SecurityUtil.getCurrentUser();
+        User user = SecurityUtils.getCurrentUser();
         String cacheKey = String.format(REBIND_EMAIL_CODE_KEY_TEMPLATE, user.getId(), email);
         String cacheCode = (String) redisTemplate.opsForValue().get(cacheKey);
         if (StringUtils.isEmpty(cacheCode)) {
