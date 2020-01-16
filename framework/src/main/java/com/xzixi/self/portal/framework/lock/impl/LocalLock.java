@@ -30,18 +30,13 @@ public class LocalLock implements ILock {
     }
 
     @Override
-    public boolean check() {
-        return false;
+    public String lockValue() {
+        return null;
     }
 
     @Override
-    public boolean check(String value) {
-        return false;
-    }
-
-    @Override
-    public boolean check(int count) {
-        return false;
+    public int nodeCount() {
+        return 0;
     }
 
     @Override

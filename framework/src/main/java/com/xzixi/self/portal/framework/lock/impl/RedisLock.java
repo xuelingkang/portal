@@ -3,10 +3,8 @@ package com.xzixi.self.portal.framework.lock.impl;
 import com.xzixi.self.portal.framework.lock.ILock;
 import com.xzixi.self.portal.framework.lock.LockException;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -75,24 +73,17 @@ public class RedisLock implements ILock {
     }
 
     @Override
-    public boolean check() {
-        String parentNodeValue = (String) redisTemplate.opsForValue().get(parentNode);
-        return StringUtils.isNotBlank(parentNodeValue);
+    public String lockValue() {
+        return (String) redisTemplate.opsForValue().get(parentNode);
     }
 
     @Override
-    public boolean check(String value) {
-        Object parentNodeValue = redisTemplate.opsForValue().get(parentNode);
-        return Objects.equals(value, parentNodeValue);
-    }
-
-    @Override
-    public boolean check(int count) {
+    public int nodeCount() {
         Set<String> keys = redisTemplate.keys(parentNode + NODE_SEPARATOR + "*");
         if (CollectionUtils.isEmpty(keys)) {
-            return count == 0;
+            return 0;
         }
-        return count == keys.size();
+        return keys.size();
     }
 
     @Override
