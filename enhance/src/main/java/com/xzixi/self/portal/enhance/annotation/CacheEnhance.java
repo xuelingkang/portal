@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 主要用于自动维护数据库和缓存的一致性，直接用在数据层的实现类上
+ *
  * @author 薛凌康
  */
 @Target(ElementType.TYPE)
