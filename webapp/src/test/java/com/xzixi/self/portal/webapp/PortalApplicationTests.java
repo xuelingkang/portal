@@ -12,6 +12,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -86,5 +87,11 @@ public class PortalApplicationTests {
     @Test
     public void testValue() {
         redisTemplate.opsForValue().set("123::456", 2, 1800, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void testGetMapping() {
+        Map<?, ?> map = elasticsearchTemplate.getMapping(Article.class);
+        System.out.println(map);
     }
 }
