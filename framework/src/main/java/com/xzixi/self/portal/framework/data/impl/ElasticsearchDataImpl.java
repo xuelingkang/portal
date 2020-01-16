@@ -254,7 +254,7 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
             // 二次检查
             checkSync();
             // 监听节点
-            getRemoveLock().register(this::doInit);
+            getRemoveLock().waitNode(this::doInit);
         } finally {
             getInitLock().release(value);
         }
@@ -301,7 +301,7 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
             // 二次检查
             checkInit();
             // 监听节点
-            getRemoveLock().register(this::doSync);
+            getRemoveLock().waitNode(this::doSync);
         } finally {
             getSyncLock().release(value);
         }
