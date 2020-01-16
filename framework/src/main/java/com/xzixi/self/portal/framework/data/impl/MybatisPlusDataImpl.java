@@ -33,12 +33,12 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
 
     @Override
     public List<T> list(QueryParams<T> params) {
-        return super.list(parseQueryWrapper(params, true));
+        return super.list(parseQueryWrapper(params, true, true));
     }
 
     @Override
     public Pagination<T> page(Pagination<T> pagination, QueryParams<T> params) {
-        IPage<T> page = super.page(parsePage(pagination), parseQueryWrapper(params, true));
+        IPage<T> page = super.page(parsePage(pagination), parseQueryWrapper(params, true, true));
         pagination.setCurrent(page.getCurrent());
         pagination.setSize(page.getSize());
         pagination.setTotal(page.getTotal());
@@ -48,7 +48,7 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
 
     @Override
     public long count(QueryParams<T> params) {
-        return super.count(parseQueryWrapper(params, true));
+        return super.count(parseQueryWrapper(params, true, false));
     }
 
     @Override
@@ -76,16 +76,33 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
         return page;
     }
 
-    private QueryWrapper<T> parseQueryWrapper(QueryParams<T> params, boolean parseModel) {
+    private QueryWrapper<T> parseQueryWrapper(QueryParams<T> params, boolean parseModel, boolean parseColumns) {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
         if (parseModel && params.getModel() != null) {
             queryWrapper.setEntity(params.getModel());
         }
-        String[] columns = params.getColumns();
-        if (columns != null && ArrayUtils.isNotEmpty(columns)) {
-            columns = Arrays.stream(columns).map(StringUtils::camelToUnderline).toArray(String[]::new);
-            queryWrapper.select(columns);
+        if (parseColumns) {
+            String[] columns = params.getColumns();
+            if (columns != null && ArrayUtils.isNotEmpty(columns)) {
+                columns = Arrays.stream(columns).map(StringUtils::camelToUnderline).toArray(String[]::new);
+                queryWrapper.select(columns);
+            }
         }
+        // 处理QueryParams的属性
+        parseParamsProps(queryWrapper, params);
+        // 递归
+        if (CollectionUtils.isNotEmpty(params.getAnds())) {
+            params.getAnds().forEach(queryParams -> queryWrapper.getExpression()
+                    .add(SqlKeyword.AND, WrapperKeyword.LEFT_BRACKET, parseQueryWrapper(queryParams, false, false), WrapperKeyword.RIGHT_BRACKET));
+        }
+        if (CollectionUtils.isNotEmpty(params.getOrs())) {
+            params.getOrs().forEach(queryParams -> queryWrapper.getExpression()
+                    .add(SqlKeyword.OR, WrapperKeyword.LEFT_BRACKET, parseQueryWrapper(queryParams, false, false), WrapperKeyword.RIGHT_BRACKET));
+        }
+        return queryWrapper;
+    }
+
+    private void parseParamsProps(QueryWrapper<T> queryWrapper, QueryParams<T> params) {
         if (MapUtils.isNotEmpty(params.getEqMap())) {
             params.getEqMap().forEach((name, value) -> queryWrapper.eq(camelToUnderline(name), value));
         }
@@ -134,14 +151,5 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
                 }
             });
         }
-        if (CollectionUtils.isNotEmpty(params.getAnds())) {
-            params.getAnds().forEach(queryParams -> queryWrapper.getExpression()
-                    .add(SqlKeyword.AND, WrapperKeyword.LEFT_BRACKET, parseQueryWrapper(queryParams, false), WrapperKeyword.RIGHT_BRACKET));
-        }
-        if (CollectionUtils.isNotEmpty(params.getOrs())) {
-            params.getOrs().forEach(queryParams -> queryWrapper.getExpression()
-                    .add(SqlKeyword.OR, WrapperKeyword.LEFT_BRACKET, parseQueryWrapper(queryParams, false), WrapperKeyword.RIGHT_BRACKET));
-        }
-        return queryWrapper;
     }
 }
