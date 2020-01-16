@@ -182,7 +182,7 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         // 检查是否正在进行初始化或同步
         checkInit();
         checkSync();
-        String node = randomNode();
+        String node = randomString();
         try {
             // 挂载节点
             getRemoveLock().mount(node);
@@ -210,7 +210,7 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         // 检查是否正在进行初始化或同步
         checkInit();
         checkSync();
-        String node = randomNode();
+        String node = randomString();
         try {
             // 挂载节点
             getRemoveLock().mount(node);
@@ -244,19 +244,19 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         // 检查是否正在进行同步
         checkInit();
         checkSync();
-        String node = randomNode();
+        String value = randomString();
         try {
-            // 挂载节点
-            getInitLock().mount(node);
+            // 获取锁
+            if (!getInitLock().acquire(value)) {
+                // 竞争失败
+                throwInit();
+            }
             // 二次检查
-            checkInit();
             checkSync();
-            // 注册监听
+            // 监听节点
             getRemoveLock().register(this::doInit);
-        } catch (Exception e) {
-            throw new ServerException(null, "执行初始化失败！", e);
         } finally {
-            getInitLock().unmount(node);
+            getInitLock().release(value);
         }
     }
 
@@ -291,19 +291,19 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         // 检查是否正在进行初始化
         checkInit();
         checkSync();
-        String node = randomNode();
+        String value = randomString();
         try {
-            // 挂载节点
-            getSyncLock().mount(node);
+            // 获取锁
+            if (!getSyncLock().acquire(value)) {
+                // 竞争失败
+                throwSync();
+            }
             // 二次检查
             checkInit();
-            checkSync();
-            // 注册监听
+            // 监听节点
             getRemoveLock().register(this::doSync);
-        } catch (Exception e) {
-            throw new ServerException(null, "执行同步失败！", e);
         } finally {
-            getSyncLock().unmount(node);
+            getSyncLock().release(value);
         }
     }
 
@@ -315,8 +315,8 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
      * 检查是否正在进行初始化
      */
     private void checkInit() {
-        if (getInitLock().isNotEmpty()) {
-            throw new ServerException("搜索引擎正在进行初始化，请稍后再试！");
+        if (getInitLock().check()) {
+            throwInit();
         }
     }
 
@@ -324,9 +324,17 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
      * 检查是否正在进行同步
      */
     private void checkSync() {
-        if (getSyncLock().isNotEmpty()) {
-            throw new ServerException("搜索引擎正在进行同步，请稍后再试！");
+        if (getSyncLock().check()) {
+            throwSync();
         }
+    }
+
+    private void throwInit() {
+        throw new ServerException("搜索引擎正在进行初始化，请稍后再试！");
+    }
+
+    private void throwSync() {
+        throw new ServerException("搜索引擎正在进行同步，请稍后再试！");
     }
 
     private void index(T entity) {
@@ -373,7 +381,7 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         }
     }
 
-    private String randomNode() {
+    private String randomString() {
         return UUID.randomUUID().toString();
     }
 }

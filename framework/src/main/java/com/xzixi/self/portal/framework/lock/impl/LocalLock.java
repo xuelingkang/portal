@@ -10,6 +10,16 @@ import com.xzixi.self.portal.framework.lock.ILock;
 public class LocalLock implements ILock {
 
     @Override
+    public boolean acquire(String value) {
+        return false;
+    }
+
+    @Override
+    public void release(String value) {
+
+    }
+
+    @Override
     public void mount(String node) {
 
     }
@@ -20,17 +30,22 @@ public class LocalLock implements ILock {
     }
 
     @Override
-    public boolean isEmpty() {
+    public boolean check() {
         return false;
     }
 
     @Override
-    public boolean isNotEmpty() {
-        return !isEmpty();
+    public boolean check(String value) {
+        return false;
     }
 
     @Override
-    public void register(Listener listener) throws Exception {
+    public boolean check(int count) {
+        return false;
+    }
+
+    @Override
+    public void register(Listener listener) {
 
     }
 }

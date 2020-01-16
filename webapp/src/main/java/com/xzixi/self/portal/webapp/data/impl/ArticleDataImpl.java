@@ -7,8 +7,6 @@ import com.xzixi.self.portal.webapp.data.IArticleData;
 import com.xzixi.self.portal.webapp.mapper.ArticleMapper;
 import com.xzixi.self.portal.webapp.model.po.Article;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -22,22 +20,19 @@ public class ArticleDataImpl extends ElasticsearchDataImpl<ArticleMapper, Articl
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
-    @Autowired
-    @Qualifier("taskExecutor")
-    private TaskExecutor taskExecutor;
 
     @Override
     protected ILock getRemoveLock() {
-        return new RedisLock(LOCK_PREFIX + "article:remove:%s", redisTemplate, taskExecutor);
+        return new RedisLock(LOCK_PREFIX + "article:remove", redisTemplate);
     }
 
     @Override
     protected ILock getInitLock() {
-        return new RedisLock(LOCK_PREFIX + "article:init:%s", redisTemplate, taskExecutor);
+        return new RedisLock(LOCK_PREFIX + "article:init", redisTemplate);
     }
 
     @Override
     protected ILock getSyncLock() {
-        return new RedisLock(LOCK_PREFIX + "article:sync:%s", redisTemplate, taskExecutor);
+        return new RedisLock(LOCK_PREFIX + "article:sync", redisTemplate);
     }
 }
