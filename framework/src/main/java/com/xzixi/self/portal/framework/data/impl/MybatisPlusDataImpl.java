@@ -33,12 +33,12 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
 
     @Override
     public List<T> list(QueryParams<T> params) {
-        return super.list(parseQueryWrapper(params));
+        return super.list(parseQueryWrapper(params, true));
     }
 
     @Override
     public Pagination<T> page(Pagination<T> pagination, QueryParams<T> params) {
-        IPage<T> page = super.page(parsePage(pagination), parseQueryWrapper(params));
+        IPage<T> page = super.page(parsePage(pagination), parseQueryWrapper(params, true));
         pagination.setCurrent(page.getCurrent());
         pagination.setSize(page.getSize());
         pagination.setTotal(page.getTotal());
@@ -48,7 +48,7 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
 
     @Override
     public long count(QueryParams<T> params) {
-        return super.count(parseQueryWrapper(params));
+        return super.count(parseQueryWrapper(params, true));
     }
 
     @Override
@@ -76,9 +76,9 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
         return page;
     }
 
-    private QueryWrapper<T> parseQueryWrapper(QueryParams<T> params) {
+    private QueryWrapper<T> parseQueryWrapper(QueryParams<T> params, boolean parseModel) {
         QueryWrapper<T> queryWrapper = new QueryWrapper<>();
-        if (params.getModel() != null) {
+        if (parseModel && params.getModel() != null) {
             queryWrapper.setEntity(params.getModel());
         }
         String[] columns = params.getColumns();
@@ -136,11 +136,11 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
         }
         if (CollectionUtils.isNotEmpty(params.getAnds())) {
             params.getAnds().forEach(queryParams -> queryWrapper.getExpression()
-                    .add(SqlKeyword.AND, WrapperKeyword.LEFT_BRACKET, parseQueryWrapper(queryParams), WrapperKeyword.RIGHT_BRACKET));
+                    .add(SqlKeyword.AND, WrapperKeyword.LEFT_BRACKET, parseQueryWrapper(queryParams, false), WrapperKeyword.RIGHT_BRACKET));
         }
         if (CollectionUtils.isNotEmpty(params.getOrs())) {
             params.getOrs().forEach(queryParams -> queryWrapper.getExpression()
-                    .add(SqlKeyword.OR, WrapperKeyword.LEFT_BRACKET, parseQueryWrapper(queryParams), WrapperKeyword.RIGHT_BRACKET));
+                    .add(SqlKeyword.OR, WrapperKeyword.LEFT_BRACKET, parseQueryWrapper(queryParams, false), WrapperKeyword.RIGHT_BRACKET));
         }
         return queryWrapper;
     }

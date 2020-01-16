@@ -22,8 +22,6 @@ public class QueryParams<T extends BaseModel> {
 
     private T model;
 
-    private Class<T> modelClass;
-
     private String[] columns;
 
     private Map<String, Object> eqMap = new LinkedHashMap<>();
