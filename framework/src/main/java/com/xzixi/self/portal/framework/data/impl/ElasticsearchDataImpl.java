@@ -42,6 +42,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.xzixi.self.portal.framework.model.search.QueryParams.SCORE;
+import static com.xzixi.self.portal.framework.util.TypeUtils.parseObject;
 
 /**
  * elasticsearch实现
@@ -611,7 +612,8 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
             if (value == null) {
                 return;
             }
-            org.springframework.data.elasticsearch.annotations.Field esField = field.getDeclaredAnnotation(Field.class);
+            Object parsedValue = parseObject(value);
+            Field esField = field.getDeclaredAnnotation(Field.class);
             if (esField == null) {
                 return;
             }
@@ -625,18 +627,18 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
                 case Keyword:
                 case Ip:
                 case Date:
-                    builder.must(new TermQueryBuilder(name, value));
+                    builder.must(new TermQueryBuilder(name, parsedValue));
                     break;
                 case Auto:
                     Class<?> type = field.getType();
                     if (TypeUtils.isSimpleValueType(type)) {
-                        builder.must(new TermQueryBuilder(name, value));
+                        builder.must(new TermQueryBuilder(name, parsedValue));
                     } else {
-                        builder.must(new MatchQueryBuilder(name, value));
+                        builder.must(new MatchQueryBuilder(name, parsedValue));
                     }
                     break;
                 default:
-                    builder.must(new MatchQueryBuilder(name, value));
+                    builder.must(new MatchQueryBuilder(name, parsedValue));
                     break;
             }
         });

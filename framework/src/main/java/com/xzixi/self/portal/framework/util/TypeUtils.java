@@ -44,4 +44,15 @@ public class TypeUtils {
     public static boolean isCollectionType(Class<?> clazz) {
         return Collection.class.isAssignableFrom(clazz);
     }
+
+    public static Object parseObject(Object value) {
+        if (value == null) {
+            return null;
+        }
+        if (value.getClass().isEnum()) {
+            Enum<?> e = (Enum<?>) value;
+            return e.name();
+        }
+        return value;
+    }
 }
