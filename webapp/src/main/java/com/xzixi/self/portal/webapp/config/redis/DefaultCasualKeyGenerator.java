@@ -3,6 +3,7 @@ package com.xzixi.self.portal.webapp.config.redis;
 import com.alibaba.fastjson.JSON;
 import com.xzixi.self.portal.framework.model.search.Pagination;
 import com.xzixi.self.portal.framework.util.TypeUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.util.DigestUtils;
@@ -48,10 +49,15 @@ public class DefaultCasualKeyGenerator implements KeyGenerator {
                     long current = page.getCurrent();
                     long size = page.getSize();
                     String[] orders = page.getOrders();
-                    String orderInfo = StringUtils.join(
-                        Arrays.stream(orders).map(order -> order.replaceAll(SPACE_REG, PARAM_SEPARATOR))
-                            .collect(Collectors.toList()),
-                        PARAM_SEPARATOR);
+                    String orderInfo;
+                    if (orders != null && ArrayUtils.isNotEmpty(orders)) {
+                        orderInfo = StringUtils.join(
+                            Arrays.stream(orders).map(order -> order.replaceAll(SPACE_REG, PARAM_SEPARATOR))
+                                .collect(Collectors.toList()),
+                            PARAM_SEPARATOR);
+                    } else {
+                        orderInfo = "";
+                    }
                     return String.format(PAGE_PARAM_TEMPLATE, current, size, orderInfo);
                 }
                 return DigestUtils.md5DigestAsHex(toJson(param).getBytes(StandardCharsets.UTF_8));
