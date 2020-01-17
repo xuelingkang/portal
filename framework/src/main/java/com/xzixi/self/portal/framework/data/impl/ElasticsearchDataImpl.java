@@ -51,8 +51,8 @@ import static com.xzixi.self.portal.framework.model.search.QueryParams.SCORE;
 public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel> extends ServiceImpl<M, T>
         implements IBaseData<T>, ISearchEngine {
 
+    private static final String DEFAULT_SYNC_DATA_ORDER = "id asc";
     private Class<T> clazz;
-    private String type;
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
 
@@ -65,8 +65,6 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         if (document == null) {
             throw new ProjectException(String.format("类(%s)必须使用@Document注解！", clazz.getName()));
         }
-        // Document注解的type属性
-        this.type = document.type();
     }
 
     /**
@@ -94,6 +92,15 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
      */
     protected ILock getSyncLock() {
         return new LocalLock();
+    }
+
+    /**
+     * 同步数据的顺序，必须是数据插入先后的升序
+     *
+     * @return 例如 "id asc"，自增id新插入的数据会排在后面
+     */
+    protected String syncDataOrder() {
+        return DEFAULT_SYNC_DATA_ORDER;
     }
 
     @Override
@@ -230,7 +237,7 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         if (!super.removeById(id)) {
             throw new ServerException(id, "数据库写入失败！");
         }
-        remove(QueryBuilders.idsQuery(type).addIds(String.valueOf(id)));
+        remove(QueryBuilders.idsQuery().addIds(String.valueOf(id)));
         return true;
     }
 
@@ -259,7 +266,7 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
             throw new ServerException(idList, "数据库写入失败！");
         }
         String[] ids = idList.stream().map(String::valueOf).toArray(String[]::new);
-        remove(QueryBuilders.idsQuery(type).addIds(ids));
+        remove(QueryBuilders.idsQuery().addIds(ids));
         return true;
     }
 
@@ -300,17 +307,15 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         elasticsearchTemplate.createIndex(clazz);
         elasticsearchTemplate.putMapping(clazz);
         // 批量导入数据库的数据
-        int size = 1000;
+        boolean isLastPage = false;
+        int size = defaultBatchSize();
         int current = 1;
-        while (true) {
+        while (!isLastPage) {
             IPage<T> page = super.page(new Page<T>(current, size).addOrder(OrderItem.asc("id")));
             List<T> list = page.getRecords();
             index(list, size);
             // 已经导入的数据个数
-            int imported = (current - 1) * size + list.size();
-            if (imported >= page.getTotal()) {
-                break;
-            }
+            isLastPage = (current - 1) * size + list.size() >= page.getTotal();
             current++;
         }
     }
@@ -338,7 +343,128 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     }
 
     private void doSync() {
-        // TODO 批量比对数据库和搜索引擎中的数据
+        // 创建索引和映射
+        elasticsearchTemplate.createIndex(clazz);
+        elasticsearchTemplate.putMapping(clazz);
+        // 批量比对数据
+        List<T> forIndex = new ArrayList<>();
+        List<T> forRemove = new LinkedList<>();
+        // 以这个总数为准，防止误删除同步期间新增的数据
+        long totalInDb = super.count();
+        long totalInEs = countAll();
+        boolean isLastPageInDb = false;
+        boolean isLastPageInEs = false;
+        int size = defaultBatchSize();
+        int current = 1;
+        // 数据库或搜索引擎有一个查询到了最后一页就退出循环
+        while (!isLastPageInDb && !isLastPageInEs) {
+            // 分页查询数据库
+            IPage<T> pageInDb = super.page(new Page<T>(current, size).addOrder(getSyncOrderItem()));
+            List<T> modelsInDb = pageInDb.getRecords();
+            isLastPageInDb = (current - 1) * size + modelsInDb.size() >= totalInDb;
+            if (isLastPageInDb) {
+                // 如果到了最后一页，对modelsInDb裁剪，防止误操作新增的数据
+                long expectSize = totalInDb - (current - 1) * size;
+                if (modelsInDb.size() > expectSize) {
+                    modelsInDb = modelsInDb.subList(0, (int) expectSize);
+                }
+            }
+            // 分页查询搜索引擎
+            Pagination<T> pageInEs = page(new Pagination<T>(current, size).orders(getSyncOrder()), new QueryParams<>());
+            List<T> modelsInEs = pageInEs.getRecords();
+            isLastPageInEs = (current - 1) * size + modelsInEs.size() >= totalInEs;
+            if (isLastPageInEs) {
+                // 如果到了最后一页，对modelsInEs裁剪，防止误操作新增的数据
+                long expectSize = totalInEs - (current - 1) * size;
+                if (modelsInEs.size() > expectSize) {
+                    modelsInEs = modelsInEs.subList(0, (int) expectSize);
+                }
+            }
+            // 遍历数据库的数据，查询出搜索引擎中缺少或需要更新的元素，添加到forIndex集合
+            List<T> finalModelsInEs = modelsInEs;
+            modelsInDb.forEach(model -> {
+                // 先从forRemove查询，再从recordsInEs查询
+                T matchModel = matchModel(forRemove, model);
+                if (matchModel != null) {
+                    forRemove.remove(matchModel);
+                }
+                if (matchModel == null) {
+                    matchModel = matchModel(finalModelsInEs, model);
+                }
+                // 先比较hashCode，再比较equals
+                if (matchModel == null || model.hashCode() != matchModel.hashCode() || !model.equals(matchModel)) {
+                    forIndex.add(model);
+                }
+            });
+            // 查询在recordsInEs存在，在recordsInDb不存在的元素，添加到forRemove集合
+            List<Integer> idsInDb = modelsInDb.stream().map(BaseModel::getId).collect(Collectors.toList());
+            List<T> modelsNotInDb = modelsInEs.stream().filter(model -> !idsInDb.contains(model.getId())).collect(Collectors.toList());
+            forRemove.addAll(modelsNotInDb);
+            current++;
+        }
+        while (!isLastPageInDb) {
+            // 数据库没有到最后一页，查询剩余的记录，添加到forIndex集合
+            IPage<T> pageInDb = super.page(new Page<T>(current, size).addOrder(getSyncOrderItem()));
+            List<T> modelsInDb = pageInDb.getRecords();
+            isLastPageInDb = (current - 1) * size + modelsInDb.size() >= totalInDb;
+            if (isLastPageInDb) {
+                // 如果到了最后一页，对modelsInDb裁剪，防止误操作新增的数据
+                long expectSize = totalInDb - (current - 1) * size;
+                if (modelsInDb.size() > expectSize) {
+                    modelsInDb = modelsInDb.subList(0, (int) expectSize);
+                }
+            }
+            forIndex.addAll(modelsInDb);
+            current++;
+        }
+        while (!isLastPageInEs) {
+            // 搜索引擎没有到最后一页，查询剩余的记录，添加到forRemove集合
+            Pagination<T> pageInEs = page(new Pagination<T>(current, size).orders(getSyncOrder()), new QueryParams<>());
+            List<T> modelsInEs = pageInEs.getRecords();
+            isLastPageInEs = (current - 1) * size + modelsInEs.size() >= totalInEs;
+            if (isLastPageInEs) {
+                // 如果到了最后一页，对modelsInEs裁剪，防止误操作新增的数据
+                long expectSize = totalInEs - (current - 1) * size;
+                if (modelsInEs.size() > expectSize) {
+                    modelsInEs = modelsInEs.subList(0, (int) expectSize);
+                }
+            }
+            forRemove.addAll(modelsInEs);
+            current++;
+        }
+        if (CollectionUtils.isNotEmpty(forIndex)) {
+            // 索引数据
+            index(forIndex, size);
+        }
+        if (CollectionUtils.isNotEmpty(forRemove)) {
+            // 删除数据
+            String[] ids = forRemove.stream().map(model -> String.valueOf(model.getId())).toArray(String[]::new);
+            remove(QueryBuilders.idsQuery().addIds(ids));
+        }
+    }
+
+    private T matchModel(List<T> models, T model) {
+        return models.stream().filter(matchModel -> matchModel.getId().equals(model.getId())).findFirst().orElse(null);
+    }
+
+    private OrderItem getSyncOrderItem() {
+        String[] arr = OrderUtils.parse(syncDataOrder());
+        if (arr == null || ArrayUtils.isEmpty(arr)) {
+            arr = OrderUtils.parse(DEFAULT_SYNC_DATA_ORDER);
+        }
+        assert arr != null;
+        if (OrderUtils.isAsc(arr[1])) {
+            return OrderItem.asc(arr[0]);
+        }
+        return OrderItem.desc(arr[0]);
+    }
+
+    private String getSyncOrder() {
+        String[] arr = OrderUtils.parse(syncDataOrder());
+        if (arr == null || ArrayUtils.isEmpty(arr)) {
+            return DEFAULT_SYNC_DATA_ORDER;
+        }
+        return syncDataOrder();
     }
 
     /**
