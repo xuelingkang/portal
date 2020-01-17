@@ -12,6 +12,7 @@ public interface ISearchEngine {
 
     /**
      * 初始化/重新初始化数据
+     * 清空搜索引擎的数据，然后导入数据库的数据
      */
     void init();
 
