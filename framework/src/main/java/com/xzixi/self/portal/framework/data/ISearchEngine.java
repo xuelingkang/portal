@@ -11,7 +11,7 @@ package com.xzixi.self.portal.framework.data;
 public interface ISearchEngine {
 
     /**
-     * 初始化数据
+     * 初始化/重新初始化数据
      */
     void init();
 
