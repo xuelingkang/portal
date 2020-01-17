@@ -6,7 +6,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -55,7 +54,7 @@ public class RedisLock implements ILock {
         redisTemplate.opsForList().rightPush(parentNode, value);
         redisTemplate.expire(parentNode, lockExpire, TimeUnit.SECONDS);
         // 当前锁的值和value相等表示加锁成功
-        return Objects.equals(value, lockValue());
+        return check(value);
     }
 
     @Override

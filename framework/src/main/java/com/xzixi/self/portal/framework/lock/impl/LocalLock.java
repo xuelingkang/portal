@@ -5,7 +5,6 @@ import com.xzixi.self.portal.framework.lock.LockException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -25,7 +24,7 @@ public class LocalLock implements ILock {
             throw new LockException("锁的值不能为空！");
         }
         values.offer(value);
-        return Objects.equals(value, lockValue());
+        return check(value);
     }
 
     @Override
