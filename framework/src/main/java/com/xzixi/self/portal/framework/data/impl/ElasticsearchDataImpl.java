@@ -46,6 +46,7 @@ import static com.xzixi.self.portal.framework.util.TypeUtils.parseObject;
 
 /**
  * elasticsearch实现
+ * TODO 这样做数据库和es的字段必须一致，是否能满足需求，需要扩展？
  *
  * @author 薛凌康
  */
