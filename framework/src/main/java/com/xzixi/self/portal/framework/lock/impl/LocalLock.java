@@ -76,7 +76,7 @@ public class LocalLock implements ILock {
         }
         // 同步代码块只负责等待，监听器的回调在同步块外执行
         synchronized (valueLock) {
-            while (!Objects.equals(value, lockValue())) {
+            while (!check(value)) {
                 try {
                     valueLock.wait();
                 } catch (Exception e) {

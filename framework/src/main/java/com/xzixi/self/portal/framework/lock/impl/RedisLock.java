@@ -104,7 +104,7 @@ public class RedisLock implements ILock {
         if (listener == null) {
             throw new LockException("监听器不能为空！");
         }
-        while (check(value)) {
+        while (!check(value)) {
             // 如果与期望的值不同就循环等待
             try {
                 Thread.sleep(listenInterval);
@@ -121,7 +121,7 @@ public class RedisLock implements ILock {
         if (listener == null) {
             throw new LockException("监听器不能为空！");
         }
-        while (check(0)) {
+        while (!check(0)) {
             // 如果节点不为空就循环等待
             try {
                 Thread.sleep(listenInterval);
