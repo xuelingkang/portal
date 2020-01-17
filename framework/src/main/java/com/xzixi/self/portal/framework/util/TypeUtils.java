@@ -45,6 +45,12 @@ public class TypeUtils {
         return Collection.class.isAssignableFrom(clazz);
     }
 
+    /**
+     * 有些类型不能直接用来当做查询参数，如enum
+     *
+     * @param value 原始值
+     * @return 转换后的值
+     */
     public static Object parseObject(Object value) {
         if (value == null) {
             return null;
