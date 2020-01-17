@@ -1,6 +1,7 @@
 package com.xzixi.self.portal.framework.model;
 
 import com.xzixi.self.portal.framework.exception.ProjectException;
+import lombok.Data;
 
 import java.io.*;
 
@@ -9,6 +10,7 @@ import java.io.*;
  *
  * @author 薛凌康
  */
+@Data
 public abstract class BaseModel implements Cloneable, Serializable {
 
     private static final long serialVersionUID = 1L;
