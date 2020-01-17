@@ -3,6 +3,7 @@ package com.xzixi.self.portal.framework.model.search;
 import com.xzixi.self.portal.framework.model.BaseModel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -69,6 +70,11 @@ public class Pagination<T extends BaseModel> {
         this.size = size;
         this.total = total;
         this.isSearchCount = isSearchCount;
+    }
+
+    public Pagination<T> orders(String... orders) {
+        this.orders = ArrayUtils.addAll(this.orders, orders);
+        return this;
     }
 
     @SuppressWarnings("unused")
