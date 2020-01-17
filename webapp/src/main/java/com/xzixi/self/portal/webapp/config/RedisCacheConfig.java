@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.config;
 
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
-import com.xzixi.self.portal.framework.cache.redis.FuzzyEvictRedisCacheManager;
+import com.xzixi.self.portal.framework.cache.FuzzyEvictRedisCacheManager;
 import com.xzixi.self.portal.webapp.config.redis.*;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

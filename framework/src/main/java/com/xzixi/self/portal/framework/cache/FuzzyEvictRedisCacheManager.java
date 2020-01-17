@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.framework.cache.redis;
+package com.xzixi.self.portal.framework.cache;
 
 import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
