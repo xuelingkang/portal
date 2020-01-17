@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.config.redis;
+package com.xzixi.self.portal.framework.cache.redis;
 
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.redis.cache.RedisCache;
@@ -6,9 +6,6 @@ import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 
 import java.util.Arrays;
-
-import static com.xzixi.self.portal.webapp.constant.RedisConstant.KEYS_SEPARATOR;
-import static com.xzixi.self.portal.webapp.constant.RedisConstant.REGEX_KEY_PREFIX;
 
 /**
  * evict支持删除模糊匹配key
@@ -20,14 +17,20 @@ public class FuzzyEvictRedisCache extends RedisCache {
     private final String name;
     private final RedisCacheWriter cacheWriter;
     private final ConversionService conversionService;
+    private final String keysSeparator;
+    private final String regexKeyPrefix;
 
     protected FuzzyEvictRedisCache(String name,
                                    RedisCacheWriter cacheWriter,
-                                   RedisCacheConfiguration cacheConfig) {
+                                   RedisCacheConfiguration cacheConfig,
+                                   String keysSeparator,
+                                   String regexKeyPrefix) {
         super(name, cacheWriter, cacheConfig);
         this.name = name;
         this.cacheWriter = cacheWriter;
         this.conversionService = cacheConfig.getConversionService();
+        this.keysSeparator = keysSeparator;
+        this.regexKeyPrefix = regexKeyPrefix;
     }
 
     /**
@@ -39,12 +42,12 @@ public class FuzzyEvictRedisCache extends RedisCache {
     @Override
     public void evict(Object key) {
         if (key instanceof String) {
-            String[] keys = ((String) key).split(KEYS_SEPARATOR);
+            String[] keys = ((String) key).split(keysSeparator);
             Arrays.stream(keys).forEach(keyItem -> {
                 // 根据前缀验证是否模糊key
-                if (keyItem.startsWith(REGEX_KEY_PREFIX)) {
+                if (keyItem.startsWith(regexKeyPrefix)) {
                     // 调用cacheWriter的clean方法清除匹配的缓存
-                    String shortKey = keyItem.substring(REGEX_KEY_PREFIX.length());
+                    String shortKey = keyItem.substring(regexKeyPrefix.length());
                     byte[] pattern = conversionService.convert(createCacheKey(shortKey), byte[].class);
                     if (pattern != null) {
                         cacheWriter.clean(name, pattern);

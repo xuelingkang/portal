@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.config.redis;
+package com.xzixi.self.portal.framework.cache.redis;
 
 import org.springframework.data.redis.cache.RedisCache;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -17,6 +17,8 @@ public class FuzzyEvictRedisCacheManager extends RedisCacheManager {
 
     private final RedisCacheWriter cacheWriter;
     private final RedisCacheConfiguration defaultCacheConfig;
+    private final String keysSeparator;
+    private final String regexKeyPrefix;
 
     /**
      * 重写createRedisCache，将RedisCache替换为FuzzyEvictRedisCache
@@ -27,15 +29,19 @@ public class FuzzyEvictRedisCacheManager extends RedisCacheManager {
      */
     @Override
     protected RedisCache createRedisCache(String name, @Nullable RedisCacheConfiguration cacheConfig) {
-        return new FuzzyEvictRedisCache(name, cacheWriter, cacheConfig != null ? cacheConfig : defaultCacheConfig);
+        return new FuzzyEvictRedisCache(name, cacheWriter, cacheConfig != null ? cacheConfig : defaultCacheConfig, keysSeparator, regexKeyPrefix);
     }
 
     public FuzzyEvictRedisCacheManager(RedisCacheWriter cacheWriter,
                                        RedisCacheConfiguration defaultCacheConfiguration,
                                        Map<String, RedisCacheConfiguration> initialCacheConfigurations,
-                                       boolean allowInFlightCacheCreation) {
+                                       boolean allowInFlightCacheCreation,
+                                       String keysSeparator,
+                                       String regexKeyPrefix) {
         super(cacheWriter, defaultCacheConfiguration, initialCacheConfigurations, allowInFlightCacheCreation);
         this.cacheWriter = cacheWriter;
         this.defaultCacheConfig = defaultCacheConfiguration;
+        this.keysSeparator = keysSeparator;
+        this.regexKeyPrefix = regexKeyPrefix;
     }
 }

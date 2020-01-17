@@ -1,6 +1,7 @@
 package com.xzixi.self.portal.webapp.config;
 
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
+import com.xzixi.self.portal.framework.cache.redis.FuzzyEvictRedisCacheManager;
 import com.xzixi.self.portal.webapp.config.redis.*;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -20,6 +21,9 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.LinkedHashMap;
+
+import static com.xzixi.self.portal.webapp.constant.RedisConstant.KEYS_SEPARATOR;
+import static com.xzixi.self.portal.webapp.constant.RedisConstant.REGEX_KEY_PREFIX;
 
 /**
  * redis缓存配置
@@ -76,7 +80,8 @@ public class RedisCacheConfig {
 
         RedisCacheWriter redisCacheWriter = RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory);
 
-        return new FuzzyEvictRedisCacheManager(redisCacheWriter, config, new LinkedHashMap<>(), true);
+        return new FuzzyEvictRedisCacheManager(redisCacheWriter, config, new LinkedHashMap<>(),
+            true, KEYS_SEPARATOR, REGEX_KEY_PREFIX);
     }
 
     /**
