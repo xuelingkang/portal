@@ -65,9 +65,9 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
                 String[] arr = OrderUtils.parse(order);
                 if (arr != null && ArrayUtils.isNotEmpty(arr)) {
                     if (OrderUtils.isAsc(arr[1])) {
-                        orderItems.add(OrderItem.asc(arr[0]));
+                        orderItems.add(OrderItem.asc(camelToUnderline(arr[0])));
                     } else {
-                        orderItems.add(OrderItem.desc(arr[0]));
+                        orderItems.add(OrderItem.desc(camelToUnderline(arr[0])));
                     }
                 }
             });
