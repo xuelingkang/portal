@@ -7,7 +7,7 @@
 1. 准备一个centOS7虚拟机，3G内存以上，有root权限
 2. 将`develop`目录下文件（文本文件先转为unix）拷贝到虚拟机上
 3. 执行`init.sh`，等待安装完成
-4. `webapp`项目设置VM参数：`-javaagent:目录路径\aspectjweaver-1.9.4.jar`
+4. `webapp`项目设置VM参数：`-javaagent:目录路径/aspectjweaver-1.9.4.jar`
 5. 使用maven package命令打包`enhance`和`starter`模块
 6. 启动`webapp`项目
 
