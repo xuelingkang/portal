@@ -97,7 +97,7 @@ public class SftpFactory extends BasePooledObjectFactory<Sftp> {
             Sftp sftp = p.getObject();
             if (sftp!=null) {
                 try {
-                    sftp.getChannelSftp().pwd();
+                    sftp.getChannelSftp().cd("./");
                     return true;
                 } catch (SftpException e) {
                     return false;
