@@ -167,7 +167,7 @@ sftp-client:
     # 在创建对象时检测对象是否有效
     test-on-create: false
     # 在从对象池获取对象时是否检测对象有效
-    test-on-borrow: false
+    test-on-borrow: true
     # 在向对象池中归还对象时是否检测对象有效
     test-on-return: false
     # 在检测空闲对象线程检测到对象不需要移除时，是否检测对象的有效性
