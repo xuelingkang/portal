@@ -102,10 +102,15 @@ rm -rf portal.sql
 # mysql配置文件
 mkdir -p /etc/mysql
 tee /etc/mysql/my.cnf <<-'EOF'
+[client]
+default-character-set=utf8mb4
+[mysql]
+default-character-set=utf8mb4
 [mysqld]
 port=3306
 max_connections=200
 character-set-server=utf8mb4
+collation-server=utf8mb4_bin
 default-storage-engine=INNODB
 explicit_defaults_for_timestamp=true
 default-time-zone='+08:00'
