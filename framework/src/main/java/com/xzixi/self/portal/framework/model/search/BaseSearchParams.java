@@ -20,19 +20,29 @@ import java.util.Arrays;
 @Data
 public class BaseSearchParams<T extends BaseModel> {
 
-    /** 实体类参数 */
+    /**
+     * 实体类参数
+     */
     private T model;
 
-    /** 当前页 */
+    /**
+     * 当前页
+     */
     private Long current = 1L;
 
-    /** 每页个数 */
+    /**
+     * 每页个数
+     */
     private Long size = 10L;
 
-    /** 排序规则 */
+    /**
+     * 排序规则
+     */
     private String[] orders;
 
-    /** 默认排序规则 */
+    /**
+     * 默认排序规则
+     */
     private String[] defaultOrders;
 
     @SuppressWarnings("unchecked")
@@ -53,7 +63,7 @@ public class BaseSearchParams<T extends BaseModel> {
         String[] orders = null;
         if (this.orders != null && ArrayUtils.isNotEmpty(this.orders)) {
             orders = Arrays.stream(this.orders)
-                .filter(order -> OrderUtils.parse(order) != null).toArray(String[]::new);
+                    .filter(order -> OrderUtils.parse(order) != null).toArray(String[]::new);
         }
         if (orders != null && ArrayUtils.isNotEmpty(orders)) {
             pagination.setOrders(orders);
@@ -96,7 +106,7 @@ public class BaseSearchParams<T extends BaseModel> {
         Field[] fields = ReflectUtils.getDeclaredFields(cls);
         T instance = ReflectUtils.newInstance(cls);
         BeanUtils.copyPropertiesIgnoreNull(this.model, instance, Arrays.stream(fields).filter(field ->
-            findAnnotation(field) != null).map(Field::getName).toArray(String[]::new));
+                findAnnotation(field) != null).map(Field::getName).toArray(String[]::new));
         return new QueryParams<>(instance);
     }
 

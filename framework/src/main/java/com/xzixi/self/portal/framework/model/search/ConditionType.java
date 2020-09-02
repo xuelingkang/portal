@@ -9,7 +9,9 @@ import java.util.Collection;
  */
 public enum ConditionType {
 
-    /** 等于 */
+    /**
+     * 等于
+     */
     EQ() {
         @Override
         public void parse(QueryParams<?> params, String column, Object value) {
@@ -20,7 +22,9 @@ public enum ConditionType {
             params.eq(column, value);
         }
     },
-    /** 不等于 */
+    /**
+     * 不等于
+     */
     NE() {
         @Override
         public void parse(QueryParams<?> params, String column, Object value) {
@@ -31,7 +35,9 @@ public enum ConditionType {
             params.ne(column, value);
         }
     },
-    /** 大于 */
+    /**
+     * 大于
+     */
     GT() {
         @Override
         public void parse(QueryParams<?> params, String column, Object value) {
@@ -41,7 +47,9 @@ public enum ConditionType {
             params.gt(column, value);
         }
     },
-    /** 大于等于 */
+    /**
+     * 大于等于
+     */
     GE() {
         @Override
         public void parse(QueryParams<?> params, String column, Object value) {
@@ -51,7 +59,9 @@ public enum ConditionType {
             params.ge(column, value);
         }
     },
-    /** 小于 */
+    /**
+     * 小于
+     */
     LT() {
         @Override
         public void parse(QueryParams<?> params, String column, Object value) {
@@ -61,7 +71,9 @@ public enum ConditionType {
             params.lt(column, value);
         }
     },
-    /** 小于等于 */
+    /**
+     * 小于等于
+     */
     LE() {
         @Override
         public void parse(QueryParams<?> params, String column, Object value) {
@@ -71,7 +83,9 @@ public enum ConditionType {
             params.le(column, value);
         }
     },
-    /** 模糊搜索 */
+    /**
+     * 模糊搜索
+     */
     LIKE() {
         @Override
         public void parse(QueryParams<?> params, String column, Object value) {

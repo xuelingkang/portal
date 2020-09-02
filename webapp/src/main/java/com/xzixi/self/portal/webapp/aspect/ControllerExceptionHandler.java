@@ -117,7 +117,7 @@ public class ControllerExceptionHandler {
     }
 
     /**
-     * 业务逻辑异常
+     * 客户端异常
      *
      * @param e LogicException
      * @return Result
@@ -129,7 +129,7 @@ public class ControllerExceptionHandler {
     }
 
     /**
-     * 服务器异常
+     * 服务端异常
      *
      * @param e ServerException
      * @return Result

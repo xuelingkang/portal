@@ -22,7 +22,9 @@ import static com.xzixi.self.portal.framework.util.TypeUtils.parseObject;
 @NoArgsConstructor
 public class QueryParams<T extends BaseModel> {
 
-    /** 分值 */
+    /**
+     * 分值
+     */
     public static final String SCORE = "_score";
 
     private T model;

@@ -1,16 +1,8 @@
 package com.xzixi.self.portal.framework.data.impl;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.metadata.OrderItem;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xzixi.self.portal.framework.data.IBaseData;
-import com.xzixi.self.portal.framework.data.ISearchEngine;
 import com.xzixi.self.portal.framework.exception.ProjectException;
 import com.xzixi.self.portal.framework.exception.ServerException;
-import com.xzixi.self.portal.framework.lock.ILock;
-import com.xzixi.self.portal.framework.lock.impl.LocalLock;
-import com.xzixi.self.portal.framework.mapper.IBaseMapper;
 import com.xzixi.self.portal.framework.model.BaseModel;
 import com.xzixi.self.portal.framework.model.search.Pagination;
 import com.xzixi.self.portal.framework.model.search.QueryParams;
@@ -34,11 +26,13 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.query.*;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.xzixi.self.portal.framework.model.search.QueryParams.SCORE;
@@ -46,17 +40,14 @@ import static com.xzixi.self.portal.framework.util.TypeUtils.parseObject;
 
 /**
  * elasticsearch实现
- * TODO 这样做数据库和es的字段必须一致，是否能满足需求，需要扩展？elasticsearch可以同时搜索多个索引，试试
  *
  * @author 薛凌康
  */
-public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel> extends ServiceImpl<M, T>
-        implements IBaseData<T>, ISearchEngine {
+public class ElasticsearchDataImpl<T extends BaseModel> implements IBaseData<T> {
 
-    private static final String DEFAULT_SYNC_DATA_ORDER = "id asc";
-    private Class<T> clazz;
+    private final Class<T> clazz;
     @Autowired
-    private ElasticsearchTemplate elasticsearchTemplate;
+    protected ElasticsearchTemplate elasticsearchTemplate;
 
     @SuppressWarnings("unchecked")
     public ElasticsearchDataImpl() {
@@ -67,42 +58,6 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         if (document == null) {
             throw new ProjectException(String.format("类(%s)必须使用@Document注解！", clazz.getName()));
         }
-    }
-
-    /**
-     * 获取删除操作锁
-     *
-     * @return ILock
-     */
-    protected ILock getRemoveLock() {
-        return new LocalLock();
-    }
-
-    /**
-     * 获取初始化操作锁
-     *
-     * @return ILock
-     */
-    protected ILock getInitLock() {
-        return new LocalLock();
-    }
-
-    /**
-     * 获取同步操作锁
-     *
-     * @return ILock
-     */
-    protected ILock getSyncLock() {
-        return new LocalLock();
-    }
-
-    /**
-     * 同步数据的顺序，必须是数据插入先后的升序
-     *
-     * @return 例如 "id asc"，自增id新插入的数据会排在后面
-     */
-    protected String syncDataOrder() {
-        return DEFAULT_SYNC_DATA_ORDER;
     }
 
     @Override
@@ -155,118 +110,49 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean save(T model) {
-        if (!super.save(model)) {
-            throw new ServerException(model, "数据库写入失败！");
-        }
         index(model);
         return true;
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean saveBatch(Collection<T> models, int batchSize) {
-        if (!super.saveBatch(models, batchSize)) {
-            throw new ServerException(models, "数据库写入失败！");
-        }
         index(models, batchSize);
         return true;
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean saveOrUpdate(T model) {
-        if (!super.saveOrUpdate(model)) {
-            throw new ServerException(model, "数据库写入失败！");
-        }
         index(model);
         return true;
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean saveOrUpdateBatch(Collection<T> models, int batchSize) {
-        if (!super.saveOrUpdateBatch(models, batchSize)) {
-            throw new ServerException(models, "数据库写入失败！");
-        }
         index(models, batchSize);
         return true;
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateById(T model) {
-        if (!super.updateById(model)) {
-            throw new ServerException(model, "数据库写入失败！");
-        }
         index(model);
         return true;
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean updateBatchById(Collection<T> models, int batchSize) {
-        if (!super.updateBatchById(models, batchSize)) {
-            throw new ServerException(models, "数据库写入失败！");
-        }
         index(models, batchSize);
         return true;
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean removeById(Serializable id) {
-        // 删除操作不等待初始化和同步，冲突直接返回异常
-        // 检查是否正在进行初始化或同步
-        checkInit();
-        checkSync();
-        String node = randomString();
-        try {
-            // 挂载节点
-            getRemoveLock().mount(node);
-            // 二次检查
-            checkInit();
-            checkSync();
-            // 执行删除
-            return doRemoveById(id);
-        } finally {
-            getRemoveLock().unmount(node);
-        }
-    }
-
-    private boolean doRemoveById(Serializable id) {
-        if (!super.removeById(id)) {
-            throw new ServerException(id, "数据库写入失败！");
-        }
         remove(QueryBuilders.idsQuery().addIds(String.valueOf(id)));
         return true;
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public boolean removeByIds(Collection<? extends Serializable> idList) {
-        // 检查是否正在进行初始化或同步
-        checkInit();
-        checkSync();
-        String node = randomString();
-        try {
-            // 挂载节点
-            getRemoveLock().mount(node);
-            // 二次检查
-            checkInit();
-            checkSync();
-            // 执行删除
-            return doRemoveByIds(idList);
-        } finally {
-            getRemoveLock().unmount(node);
-        }
-    }
-
-    private boolean doRemoveByIds(Collection<? extends Serializable> idList) {
-        if (!super.removeByIds(idList)) {
-            throw new ServerException(idList, "数据库写入失败！");
-        }
         String[] ids = idList.stream().map(String::valueOf).toArray(String[]::new);
         remove(QueryBuilders.idsQuery().addIds(ids));
         return true;
@@ -277,224 +163,6 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         return 1000;
     }
 
-    @Override
-    public void init() {
-        // 初始化操作不等待同步操作，冲突就返回异常，如果有未完成的删除操作就等待
-        // 检查是否正在进行同步
-        checkInit();
-        checkSync();
-        String value = randomString();
-        try {
-            // 获取锁
-            if (!getInitLock().acquire(value)) {
-                // 竞争失败
-                throwInit();
-            }
-            // 二次检查
-            checkSync();
-            // 等待删除操作完成后执行初始化
-            getRemoveLock().waitNode(this::doInit);
-        } finally {
-            getInitLock().release(value);
-        }
-    }
-
-    /**
-     * 执行初始化
-     */
-    private void doInit() {
-        // 删除索引，同时会清空数据
-        elasticsearchTemplate.deleteIndex(clazz);
-        // 创建索引和映射
-        elasticsearchTemplate.createIndex(clazz);
-        elasticsearchTemplate.putMapping(clazz);
-        // 批量导入数据库的数据
-        boolean isLastPage = false;
-        int size = defaultBatchSize();
-        int current = 1;
-        while (!isLastPage) {
-            IPage<T> page = super.page(new Page<T>(current, size).addOrder(OrderItem.asc("id")));
-            List<T> list = page.getRecords();
-            index(list, size);
-            // 已经导入的数据个数
-            isLastPage = (current - 1) * size + list.size() >= page.getTotal();
-            current++;
-        }
-    }
-
-    @Override
-    public void sync() {
-        // 同步操作不等待初始化操作，冲突就返回异常，如果有未完成的删除操作就等待
-        // 检查是否正在进行初始化
-        checkInit();
-        checkSync();
-        String value = randomString();
-        try {
-            // 获取锁
-            if (!getSyncLock().acquire(value)) {
-                // 竞争失败
-                throwSync();
-            }
-            // 二次检查
-            checkInit();
-            // 等待删除操作完成后执行同步
-            getRemoveLock().waitNode(this::doSync);
-        } finally {
-            getSyncLock().release(value);
-        }
-    }
-
-    private void doSync() {
-        // 创建索引和映射
-        elasticsearchTemplate.createIndex(clazz);
-        elasticsearchTemplate.putMapping(clazz);
-        // 批量比对数据
-        List<T> forIndex = new ArrayList<>();
-        List<T> forRemove = new LinkedList<>();
-        // 以这个总数为准，防止误删除同步期间新增的数据
-        long totalInDb = super.count();
-        long totalInEs = countAll();
-        boolean isLastPageInDb = false;
-        boolean isLastPageInEs = false;
-        int size = defaultBatchSize();
-        int current = 1;
-        // 数据库或搜索引擎有一个查询到了最后一页就退出循环
-        while (!isLastPageInDb && !isLastPageInEs) {
-            // 分页查询数据库
-            IPage<T> pageInDb = super.page(new Page<T>(current, size).addOrder(getSyncOrderItem()));
-            List<T> modelsInDb = pageInDb.getRecords();
-            isLastPageInDb = (current - 1) * size + modelsInDb.size() >= totalInDb;
-            if (isLastPageInDb) {
-                // 如果到了最后一页，对modelsInDb裁剪，防止误操作新增的数据
-                long expectSize = totalInDb - (current - 1) * size;
-                if (modelsInDb.size() > expectSize) {
-                    modelsInDb = modelsInDb.subList(0, (int) expectSize);
-                }
-            }
-            // 分页查询搜索引擎
-            Pagination<T> pageInEs = page(new Pagination<T>(current, size).orders(getSyncOrder()), new QueryParams<>());
-            List<T> modelsInEs = pageInEs.getRecords();
-            isLastPageInEs = (current - 1) * size + modelsInEs.size() >= totalInEs;
-            if (isLastPageInEs) {
-                // 如果到了最后一页，对modelsInEs裁剪，防止误操作新增的数据
-                long expectSize = totalInEs - (current - 1) * size;
-                if (modelsInEs.size() > expectSize) {
-                    modelsInEs = modelsInEs.subList(0, (int) expectSize);
-                }
-            }
-            // 遍历数据库的数据，查询出搜索引擎中缺少或需要更新的元素，添加到forIndex集合
-            List<T> finalModelsInEs = modelsInEs;
-            modelsInDb.forEach(model -> {
-                // 先从forRemove查询，再从recordsInEs查询
-                T matchModel = matchModel(forRemove, model);
-                if (matchModel != null) {
-                    forRemove.remove(matchModel);
-                }
-                if (matchModel == null) {
-                    matchModel = matchModel(finalModelsInEs, model);
-                }
-                // 先比较hashCode，再比较equals
-                if (matchModel == null || model.hashCode() != matchModel.hashCode() || !model.equals(matchModel)) {
-                    forIndex.add(model);
-                }
-            });
-            // 查询在recordsInEs存在，在recordsInDb不存在的元素，添加到forRemove集合
-            List<Integer> idsInDb = modelsInDb.stream().map(BaseModel::getId).collect(Collectors.toList());
-            List<T> modelsNotInDb = modelsInEs.stream().filter(model -> !idsInDb.contains(model.getId())).collect(Collectors.toList());
-            forRemove.addAll(modelsNotInDb);
-            current++;
-        }
-        while (!isLastPageInDb) {
-            // 数据库没有到最后一页，查询剩余的记录，添加到forIndex集合
-            IPage<T> pageInDb = super.page(new Page<T>(current, size).addOrder(getSyncOrderItem()));
-            List<T> modelsInDb = pageInDb.getRecords();
-            isLastPageInDb = (current - 1) * size + modelsInDb.size() >= totalInDb;
-            if (isLastPageInDb) {
-                // 如果到了最后一页，对modelsInDb裁剪，防止误操作新增的数据
-                long expectSize = totalInDb - (current - 1) * size;
-                if (modelsInDb.size() > expectSize) {
-                    modelsInDb = modelsInDb.subList(0, (int) expectSize);
-                }
-            }
-            forIndex.addAll(modelsInDb);
-            current++;
-        }
-        while (!isLastPageInEs) {
-            // 搜索引擎没有到最后一页，查询剩余的记录，添加到forRemove集合
-            Pagination<T> pageInEs = page(new Pagination<T>(current, size).orders(getSyncOrder()), new QueryParams<>());
-            List<T> modelsInEs = pageInEs.getRecords();
-            isLastPageInEs = (current - 1) * size + modelsInEs.size() >= totalInEs;
-            if (isLastPageInEs) {
-                // 如果到了最后一页，对modelsInEs裁剪，防止误操作新增的数据
-                long expectSize = totalInEs - (current - 1) * size;
-                if (modelsInEs.size() > expectSize) {
-                    modelsInEs = modelsInEs.subList(0, (int) expectSize);
-                }
-            }
-            forRemove.addAll(modelsInEs);
-            current++;
-        }
-        if (CollectionUtils.isNotEmpty(forIndex)) {
-            // 索引数据
-            index(forIndex, size);
-        }
-        if (CollectionUtils.isNotEmpty(forRemove)) {
-            // 删除数据
-            String[] ids = forRemove.stream().map(model -> String.valueOf(model.getId())).toArray(String[]::new);
-            remove(QueryBuilders.idsQuery().addIds(ids));
-        }
-    }
-
-    private T matchModel(List<T> models, T model) {
-        return models.stream().filter(matchModel -> matchModel.getId().equals(model.getId())).findFirst().orElse(null);
-    }
-
-    private OrderItem getSyncOrderItem() {
-        String[] arr = OrderUtils.parse(syncDataOrder());
-        if (arr == null || ArrayUtils.isEmpty(arr)) {
-            arr = OrderUtils.parse(DEFAULT_SYNC_DATA_ORDER);
-        }
-        assert arr != null;
-        if (OrderUtils.isAsc(arr[1])) {
-            return OrderItem.asc(arr[0]);
-        }
-        return OrderItem.desc(arr[0]);
-    }
-
-    private String getSyncOrder() {
-        String[] arr = OrderUtils.parse(syncDataOrder());
-        if (arr == null || ArrayUtils.isEmpty(arr)) {
-            return DEFAULT_SYNC_DATA_ORDER;
-        }
-        return syncDataOrder();
-    }
-
-    /**
-     * 检查是否正在进行初始化
-     */
-    private void checkInit() {
-        if (getInitLock().check()) {
-            throwInit();
-        }
-    }
-
-    /**
-     * 检查是否正在进行同步
-     */
-    private void checkSync() {
-        if (getSyncLock().check()) {
-            throwSync();
-        }
-    }
-
-    private void throwInit() {
-        throw new ServerException("搜索引擎正在进行初始化，请稍后再试！");
-    }
-
-    private void throwSync() {
-        throw new ServerException("搜索引擎正在进行同步，请稍后再试！");
-    }
-
     private void index(T entity) {
         try {
             IndexQuery indexQuery = new IndexQueryBuilder()
@@ -503,7 +171,7 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
                 .build();
             elasticsearchTemplate.index(indexQuery);
         } catch (Exception e) {
-            throw new ServerException(entity, "搜索引擎写入失败！", e);
+            throw new ServerException(entity, "索引失败！", e);
         }
     }
 
@@ -525,7 +193,7 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
                 toIndex += batchSize;
             }
         } catch (Exception e) {
-            throw new ServerException(entityList, "搜索引擎写入失败！", e);
+            throw new ServerException(entityList, "索引失败！", e);
         }
     }
 
@@ -535,7 +203,7 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
             deleteQuery.setQuery(queryBuilder);
             elasticsearchTemplate.delete(deleteQuery, clazz);
         } catch (Exception e) {
-            throw new ServerException(queryBuilder, "搜索引擎写入失败！", e);
+            throw new ServerException(queryBuilder, "删除失败！", e);
         }
     }
 
@@ -690,9 +358,5 @@ public class ElasticsearchDataImpl<M extends IBaseMapper<T>, T extends BaseModel
         if (CollectionUtils.isNotEmpty(params.getNotNulls())) {
             params.getNotNulls().forEach(name -> builder.must(new ExistsQueryBuilder(name)));
         }
-    }
-
-    private String randomString() {
-        return UUID.randomUUID().toString();
     }
 }
