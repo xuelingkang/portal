@@ -33,7 +33,10 @@
         <mybatis-plus.version>3.4.0</mybatis-plus.version>
         <jwt.version>0.9.1</jwt.version>
         <json-lib.version>2.4</json-lib.version>
-        <docker.host>http://docker:2375</docker.host>
+        <docker.image.prefix>registry.cn-zhangjiakou.aliyuncs.com/xzixi/portal</docker.image.prefix>
+        <docker.image.tag>${version}</docker.image.tag>
+        <docker.skip>true</docker.skip>
+        <docker.build.no-cache>false</docker.build.no-cache>
     </properties>
 
     <dependencyManagement>
@@ -105,27 +108,30 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <configuration>
+                    <repository>${docker.image.prefix}/${artifactId}</repository>
+                    <tag>${docker.image.tag}</tag>
+                    <skip>${docker.skip}</skip>
+                    <noCache>${docker.build.no-cache}</noCache>
+                    <contextDirectory>${basedir}</contextDirectory>
+                    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                    <buildArgs>
+                        <JAR_FILE>target/${build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>2.2.5</version>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
-                <plugin>
-                    <groupId>com.spotify</groupId>
-                    <artifactId>docker-maven-plugin</artifactId>
-                    <version>0.4.12</version>
-                    <configuration>
-                        <imageName>${project.name}</imageName>
-                        <imageTags>${project.version}</imageTags>
-                        <dockerHost>${docker.host}</dockerHost>
-                        <dockerDirectory>${project.basedir}</dockerDirectory>
-                        <resources>
-                            <resource>
-                                <targetPath>/</targetPath>
-                                <directory>${project.build.directory}</directory>
-                                <include>${project.build.finalName}.jar</include>
-                            </resource>
-                        </resources>
-                    </configuration>
-                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
@@ -135,11 +141,6 @@
                         <source>${maven.compiler.source}</source>
                         <encoding>${project.build.sourceEncoding}</encoding>
                     </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>pl.project13.maven</groupId>
-                    <artifactId>git-commit-id-plugin</artifactId>
-                    <version>2.2.5</version>
                 </plugin>
             </plugins>
         </pluginManagement>

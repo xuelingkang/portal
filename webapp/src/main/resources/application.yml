@@ -49,8 +49,6 @@ spring:
 
   # rabbitmq
   rabbitmq:
-    # 发送确认
-    publisher-confirms: true
     # 发送失败退回
     publisher-returns: true
 

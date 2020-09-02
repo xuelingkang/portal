@@ -1,0 +1,14 @@
+FROM registry.cn-zhangjiakou.aliyuncs.com/xzixi/portal/oracle-jdk-aspectj:8u261
+
+MAINTAINER xuelingkang
+
+ARG JAR_FILE
+
+COPY $JAR_FILE app.jar
+
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo "Asia/Shanghai" > /etc/timezone
+
+EXPOSE 8080
+
+CMD java -Dfile.encoding=utf-8 -Djava.security.egd=file:/dev/./urandom -javaagent:aspectjweaver.jar $JAVA_OPTS -jar app.jar > /dev/null 2>&1
