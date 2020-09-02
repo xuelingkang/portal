@@ -13,6 +13,10 @@
     <artifactId>webapp</artifactId>
     <description>服务端</description>
 
+    <properties>
+        <docker.skip>false</docker.skip>
+    </properties>
+
     <dependencies>
         <!-- 编译期增强 -->
         <dependency>

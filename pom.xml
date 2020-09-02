@@ -33,7 +33,7 @@
         <mybatis-plus.version>3.4.0</mybatis-plus.version>
         <jwt.version>0.9.1</jwt.version>
         <json-lib.version>2.4</json-lib.version>
-        <docker.image.prefix>registry.cn-zhangjiakou.aliyuncs.com/xzixi/portal</docker.image.prefix>
+        <docker.image.prefix>registry.cn-zhangjiakou.aliyuncs.com/xuelingkang/portal</docker.image.prefix>
         <docker.image.tag>${version}</docker.image.tag>
         <docker.skip>true</docker.skip>
         <docker.build.no-cache>false</docker.build.no-cache>

@@ -1,4 +1,4 @@
-FROM registry.cn-zhangjiakou.aliyuncs.com/xzixi/portal/oracle-jdk-aspectj:8u261
+FROM registry.cn-zhangjiakou.aliyuncs.com/xuelingkang/library/oracle-jdk-aspectj:8u261
 
 MAINTAINER xuelingkang
 
