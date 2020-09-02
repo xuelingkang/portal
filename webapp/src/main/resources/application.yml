@@ -115,13 +115,6 @@ server:
       file-date-format: yyyy_MM_dd # 日志文件日期格式
       retention-period: 31 # 日志保留天数，默认31
       append: true # 追加日志，默认false，重启后旧日志另存，重新创建新日志
-      extended-format: true # 启用扩展NCSA格式，默认false
-      date-format: yyyy-MMM-dd HH:mm:ss.SSS # 日志内容时间格式，默认dd/MMM/yyyy:HH:mm:ss Z
-      locale: zh_CN # 日志语言
-      time-zone: GMT+8 # 时区，默认GMT
-      log-cookies: true # 记录cookie，默认false
-      log-server: true # 记录主机名，默认false
-      log-latency: true # 记录请求处理时间，默认false
 
 # mybatis plus
 mybatis-plus:

@@ -24,13 +24,13 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-boot.version>2.1.10.RELEASE</spring-boot.version>
-        <commons-lang3.version>3.7</commons-lang3.version>
-        <commons-io.version>2.6</commons-io.version>
+        <spring-boot.version>2.2.9.RELEASE</spring-boot.version>
+        <commons-lang3.version>3.11</commons-lang3.version>
+        <commons-io.version>2.7</commons-io.version>
         <commons-collection.version>3.2.2</commons-collection.version>
-        <fastjson.version>1.2.60</fastjson.version>
-        <druid.version>1.1.21</druid.version>
-        <mybatis-plus.version>3.2.0</mybatis-plus.version>
+        <fastjson.version>1.2.69</fastjson.version>
+        <druid.version>1.1.23</druid.version>
+        <mybatis-plus.version>3.4.0</mybatis-plus.version>
         <jwt.version>0.9.1</jwt.version>
         <json-lib.version>2.4</json-lib.version>
         <docker.host>http://docker:2375</docker.host>
