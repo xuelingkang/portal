@@ -52,7 +52,7 @@ public class ElasticsearchDataImpl<T extends BaseModel> implements IBaseData<T> 
     @SuppressWarnings("unchecked")
     public ElasticsearchDataImpl() {
         // 获取T的实际类型，第二个泛型参数
-        this.clazz = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+        this.clazz = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         // 获取Document注解
         Document document = clazz.getDeclaredAnnotation(Document.class);
         if (document == null) {
@@ -68,7 +68,7 @@ public class ElasticsearchDataImpl<T extends BaseModel> implements IBaseData<T> 
     }
 
     @Override
-    public Collection<T> listByIds(Collection<? extends Serializable> idList) {
+    public List<T> listByIds(Collection<? extends Serializable> idList) {
         Collection<String> ids = idList.stream().map(String::valueOf).collect(Collectors.toList());
         SearchQuery query = new NativeSearchQueryBuilder().withIds(ids).build();
         return elasticsearchTemplate.queryForList(query, clazz);

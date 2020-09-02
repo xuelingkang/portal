@@ -29,7 +29,7 @@ public interface IBaseData<T extends BaseModel> {
      * @param ids 主键集合
      * @return 实体集合
      */
-    Collection<T> listByIds(Collection<? extends Serializable> ids);
+    List<T> listByIds(Collection<? extends Serializable> ids);
 
     /**
      * 根据条件查询一个

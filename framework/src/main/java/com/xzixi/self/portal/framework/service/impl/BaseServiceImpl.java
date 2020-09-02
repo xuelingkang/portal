@@ -104,7 +104,7 @@ public class BaseServiceImpl<D extends IBaseData<T>, T extends BaseModel> implem
     }
 
     @Override
-    public final Collection<T> listByIds(Collection<? extends Serializable> idList) {
+    public final List<T> listByIds(Collection<? extends Serializable> idList) {
         idList = idList.stream().filter(Objects::nonNull).distinct().collect(Collectors.toList());
         if (CollectionUtils.isEmpty(idList)) {
             throw new ProjectException("idList不能为空！");

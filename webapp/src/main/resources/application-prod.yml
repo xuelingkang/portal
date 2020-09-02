@@ -42,7 +42,7 @@ spring:
 
   data:
     elasticsearch:
-      cluster-name: docker-cluster
+      cluster-name: elasticsearch
       cluster-nodes: ali-server03:9300
       repositories:
         enabled: true

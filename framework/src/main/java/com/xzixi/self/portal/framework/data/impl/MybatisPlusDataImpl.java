@@ -1,10 +1,11 @@
 package com.xzixi.self.portal.framework.data.impl;
 
+import com.baomidou.mybatisplus.core.conditions.ISqlSegment;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.enums.SqlKeyword;
-import com.baomidou.mybatisplus.core.enums.WrapperKeyword;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -18,8 +19,10 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static com.baomidou.mybatisplus.core.toolkit.StringUtils.camelToUnderline;
@@ -30,6 +33,16 @@ import static com.baomidou.mybatisplus.core.toolkit.StringUtils.camelToUnderline
  * @author 薛凌康
  */
 public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> extends ServiceImpl<M, T> implements IBaseData<T> {
+
+    @Override
+    public T getById(Serializable id) {
+        return super.getById(id);
+    }
+
+    @Override
+    public List<T> listByIds(Collection<? extends Serializable> idList) {
+        return super.listByIds(idList);
+    }
 
     @Override
     public List<T> list(QueryParams<T> params) {
@@ -49,6 +62,26 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
     @Override
     public long count(QueryParams<T> params) {
         return super.count(parseQueryWrapper(params, true, false));
+    }
+
+    @Override
+    public boolean save(T entity) {
+        return super.save(entity);
+    }
+
+    @Override
+    public boolean updateById(T entity) {
+        return super.updateById(entity);
+    }
+
+    @Override
+    public boolean removeById(Serializable id) {
+        return super.removeById(id);
+    }
+
+    @Override
+    public boolean removeByIds(Collection<? extends Serializable> idList) {
+        return super.removeByIds(idList);
     }
 
     @Override
@@ -150,6 +183,22 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
                     }
                 }
             });
+        }
+    }
+
+    public enum WrapperKeyword implements ISqlSegment {
+        LEFT_BRACKET(StringPool.LEFT_BRACKET),
+        RIGHT_BRACKET(StringPool.RIGHT_BRACKET);
+
+        private final String keyword;
+
+        WrapperKeyword(final String keyword) {
+            this.keyword = keyword;
+        }
+
+        @Override
+        public String getSqlSegment() {
+            return keyword;
         }
     }
 }

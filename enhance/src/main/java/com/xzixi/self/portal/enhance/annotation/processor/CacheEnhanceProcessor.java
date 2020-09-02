@@ -145,7 +145,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
 
     /**
      * listByIds
-     * 这个方法不加缓存，调用getById方法提高缓存的利用率
+     * 这个方法不加缓存，调用getById方法提高缓存的命中率
      */
     public JCTree.JCMethodDecl listByIdsDecl(String modelClassName) {
         final String method = "listByIds";
@@ -165,7 +165,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 方法名
         Name name = getNameFromString(method);
         // 返回值类型
-        JCTree.JCExpression returnType = collectionType(modelClassName);
+        JCTree.JCExpression returnType = listType(modelClassName);
         // 参数列表
         List<JCTree.JCVariableDecl> parameters = List.of(extendsWildCollectionParamDecl(idList, SERIALIZABLE));
         // Stream<? extends Serializable> stream = idList.stream()

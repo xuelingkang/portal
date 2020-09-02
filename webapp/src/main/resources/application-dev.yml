@@ -42,8 +42,8 @@ spring:
 
   data:
     elasticsearch:
-      cluster-name: docker-cluster
-      cluster-nodes: docker:9300
+      cluster-name: elasticsearch
+      cluster-nodes: localhost:9300
       repositories:
         enabled: true
 
