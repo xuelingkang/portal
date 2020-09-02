@@ -28,3 +28,5 @@ build/
 
 ### VS Code ###
 .vscode/
+
+base-images/oracle-jdk/jdk-8u261-linux-x64.tar.gz
