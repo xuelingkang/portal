@@ -7,15 +7,20 @@ docker run -d --name mysql \
 -e MYSQL_ROOT_PASSWORD=root \
 -v /etc/localtime:/etc/localtime \
 -v /etc/timezone:/etc/timezone \
+-v $(pwd)/my.cnf:/etc/mysql/my.cnf \
 -p 3306:3306 \
 mysql:8.0.21
 
-# 初始化配置和数据
-docker cp my.cnf mysql:/etc/mysql/my.cnf
-docker cp init.sql mysql:/init.sql
-docker restart mysql
-sleep 5
-docker exec mysql mysql -uroot -proot -e "source /init.sql"
+# 初始化数据
+docker cp quartz.sql mysql:/quartz.sql
+docker cp portal.sql mysql:/portal.sql
+result=1
+while [ $result -ne 0 ]
+do
+  sleep 2
+  docker exec mysql mysql -uroot -proot -e "SET CHARACTER SET utf8mb4;DROP DATABASE IF EXISTS portal;CREATE DATABASE portal DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;USE portal;SOURCE /portal.sql;SOURCE /quartz.sql;"
+  result=$?
+done
 
 # redis
 docker run -d --name redis \
@@ -46,13 +51,13 @@ docker run -d --name elasticsearch \
 -e "discovery.type=single-node" \
 -v /etc/localtime:/etc/localtime \
 -v /etc/timezone:/etc/timezone \
+-v $(pwd)/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml \
 -p 9200:9200 \
 -p 9300:9300 \
 elasticsearch:6.8.10
 
 # ik分词器
-docker cp elasticsearch.yml elasticsearch:/usr/share/elasticsearch/config/elasticsearch.yml && \
-docker cp elasticsearch-analysis-ik-6.8.10.zip elasticsearch:/root/elasticsearch-analysis-ik.zip && \
-docker exec elasticsearch mkdir -p /etc/elasticsearch/plugins/ik && \
-docker exec elasticsearch unzip -o -d /etc/elasticsearch/plugins/ik /root/elasticsearch-analysis-ik.zip && \
+docker cp elasticsearch-analysis-ik-6.8.10.zip elasticsearch:/root/elasticsearch-analysis-ik.zip
+docker exec elasticsearch mkdir -p /etc/elasticsearch/plugins/ik
+docker exec elasticsearch unzip -o -d /etc/elasticsearch/plugins/ik /root/elasticsearch-analysis-ik.zip
 docker restart elasticsearch
