@@ -9,9 +9,13 @@ docker run -d --name mysql \
 -v /etc/timezone:/etc/timezone \
 -p 3306:3306 \
 mysql:8.0.21
-# TODO 大小写敏感配置 表名、字段名、字段值
 
-# 导入init.sql
+# 初始化配置和数据
+docker cp my.cnf mysql:/etc/mysql/my.cnf
+docker cp init.sql mysql:/init.sql
+docker restart mysql
+sleep 5
+docker exec mysql mysql -uroot -proot -e "source /init.sql"
 
 # redis
 docker run -d --name redis \
@@ -46,6 +50,7 @@ docker run -d --name elasticsearch \
 -p 9300:9300 \
 elasticsearch:6.8.10
 
+# ik分词器
 docker cp elasticsearch.yml elasticsearch:/usr/share/elasticsearch/config/elasticsearch.yml && \
 docker cp elasticsearch-analysis-ik-6.8.10.zip elasticsearch:/root/elasticsearch-analysis-ik.zip && \
 docker exec elasticsearch mkdir -p /etc/elasticsearch/plugins/ik && \
