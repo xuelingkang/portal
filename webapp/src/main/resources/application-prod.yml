@@ -2,7 +2,7 @@
 spring:
   # 数据源
   datasource:
-    url: jdbc:mysql://ali-server02:3306/portal?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://ali-server02:3306/portal?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8
     username: root
     password: root
     druid:
@@ -42,7 +42,7 @@ spring:
 
   data:
     elasticsearch:
-      cluster-name: elasticsearch
+      cluster-name: docker-cluster
       cluster-nodes: ali-server03:9300
       repositories:
         enabled: true
