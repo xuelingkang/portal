@@ -5,7 +5,7 @@
 ## 启动开发环境
 
 1. 执行`init.sh`，等待安装完成
-2. `webapp`项目设置VM参数：`-javaagent:目录路径/aspectjweaver-1.9.4.jar`
+2. `webapp`项目设置VM参数：`-javaagent:/path/to/aspectjweaver/aspectjweaver-1.9.6.jar`
 3. 使用maven package命令打包`enhance`和`starter`模块
 4. 启动`webapp`项目
 
