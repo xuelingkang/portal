@@ -1,9 +1,11 @@
 package com.xzixi.self.portal.webapp.config.security;
 
 import com.xzixi.self.portal.framework.model.search.QueryParams;
+import com.xzixi.self.portal.webapp.model.enums.AuthorityMethod;
 import com.xzixi.self.portal.webapp.model.enums.AuthorityProtocol;
 import com.xzixi.self.portal.webapp.model.po.Authority;
 import com.xzixi.self.portal.webapp.service.IAuthorityService;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
@@ -15,7 +17,9 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static com.xzixi.self.portal.webapp.constant.AuthorityConstant.ALL_PATH;
 
 /**
  * 根据访问url获取所需权限
@@ -36,13 +40,17 @@ public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocat
         List<Authority> authorities = authorityService
                 .list(new QueryParams<>(new Authority().setProtocol(AuthorityProtocol.HTTP)));
 
-        // 匹配权限
-        Optional<Authority> authorityOptional = authorities.stream().filter(authority ->
-                new AntPathRequestMatcher(authority.getPattern(), authority.getMethod().name())
-                        .matches(request)).findFirst();
+        List<Authority> matched = authorities.stream()
+                .filter(authority -> new AntPathRequestMatcher(authority.getPattern(), authority.getMethod() == AuthorityMethod.ALL ? null : authority.getMethod().name()).matches(request))
+                .collect(Collectors.toList());
 
-        return authorityOptional.map(authority ->
-                SecurityConfig.createList(String.valueOf(authority.getId()))).orElse(null);
+        // 没有匹配的权限，或者只匹配到/**，返回null表示没有匹配的权限
+        if (CollectionUtils.isEmpty(matched) || (matched.size() == 1 && matched.get(0).getPattern().equals(ALL_PATH))) {
+            return null;
+        }
+
+        // 匹配到的权限
+        return matched.stream().map(authority -> new SecurityConfig(String.valueOf(authority.getId()))).collect(Collectors.toList());
     }
 
     @Override

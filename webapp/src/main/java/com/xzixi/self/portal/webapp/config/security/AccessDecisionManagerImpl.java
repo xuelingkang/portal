@@ -20,9 +20,8 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
-
-import static com.xzixi.self.portal.webapp.constant.UserConstant.SYSTEM_ADMIN_USER_ID;
 
 /**
  * 自定义授权决策
@@ -52,10 +51,6 @@ public class AccessDecisionManagerImpl implements AccessDecisionManager {
                     .collect(Collectors.toSet());
         } else {
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            // 系统管理员直接跳过
-            if (Objects.equals(SYSTEM_ADMIN_USER_ID, userDetails.getUser().getId())) {
-                return;
-            }
             if (Objects.equals(UserType.WEBSITE, userDetails.getUser().getType())) {
                 // 网站用户权限
                 Collection<Authority> websiteAuthorities = authorityService
@@ -69,12 +64,13 @@ public class AccessDecisionManagerImpl implements AccessDecisionManager {
             }
         }
         if (CollectionUtils.isNotEmpty(authorities)) {
-            // 需求权限id
-            String authorityId = ((List<ConfigAttribute>) configAttributes).get(0).getAttribute();
-            // 检查是否包含权限
-            boolean contains = authorities.stream().map(GrantedAuthority::getAuthority)
-                    .collect(Collectors.toSet()).contains(authorityId);
-            if (contains) {
+            // 需求权限
+            List<String> requiredIds = configAttributes.stream().map(ConfigAttribute::getAttribute).collect(Collectors.toList());
+            // 当前权限
+            Set<String> currentIds = authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
+            // 求交集
+            currentIds.retainAll(requiredIds);
+            if (currentIds.size() > 0) {
                 return;
             }
         }

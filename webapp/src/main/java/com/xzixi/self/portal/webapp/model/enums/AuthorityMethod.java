@@ -13,6 +13,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AuthorityMethod implements IBaseEnum {
 
+    /** 所有请求 */
+    ALL("所有请求"),
     /** http get请求 */
     GET("GET请求"),
     /** http head请求 */

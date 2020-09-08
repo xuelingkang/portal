@@ -13,6 +13,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AuthorityCategory implements IBaseEnum {
 
+    /** 系统 */
+    SYSTEM("系统"),
     /** 枚举 */
     ENUM("枚举"),
     /** 认证 */
