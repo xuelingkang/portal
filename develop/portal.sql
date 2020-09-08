@@ -220,7 +220,7 @@ CREATE TABLE `t_authority` (
   `method` char(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '' COMMENT '请求方法',
   `description` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '' COMMENT '权限描述',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='权限';
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='权限';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -229,7 +229,7 @@ CREATE TABLE `t_authority` (
 
 LOCK TABLES `t_authority` WRITE;
 /*!40000 ALTER TABLE `t_authority` DISABLE KEYS */;
-INSERT INTO `t_authority` VALUES (1,'HTTP','AUTHORIZATION',100,'/website/user','POST','注册'),(2,'HTTP','AUTHORIZATION',200,'/login','POST','登录'),(3,'HTTP','AUTHORIZATION',300,'/user/reset-password','GET','获取重置密码链接'),(4,'HTTP','AUTHORIZATION',400,'/user/reset-password','PATCH','重置账户密码'),(5,'HTTP','AUTHORIZATION',500,'/logout','GET','登出'),(6,'HTTP','USER',100,'/user','GET','分页查询用户'),(7,'HTTP','USER',200,'/user/*','GET','根据id查询用户'),(8,'HTTP','USER',300,'/user','POST','保存用户'),(9,'HTTP','USER',400,'/user','PUT','更新用户'),(10,'HTTP','USER',500,'/user/personal','PUT','更新个人信息'),(11,'HTTP','USER',600,'/user/lock','PATCH','锁定用户账户'),(12,'HTTP','USER',700,'/user/unlock','PATCH','解锁用户账户'),(13,'HTTP','USER',800,'/user','DELETE','删除用户账户'),(14,'HTTP','USER',900,'/user/password','PATCH','修改用户账户密码'),(15,'HTTP','USER',1000,'/user/personal/password','PATCH','修改个人账户密码'),(16,'HTTP','USER',1100,'/user/*/role','POST','更新用户角色'),(17,'HTTP','ROLE',100,'/role','GET','分页查询角色'),(18,'HTTP','ROLE',200,'/role/*','GET','根据id查询角色'),(19,'HTTP','ROLE',300,'/role','POST','保存角色'),(20,'HTTP','ROLE',400,'/role','PUT','更新角色'),(21,'HTTP','ROLE',500,'/role','DELETE','删除角色'),(22,'HTTP','ROLE',600,'/role/*/authority','POST','更新角色权限'),(23,'HTTP','AUTHORITY',100,'/authority','GET','分页查询权限'),(24,'HTTP','AUTHORITY',200,'/authority/*','GET','根据id查询权限'),(25,'HTTP','AUTHORITY',300,'/authority','POST','保存权限'),(26,'HTTP','AUTHORITY',400,'/authority','PUT','更新权限'),(27,'HTTP','AUTHORITY',500,'/authority','DELETE','删除权限'),(28,'HTTP','ENUM',100,'/enum','GET','获取所有枚举'),(29,'HTTP','ENUM',200,'/enum/*','GET','根据类名获取枚举'),(30,'HTTP','ATTACHMENT',100,'/attachment/*','POST','上传附件'),(31,'HTTP','ATTACHMENT',200,'/attachment','GET','分页查询附件'),(32,'HTTP','ATTACHMENT',300,'/attachment/*','GET','根据id查询附件'),(33,'HTTP','ATTACHMENT',400,'/attachment','DELETE','删除附件'),(34,'HTTP','JOB_TEMPLATE',100,'/job-template','GET','分页查询任务模板'),(35,'HTTP','JOB_TEMPLATE',200,'/job-template/*','GET','根据id查询任务模板'),(36,'HTTP','JOB_TEMPLATE',300,'/job-template','POST','保存任务模板'),(37,'HTTP','JOB_TEMPLATE',400,'/job-template','PUT','更新任务模板'),(38,'HTTP','JOB_TEMPLATE',500,'/job-template','DELETE','删除任务模板'),(39,'HTTP','JOB',100,'/job','GET','分页查询定时任务'),(40,'HTTP','JOB',200,'/job/*','GET','根据id查询定时任务'),(41,'HTTP','JOB',300,'/job','POST','保存定时任务'),(42,'HTTP','JOB',400,'/job','PUT','更新定时任务'),(43,'HTTP','JOB',500,'/job','DELETE','删除定时任务'),(44,'HTTP','JOB',600,'/job/pause','PATCH','暂停定时任务'),(45,'HTTP','JOB',700,'/job/resume','PATCH','恢复定时任务'),(46,'HTTP','MAIL',100,'/mail','GET','分页查询邮件'),(47,'HTTP','MAIL',200,'/mail/*','GET','根据id查询邮件'),(48,'HTTP','MAIL',300,'/mail','POST','发送邮件'),(49,'HTTP','MAIL',400,'/mail','DELETE','删除邮件'),(50,'HTTP','USER_LINK',100,'/user-link/idols','GET','查询当前用户的偶像'),(51,'HTTP','USER_LINK',200,'/user-link/followers','GET','查询当前用户的粉丝'),(52,'HTTP','USER_LINK',300,'/user-link/*','POST','添加关注'),(53,'HTTP','USER_LINK',400,'/user-link/*','DELETE','取消关注'),(54,'HTTP','AUTHORIZATION',600,'/user/activate','PATCH','激活账户'),(55,'HTTP','USER',1200,'/user/rebind-email-code','GET','生成重新绑定邮箱验证码'),(56,'HTTP','USER',1300,'/user/rebind-email','PATCH','重新绑定邮箱');
+INSERT INTO `t_authority` VALUES (1,'HTTP','SYSTEM',100,'/**','ALL','超级权限'),(2,'HTTP','AUTHORIZATION',100,'/website/user','POST','注册'),(3,'HTTP','AUTHORIZATION',200,'/login','POST','登录'),(4,'HTTP','AUTHORIZATION',300,'/user/reset-password','GET','获取重置密码链接'),(5,'HTTP','AUTHORIZATION',400,'/user/reset-password','PATCH','重置账户密码'),(6,'HTTP','AUTHORIZATION',500,'/logout','GET','登出'),(7,'HTTP','USER',100,'/user','GET','分页查询用户'),(8,'HTTP','USER',200,'/user/*','GET','根据id查询用户'),(9,'HTTP','USER',300,'/user','POST','保存用户'),(10,'HTTP','USER',400,'/user','PUT','更新用户'),(11,'HTTP','USER',500,'/user/personal','PUT','更新个人信息'),(12,'HTTP','USER',600,'/user/lock','PATCH','锁定用户账户'),(13,'HTTP','USER',700,'/user/unlock','PATCH','解锁用户账户'),(14,'HTTP','USER',800,'/user','DELETE','删除用户账户'),(15,'HTTP','USER',900,'/user/password','PATCH','修改用户账户密码'),(16,'HTTP','USER',1000,'/user/personal/password','PATCH','修改个人账户密码'),(17,'HTTP','USER',1100,'/user/*/role','POST','更新用户角色'),(18,'HTTP','ROLE',100,'/role','GET','分页查询角色'),(19,'HTTP','ROLE',200,'/role/*','GET','根据id查询角色'),(20,'HTTP','ROLE',300,'/role','POST','保存角色'),(21,'HTTP','ROLE',400,'/role','PUT','更新角色'),(22,'HTTP','ROLE',500,'/role','DELETE','删除角色'),(23,'HTTP','ROLE',600,'/role/*/authority','POST','更新角色权限'),(24,'HTTP','AUTHORITY',100,'/authority','GET','分页查询权限'),(25,'HTTP','AUTHORITY',200,'/authority/*','GET','根据id查询权限'),(26,'HTTP','AUTHORITY',300,'/authority','POST','保存权限'),(27,'HTTP','AUTHORITY',400,'/authority','PUT','更新权限'),(28,'HTTP','AUTHORITY',500,'/authority','DELETE','删除权限'),(29,'HTTP','ENUM',100,'/enum','GET','获取所有枚举'),(30,'HTTP','ENUM',200,'/enum/*','GET','根据类名获取枚举'),(31,'HTTP','ATTACHMENT',100,'/attachment/*','POST','上传附件'),(32,'HTTP','ATTACHMENT',200,'/attachment','GET','分页查询附件'),(33,'HTTP','ATTACHMENT',300,'/attachment/*','GET','根据id查询附件'),(34,'HTTP','ATTACHMENT',400,'/attachment','DELETE','删除附件'),(35,'HTTP','JOB_TEMPLATE',100,'/job-template','GET','分页查询任务模板'),(36,'HTTP','JOB_TEMPLATE',200,'/job-template/*','GET','根据id查询任务模板'),(37,'HTTP','JOB_TEMPLATE',300,'/job-template','POST','保存任务模板'),(38,'HTTP','JOB_TEMPLATE',400,'/job-template','PUT','更新任务模板'),(39,'HTTP','JOB_TEMPLATE',500,'/job-template','DELETE','删除任务模板'),(40,'HTTP','JOB',100,'/job','GET','分页查询定时任务'),(41,'HTTP','JOB',200,'/job/*','GET','根据id查询定时任务'),(42,'HTTP','JOB',300,'/job','POST','保存定时任务'),(43,'HTTP','JOB',400,'/job','PUT','更新定时任务'),(44,'HTTP','JOB',500,'/job','DELETE','删除定时任务'),(45,'HTTP','JOB',600,'/job/pause','PATCH','暂停定时任务'),(46,'HTTP','JOB',700,'/job/resume','PATCH','恢复定时任务'),(47,'HTTP','MAIL',100,'/mail','GET','分页查询邮件'),(48,'HTTP','MAIL',200,'/mail/*','GET','根据id查询邮件'),(49,'HTTP','MAIL',300,'/mail','POST','发送邮件'),(50,'HTTP','MAIL',400,'/mail','DELETE','删除邮件'),(51,'HTTP','USER_LINK',100,'/user-link/idols','GET','查询当前用户的偶像'),(52,'HTTP','USER_LINK',200,'/user-link/followers','GET','查询当前用户的粉丝'),(53,'HTTP','USER_LINK',300,'/user-link/*','POST','添加关注'),(54,'HTTP','USER_LINK',400,'/user-link/*','DELETE','取消关注'),(55,'HTTP','AUTHORIZATION',600,'/user/activate','PATCH','激活账户'),(56,'HTTP','USER',1200,'/user/rebind-email-code','GET','生成重新绑定邮箱验证码'),(57,'HTTP','USER',1300,'/user/rebind-email','PATCH','重新绑定邮箱');
 /*!40000 ALTER TABLE `t_authority` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -413,7 +413,7 @@ CREATE TABLE `t_role` (
   `description` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '' COMMENT '角色描述',
   PRIMARY KEY (`id`),
   UNIQUE KEY `t_role_uk_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='角色';
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='角色';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -422,7 +422,7 @@ CREATE TABLE `t_role` (
 
 LOCK TABLES `t_role` WRITE;
 /*!40000 ALTER TABLE `t_role` DISABLE KEYS */;
-INSERT INTO `t_role` VALUES (1,'ROLE_GUEST',100,1,0,'游客用户'),(2,'ROLE_WEBSITE',200,0,1,'网站用户'),(3,'ROLE_SYSTEM',300,0,0,'后台用户'),(4,'ROLE_USER',400,0,0,'用户管理员'),(5,'ROLE_ROLE',500,0,0,'角色管理员'),(6,'ROLE_AUTHORITY',600,0,0,'权限管理员'),(7,'ROLE_ATTACHMENT',700,0,0,'附件管理员'),(8,'ROLE_JOB_TEMPLATE',800,0,0,'任务模板管理员'),(9,'ROLE_JOB',900,0,0,'定时任务管理员'),(10,'ROLE_MAIL',1000,0,0,'邮件管理员');
+INSERT INTO `t_role` VALUES (1,'ROLE_SUPER',100,0,0,'超级管理员'),(2,'ROLE_GUEST',200,1,0,'游客用户'),(3,'ROLE_WEBSITE',300,0,1,'网站用户'),(4,'ROLE_SYSTEM',400,0,0,'后台用户'),(5,'ROLE_USER',500,0,0,'用户管理员'),(6,'ROLE_ROLE',600,0,0,'角色管理员'),(7,'ROLE_AUTHORITY',700,0,0,'权限管理员'),(8,'ROLE_ATTACHMENT',800,0,0,'附件管理员'),(9,'ROLE_JOB_TEMPLATE',900,0,0,'任务模板管理员'),(10,'ROLE_JOB',1000,0,0,'定时任务管理员'),(11,'ROLE_MAIL',1100,0,0,'邮件管理员');
 /*!40000 ALTER TABLE `t_role` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -438,7 +438,7 @@ CREATE TABLE `t_role_authority_link` (
   `role_id` int NOT NULL COMMENT '角色id',
   `authority_id` int NOT NULL COMMENT '权限id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='角色权限关联';
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='角色权限关联';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -447,7 +447,7 @@ CREATE TABLE `t_role_authority_link` (
 
 LOCK TABLES `t_role_authority_link` WRITE;
 /*!40000 ALTER TABLE `t_role_authority_link` DISABLE KEYS */;
-INSERT INTO `t_role_authority_link` VALUES (1,1,1),(2,1,2),(3,1,3),(4,1,4),(8,4,6),(9,4,7),(10,4,8),(11,4,9),(12,4,10),(13,4,11),(14,4,12),(15,4,13),(16,4,14),(17,4,15),(18,4,16),(19,5,17),(20,5,18),(21,5,19),(22,5,20),(23,5,21),(24,5,22),(25,6,23),(26,6,24),(27,6,25),(28,6,26),(29,6,27),(30,3,28),(31,3,29),(32,7,30),(33,7,31),(34,7,32),(35,7,33),(36,8,34),(37,8,35),(38,8,36),(39,8,37),(40,8,38),(41,9,39),(42,9,40),(43,9,41),(44,9,42),(45,9,43),(46,9,44),(47,9,45),(48,10,46),(49,10,47),(50,10,48),(51,10,49),(52,2,50),(53,2,51),(54,2,52),(55,2,53),(56,3,50),(57,3,51),(58,3,52),(59,3,53),(60,1,54),(61,2,55),(62,2,56),(63,3,55),(64,3,56);
+INSERT INTO `t_role_authority_link` VALUES (1,2,2),(2,2,3),(3,2,4),(4,2,5),(8,5,7),(9,5,8),(10,5,9),(11,5,10),(12,5,11),(13,5,12),(14,5,13),(15,5,14),(16,5,15),(17,5,16),(18,5,17),(19,6,18),(20,6,19),(21,6,20),(22,6,21),(23,6,22),(24,6,23),(25,7,24),(26,7,25),(27,7,26),(28,7,27),(29,7,28),(30,4,29),(31,4,30),(32,8,31),(33,8,32),(34,8,33),(35,8,34),(36,9,35),(37,9,36),(38,9,37),(39,9,38),(40,9,39),(41,10,40),(42,10,41),(43,10,42),(44,10,43),(45,10,44),(46,10,45),(47,10,46),(48,11,47),(49,11,48),(50,11,49),(51,11,50),(52,3,51),(53,3,52),(54,3,53),(55,3,54),(56,4,51),(57,4,52),(58,4,53),(59,4,54),(60,2,55),(61,3,56),(62,3,57),(63,4,56),(64,4,57),(65,1,1);
 /*!40000 ALTER TABLE `t_role_authority_link` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -485,7 +485,7 @@ CREATE TABLE `t_user` (
 
 LOCK TABLES `t_user` WRITE;
 /*!40000 ALTER TABLE `t_user` DISABLE KEYS */;
-INSERT INTO `t_user` VALUES (1,'admin','$2a$10$uSj1t4ad0oicwP2UqHoX3uw9LZEhJYRsa1BPe/4Q/zztEkHyXq4g6','xuelingkang@163.com','系统管理员','MALE',655833600000,'SYSTEM',1578326122478,1599493006146,0,1,0);
+INSERT INTO `t_user` VALUES (1,'admin','$2a$10$uSj1t4ad0oicwP2UqHoX3uw9LZEhJYRsa1BPe/4Q/zztEkHyXq4g6','xuelingkang@163.com','系统管理员','MALE',655833600000,'SYSTEM',1578326122478,1599582101329,0,1,0);
 /*!40000 ALTER TABLE `t_user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -529,7 +529,7 @@ CREATE TABLE `t_user_role_link` (
   `role_id` int NOT NULL COMMENT '角色id',
   PRIMARY KEY (`id`),
   KEY `t_user_role_link_user_id_idx` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='用户角色关联';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='用户角色关联';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -538,7 +538,7 @@ CREATE TABLE `t_user_role_link` (
 
 LOCK TABLES `t_user_role_link` WRITE;
 /*!40000 ALTER TABLE `t_user_role_link` DISABLE KEYS */;
-INSERT INTO `t_user_role_link` VALUES (1,1,3),(2,1,4),(3,1,5),(4,1,6),(5,1,7),(6,1,8),(7,1,9);
+INSERT INTO `t_user_role_link` VALUES (1,1,1);
 /*!40000 ALTER TABLE `t_user_role_link` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -551,4 +551,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-09-07 23:54:28
+-- Dump completed on 2020-09-09  0:25:10
