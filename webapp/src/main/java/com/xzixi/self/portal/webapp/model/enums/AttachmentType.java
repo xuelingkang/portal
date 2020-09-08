@@ -18,5 +18,5 @@ public enum AttachmentType implements IBaseEnum {
     /** 新闻附件*/
     NEWS("新闻附件");
 
-    private String value;
+    private final String value;
 }

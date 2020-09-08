@@ -18,5 +18,5 @@ public enum MailStatus implements IBaseEnum {
     /** 失败 */
     FAILURE("失败");
 
-    private String value;
+    private final String value;
 }

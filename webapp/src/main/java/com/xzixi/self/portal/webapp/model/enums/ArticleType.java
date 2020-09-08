@@ -20,5 +20,5 @@ public enum ArticleType implements IBaseEnum {
     /** 翻译 */
     TRANSLATE("翻译");
 
-    private String value;
+    private final String value;
 }

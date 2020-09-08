@@ -29,5 +29,5 @@ public enum JobTriggerState implements IBaseEnum {
     /** 错误 */
     ERROR("错误");
 
-    private String value;
+    private final String value;
 }

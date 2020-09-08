@@ -18,5 +18,5 @@ public enum UserType implements IBaseEnum {
     /** 网站用户 */
     WEBSITE("网站用户");
 
-    private String value;
+    private final String value;
 }

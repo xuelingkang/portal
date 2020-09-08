@@ -18,5 +18,5 @@ public enum ArticleAccess implements IBaseEnum {
     /** 个人 */
     PRIVATE("个人");
 
-    private String value;
+    private final String value;
 }

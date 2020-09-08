@@ -16,5 +16,5 @@ public enum MailType implements IBaseEnum {
     /** 私人 */
     PRIVATE("个人");
 
-    private String value;
+    private final String value;
 }

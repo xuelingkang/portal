@@ -38,5 +38,5 @@ public enum AuthorityCategory implements IBaseEnum {
     /** 回复 */
     REPLY("回复");
 
-    private String value;
+    private final String value;
 }

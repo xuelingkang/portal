@@ -16,5 +16,5 @@ public enum AuthorityProtocol implements IBaseEnum {
     /** websocket */
     WEBSOCKET("WEBSOCKET");
 
-    private String value;
+    private final String value;
 }

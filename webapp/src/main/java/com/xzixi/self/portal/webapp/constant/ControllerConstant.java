@@ -7,5 +7,5 @@ import org.springframework.http.MediaType;
  */
 public interface ControllerConstant {
 
-    String RESPONSE_MEDIA_TYPE = MediaType.APPLICATION_JSON_UTF8_VALUE;
+    String RESPONSE_MEDIA_TYPE = MediaType.APPLICATION_JSON_VALUE;
 }

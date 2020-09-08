@@ -65,7 +65,7 @@ public enum JobParameterType implements IBaseEnum {
         }
     };
 
-    private String value;
+    private final String value;
 
     /**
      * 检查传入的值是否与当前类型匹配

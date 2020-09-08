@@ -28,5 +28,5 @@ public enum AuthorityMethod implements IBaseEnum {
     /** stomp subscribe请求 */
     SUBSCRIBE("SUBSCRIBE请求");
 
-    private String value;
+    private final String value;
 }

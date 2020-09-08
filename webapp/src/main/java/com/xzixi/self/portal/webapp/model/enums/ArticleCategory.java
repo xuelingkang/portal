@@ -20,5 +20,5 @@ public enum ArticleCategory implements IBaseEnum {
     /** 其他 */
     OTHER("其他");
 
-    private String value;
+    private final String value;
 }

@@ -18,5 +18,5 @@ public enum Sex implements IBaseEnum {
     /** 女 */
     FEMALE("女");
 
-    private String value;
+    private final String value;
 }
