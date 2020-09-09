@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.config;
+package com.xzixi.self.portal.framework.config.elasticsearch;
 
 import org.springframework.context.annotation.Configuration;
 

@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.config;
+package com.xzixi.self.portal.framework.config.async;
 
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;

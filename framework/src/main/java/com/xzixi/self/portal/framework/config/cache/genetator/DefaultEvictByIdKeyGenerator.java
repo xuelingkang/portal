@@ -1,10 +1,10 @@
-package com.xzixi.self.portal.webapp.config.redis;
+package com.xzixi.self.portal.framework.config.cache.genetator;
 
 import org.springframework.cache.interceptor.KeyGenerator;
 
 import java.lang.reflect.Method;
 
-import static com.xzixi.self.portal.webapp.constant.RedisConstant.*;
+import static com.xzixi.self.portal.framework.constant.RedisConstant.*;
 
 /**
  * 根据id生成删除缓存key

@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.config;
+package com.xzixi.self.portal.framework.config.mail;
 
 import org.springframework.context.annotation.Configuration;
 

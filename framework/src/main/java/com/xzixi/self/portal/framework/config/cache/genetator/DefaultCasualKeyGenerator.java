@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.config.redis;
+package com.xzixi.self.portal.framework.config.cache.genetator;
 
 import com.alibaba.fastjson.JSON;
 import com.xzixi.self.portal.framework.model.search.Pagination;
@@ -13,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static com.xzixi.self.portal.webapp.constant.RedisConstant.*;
+import static com.xzixi.self.portal.framework.constant.RedisConstant.*;
 
 /**
  * 使用其他非正式参数生成key

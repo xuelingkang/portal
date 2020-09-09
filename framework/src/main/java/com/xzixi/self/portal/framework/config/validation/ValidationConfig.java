@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.config;
+package com.xzixi.self.portal.framework.config.validation;
 
 import org.hibernate.validator.HibernateValidator;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +13,7 @@ import javax.validation.Validator;
  * @author 薛凌康
  */
 @Configuration
-public class ValidatorConfig {
+public class ValidationConfig {
 
     @Bean
     public Validator validator() {

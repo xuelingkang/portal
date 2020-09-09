@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.config.redis;
+package com.xzixi.self.portal.framework.config.cache.genetator;
 
 import com.xzixi.self.portal.framework.model.BaseModel;
 import org.apache.commons.collections.CollectionUtils;
@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.xzixi.self.portal.webapp.constant.RedisConstant.*;
+import static com.xzixi.self.portal.framework.constant.RedisConstant.*;
 
 /**
  * 根据entity集合的元素id生成删除缓存key

@@ -40,7 +40,7 @@ public class WebUtils {
     }
 
     public static void printJson(HttpServletResponse response, Result<?> result) {
-        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setStatus(result.getCode());
         OutputStream out = null;
         try {

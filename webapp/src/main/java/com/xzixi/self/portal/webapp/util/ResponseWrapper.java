@@ -14,9 +14,9 @@ import java.io.IOException;
  */
 public class ResponseWrapper extends HttpServletResponseWrapper {
 
-    private ByteArrayOutputStream buffer;
+    private final ByteArrayOutputStream buffer;
 
-    private ServletOutputStream out;
+    private final ServletOutputStream out;
 
     public ResponseWrapper(HttpServletResponse httpServletResponse) {
         super(httpServletResponse);
@@ -45,7 +45,7 @@ public class ResponseWrapper extends HttpServletResponseWrapper {
 
     public static class WrapperOutputStream extends ServletOutputStream {
 
-        private ByteArrayOutputStream bos;
+        private final ByteArrayOutputStream bos;
 
         public WrapperOutputStream(ByteArrayOutputStream bos) {
             this.bos = bos;

@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.config.redis;
+package com.xzixi.self.portal.framework.config.cache.genetator;
 
 import com.xzixi.self.portal.framework.exception.ProjectException;
 import com.xzixi.self.portal.framework.util.TypeUtils;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.xzixi.self.portal.webapp.constant.RedisConstant.*;
+import static com.xzixi.self.portal.framework.constant.RedisConstant.*;
 
 /**
  * 根据id或id集合数组生成key

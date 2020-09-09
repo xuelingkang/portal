@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.config;
+package com.xzixi.self.portal.framework.config.json;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
@@ -35,7 +35,7 @@ public class FastJsonConfig {
 
         // 处理中文乱码问题
         List<MediaType> mediaTypes = new ArrayList<>();
-        mediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
+        mediaTypes.add(MediaType.APPLICATION_JSON);
         converter.setSupportedMediaTypes(mediaTypes);
         return converter;
     }

@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.framework.cache;
+package com.xzixi.self.portal.framework.config.cache.extension;
 
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.redis.cache.RedisCache;

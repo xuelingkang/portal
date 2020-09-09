@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.constant;
+package com.xzixi.self.portal.framework.constant;
 
 /**
  * @author 薛凌康

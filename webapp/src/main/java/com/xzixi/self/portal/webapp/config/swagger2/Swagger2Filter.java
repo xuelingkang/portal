@@ -22,9 +22,9 @@ import static com.xzixi.self.portal.webapp.constant.Swagger2Constant.AUTHENTICAT
  */
 public class Swagger2Filter implements Filter {
 
-    private static JSONObject tag;
-    private static JSONObject login;
-    private static JSONObject logout;
+    private static final JSONObject tag;
+    private static final JSONObject login;
+    private static final JSONObject logout;
 
     /**
      * 拦截api信息，动态添加认证接口
