@@ -1,6 +1,6 @@
-package com.xzixi.self.portal.extension.swagger2.annotation;
+package com.xzixi.self.portal.swagger2.extension.annotation;
 
-import com.xzixi.self.portal.extension.swagger2.component.ModelAttributeParameterExpanderExtension;
+import com.xzixi.self.portal.swagger2.extension.component.ModelAttributeParameterExpanderExtension;
 import org.springframework.context.annotation.Import;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 

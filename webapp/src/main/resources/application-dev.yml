@@ -64,14 +64,14 @@ server:
     accesslog:
       enabled: true # 开启访问日志，默认false
 
+swagger2:
+  enable: true # 启用swagger2
+
 log:
   home: /data/logs/portal # 日志目录
 
 attachment:
   save-dir: /home/portalfile # 文件保存路径
-
-swagger2:
-  enable: true # 启用swagger2
 
 reset-password-url: http://localhost:3000/reset-password.html
 

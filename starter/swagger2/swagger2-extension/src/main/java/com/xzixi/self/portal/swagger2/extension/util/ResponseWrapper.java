@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.webapp.util;
+package com.xzixi.self.portal.swagger2.extension.util;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;

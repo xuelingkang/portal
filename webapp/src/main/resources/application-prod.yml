@@ -64,14 +64,14 @@ server:
     accesslog:
       enabled: true # 开启访问日志，默认false
 
+swagger2:
+  enable: false # 关闭swagger2
+
 log:
   home: /var/log/portal # 日志目录
 
 attachment:
   save-dir: /home/portalfile # 文件保存路径
-
-swagger2:
-  enable: false # 关闭swagger2
 
 reset-password-url: https://xzixi.com/reset-password.html
 

@@ -1,7 +1,3 @@
-project:
-  name: @project.parent.artifactId@-@project.artifactId@
-  version: @project.version@
-
 spring:
   profiles:
     active: @profileActive@
@@ -131,6 +127,10 @@ mybatis-plus:
       logic-not-delete-value: 0 # 逻辑未删除值，逻辑删除下有效
       update-strategy: ignored
 
+# 日志
+logging:
+  config: classpath:logback-spring.xml
+
 # sftp配置
 sftp-client:
   # 连接池配置
@@ -188,9 +188,13 @@ sftp-client:
     # 如果池实现了org.apache.commons.pool2.UsageTracking接口，是否记录完整堆栈信息用来辅助调试废弃对象，当logAbandoned为true时有效
     use-usage-tracking: false
 
-# 日志
-logging:
-  config: classpath:logback-spring.xml
+swagger2:
+  project-name: @project.parent.artifactId@-@project.artifactId@
+  project-version: @project.version@
+  auth-api:
+    exclude-url-reg: ^(?!(/login|/website/user|/user/reset-password|/user/activate)).*$
+    param-name: Authorization
+    header-name: x-access-token
 
 log:
   root-level: INFO # 日志级别

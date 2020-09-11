@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.extension.swagger2.component;
+package com.xzixi.self.portal.swagger2.extension.component;
 
 import com.fasterxml.classmate.ResolvedType;
 import com.fasterxml.classmate.members.ResolvedField;
@@ -11,8 +11,8 @@ import com.google.common.base.*;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.xzixi.self.portal.extension.swagger2.annotation.IgnoreSwagger2Parameter;
-import com.xzixi.self.portal.extension.swagger2.util.FieldUtil;
+import com.xzixi.self.portal.swagger2.extension.annotation.IgnoreSwagger2Parameter;
+import com.xzixi.self.portal.swagger2.extension.util.FieldUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

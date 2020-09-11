@@ -1,10 +1,10 @@
-package com.xzixi.self.portal.webapp.config;
+package com.xzixi.self.portal.swagger2.extension.starter.autoconfigure;
 
-import com.xzixi.self.portal.extension.swagger2.annotation.EnableSwagger2Extension;
-import com.xzixi.self.portal.webapp.config.swagger2.Swagger2Filter;
+import com.xzixi.self.portal.swagger2.extension.annotation.EnableSwagger2Extension;
+import com.xzixi.self.portal.swagger2.extension.filter.Swagger2Filter;
 import io.swagger.annotations.Api;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,26 +20,23 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.web.Swagger2Controller;
 
+import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
 
-import static com.xzixi.self.portal.webapp.constant.SecurityConstant.AUTHENTICATION_HEADER_NAME;
-import static com.xzixi.self.portal.webapp.constant.Swagger2Constant.*;
-
-/**
- * swagger2配置
- *
- * @author 薛凌康
- */
 @Configuration
 @ConditionalOnExpression("${swagger2.enable}")
 @EnableSwagger2Extension
-public class Swagger2Config {
+@EnableConfigurationProperties(Swagger2ExtensionProperties.class)
+public class Swagger2ExtensionAutoConfiguration {
 
-    @Value("${project.name}")
-    private String projectName;
-    @Value("${project.version}")
-    private String projectVersion;
+    private static final String AUTHENTICATION_PARAMETER_TYPE = "HEADER";
+    private static final String AUTHENTICATION_SCOPE_NAME = "global";
+    private static final String AUTHENTICATION_SCOPE_DESCRIPTION = "全局";
+    private static final String AUTHENTICATION_API_FILTER_NAME = "swagger2Filter";
+
+    @Resource
+    Swagger2ExtensionProperties properties;
 
     @Bean
     public Docket api() {
@@ -55,7 +52,7 @@ public class Swagger2Config {
 
     @Bean
     public Swagger2Filter swagger2Filter() {
-        return new Swagger2Filter();
+        return new Swagger2Filter(properties.getAuthApi().getTemplatePath());
     }
 
     @Bean
@@ -69,25 +66,26 @@ public class Swagger2Config {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title(projectName)
-                .version(projectVersion)
+                .title(properties.getProjectName())
+                .version(properties.getProjectVersion())
                 .build();
     }
 
     private List<ApiKey> securitySchemes() {
-        return Collections.singletonList(new ApiKey(AUTHENTICATION_PARAMETER_NAME, AUTHENTICATION_HEADER_NAME, AUTHENTICATION_PARAMETER_TYPE));
+        Swagger2ExtensionProperties.AuthApi authApi = properties.getAuthApi();
+        return Collections.singletonList(new ApiKey(authApi.getParamName(), authApi.getHeaderName(), AUTHENTICATION_PARAMETER_TYPE));
     }
 
     private List<SecurityContext> securityContexts() {
         return Collections.singletonList(SecurityContext.builder()
                 .securityReferences(securityReferences())
-                .forPaths(PathSelectors.regex(AUTHENTICATION_EXCLUDE_URL_REG))
+                .forPaths(PathSelectors.regex(properties.getAuthApi().getExcludeUrlReg()))
                 .build());
     }
 
     private List<SecurityReference> securityReferences() {
         AuthorizationScope[] authorizationScopes
                 = new AuthorizationScope[]{new AuthorizationScope(AUTHENTICATION_SCOPE_NAME, AUTHENTICATION_SCOPE_DESCRIPTION)};
-        return Collections.singletonList(new SecurityReference(AUTHENTICATION_PARAMETER_NAME, authorizationScopes));
+        return Collections.singletonList(new SecurityReference(properties.getAuthApi().getParamName(), authorizationScopes));
     }
 }

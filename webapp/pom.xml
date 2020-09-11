@@ -25,12 +25,6 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- swagger2扩展 -->
-        <dependency>
-            <groupId>com.xzixi.self.portal</groupId>
-            <artifactId>swagger2-extension</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <!-- 基础web框架 -->
         <dependency>
             <groupId>com.xzixi.self.portal</groupId>
@@ -41,6 +35,12 @@
         <dependency>
             <groupId>com.xzixi.self.portal</groupId>
             <artifactId>sftp-client-spring-boot-starter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- swagger2启动器 -->
+        <dependency>
+            <groupId>com.xzixi.self.portal</groupId>
+            <artifactId>swagger2-spring-boot-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- web -->
@@ -99,12 +99,6 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-        </dependency>
-        <!-- json-lib -->
-        <dependency>
-            <groupId>net.sf.json-lib</groupId>
-            <artifactId>json-lib</artifactId>
-            <classifier>jdk15</classifier>
         </dependency>
         <!-- configuration processor -->
         <dependency>

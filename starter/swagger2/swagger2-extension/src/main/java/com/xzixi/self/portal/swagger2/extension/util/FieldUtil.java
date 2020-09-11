@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.extension.swagger2.util;
+package com.xzixi.self.portal.swagger2.extension.util;
 
 import java.lang.reflect.Field;
 

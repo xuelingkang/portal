@@ -1,4 +1,4 @@
-package com.xzixi.self.portal.extension.swagger2.annotation;
+package com.xzixi.self.portal.swagger2.extension.annotation;
 
 import java.lang.annotation.*;
 
