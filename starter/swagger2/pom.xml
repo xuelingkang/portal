@@ -5,17 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>portal</artifactId>
+        <artifactId>starter</artifactId>
         <groupId>com.xzixi.self.portal</groupId>
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>starter</artifactId>
+    <artifactId>swagger2</artifactId>
     <packaging>pom</packaging>
-    <description>自定义spring-boot-starter</description>
+    <description>swagger2文档</description>
 
     <modules>
-        <module>sftp</module>
-        <module>swagger2</module>
+        <module>swagger2-extension</module>
+        <module>swagger2-spring-boot-starter</module>
     </modules>
 </project>

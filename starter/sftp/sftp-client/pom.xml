@@ -12,16 +12,11 @@
     <artifactId>sftp-client</artifactId>
     <description>sftp连接池</description>
 
-    <properties>
-        <jsch.version>0.1.55</jsch.version>
-    </properties>
-
     <dependencies>
         <!-- sftp -->
         <dependency>
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
-            <version>${jsch.version}</version>
         </dependency>
         <!-- commons-pool2 -->
         <dependency>

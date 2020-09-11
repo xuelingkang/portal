@@ -5,16 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>portal</artifactId>
+        <artifactId>swagger2</artifactId>
         <groupId>com.xzixi.self.portal</groupId>
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>extension</artifactId>
-    <packaging>pom</packaging>
-    <description>功能扩展</description>
-
-    <modules>
-        <module>swagger2-extension</module>
-    </modules>
+    <artifactId>swagger2-spring-boot-starter</artifactId>
+    <description>swagger2启动器</description>
 </project>
