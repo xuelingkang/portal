@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>framework</artifactId>
-    <description>web框架核心，使用mybatis-plus和elasticsearch实现</description>
+    <description>web框架核心，通用配置和基础框架</description>
 
     <dependencies>
         <!-- web -->
