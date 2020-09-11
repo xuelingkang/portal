@@ -19,7 +19,6 @@
 | 编号 | 名称 | 描述 |
 | :---: | :---: | :---: |
 | 1 | `enhance` | 使用注解驱动器实现编译期增强 |
-| 2 | `extension` | 对第三方类库的扩展 |
 | 3 | `starter` | 自定义的springboot启动器 |
 | 4 | `framework` | 项目架构核心 |
 | 5 | `webapp` | web项目 |
