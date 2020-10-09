@@ -1,0 +1,18 @@
+package ${dataImplPackage};
+
+import ${superDataImplClassPackage};
+import ${dataClassPackage};
+import ${package.Mapper}.${table.mapperName};
+import ${package.Entity}.${entity};
+import org.springframework.stereotype.Service;
+
+/**
+ * $!{table.comment} 数据实现类
+ *
+ * @author ${author}
+ * @date ${date}
+ */
+@Service
+public class ${dataImplClass} extends ${superDataImplClass}<${table.mapperName}, ${entity}> implements ${dataClass} {
+
+}
