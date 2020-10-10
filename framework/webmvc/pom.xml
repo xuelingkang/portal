@@ -7,10 +7,11 @@
     <parent>
         <artifactId>framework</artifactId>
         <groupId>com.xzixi.self.portal</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>webmvc</artifactId>
+    <name>${project.artifactId}</name>
     <description>web框架核心，通用配置和基础框架</description>
 
     <dependencies>

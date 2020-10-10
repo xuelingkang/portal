@@ -7,10 +7,11 @@
     <parent>
         <artifactId>portal</artifactId>
         <groupId>com.xzixi.self.portal</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>webapp</artifactId>
+    <name>${project.artifactId}</name>
     <description>服务端</description>
 
     <properties>

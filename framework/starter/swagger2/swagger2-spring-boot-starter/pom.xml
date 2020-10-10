@@ -7,10 +7,11 @@
     <parent>
         <artifactId>swagger2</artifactId>
         <groupId>com.xzixi.self.portal</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>swagger2-spring-boot-starter</artifactId>
+    <name>${project.artifactId}</name>
     <description>swagger2启动器</description>
 
     <dependencies>

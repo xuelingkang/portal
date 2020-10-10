@@ -7,11 +7,11 @@
     <parent>
         <artifactId>framework</artifactId>
         <groupId>com.xzixi.self.portal</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>enhance</artifactId>
-
+    <name>${project.artifactId}</name>
     <description>编译期增强</description>
 
     <dependencies>

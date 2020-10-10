@@ -7,11 +7,12 @@
     <parent>
         <artifactId>framework</artifactId>
         <groupId>com.xzixi.self.portal</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>starter</artifactId>
     <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
     <description>自定义spring-boot-starter</description>
 
     <modules>

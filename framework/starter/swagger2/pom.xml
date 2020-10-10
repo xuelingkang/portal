@@ -7,11 +7,12 @@
     <parent>
         <artifactId>starter</artifactId>
         <groupId>com.xzixi.self.portal</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
 
     <artifactId>swagger2</artifactId>
     <packaging>pom</packaging>
+    <name>${project.artifactId}</name>
     <description>swagger2文档</description>
 
     <modules>

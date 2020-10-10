@@ -6,15 +6,10 @@
 
     <groupId>com.xzixi.self.portal</groupId>
     <artifactId>portal</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>个人门户前后台，博客、新闻、笔记、知识点整理等</description>
-
-    <modules>
-        <module>framework</module>
-        <module>webapp</module>
-    </modules>
 
     <properties>
         <java.version>1.8</java.version>
@@ -169,14 +164,14 @@
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>1.4.13</version>
                 <configuration>
-                    <repository>${docker.image.prefix}/portal-${artifactId}</repository>
+                    <repository>${docker.image.prefix}/portal-${project.artifactId}</repository>
                     <tag>${docker.image.tag}</tag>
                     <skip>${docker.skip}</skip>
                     <noCache>${docker.build.no-cache}</noCache>
                     <contextDirectory>${basedir}</contextDirectory>
                     <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
                     <buildArgs>
-                        <JAR_FILE>target/${build.finalName}.jar</JAR_FILE>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
                 </configuration>
             </plugin>
@@ -202,6 +197,36 @@
         </pluginManagement>
     </build>
 
+    <url>https://gitee.com/xuelingkang/portal</url>
+
+    <developers>
+        <developer>
+            <name>薛凌康</name>
+            <url>https://gitee.com/xuelingkang</url>
+            <email>xuelingkang@163.com</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License version 3</name>
+            <url>https://opensource.org/licenses/GPL-3.0</url>
+        </license>
+    </licenses>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <scm>
+        <connection>scm:git:git@gitee.com:xuelingkang/portal.git</connection>
+        <developerConnection>scm:git:git@gitee.com:xuelingkang/portal.git</developerConnection>
+        <url>https://gitee.com/xuelingkang/portal</url>
+    </scm>
+
     <profiles>
         <profile>
             <id>dev</id>
@@ -211,12 +236,106 @@
             <properties>
                 <profileActive>dev</profileActive>
             </properties>
+            <modules>
+                <module>framework</module>
+                <module>webapp</module>
+            </modules>
         </profile>
         <profile>
             <id>prod</id>
             <properties>
                 <profileActive>prod</profileActive>
             </properties>
+            <modules>
+                <module>framework</module>
+                <module>webapp</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>release</id>
+            <properties>
+                <profileActive>release</profileActive>
+            </properties>
+            <modules>
+                <module>framework</module>
+            </modules>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>2.8.2</version>
+                        <executions>
+                            <execution>
+                                <id>default-deploy</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <configuration>
+                            <aggregate>true</aggregate>
+                            <charset>UTF-8</charset>
+                            <encoding>UTF-8</encoding>
+                            <docencoding>UTF-8</docencoding>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>
