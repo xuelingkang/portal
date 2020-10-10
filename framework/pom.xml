@@ -11,11 +11,185 @@
     </parent>
 
     <artifactId>framework</artifactId>
+    <name>${artifactId}</name>
     <packaging>pom</packaging>
+    <description>整合常用组件，简化开发</description>
 
     <modules>
         <module>enhance</module>
         <module>starter</module>
         <module>webmvc</module>
     </modules>
+
+    <url>https://gitee.com/xuelingkang/portal</url>
+
+    <developers>
+        <developer>
+            <name>薛凌康</name>
+            <url>https://gitee.com/xuelingkang</url>
+            <email>xuelingkang@163.com</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License version 3</name>
+            <url>https://opensource.org/licenses/GPL-3.0</url>
+        </license>
+    </licenses>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <scm>
+        <connection>scm:git:git@gitee.com:xuelingkang/portal.git</connection>
+        <developerConnection>scm:git:git@gitee.com:xuelingkang/portal.git</developerConnection>
+        <url>https://gitee.com/xuelingkang/portal</url>
+    </scm>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <profileActive>dev</profileActive>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <profileActive>prod</profileActive>
+            </properties>
+        </profile>
+        <profile>
+            <id>release</id>
+            <properties>
+                <profileActive>release</profileActive>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>2.8.2</version>
+                        <executions>
+                            <execution>
+                                <id>default-deploy</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-scm-plugin</artifactId>
+                        <version>1.8.1</version>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-release-plugin</artifactId>
+                        <version>2.5.3</version>
+                        <configuration>
+                            <mavenExecutorId>forked-path</mavenExecutorId>
+                            <useReleaseProfile>false</useReleaseProfile>
+                            <arguments>-Psonatype-oss-release</arguments>
+                            <pushChanges>false</pushChanges>
+                            <localCheckout>false</localCheckout>
+                            <autoVersionSubmodules>true</autoVersionSubmodules>
+                            <checkModificationExcludes>
+                                <checkModificationExclude>.idea/</checkModificationExclude>
+                                <checkModificationExclude>.idea/*</checkModificationExclude>
+                                <checkModificationExclude>.idea/libraries/*</checkModificationExclude>
+                                <checkModificationExclude>pom.xml</checkModificationExclude>
+                                <checkModificationExclude>release-pom.xml</checkModificationExclude>
+                                <checkModificationExclude>framework.iml</checkModificationExclude>
+                                <checkModificationExclude>enhance/enhance.iml</checkModificationExclude>
+                                <checkModificationExclude>starter/starter.iml</checkModificationExclude>
+                                <checkModificationExclude>starter/sftp/sftp.iml</checkModificationExclude>
+                                <checkModificationExclude>starter/sftp/sftp-client/sftp-client.iml</checkModificationExclude>
+                                <checkModificationExclude>starter/sftp/sftp-client-spring-boot-starter/sftp-client-spring-boot-starter.iml</checkModificationExclude>
+                                <checkModificationExclude>starter/swagger2/swagger2.iml</checkModificationExclude>
+                                <checkModificationExclude>starter/swagger2/swagger2-extension/swagger2-extension.iml</checkModificationExclude>
+                                <checkModificationExclude>starter/swagger2/swagger2-spring-boot-starter/swagger2-spring-boot-starter.iml</checkModificationExclude>
+                                <checkModificationExclude>webmvc/webmvc.iml</checkModificationExclude>
+                            </checkModificationExcludes>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.apache.maven.plugins</groupId>
+                                <artifactId>maven-scm-plugin</artifactId>
+                                <version>1.8.1</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <configuration>
+                            <aggregate>true</aggregate>
+                            <charset>UTF-8</charset>
+                            <encoding>UTF-8</encoding>
+                            <docencoding>UTF-8</docencoding>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
