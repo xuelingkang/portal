@@ -1,10 +1,12 @@
-FROM registry.cn-zhangjiakou.aliyuncs.com/xuelingkang/library/oracle-jdk-aspectj:8u261
+FROM registry.cn-zhangjiakou.aliyuncs.com/xzixi/oracle-jdk:8u261
 
 MAINTAINER xuelingkang
 
 ARG JAR_FILE
 
 COPY $JAR_FILE app.jar
+
+COPY --from=registry.cn-zhangjiakou.aliyuncs.com/xzixi/aspectjweaver:1.9.6 /aspectjweaver.jar /aspectjweaver.jar
 
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone

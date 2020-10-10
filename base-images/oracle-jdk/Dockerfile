@@ -18,5 +18,5 @@ ENV JRE_HOME=$JAVA_HOME/jre
 ENV CLASSPATH=.:$JAVA_HOME/lib:$JRE_HOME/lib
 ENV PATH=$JAVA_HOME/bin:$PATH
 
-# docker build -t registry.cn-zhangjiakou.aliyuncs.com/xuelingkang/library/oracle-jdk:8u261 .
-# docker push registry.cn-zhangjiakou.aliyuncs.com/xuelingkang/library/oracle-jdk:8u261
+# docker build -t registry.cn-zhangjiakou.aliyuncs.com/xzixi/oracle-jdk:8u261 .
+# docker push registry.cn-zhangjiakou.aliyuncs.com/xzixi/oracle-jdk:8u261

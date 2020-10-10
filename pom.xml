@@ -39,7 +39,7 @@
         <swagger-ui.version>2.9.2</swagger-ui.version>
         <swagger-models.version>1.5.21</swagger-models.version>
         <swagger-annotations.version>1.5.21</swagger-annotations.version>
-        <docker.image.prefix>registry.cn-zhangjiakou.aliyuncs.com/xuelingkang/portal</docker.image.prefix>
+        <docker.image.prefix>registry.cn-zhangjiakou.aliyuncs.com/xzixi</docker.image.prefix>
         <docker.image.tag>latest</docker.image.tag>
         <docker.skip>true</docker.skip>
         <docker.build.no-cache>false</docker.build.no-cache>
@@ -171,7 +171,7 @@
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>1.4.13</version>
                 <configuration>
-                    <repository>${docker.image.prefix}/${artifactId}</repository>
+                    <repository>${docker.image.prefix}/portal-${artifactId}</repository>
                     <tag>${docker.image.tag}</tag>
                     <skip>${docker.skip}</skip>
                     <noCache>${docker.build.no-cache}</noCache>
