@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.job;
 
-import com.xzixi.self.portal.framework.model.search.QueryParams;
+import com.xzixi.self.portal.framework.webmvc.model.search.QueryParams;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.service.IUserService;
 import lombok.extern.slf4j.Slf4j;

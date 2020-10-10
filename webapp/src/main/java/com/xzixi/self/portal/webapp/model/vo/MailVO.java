@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.model.vo;
 
-import com.xzixi.self.portal.framework.util.BeanUtils;
+import com.xzixi.self.portal.framework.webmvc.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.po.Attachment;
 import com.xzixi.self.portal.webapp.model.po.Mail;
 import com.xzixi.self.portal.webapp.model.po.MailContent;

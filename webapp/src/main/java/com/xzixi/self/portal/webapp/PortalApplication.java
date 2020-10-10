@@ -1,12 +1,12 @@
 package com.xzixi.self.portal.webapp;
 
-import com.xzixi.self.portal.framework.config.async.annotation.EnableFrameworkAsync;
-import com.xzixi.self.portal.framework.config.cache.annotation.EnableFrameworkCache;
-import com.xzixi.self.portal.framework.config.elasticsearch.annotation.EnableFrameworkElasticsearch;
-import com.xzixi.self.portal.framework.config.json.annotation.EnableFrameworkJson;
-import com.xzixi.self.portal.framework.config.mail.annotation.EnableFrameworkMail;
-import com.xzixi.self.portal.framework.config.mybatis.annotation.EnableFrameworkMybatis;
-import com.xzixi.self.portal.framework.config.validation.annotation.EnableFrameworkValidation;
+import com.xzixi.self.portal.framework.webmvc.config.async.annotation.EnableFrameworkAsync;
+import com.xzixi.self.portal.framework.webmvc.config.cache.annotation.EnableFrameworkCache;
+import com.xzixi.self.portal.framework.webmvc.config.elasticsearch.annotation.EnableFrameworkElasticsearch;
+import com.xzixi.self.portal.framework.webmvc.config.json.annotation.EnableFrameworkJson;
+import com.xzixi.self.portal.framework.webmvc.config.mail.annotation.EnableFrameworkMail;
+import com.xzixi.self.portal.framework.webmvc.config.mybatis.annotation.EnableFrameworkMybatis;
+import com.xzixi.self.portal.framework.webmvc.config.validation.annotation.EnableFrameworkValidation;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

@@ -28,7 +28,7 @@
         <!-- 基础web框架 -->
         <dependency>
             <groupId>com.xzixi.self.portal</groupId>
-            <artifactId>framework</artifactId>
+            <artifactId>webmvc</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- sftp连接池启动器 -->
@@ -104,16 +104,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-        </dependency>
-        <!-- mybatis plus 代码生成器 -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-generator</artifactId>
-        </dependency>
-        <!-- 模板引擎 -->
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity-engine-core</artifactId>
         </dependency>
         <!-- lombok -->
         <dependency>

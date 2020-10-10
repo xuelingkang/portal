@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.config.security;
 
-import com.xzixi.self.portal.framework.model.Result;
+import com.xzixi.self.portal.framework.webmvc.model.Result;
 import com.xzixi.self.portal.webapp.service.ITokenService;
 import com.xzixi.self.portal.webapp.util.WebUtils;
 import org.apache.commons.lang3.StringUtils;

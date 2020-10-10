@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.model.po;
 
-import com.xzixi.self.portal.framework.model.BaseModel;
+import com.xzixi.self.portal.framework.webmvc.model.BaseModel;
 import com.xzixi.self.portal.webapp.model.enums.AuthorityCategory;
 import com.xzixi.self.portal.webapp.model.enums.AuthorityMethod;
 import com.xzixi.self.portal.webapp.model.enums.AuthorityProtocol;

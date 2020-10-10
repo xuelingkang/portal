@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.model.vo;
 
-import com.xzixi.self.portal.framework.util.BeanUtils;
+import com.xzixi.self.portal.framework.webmvc.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.po.Token;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

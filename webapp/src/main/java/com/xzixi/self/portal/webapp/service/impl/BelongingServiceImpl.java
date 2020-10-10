@@ -1,8 +1,8 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.xzixi.self.portal.framework.exception.ClientException;
-import com.xzixi.self.portal.framework.model.IBelonging;
-import com.xzixi.self.portal.framework.service.IBelongingService;
+import com.xzixi.self.portal.framework.webmvc.exception.ClientException;
+import com.xzixi.self.portal.framework.webmvc.model.IBelonging;
+import com.xzixi.self.portal.framework.webmvc.service.IBelongingService;
 import com.xzixi.self.portal.webapp.util.SecurityUtils;
 import org.springframework.stereotype.Service;
 

@@ -2,10 +2,10 @@ package com.xzixi.self.portal.webapp.aspect;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.xzixi.self.portal.framework.exception.ClientException;
-import com.xzixi.self.portal.framework.exception.ProjectException;
-import com.xzixi.self.portal.framework.exception.ServerException;
-import com.xzixi.self.portal.framework.model.Result;
+import com.xzixi.self.portal.framework.webmvc.exception.ClientException;
+import com.xzixi.self.portal.framework.webmvc.exception.ProjectException;
+import com.xzixi.self.portal.framework.webmvc.exception.ServerException;
+import com.xzixi.self.portal.framework.webmvc.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;

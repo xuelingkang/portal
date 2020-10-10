@@ -1,8 +1,8 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.xzixi.self.portal.framework.exception.ServerException;
-import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
-import com.xzixi.self.portal.sftp.client.component.ISftpClient;
+import com.xzixi.self.portal.framework.webmvc.exception.ServerException;
+import com.xzixi.self.portal.framework.webmvc.service.impl.BaseServiceImpl;
+import com.xzixi.self.portal.framework.sftp.client.component.ISftpClient;
 import com.xzixi.self.portal.webapp.data.IAttachmentData;
 import com.xzixi.self.portal.webapp.model.po.Attachment;
 import com.xzixi.self.portal.webapp.model.vo.AttachmentVO;

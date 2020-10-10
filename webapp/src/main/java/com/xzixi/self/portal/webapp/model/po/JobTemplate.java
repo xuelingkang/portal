@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.model.po;
 
-import com.xzixi.self.portal.framework.model.BaseModel;
+import com.xzixi.self.portal.framework.webmvc.model.BaseModel;
 import com.xzixi.self.portal.webapp.model.valid.JobTemplateSave;
 import com.xzixi.self.portal.webapp.model.valid.JobTemplateUpdate;
 import io.swagger.annotations.ApiModel;

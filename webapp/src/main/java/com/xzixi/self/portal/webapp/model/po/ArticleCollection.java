@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.model.po;
 
-import com.xzixi.self.portal.framework.model.BaseModel;
-import com.xzixi.self.portal.framework.model.IBelonging;
+import com.xzixi.self.portal.framework.webmvc.model.BaseModel;
+import com.xzixi.self.portal.framework.webmvc.model.IBelonging;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

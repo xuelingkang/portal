@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.config.security;
 
-import com.xzixi.self.portal.framework.exception.ClientException;
-import com.xzixi.self.portal.framework.model.search.QueryParams;
+import com.xzixi.self.portal.framework.webmvc.exception.ClientException;
+import com.xzixi.self.portal.framework.webmvc.model.search.QueryParams;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;
 import com.xzixi.self.portal.webapp.service.IUserService;

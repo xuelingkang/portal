@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.model.vo;
 
-import com.xzixi.self.portal.framework.util.BeanUtils;
+import com.xzixi.self.portal.framework.webmvc.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.po.JobTemplate;
 import com.xzixi.self.portal.webapp.model.po.JobTemplateParameter;
 import io.swagger.annotations.ApiModel;

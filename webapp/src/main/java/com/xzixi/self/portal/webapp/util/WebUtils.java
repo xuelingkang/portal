@@ -1,8 +1,8 @@
 package com.xzixi.self.portal.webapp.util;
 
 import com.alibaba.fastjson.JSON;
-import com.xzixi.self.portal.framework.exception.ProjectException;
-import com.xzixi.self.portal.framework.model.Result;
+import com.xzixi.self.portal.framework.webmvc.exception.ProjectException;
+import com.xzixi.self.portal.framework.webmvc.model.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 

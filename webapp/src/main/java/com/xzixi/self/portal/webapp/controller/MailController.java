@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.controller;
 
-import com.xzixi.self.portal.framework.model.Result;
-import com.xzixi.self.portal.framework.model.search.Pagination;
+import com.xzixi.self.portal.framework.webmvc.model.Result;
+import com.xzixi.self.portal.framework.webmvc.model.search.Pagination;
 import com.xzixi.self.portal.webapp.model.enums.MailType;
 import com.xzixi.self.portal.webapp.model.params.MailSearchParams;
 import com.xzixi.self.portal.webapp.model.po.Mail;

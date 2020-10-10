@@ -1,9 +1,9 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.xzixi.self.portal.framework.exception.ClientException;
-import com.xzixi.self.portal.framework.exception.ServerException;
-import com.xzixi.self.portal.framework.model.search.QueryParams;
-import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
+import com.xzixi.self.portal.framework.webmvc.exception.ClientException;
+import com.xzixi.self.portal.framework.webmvc.exception.ServerException;
+import com.xzixi.self.portal.framework.webmvc.model.search.QueryParams;
+import com.xzixi.self.portal.framework.webmvc.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.data.IUserData;
 import com.xzixi.self.portal.webapp.model.enums.MailType;
 import com.xzixi.self.portal.webapp.model.po.*;

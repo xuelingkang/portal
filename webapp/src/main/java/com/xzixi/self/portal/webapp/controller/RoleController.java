@@ -1,10 +1,10 @@
 package com.xzixi.self.portal.webapp.controller;
 
-import com.xzixi.self.portal.framework.exception.ServerException;
-import com.xzixi.self.portal.framework.model.Result;
-import com.xzixi.self.portal.framework.model.search.Pagination;
-import com.xzixi.self.portal.framework.model.search.QueryParams;
-import com.xzixi.self.portal.framework.util.BeanUtils;
+import com.xzixi.self.portal.framework.webmvc.exception.ServerException;
+import com.xzixi.self.portal.framework.webmvc.model.Result;
+import com.xzixi.self.portal.framework.webmvc.model.search.Pagination;
+import com.xzixi.self.portal.framework.webmvc.model.search.QueryParams;
+import com.xzixi.self.portal.framework.webmvc.util.BeanUtils;
 import com.xzixi.self.portal.webapp.model.params.RoleSearchParams;
 import com.xzixi.self.portal.webapp.model.po.Role;
 import com.xzixi.self.portal.webapp.model.po.RoleAuthorityLink;

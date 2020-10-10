@@ -1,8 +1,8 @@
 package com.xzixi.self.portal.webapp.controller;
 
-import com.xzixi.self.portal.framework.exception.ServerException;
-import com.xzixi.self.portal.framework.model.Result;
-import com.xzixi.self.portal.framework.model.search.QueryParams;
+import com.xzixi.self.portal.framework.webmvc.exception.ServerException;
+import com.xzixi.self.portal.framework.webmvc.model.Result;
+import com.xzixi.self.portal.framework.webmvc.model.search.QueryParams;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.po.UserLink;
 import com.xzixi.self.portal.webapp.service.IUserLinkService;

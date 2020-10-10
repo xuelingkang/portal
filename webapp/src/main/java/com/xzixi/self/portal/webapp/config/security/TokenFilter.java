@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.config.security;
 
-import com.xzixi.self.portal.framework.model.Result;
+import com.xzixi.self.portal.framework.webmvc.model.Result;
 import com.xzixi.self.portal.webapp.model.po.Token;
 import com.xzixi.self.portal.webapp.model.po.User;
 import com.xzixi.self.portal.webapp.model.vo.UserVO;

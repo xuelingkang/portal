@@ -1,7 +1,7 @@
 package com.xzixi.self.portal.webapp.service.impl;
 
-import com.xzixi.self.portal.framework.model.search.QueryParams;
-import com.xzixi.self.portal.framework.service.impl.BaseServiceImpl;
+import com.xzixi.self.portal.framework.webmvc.model.search.QueryParams;
+import com.xzixi.self.portal.framework.webmvc.service.impl.BaseServiceImpl;
 import com.xzixi.self.portal.webapp.data.IUserRoleLinkData;
 import com.xzixi.self.portal.webapp.model.po.UserRoleLink;
 import com.xzixi.self.portal.webapp.service.IUserRoleLinkService;

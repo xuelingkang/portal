@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.xzixi.self.portal.framework.swagger2.extension.starter.autoconfigure.Swagger2ExtensionAutoConfiguration

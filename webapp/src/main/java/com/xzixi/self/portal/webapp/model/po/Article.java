@@ -1,9 +1,9 @@
 package com.xzixi.self.portal.webapp.model.po;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.xzixi.self.portal.swagger2.extension.annotation.IgnoreSwagger2Parameter;
-import com.xzixi.self.portal.framework.model.BaseModel;
-import com.xzixi.self.portal.framework.model.IBelonging;
+import com.xzixi.self.portal.framework.swagger2.extension.annotation.IgnoreSwagger2Parameter;
+import com.xzixi.self.portal.framework.webmvc.model.BaseModel;
+import com.xzixi.self.portal.framework.webmvc.model.IBelonging;
 import com.xzixi.self.portal.webapp.model.enums.ArticleAccess;
 import com.xzixi.self.portal.webapp.model.enums.ArticleCategory;
 import com.xzixi.self.portal.webapp.model.enums.ArticleType;

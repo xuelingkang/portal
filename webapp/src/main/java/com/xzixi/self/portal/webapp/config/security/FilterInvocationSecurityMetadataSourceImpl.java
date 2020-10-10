@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.config.security;
 
-import com.xzixi.self.portal.framework.model.search.QueryParams;
+import com.xzixi.self.portal.framework.webmvc.model.search.QueryParams;
 import com.xzixi.self.portal.webapp.model.enums.AuthorityMethod;
 import com.xzixi.self.portal.webapp.model.enums.AuthorityProtocol;
 import com.xzixi.self.portal.webapp.model.po.Authority;

@@ -2,7 +2,7 @@ package com.xzixi.self.portal.webapp.model.po;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.xzixi.self.portal.framework.model.BaseModel;
+import com.xzixi.self.portal.framework.webmvc.model.BaseModel;
 import com.xzixi.self.portal.webapp.model.enums.MailStatus;
 import com.xzixi.self.portal.webapp.model.enums.MailType;
 import com.xzixi.self.portal.webapp.model.valid.MailSave;

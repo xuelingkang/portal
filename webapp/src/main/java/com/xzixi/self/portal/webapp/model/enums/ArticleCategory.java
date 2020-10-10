@@ -1,6 +1,6 @@
 package com.xzixi.self.portal.webapp.model.enums;
 
-import com.xzixi.self.portal.framework.model.IBaseEnum;
+import com.xzixi.self.portal.framework.webmvc.model.IBaseEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
