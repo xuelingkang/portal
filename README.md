@@ -22,6 +22,40 @@
 | 2 | `starter` | 自定义的springboot启动器 |
 | 3 | `webmvc` | 项目架构核心 |
 
+关键模块maven坐标
+
+```xml
+<dependencies>
+    <!-- 编译期增强 -->
+    <dependency>
+        <groupId>com.xzixi.self.portal</groupId>
+        <artifactId>enhance</artifactId>
+        <version>xxx</version>
+        <scope>provided</scope>
+    </dependency>
+    <!-- 基础web框架 -->
+    <dependency>
+        <groupId>com.xzixi.self.portal</groupId>
+        <artifactId>webmvc</artifactId>
+        <version>xxx</version>
+    </dependency>
+    <!-- sftp连接池启动器 -->
+    <dependency>
+        <groupId>com.xzixi.self.portal</groupId>
+        <artifactId>sftp-client-spring-boot-starter</artifactId>
+        <version>xxx</version>
+    </dependency>
+    <!-- swagger2启动器 -->
+    <dependency>
+        <groupId>com.xzixi.self.portal</groupId>
+        <artifactId>swagger2-spring-boot-starter</artifactId>
+        <version>xxx</version>
+    </dependency>
+</dependencies>
+```
+
+- [更新日志](./UPDATELOG.md)
+
 ### 项目分层
 
 在传统的三层架构基础上增加了数据层
