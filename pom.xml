@@ -40,7 +40,7 @@
         <swagger-models.version>1.5.21</swagger-models.version>
         <swagger-annotations.version>1.5.21</swagger-annotations.version>
         <docker.image.prefix>registry.cn-zhangjiakou.aliyuncs.com/xuelingkang/portal</docker.image.prefix>
-        <docker.image.tag>${version}</docker.image.tag>
+        <docker.image.tag>latest</docker.image.tag>
         <docker.skip>true</docker.skip>
         <docker.build.no-cache>false</docker.build.no-cache>
     </properties>
