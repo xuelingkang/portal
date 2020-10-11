@@ -6,7 +6,7 @@
 
     <parent>
         <artifactId>swagger2</artifactId>
-        <groupId>com.xzixi.self.portal</groupId>
+        <groupId>com.xzixi.framework</groupId>
         <version>1.0.1</version>
     </parent>
 
@@ -17,7 +17,7 @@
     <dependencies>
         <!-- swagger2扩展 -->
         <dependency>
-            <groupId>com.xzixi.self.portal</groupId>
+            <groupId>com.xzixi.framework</groupId>
             <artifactId>swagger2-extension</artifactId>
             <version>${project.version}</version>
         </dependency>

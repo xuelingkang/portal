@@ -6,7 +6,7 @@
 
     <parent>
         <artifactId>framework</artifactId>
-        <groupId>com.xzixi.self.portal</groupId>
+        <groupId>com.xzixi.framework</groupId>
         <version>1.0.1</version>
     </parent>
 

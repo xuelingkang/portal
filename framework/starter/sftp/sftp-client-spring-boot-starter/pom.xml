@@ -6,7 +6,7 @@
 
     <parent>
         <artifactId>sftp</artifactId>
-        <groupId>com.xzixi.self.portal</groupId>
+        <groupId>com.xzixi.framework</groupId>
         <version>1.0.1</version>
     </parent>
 
@@ -17,7 +17,7 @@
     <dependencies>
         <!-- sftp连接池 -->
         <dependency>
-            <groupId>com.xzixi.self.portal</groupId>
+            <groupId>com.xzixi.framework</groupId>
             <artifactId>sftp-client</artifactId>
             <version>${project.version}</version>
         </dependency>
