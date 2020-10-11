@@ -10,7 +10,7 @@
         <version>1.0.1</version>
     </parent>
 
-    <artifactId>framework</artifactId>
+    <artifactId>boot</artifactId>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>整合常用组件，简化开发</description>

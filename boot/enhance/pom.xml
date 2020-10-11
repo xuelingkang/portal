@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>framework</artifactId>
+        <artifactId>boot</artifactId>
         <groupId>com.xzixi.framework</groupId>
         <version>1.0.1</version>
     </parent>

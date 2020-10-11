@@ -14,7 +14,7 @@
 - **模块化**
 - **面向接口**
 
-### framework模块说明
+### boot模块说明
 
 | 编号 | 名称 | 描述 |
 | :---: | :---: | :---: |
@@ -28,26 +28,26 @@
 <dependencies>
     <!-- 编译期增强 -->
     <dependency>
-        <groupId>com.xzixi.self.portal</groupId>
+        <groupId>com.xzixi.framework</groupId>
         <artifactId>enhance</artifactId>
         <version>xxx</version>
         <scope>provided</scope>
     </dependency>
     <!-- 基础web框架 -->
     <dependency>
-        <groupId>com.xzixi.self.portal</groupId>
+        <groupId>com.xzixi.framework</groupId>
         <artifactId>webmvc</artifactId>
         <version>xxx</version>
     </dependency>
     <!-- sftp连接池启动器 -->
     <dependency>
-        <groupId>com.xzixi.self.portal</groupId>
+        <groupId>com.xzixi.framework</groupId>
         <artifactId>sftp-client-spring-boot-starter</artifactId>
         <version>xxx</version>
     </dependency>
     <!-- swagger2启动器 -->
     <dependency>
-        <groupId>com.xzixi.self.portal</groupId>
+        <groupId>com.xzixi.framework</groupId>
         <artifactId>swagger2-spring-boot-starter</artifactId>
         <version>xxx</version>
     </dependency>

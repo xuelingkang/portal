@@ -237,7 +237,7 @@
                 <profileActive>dev</profileActive>
             </properties>
             <modules>
-                <module>framework</module>
+                <module>boot</module>
                 <module>webapp</module>
             </modules>
         </profile>
@@ -247,7 +247,7 @@
                 <profileActive>prod</profileActive>
             </properties>
             <modules>
-                <module>framework</module>
+                <module>boot</module>
                 <module>webapp</module>
             </modules>
         </profile>
@@ -257,7 +257,7 @@
                 <profileActive>release</profileActive>
             </properties>
             <modules>
-                <module>framework</module>
+                <module>boot</module>
             </modules>
             <build>
                 <plugins>
