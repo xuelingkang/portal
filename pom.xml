@@ -6,7 +6,7 @@
 
     <groupId>com.xzixi.framework</groupId>
     <artifactId>portal</artifactId>
-    <version>1.0.1</version>
+    <version>2.0.0</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
     <description>个人门户前后台，博客、新闻、笔记、知识点整理等</description>
