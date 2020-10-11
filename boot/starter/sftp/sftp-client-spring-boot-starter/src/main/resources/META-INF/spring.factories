@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.xzixi.self.portal.framework.sftp.client.starter.autoconfigure.SftpClientAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.xzixi.framework.boot.sftp.client.starter.autoconfigure.SftpClientAutoConfiguration

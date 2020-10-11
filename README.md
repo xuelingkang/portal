@@ -83,7 +83,7 @@
 ### 参数校验
 
 - 直接在controller的方法参数上使用validation框架的注解，需要在controller类加上`@Validate`
-- 在com.xzixi.self.portal.webapp.model.valid包下创建接口用作校验分组，在controller的方法参数上添加`@Validated`，会按照实体类字段上定义的校验规则进行校验
+- 在com.xzixi.framework.webapp.model.valid包下创建接口用作校验分组，在controller的方法参数上添加`@Validated`，会按照实体类字段上定义的校验规则进行校验
 
 ### 返回值设计
 
@@ -96,7 +96,7 @@ restful接口返回值统一都是`Result`
 ### 缓存设计
 
 - 使用`FuzzyEvictRedisCacheManager`扩展`RedisCacheManager`，`FuzzyEvictRedisCache`扩展`RedisCache`，实现了使用通配符匹配key
-- 在com.xzixi.self.portal.webapp.config.redis包定义了一些默认的`KeyGenerator`，包括：
+- 在com.xzixi.framework.boot.webmvc.config.cache.generator.config.redis包定义了一些默认的`KeyGenerator`，包括：
     1. 根据id和id集合生成key
     2. 根据参数列表的hashCode生成key
 - `@CacheEnhance`编译期注解的作用：编译期重写`ServiceImpl`的方法，并添加缓存管理注解
@@ -108,7 +108,7 @@ restful接口返回值统一都是`Result`
 1. `FilterInvocationSecurityMetadataSourceImpl`，使用`AntPathRequestMatcher`匹配当前请求所需要的权限，将权限封装到返回值
 2. `AccessDecisionManagerImpl`，接收上一步的返回值，比对当前用户的权限，没有权限就抛出异常，有权限就`return`执行真正的请求
 
-com.xzixi.self.portal.webapp.config.security包除了以上两个类，还包括一些认证授权成功或失败处理器等
+com.xzixi.framework.webapp.config.security包除了以上两个类，还包括一些认证授权成功或失败处理器等
 
 ### 全局异常拦截
 

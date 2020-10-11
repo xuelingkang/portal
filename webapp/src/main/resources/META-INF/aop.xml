@@ -3,6 +3,6 @@
 <aspectj>
     <!-- -showWeaveInfo参数可以输出织入信息 -->
     <weaver options="-showWeaveInfo">
-        <include within="com.xzixi.self.portal.webapp..*" />
+        <include within="com.xzixi.framework.webapp..*" />
     </weaver>
 </aspectj>

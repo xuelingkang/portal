@@ -113,7 +113,7 @@ server:
 # mybatis plus
 mybatis-plus:
   mapper-locations: classpath:/mapper/*Mapper.xml # mapper文件路径
-  type-handlers-package: com.xzixi.self.portal.webapp.typehandler
+  type-handlers-package: com.xzixi.framework.webapp.typehandler
   configuration:
     map-underscore-to-camel-case: true # 驼峰命名
     cache-enabled: true # 是否开启缓存
