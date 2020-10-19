@@ -11,6 +11,7 @@ import com.xzixi.framework.boot.webmvc.mapper.IBaseMapper;
 import com.xzixi.framework.boot.webmvc.model.BaseModel;
 import com.xzixi.framework.boot.webmvc.service.IBaseService;
 import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
 import java.io.File;
@@ -24,6 +25,13 @@ public class CodeGenerator {
     private static final String DOT_VM = ".vm";
     private static final String DOT_REG = "\\.";
     private static final String SEPARATOR = File.separator;
+    private static final String DEFAULT_ENTITY_TEMPLATE = "code-templates/entity.java";
+    private static final String DEFAULT_MAPPER_TEMPLATE = "code-templates/mapper.java";
+    private static final String DEFAULT_DATA_TEMPLATE = "code-templates/data.java";
+    private static final String DEFAULT_DATA_IMPL_TEMPLATE = "code-templates/dataImpl.java";
+    private static final String DEFAULT_SERVICE_TEMPLATE = "code-templates/service.java";
+    private static final String DEFAULT_SERVICE_IMPL_TEMPLATE = "code-templates/serviceImpl.java";
+    private static final String DEFAULT_CONTROLLER_TEMPLATE = "code-templates/controller.java";
 
     public void execute(CodeGeneratorConfig config) {
         // 验证参数
@@ -40,13 +48,29 @@ public class CodeGenerator {
         Assert.hasText(config.getServicePackage(), "servicePackage不能为空！");
         Assert.hasText(config.getServiceImplPackage(), "serviceImplPackage不能为空！");
         Assert.hasText(config.getControllerPackage(), "controllerPackage不能为空！");
-        Assert.hasText(config.getEntityTemplate(), "entityTemplate不能为空！");
-        Assert.hasText(config.getMapperTemplate(), "mapperTemplate不能为空！");
-        Assert.hasText(config.getDataTemplate(), "dataTemplate不能为空！");
-        Assert.hasText(config.getDataImplTemplate(), "dataImplTemplate不能为空！");
-        Assert.hasText(config.getServiceTemplate(), "serviceTemplate不能为空！");
-        Assert.hasText(config.getServiceImplTemplate(), "serviceImplTemplate不能为空！");
-        Assert.hasText(config.getControllerTemplate(), "controllerTemplate不能为空！");
+
+        // 设置默认值
+        if (StringUtils.isBlank(config.getEntityTemplate())) {
+            config.setEntityTemplate(DEFAULT_ENTITY_TEMPLATE);
+        }
+        if (StringUtils.isBlank(config.getMapperTemplate())) {
+            config.setMapperTemplate(DEFAULT_MAPPER_TEMPLATE);
+        }
+        if (StringUtils.isBlank(config.getDataTemplate())) {
+            config.setDataTemplate(DEFAULT_DATA_TEMPLATE);
+        }
+        if (StringUtils.isBlank(config.getDataImplTemplate())) {
+            config.setDataImplTemplate(DEFAULT_DATA_IMPL_TEMPLATE);
+        }
+        if (StringUtils.isBlank(config.getServiceTemplate())) {
+            config.setServiceTemplate(DEFAULT_SERVICE_TEMPLATE);
+        }
+        if (StringUtils.isBlank(config.getServiceImplTemplate())) {
+            config.setServiceImplTemplate(DEFAULT_SERVICE_IMPL_TEMPLATE);
+        }
+        if (StringUtils.isBlank(config.getControllerTemplate())) {
+            config.setControllerTemplate(DEFAULT_CONTROLLER_TEMPLATE);
+        }
 
         // 代码生成器
         AutoGenerator generator = new AutoGenerator();

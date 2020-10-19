@@ -27,13 +27,6 @@ public class Generator {
         config.setServicePackage("com.xzixi.framework.webapp.service");
         config.setServiceImplPackage("com.xzixi.framework.webapp.service.impl");
         config.setControllerPackage("com.xzixi.framework.webapp.controller");
-        config.setEntityTemplate("code-templates/entity.java");
-        config.setMapperTemplate("code-templates/mapper.java");
-        config.setDataTemplate("code-templates/data.java");
-        config.setDataImplTemplate("code-templates/dataImpl.java");
-        config.setServiceTemplate("code-templates/service.java");
-        config.setServiceImplTemplate("code-templates/serviceImpl.java");
-        config.setControllerTemplate("code-templates/controller.java");
         generator.execute(config);
     }
 }
