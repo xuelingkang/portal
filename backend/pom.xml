@@ -12,7 +12,7 @@
 
     <artifactId>backend</artifactId>
     <name>${project.artifactId}</name>
-    <description>服务端</description>
+    <description>后台-服务端</description>
 
     <properties>
         <docker.skip>false</docker.skip>
