@@ -47,20 +47,15 @@ public class AttachmentController {
     @ApiOperation(value = "上传附件")
     public Result<AttachmentVO> upload(
             @ApiParam(value = "文件", required = true) @NotNull(message = "文件不能为空！") @RequestParam MultipartFile file,
-            @ApiParam(value = "文件类型", required = true) @NotNull(message = "文件类型不能为空！") @PathVariable AttachmentType type,
-            @ApiParam(value = "是否重命名", required = true) @NotNull(message = "是否重命名不能为空！") @RequestParam boolean rename) {
+            @ApiParam(value = "文件类型", required = true) @NotNull(message = "文件类型不能为空！") @PathVariable AttachmentType type) {
         String originalFilename = file.getOriginalFilename();
         // 处理文件名
         String name;
-        if (!rename && StringUtils.isNotBlank(originalFilename)) {
-            name = originalFilename;
+        String ext = FilenameUtils.getExtension(originalFilename);
+        if (StringUtils.isNotBlank(ext)) {
+            name = genRandomName() + "." + ext;
         } else {
-            String exp = FilenameUtils.getExtension(originalFilename);
-            if (StringUtils.isNotBlank(exp)) {
-                name = genRandomName() + "." + exp;
-            } else {
-                name = genRandomName();
-            }
+            name = genRandomName();
         }
         // type小写
         String lowerCaseType = type.name().toLowerCase();

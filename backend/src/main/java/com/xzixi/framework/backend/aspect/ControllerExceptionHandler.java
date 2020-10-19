@@ -7,6 +7,7 @@ import com.xzixi.framework.boot.webmvc.exception.ProjectException;
 import com.xzixi.framework.boot.webmvc.exception.ServerException;
 import com.xzixi.framework.boot.webmvc.model.Result;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
@@ -33,6 +35,22 @@ import java.util.Set;
 @RestControllerAdvice
 @Slf4j
 public class ControllerExceptionHandler {
+
+    @Value("${spring.servlet.multipart.max-file-size}")
+    private String maxFileSize;
+
+    /**
+     * 上传文件大小超限
+     *
+     * @param e MaxUploadSizeExceededException
+     * @return Result
+     */
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result<?> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e) {
+        String errMsg = String.format("上传文件大小不能超过%s！", maxFileSize);
+        return new Result<>(HttpStatus.BAD_REQUEST.value(), errMsg, null);
+    }
 
     /**
      * 缺少@RequestParam(require=true)的参数
