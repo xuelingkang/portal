@@ -238,7 +238,7 @@
             </properties>
             <modules>
                 <module>boot</module>
-                <module>webapp</module>
+                <module>backend</module>
             </modules>
         </profile>
         <profile>
@@ -248,7 +248,7 @@
             </properties>
             <modules>
                 <module>boot</module>
-                <module>webapp</module>
+                <module>backend</module>
             </modules>
         </profile>
         <profile>

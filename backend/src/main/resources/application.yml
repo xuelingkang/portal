@@ -1,0 +1,203 @@
+spring:
+  profiles:
+    active: @profileActive@
+
+  servlet:
+    multipart:
+      max-file-size: 50MB # 单个文件的最大值
+      max-request-size: 200MB # 多个文件的总大小
+
+  # 数据源
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    platform: mysql
+    druid:
+      time-between-eviction-runs-millis: 60000  # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      min-evictable-idle-time-millis: 300000  # 指定一个空闲连接最少空闲多久后可被清除，单位是毫秒
+      validationQuery: SELECT 'x'
+      test-while-idle: true  # 当连接空闲时，是否执行连接测试
+      test-on-borrow: false  # 当从连接池借用连接时，是否测试该连接
+      test-on-return: false  # 在连接归还到连接池时是否测试该连接
+      filters: wall,stat  # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      pool-prepared-statements: true
+      connection-properties: druid.stat.slowSqlMillis=1000;druid.stat.logSlowSql=true;config.decrypt=true
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: /druid/*,*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico
+        session-stat-enable: true
+        session-stat-max-count: 10
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        reset-enable: true
+        login-username: admin
+        login-password: 123
+        allow:
+
+  # spring cache
+  cache:
+    type: redis
+    redis:
+      cache-null-values: true # 缓存为null的value，默认true
+      time-to-live: 30m # 缓存有效时间
+
+  # rabbitmq
+  rabbitmq:
+    # 发送失败退回
+    publisher-returns: true
+
+  # 定时任务
+  quartz:
+    auto-startup: true # 自动启动，默认true
+    startup-delay: 0s # 延迟启动，默认0s
+    job-store-type: jdbc # 任务保存方式，默认memory（内存）
+    wait-for-jobs-to-complete-on-shutdown: true # 关闭时等待任务执行完毕，默认false
+    overwrite-existing-jobs: false # 覆盖已有job，默认false
+    jdbc:
+      initialize-schema: never # 初始化数据库，默认embedded
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceId: AUTO # ID设置为自动获取，每一个必须不同，所有调度器实例中是唯一的
+            instanceName: clusteredScheduler # 任务调度器名称
+            makeSchedulerThreadDaemon: true # 指定调度程序的主线程是否应该是守护线程
+          jobStore:
+            # 使用spring管理的数据源代替quartz管理的数据源，当设置了SchedulerFactoryBean的datasource属性时默认生效
+            class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate # 数据库方言
+            tablePrefix: QRTZ_ # quartz表名前缀，默认QRTZ_
+            isClustered: true # 加入集群
+            clusterCheckinInterval: 10000 # 集群检查间隔（毫秒）
+            useProperties: false # 是否处理properties文件，默认false
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool # 线程池
+            makeThreadsDaemons: true # 生成线程守护进程
+            threadCount: 10 # 线程数量
+            threadPriority: 5 # 线程优先级
+            threadsInheritContextClassLoaderOfInitializingThread: true # 线程继承初始化线程的上下文类加载程序，默认false
+
+  # 邮件
+  mail:
+    host: smtp.163.com
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          socketFactory:
+            # SSL证书Socket工厂
+            class: javax.net.ssl.SSLSocketFactory
+            # 使用SMTPS协议465端口
+            port: 465
+          ssl:
+            trust: smtp.163.com
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+  jetty:
+    acceptors: -1 # 接收线程数，默认-1，根据运行环境派生
+    selectors: -1 # 选择器线程数，默认-1，根据运行环境派生
+    accesslog:
+      filename: ${log.home}/jetty_access_yyyy_mm_dd.log # 日志文件名，yyyy_MM_dd是日期格式占位符，最终会被file-date-format配置的格式代替
+      file-date-format: yyyy_MM_dd # 日志文件日期格式
+      retention-period: 31 # 日志保留天数，默认31
+      append: true # 追加日志，默认false，重启后旧日志另存，重新创建新日志
+
+# mybatis plus
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml # mapper文件路径
+  type-handlers-package: com.xzixi.framework.backend.typehandler
+  configuration:
+    map-underscore-to-camel-case: true # 驼峰命名
+    cache-enabled: true # 是否开启缓存
+  global-config:
+    db-config:
+      id-type: auto # 主键自增
+      table-underline: true # 表名是否使用下划线命名，默认数据库表使用下划线命名
+      table-prefix: t_ # 表名前缀
+      capital-mode: true # 是否开启大写命名，默认不开启
+      logic-delete-value: 1 # 逻辑已删除值，逻辑删除下有效
+      logic-not-delete-value: 0 # 逻辑未删除值，逻辑删除下有效
+      update-strategy: ignored
+
+# 日志
+logging:
+  config: classpath:logback-spring.xml
+
+# sftp配置
+sftp-client:
+  # 连接池配置
+  pool:
+    # 对象最大数量
+    max-total: 20
+    # 最大空闲对象数量
+    max-idle: 10
+    # 最小空闲对象数量
+    min-idle: 5
+    # 表示使用FIFO获取对象
+    lifo: true
+    # 不使用lock的公平锁
+    fairness: false
+    # 获取一个对象的最大等待时间
+    max-wait-millis: 5000
+    # 对象最小的空闲时间
+    min-evictable-idle-time-millis: -1
+    # 驱逐线程的超时时间
+    evictor-shutdown-timeout-millis: 10000
+    # 对象最小的空间时间，保留最小空闲数量
+    soft-min-evictable-idle-time-millis: 1800000
+    # 检测空闲对象线程每次检测的空闲对象的数量
+    num-tests-per-eviction-run: 3
+    # 在创建对象时检测对象是否有效
+    test-on-create: false
+    # 在从对象池获取对象时是否检测对象有效
+    test-on-borrow: true
+    # 在向对象池中归还对象时是否检测对象有效
+    test-on-return: false
+    # 在检测空闲对象线程检测到对象不需要移除时，是否检测对象的有效性
+    test-while-idle: true
+    # 空闲对象检测线程的执行周期
+    time-between-eviction-runs-millis: 600000
+    # 当对象池没有空闲对象时，新的获取对象的请求是否阻塞
+    block-when-exhausted: true
+    # 是否注册JMX
+    jmx-enabled: false
+    # JMX前缀，当jmxEnabled为true时有效
+    jmx-name-prefix: pool
+    # 使用jmxNameBase + jmxNamePrefix + i来生成ObjectName，当jmxEnabled为true时有效
+    jmx-name-base: sftp
+  # 废弃对象跟踪配置
+  abandoned:
+    # 从对象池中获取对象的时候进行清理
+    remove-abandoned-on-borrow: true
+    # 池维护（evicor）是否执行放弃的对象删除
+    remove-abandoned-on-maintenance: true
+    # 对象被获取后多长时间没有返回给对象池，则放弃对象
+    remove-abandoned-timeout: 300
+    # 是否记录放弃对象的应用程序代码的堆栈跟踪
+    log-abandoned: false
+    # 是否记录完整堆栈信息，当logAbandoned为true时有效
+    require-full-stack-trace: false
+    # 如果池实现了org.apache.commons.pool2.UsageTracking接口，是否记录完整堆栈信息用来辅助调试废弃对象，当logAbandoned为true时有效
+    use-usage-tracking: false
+
+swagger2:
+  project-name: @project.parent.artifactId@-@project.artifactId@
+  project-version: @project.version@
+  auth-api:
+    exclude-url-reg: ^(?!(/login|/website/user|/user/reset-password|/user/activate)).*$
+    param-name: Authorization
+    header-name: x-access-token
+
+log:
+  root-level: INFO # 日志级别
+  max-size: 30MB # 日志最大大小
+  max-history: 30 # 日志保留天数
+  charset: UTF-8 # 日志编码

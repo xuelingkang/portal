@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aspectj PUBLIC "-//AspectJ//DTD 1.5.0//EN" "http://.../dtd/aspectj_1_5_0.dtd">
+<aspectj>
+    <!-- -showWeaveInfo参数可以输出织入信息 -->
+    <weaver options="-showWeaveInfo">
+        <include within="com.xzixi.framework.backend..*" />
+    </weaver>
+</aspectj>
