@@ -23,9 +23,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableFrameworkMybatis
 @EnableFrameworkValidation
 @MapperScan(basePackages = "com.xzixi.framework.backend.mapper")
-public class PortalApplication {
+public class BackendApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PortalApplication.class, args);
+        SpringApplication.run(BackendApplication.class, args);
     }
 }
