@@ -61,3 +61,12 @@ docker cp elasticsearch-analysis-ik-6.8.10.zip elasticsearch:/root/elasticsearch
 docker exec elasticsearch mkdir -p /etc/elasticsearch/plugins/ik
 docker exec elasticsearch unzip -o -d /etc/elasticsearch/plugins/ik /root/elasticsearch-analysis-ik.zip
 docker restart elasticsearch
+
+# nacos
+docker run -d --name nacos \
+--restart always \
+-e MODE=standalone \
+-e PREFER_HOST_MODE=hostname \
+-v $(pwd)/custom.properties:/home/nacos/init.d/custom.properties \
+-p 8848:8848 \
+nacos/nacos-server:1.3.1
