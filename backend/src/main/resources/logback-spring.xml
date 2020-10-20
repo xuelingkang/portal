@@ -34,7 +34,7 @@
         <appender name="TRACE" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
                 <!-- 日志文件输出的文件名 -->
-                <FileNamePattern>${HOME}/trace/portal-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
+                <FileNamePattern>${HOME}/trace/log-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
                 <!-- 日志文件保留天数 -->
                 <MaxHistory>${MAX_HISTORY}</MaxHistory>
                 <!-- 日志文件最大的大小 -->
@@ -57,7 +57,7 @@
         <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
                 <!-- 日志文件输出的文件名 -->
-                <FileNamePattern>${HOME}/debug/portal-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
+                <FileNamePattern>${HOME}/debug/log-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
                 <!-- 日志文件保留天数 -->
                 <MaxHistory>${MAX_HISTORY}</MaxHistory>
                 <!-- 日志文件最大的大小 -->
@@ -80,7 +80,7 @@
         <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
                 <!-- 日志文件输出的文件名 -->
-                <FileNamePattern>${HOME}/info/portal-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
+                <FileNamePattern>${HOME}/info/log-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
                 <!-- 日志文件保留天数 -->
                 <MaxHistory>${MAX_HISTORY}</MaxHistory>
                 <!-- 日志文件最大的大小 -->
@@ -103,7 +103,7 @@
         <appender name="WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
                 <!-- 日志文件输出的文件名 -->
-                <FileNamePattern>${HOME}/warn/portal-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
+                <FileNamePattern>${HOME}/warn/log-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
                 <!-- 日志文件保留天数 -->
                 <MaxHistory>${MAX_HISTORY}</MaxHistory>
                 <!-- 日志文件最大的大小 -->
@@ -126,7 +126,7 @@
         <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
                 <!-- 日志文件输出的文件名 -->
-                <FileNamePattern>${HOME}/error/portal-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
+                <FileNamePattern>${HOME}/error/log-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
                 <!-- 日志文件保留天数 -->
                 <MaxHistory>${MAX_HISTORY}</MaxHistory>
                 <!-- 日志文件最大的大小 -->
@@ -159,7 +159,7 @@
     <appender name="MYBATIS" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件输出的文件名 -->
-            <FileNamePattern>${HOME}/mybatis/portal-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
+            <FileNamePattern>${HOME}/mybatis/log-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
             <!-- 日志文件保留天数 -->
             <MaxHistory>${MAX_HISTORY}</MaxHistory>
             <!-- 日志文件最大的大小 -->
