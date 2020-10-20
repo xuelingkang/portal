@@ -104,11 +104,6 @@ server:
   jetty:
     acceptors: -1 # 接收线程数，默认-1，根据运行环境派生
     selectors: -1 # 选择器线程数，默认-1，根据运行环境派生
-    accesslog:
-      filename: ${log.home}/jetty_access_yyyy_mm_dd.log # 日志文件名，yyyy_MM_dd是日期格式占位符，最终会被file-date-format配置的格式代替
-      file-date-format: yyyy_MM_dd # 日志文件日期格式
-      retention-period: 31 # 日志保留天数，默认31
-      append: true # 追加日志，默认false，重启后旧日志另存，重新创建新日志
 
 # mybatis plus
 mybatis-plus:

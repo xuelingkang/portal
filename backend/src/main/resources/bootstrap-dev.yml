@@ -63,12 +63,6 @@ sftp-client:
   # 密码
   password: portal
 
-server:
-  port: 8080
-  jetty:
-    accesslog:
-      enabled: true # 开启访问日志，默认false
-
 swagger2:
   enable: true # 启用swagger2
 
