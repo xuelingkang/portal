@@ -1,6 +1,8 @@
 spring:
   profiles:
     active: @profileActive@
+  application:
+    name: @project.parent.artifactId@-@project.artifactId@
 
   servlet:
     multipart:
