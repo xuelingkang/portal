@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration debug="true">
+<configuration>
     <!-- 日志root级别 -->
     <springProperty name="ROOT_LEVEL" source="log.root-level" />
     <!-- 日志文件的存储地址 -->
