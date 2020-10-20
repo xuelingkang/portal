@@ -10,6 +10,8 @@ spring:
           uri: lb://@project.parent.artifactId@-backend
           predicates:
             - Path=/backend/**
+          filters:
+            - StripPrefix=1
 
 server:
   port: 8000

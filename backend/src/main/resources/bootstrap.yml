@@ -101,8 +101,6 @@ spring:
 
 server:
   port: 8080
-  servlet:
-    context-path: /backend
   jetty:
     acceptors: -1 # 接收线程数，默认-1，根据运行环境派生
     selectors: -1 # 选择器线程数，默认-1，根据运行环境派生
