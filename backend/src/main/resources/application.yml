@@ -198,6 +198,6 @@ swagger2:
 
 log:
   root-level: INFO # 日志级别
-  max-size: 30MB # 日志最大大小
+  max-size: 1024MB # 日志最大大小
   max-history: 30 # 日志保留天数
   charset: UTF-8 # 日志编码
