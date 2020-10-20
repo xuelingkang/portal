@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: @profileActive@
+  application:
+    name: @project.parent.artifactId@-@project.artifactId@
+  cloud:
+    gateway:
+      routes:
+        - id: backend
+          uri: lb://@project.parent.artifactId@-backend
+          predicates:
+            - Path=/backend/**
+
+server:
+  port: 8000
+
+# 日志
+logging:
+  config: classpath:logback-spring.xml
+
+log:
+  root-level: INFO # 日志级别
+  max-size: 1024MB # 日志最大大小
+  max-history: 30 # 日志保留天数
+  charset: UTF-8 # 日志编码

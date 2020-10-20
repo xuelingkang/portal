@@ -257,6 +257,7 @@
             <modules>
                 <module>boot</module>
                 <module>backend</module>
+                <module>gateway</module>
             </modules>
         </profile>
         <profile>
@@ -267,6 +268,7 @@
             <modules>
                 <module>boot</module>
                 <module>backend</module>
+                <module>gateway</module>
             </modules>
         </profile>
         <profile>
