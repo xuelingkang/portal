@@ -3,9 +3,6 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
-        namespace: portal
-        username: nacos
-        password: portal
 
 log:
   home: /var/log/portal/gateway # 日志目录

@@ -4,6 +4,12 @@ spring:
   application:
     name: @project.parent.artifactId@-@project.artifactId@
 
+  cloud:
+    nacos:
+      discovery:
+        username: nacos
+        password: portal
+
   servlet:
     multipart:
       max-file-size: 50MB # 单个文件的最大值

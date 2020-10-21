@@ -4,6 +4,10 @@ spring:
   application:
     name: @project.parent.artifactId@-@project.artifactId@
   cloud:
+    nacos:
+      discovery:
+        username: nacos
+        password: portal
     gateway:
       routes:
         - id: backend
