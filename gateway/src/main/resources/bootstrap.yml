@@ -13,10 +13,10 @@ spring:
         password: portal
     gateway:
       routes:
-        - id: backend
-          uri: lb://@project.parent.artifactId@-backend
+        - id: content
+          uri: lb://@project.parent.artifactId@-content
           predicates:
-            - Path=/backend/**
+            - Path=/content/**
           filters:
             - StripPrefix=1
         - id: sso

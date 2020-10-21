@@ -13,12 +13,12 @@ mysql:8.0.21
 
 # 初始化数据
 docker cp quartz.sql mysql:/quartz.sql
-docker cp portal_backend.sql mysql:/portal_backend.sql
+docker cp portal_content.sql mysql:/portal_content.sql
 result=1
 while [ $result -ne 0 ]
 do
   sleep 2
-  docker exec mysql mysql -uroot -proot -e "SET CHARACTER SET utf8mb4;DROP DATABASE IF EXISTS portal_backend;CREATE DATABASE portal_backend DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;USE portal_backend;SOURCE /portal_backend.sql;SOURCE /quartz.sql;"
+  docker exec mysql mysql -uroot -proot -e "SET CHARACTER SET utf8mb4;DROP DATABASE IF EXISTS portal_content;CREATE DATABASE portal_content DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;USE portal_content;SOURCE /portal_content.sql;SOURCE /quartz.sql;"
   result=$?
 done
 

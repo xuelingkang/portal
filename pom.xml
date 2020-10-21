@@ -257,7 +257,7 @@
             <modules>
                 <module>boot</module>
                 <module>common</module>
-                <module>backend</module>
+                <module>content</module>
                 <module>gateway</module>
                 <module>sso</module>
             </modules>
@@ -270,7 +270,7 @@
             <modules>
                 <module>boot</module>
                 <module>common</module>
-                <module>backend</module>
+                <module>content</module>
                 <module>gateway</module>
                 <module>sso</module>
             </modules>
