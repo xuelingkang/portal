@@ -1,3 +1,6 @@
+server:
+  port: 8000
+
 spring:
   profiles:
     active: @profileActive@
@@ -16,9 +19,12 @@ spring:
             - Path=/backend/**
           filters:
             - StripPrefix=1
-
-server:
-  port: 8000
+        - id: sso
+          uri: lb://@project.parent.artifactId@-sso
+          predicates:
+            - Path=/sso/**
+          filters:
+            - StripPrefix=1
 
 # 日志
 logging:

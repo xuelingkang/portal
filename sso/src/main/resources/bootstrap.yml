@@ -1,3 +1,9 @@
+server:
+  port: 8081
+  jetty:
+    acceptors: -1 # 接收线程数，默认-1，根据运行环境派生
+    selectors: -1 # 选择器线程数，默认-1，根据运行环境派生
+
 spring:
   profiles:
     active: @profileActive@
@@ -86,12 +92,6 @@ spring:
             threadCount: 10 # 线程数量
             threadPriority: 5 # 线程优先级
             threadsInheritContextClassLoaderOfInitializingThread: true # 线程继承初始化线程的上下文类加载程序，默认false
-
-server:
-  port: 8081
-  jetty:
-    acceptors: -1 # 接收线程数，默认-1，根据运行环境派生
-    selectors: -1 # 选择器线程数，默认-1，根据运行环境派生
 
 # mybatis plus
 mybatis-plus:
