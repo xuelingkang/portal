@@ -23,7 +23,7 @@ spring:
     host: ali-server01 # 默认localhost
     port: 6379 # 默认6379
     password: portal # 密码
-    database: 5 # 采用哪个数据库，默认0
+    database: 1 # 采用哪个数据库，默认0
     timeout: 500 # 连接超时时间（毫秒）
     lettuce:
       shutdown-timeout: 100ms
