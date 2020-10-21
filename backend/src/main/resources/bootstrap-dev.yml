@@ -4,6 +4,9 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
+        namespace: portal
+        username: nacos
+        password: portal
 
   # 数据源
   datasource:

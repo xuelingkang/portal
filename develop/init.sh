@@ -67,6 +67,6 @@ docker run -d --name nacos \
 --restart always \
 -e MODE=standalone \
 -e PREFER_HOST_MODE=hostname \
--v $(pwd)/custom.properties:/home/nacos/init.d/custom.properties \
+-e NACOS_AUTH_ENABLE=true \
 -p 8848:8848 \
 nacos/nacos-server:1.3.1
