@@ -17,6 +17,13 @@ public class CodeGeneratorConfig {
     private String[] tables;
     private String author;
     private String baseDir;
+    private String entityBaseDir;
+    private String mapperBaseDir;
+    private String dataBaseDir;
+    private String dataImplBaseDir;
+    private String serviceBaseDir;
+    private String serviceImplBaseDir;
+    private String controllerBaseDir;
     private String entityPackage;
     private String mapperPackage;
     private String dataPackage;

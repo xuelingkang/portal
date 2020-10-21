@@ -1,6 +1,6 @@
 package com.xzixi.framework.backend.controller;
 
-import com.xzixi.framework.backend.model.vo.EnumVO;
+import com.xzixi.framework.common.model.vo.EnumVO;
 import com.xzixi.framework.boot.webmvc.exception.ClientException;
 import com.xzixi.framework.boot.webmvc.model.Result;
 import com.xzixi.framework.backend.service.IEnumService;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 
-import static com.xzixi.framework.backend.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.framework.common.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * @author 薛凌康

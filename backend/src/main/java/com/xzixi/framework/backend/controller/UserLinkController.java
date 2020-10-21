@@ -1,7 +1,7 @@
 package com.xzixi.framework.backend.controller;
 
-import com.xzixi.framework.backend.model.po.User;
-import com.xzixi.framework.backend.model.po.UserLink;
+import com.xzixi.framework.common.model.po.User;
+import com.xzixi.framework.common.model.po.UserLink;
 import com.xzixi.framework.backend.util.SecurityUtils;
 import com.xzixi.framework.boot.webmvc.exception.ServerException;
 import com.xzixi.framework.boot.webmvc.model.Result;
@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.xzixi.framework.backend.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.framework.common.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * @author 薛凌康

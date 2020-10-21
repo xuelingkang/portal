@@ -1,7 +1,7 @@
 package com.xzixi.framework.backend.service;
 
-import com.xzixi.framework.backend.model.po.Attachment;
-import com.xzixi.framework.backend.model.vo.AttachmentVO;
+import com.xzixi.framework.common.model.po.Attachment;
+import com.xzixi.framework.common.model.vo.AttachmentVO;
 import com.xzixi.framework.boot.webmvc.service.IBaseService;
 import com.xzixi.framework.boot.webmvc.service.IVoService;
 

@@ -1,9 +1,9 @@
 package com.xzixi.framework.backend.controller;
 
-import com.xzixi.framework.backend.model.enums.AttachmentType;
-import com.xzixi.framework.backend.model.params.AttachmentSearchParams;
-import com.xzixi.framework.backend.model.po.Attachment;
-import com.xzixi.framework.backend.model.vo.AttachmentVO;
+import com.xzixi.framework.common.model.enums.AttachmentType;
+import com.xzixi.framework.common.model.params.AttachmentSearchParams;
+import com.xzixi.framework.common.model.po.Attachment;
+import com.xzixi.framework.common.model.vo.AttachmentVO;
 import com.xzixi.framework.boot.webmvc.model.Result;
 import com.xzixi.framework.boot.webmvc.model.search.Pagination;
 import com.xzixi.framework.boot.sftp.client.component.ISftpClient;
@@ -25,8 +25,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
-import static com.xzixi.framework.backend.constant.AttachmentConstant.*;
-import static com.xzixi.framework.backend.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.framework.common.constant.AttachmentConstant.*;
+import static com.xzixi.framework.common.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * @author 薛凌康

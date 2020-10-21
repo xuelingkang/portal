@@ -1,6 +1,6 @@
 package com.xzixi.framework.backend.service;
 
-import com.xzixi.framework.backend.model.po.Token;
+import com.xzixi.framework.common.model.po.Token;
 
 /**
  * @author 薛凌康

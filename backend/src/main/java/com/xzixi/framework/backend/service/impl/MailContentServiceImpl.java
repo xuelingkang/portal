@@ -1,6 +1,6 @@
 package com.xzixi.framework.backend.service.impl;
 
-import com.xzixi.framework.backend.model.po.MailContent;
+import com.xzixi.framework.common.model.po.MailContent;
 import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
 import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
 import com.xzixi.framework.backend.data.IMailContentData;

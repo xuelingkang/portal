@@ -15,6 +15,12 @@
     <description>web框架核心，通用配置和基础框架</description>
 
     <dependencies>
+        <!-- servlet api -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!-- web -->
         <dependency>
             <groupId>org.springframework</groupId>

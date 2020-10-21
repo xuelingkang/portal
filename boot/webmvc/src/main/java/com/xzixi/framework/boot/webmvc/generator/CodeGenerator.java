@@ -40,7 +40,6 @@ public class CodeGenerator {
         Assert.hasText(config.getUsername(), "username不能为空！");
         Assert.hasText(config.getPassword(), "password不能为空！");
         Assert.notEmpty(config.getTables(), "tables不能为空！");
-        Assert.hasText(config.getBaseDir(), "baseDir不能为空！");
         Assert.hasText(config.getEntityPackage(), "entityPackage不能为空！");
         Assert.hasText(config.getMapperPackage(), "mapperPackage不能为空！");
         Assert.hasText(config.getDataPackage(), "dataPackage不能为空！");
@@ -48,6 +47,15 @@ public class CodeGenerator {
         Assert.hasText(config.getServicePackage(), "servicePackage不能为空！");
         Assert.hasText(config.getServiceImplPackage(), "serviceImplPackage不能为空！");
         Assert.hasText(config.getControllerPackage(), "controllerPackage不能为空！");
+        if (StringUtils.isBlank(config.getBaseDir())) {
+            Assert.hasText(config.getEntityBaseDir(), "entityBaseDir不能为空！");
+            Assert.hasText(config.getMapperBaseDir(), "mapperBaseDir不能为空！");
+            Assert.hasText(config.getDataBaseDir(), "dataBaseDir不能为空！");
+            Assert.hasText(config.getDataImplBaseDir(), "dataImplBaseDir不能为空！");
+            Assert.hasText(config.getServiceBaseDir(), "serviceBaseDir不能为空！");
+            Assert.hasText(config.getServiceImplBaseDir(), "serviceImplBaseDir不能为空！");
+            Assert.hasText(config.getControllerBaseDir(), "controllerBaseDir不能为空！");
+        }
 
         // 设置默认值
         if (StringUtils.isBlank(config.getEntityTemplate())) {
@@ -71,6 +79,27 @@ public class CodeGenerator {
         if (StringUtils.isBlank(config.getControllerTemplate())) {
             config.setControllerTemplate(DEFAULT_CONTROLLER_TEMPLATE);
         }
+        if (StringUtils.isBlank(config.getEntityBaseDir())) {
+            config.setEntityBaseDir(config.getBaseDir());
+        }
+        if (StringUtils.isBlank(config.getMapperBaseDir())) {
+            config.setMapperBaseDir(config.getBaseDir());
+        }
+        if (StringUtils.isBlank(config.getDataBaseDir())) {
+            config.setDataBaseDir(config.getBaseDir());
+        }
+        if (StringUtils.isBlank(config.getDataImplBaseDir())) {
+            config.setDataImplBaseDir(config.getBaseDir());
+        }
+        if (StringUtils.isBlank(config.getServiceBaseDir())) {
+            config.setServiceBaseDir(config.getBaseDir());
+        }
+        if (StringUtils.isBlank(config.getServiceImplBaseDir())) {
+            config.setServiceImplBaseDir(config.getBaseDir());
+        }
+        if (StringUtils.isBlank(config.getControllerBaseDir())) {
+            config.setControllerBaseDir(config.getBaseDir());
+        }
 
         // 代码生成器
         AutoGenerator generator = new AutoGenerator();
@@ -78,7 +107,6 @@ public class CodeGenerator {
         // 全局配置
         GlobalConfig globalConfig = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
-        globalConfig.setOutputDir(projectPath + config.getBaseDir());
         globalConfig.setAuthor(config.getAuthor());
         globalConfig.setOpen(false);
         globalConfig.setSwagger2(true);
@@ -130,20 +158,60 @@ public class CodeGenerator {
         // 自定义输出配置
         List<FileOutConfig> focList = new ArrayList<>();
         // 自定义配置会被优先输出
+        // entity
+        focList.add(new FileOutConfig(config.getEntityTemplate() + DOT_VM) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                return projectPath + config.getEntityBaseDir() + SEPARATOR + config.getEntityPackage().replaceAll(DOT_REG, SEPARATOR)
+                        + SEPARATOR + tableInfo.getEntityName() + ".java";
+            }
+        });
+        // mapper
+        focList.add(new FileOutConfig(config.getMapperTemplate() + DOT_VM) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                return projectPath + config.getMapperBaseDir() + SEPARATOR + config.getMapperPackage().replaceAll(DOT_REG, SEPARATOR)
+                        + SEPARATOR + tableInfo.getMapperName() + ".java";
+            }
+        });
+        // data
         focList.add(new FileOutConfig(config.getDataTemplate() + DOT_VM) {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                // 自定义输出文件名
-                return projectPath + config.getBaseDir() + SEPARATOR + config.getDataPackage().replaceAll(DOT_REG, SEPARATOR)
+                return projectPath + config.getDataBaseDir() + SEPARATOR + config.getDataPackage().replaceAll(DOT_REG, SEPARATOR)
                         + SEPARATOR + "I" + tableInfo.getEntityName() + "Data.java";
             }
         });
+        // dataImpl
         focList.add(new FileOutConfig(config.getDataImplTemplate() + DOT_VM) {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                // 自定义输出文件名
-                return projectPath + config.getBaseDir() + SEPARATOR + config.getDataImplPackage().replaceAll(DOT_REG, SEPARATOR)
+                return projectPath + config.getDataImplBaseDir() + SEPARATOR + config.getDataImplPackage().replaceAll(DOT_REG, SEPARATOR)
                         + SEPARATOR + tableInfo.getEntityName() + "DataImpl.java";
+            }
+        });
+        // service
+        focList.add(new FileOutConfig(config.getServiceTemplate() + DOT_VM) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                return projectPath + config.getServiceBaseDir() + SEPARATOR + config.getServicePackage().replaceAll(DOT_REG, SEPARATOR)
+                        + SEPARATOR + tableInfo.getServiceName() + ".java";
+            }
+        });
+        // serviceImpl
+        focList.add(new FileOutConfig(config.getServiceImplTemplate() + DOT_VM) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                return projectPath + config.getServiceImplBaseDir() + SEPARATOR + config.getServiceImplPackage().replaceAll(DOT_REG, SEPARATOR)
+                        + SEPARATOR + tableInfo.getServiceImplName() + ".java";
+            }
+        });
+        // controller
+        focList.add(new FileOutConfig(config.getControllerTemplate() + DOT_VM) {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                return projectPath + config.getControllerBaseDir() + SEPARATOR + config.getControllerPackage().replaceAll(DOT_REG, SEPARATOR)
+                        + SEPARATOR + tableInfo.getControllerName() + ".java";
             }
         });
         injectionConfig.setFileOutConfigList(focList);
@@ -151,12 +219,7 @@ public class CodeGenerator {
 
         // 配置模板
         TemplateConfig templateConfig = new TemplateConfig();
-        templateConfig.disable(TemplateType.XML);
-        templateConfig.setEntity(config.getEntityTemplate());
-        templateConfig.setMapper(config.getMapperTemplate());
-        templateConfig.setService(config.getServiceTemplate());
-        templateConfig.setServiceImpl(config.getServiceImplTemplate());
-        templateConfig.setController(config.getControllerTemplate());
+        templateConfig.disable(TemplateType.ENTITY, TemplateType.SERVICE, TemplateType.CONTROLLER, TemplateType.MAPPER, TemplateType.XML);
         generator.setTemplate(templateConfig);
 
         // 策略配置

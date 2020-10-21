@@ -1,6 +1,6 @@
 package com.xzixi.framework.backend.service;
 
-import com.xzixi.framework.backend.model.vo.EnumVO;
+import com.xzixi.framework.common.model.vo.EnumVO;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public interface IEnumService {
 
-    String ENUM_SCAN = "classpath:com/xzixi/framework/backend/model/enums/**.class";
+    String ENUM_SCAN = "classpath:com/xzixi/framework/common/model/enums/**.class";
     Set<EnumVO> ENUMS = new HashSet<>();
 
     /**

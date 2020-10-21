@@ -1,13 +1,13 @@
 package com.xzixi.framework.backend.service.impl;
 
-import com.xzixi.framework.backend.constant.AttachmentConstant;
-import com.xzixi.framework.backend.constant.UserConstant;
-import com.xzixi.framework.backend.model.enums.MailStatus;
-import com.xzixi.framework.backend.model.po.Attachment;
-import com.xzixi.framework.backend.model.po.Mail;
-import com.xzixi.framework.backend.model.po.MailContent;
-import com.xzixi.framework.backend.model.po.User;
-import com.xzixi.framework.backend.model.vo.MailVO;
+import com.xzixi.framework.common.constant.AttachmentConstant;
+import com.xzixi.framework.common.constant.UserConstant;
+import com.xzixi.framework.common.model.enums.MailStatus;
+import com.xzixi.framework.common.model.po.Attachment;
+import com.xzixi.framework.common.model.po.Mail;
+import com.xzixi.framework.common.model.po.MailContent;
+import com.xzixi.framework.common.model.po.User;
+import com.xzixi.framework.common.model.vo.MailVO;
 import com.xzixi.framework.boot.webmvc.exception.ServerException;
 import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
 import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;

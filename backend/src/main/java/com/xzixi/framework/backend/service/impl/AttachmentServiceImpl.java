@@ -1,8 +1,8 @@
 package com.xzixi.framework.backend.service.impl;
 
-import com.xzixi.framework.backend.constant.AttachmentConstant;
-import com.xzixi.framework.backend.model.po.Attachment;
-import com.xzixi.framework.backend.model.vo.AttachmentVO;
+import com.xzixi.framework.common.constant.AttachmentConstant;
+import com.xzixi.framework.common.model.po.Attachment;
+import com.xzixi.framework.common.model.vo.AttachmentVO;
 import com.xzixi.framework.boot.webmvc.exception.ServerException;
 import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
 import com.xzixi.framework.boot.sftp.client.component.ISftpClient;

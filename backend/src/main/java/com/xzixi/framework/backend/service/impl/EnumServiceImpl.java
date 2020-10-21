@@ -1,7 +1,7 @@
 package com.xzixi.framework.backend.service.impl;
 
-import com.xzixi.framework.backend.model.vo.EnumItemVO;
-import com.xzixi.framework.backend.model.vo.EnumVO;
+import com.xzixi.framework.common.model.vo.EnumItemVO;
+import com.xzixi.framework.common.model.vo.EnumVO;
 import com.xzixi.framework.boot.webmvc.model.IBaseEnum;
 import com.xzixi.framework.backend.service.IEnumService;
 import org.springframework.beans.factory.annotation.Autowired;

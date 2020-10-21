@@ -1,10 +1,10 @@
 package com.xzixi.framework.backend.controller;
 
-import com.xzixi.framework.backend.model.enums.MailType;
-import com.xzixi.framework.backend.model.params.MailSearchParams;
-import com.xzixi.framework.backend.model.po.Mail;
-import com.xzixi.framework.backend.model.valid.MailSave;
-import com.xzixi.framework.backend.model.vo.MailVO;
+import com.xzixi.framework.common.model.enums.MailType;
+import com.xzixi.framework.common.model.params.MailSearchParams;
+import com.xzixi.framework.common.model.po.Mail;
+import com.xzixi.framework.common.model.valid.MailSave;
+import com.xzixi.framework.common.model.vo.MailVO;
 import com.xzixi.framework.backend.util.SecurityUtils;
 import com.xzixi.framework.boot.webmvc.model.Result;
 import com.xzixi.framework.boot.webmvc.model.search.Pagination;
@@ -20,7 +20,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.xzixi.framework.backend.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.framework.common.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * @author 薛凌康

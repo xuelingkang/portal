@@ -1,6 +1,6 @@
 package com.xzixi.framework.backend.service.impl;
 
-import com.xzixi.framework.backend.model.po.UserLink;
+import com.xzixi.framework.common.model.po.UserLink;
 import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
 import com.xzixi.framework.backend.data.IUserLinkData;
 import com.xzixi.framework.backend.service.IUserLinkService;

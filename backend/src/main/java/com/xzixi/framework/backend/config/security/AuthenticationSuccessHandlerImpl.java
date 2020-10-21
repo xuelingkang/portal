@@ -1,9 +1,9 @@
 package com.xzixi.framework.backend.config.security;
 
 import com.xzixi.framework.boot.webmvc.model.Result;
-import com.xzixi.framework.backend.model.po.Token;
-import com.xzixi.framework.backend.model.vo.TokenVO;
-import com.xzixi.framework.backend.model.vo.UserVO;
+import com.xzixi.framework.common.model.po.Token;
+import com.xzixi.framework.common.model.vo.TokenVO;
+import com.xzixi.framework.common.model.vo.UserVO;
 import com.xzixi.framework.backend.service.ITokenService;
 import com.xzixi.framework.backend.service.IUserService;
 import com.xzixi.framework.backend.util.WebUtils;

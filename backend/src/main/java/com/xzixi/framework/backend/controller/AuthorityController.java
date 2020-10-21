@@ -1,10 +1,10 @@
 package com.xzixi.framework.backend.controller;
 
-import com.xzixi.framework.backend.model.params.AuthoritySearchParams;
-import com.xzixi.framework.backend.model.po.Authority;
-import com.xzixi.framework.backend.model.valid.AuthoritySave;
-import com.xzixi.framework.backend.model.valid.AuthorityUpdate;
-import com.xzixi.framework.backend.model.vo.AuthorityVO;
+import com.xzixi.framework.common.model.params.AuthoritySearchParams;
+import com.xzixi.framework.common.model.po.Authority;
+import com.xzixi.framework.common.model.valid.AuthoritySave;
+import com.xzixi.framework.common.model.valid.AuthorityUpdate;
+import com.xzixi.framework.common.model.vo.AuthorityVO;
 import com.xzixi.framework.boot.webmvc.exception.ServerException;
 import com.xzixi.framework.boot.webmvc.model.Result;
 import com.xzixi.framework.boot.webmvc.model.search.Pagination;
@@ -21,7 +21,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.xzixi.framework.backend.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.framework.common.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * @author 薛凌康

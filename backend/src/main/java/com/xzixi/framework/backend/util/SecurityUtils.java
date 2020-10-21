@@ -1,6 +1,6 @@
 package com.xzixi.framework.backend.util;
 
-import com.xzixi.framework.backend.model.vo.UserVO;
+import com.xzixi.framework.common.model.vo.UserVO;
 import com.xzixi.framework.backend.config.security.UserDetailsImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
 

@@ -1,7 +1,7 @@
 package com.xzixi.framework.backend;
 
-import com.xzixi.framework.backend.model.po.Article;
-import com.xzixi.framework.backend.model.po.ArticleContent;
+import com.xzixi.framework.common.model.po.Article;
+import com.xzixi.framework.common.model.po.ArticleContent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

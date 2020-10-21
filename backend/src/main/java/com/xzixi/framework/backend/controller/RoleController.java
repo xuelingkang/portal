@@ -1,11 +1,11 @@
 package com.xzixi.framework.backend.controller;
 
-import com.xzixi.framework.backend.model.params.RoleSearchParams;
-import com.xzixi.framework.backend.model.po.Role;
-import com.xzixi.framework.backend.model.po.RoleAuthorityLink;
-import com.xzixi.framework.backend.model.valid.RoleSave;
-import com.xzixi.framework.backend.model.valid.RoleUpdate;
-import com.xzixi.framework.backend.model.vo.RoleVO;
+import com.xzixi.framework.common.model.params.RoleSearchParams;
+import com.xzixi.framework.common.model.po.Role;
+import com.xzixi.framework.common.model.po.RoleAuthorityLink;
+import com.xzixi.framework.common.model.valid.RoleSave;
+import com.xzixi.framework.common.model.valid.RoleUpdate;
+import com.xzixi.framework.common.model.vo.RoleVO;
 import com.xzixi.framework.boot.webmvc.exception.ServerException;
 import com.xzixi.framework.boot.webmvc.model.Result;
 import com.xzixi.framework.boot.webmvc.model.search.Pagination;
@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.xzixi.framework.backend.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.framework.common.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * @author 薛凌康

@@ -1,6 +1,6 @@
 package com.xzixi.framework.backend.service;
 
-import com.xzixi.framework.backend.model.po.ArticleTag;
+import com.xzixi.framework.common.model.po.ArticleTag;
 import com.xzixi.framework.boot.webmvc.service.IBaseService;
 
 /**

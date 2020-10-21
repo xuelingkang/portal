@@ -1,11 +1,11 @@
 package com.xzixi.framework.backend.service.impl;
 
 import com.xzixi.framework.backend.data.IRoleData;
-import com.xzixi.framework.backend.model.po.Authority;
-import com.xzixi.framework.backend.model.po.Role;
-import com.xzixi.framework.backend.model.po.RoleAuthorityLink;
-import com.xzixi.framework.backend.model.po.UserRoleLink;
-import com.xzixi.framework.backend.model.vo.RoleVO;
+import com.xzixi.framework.common.model.po.Authority;
+import com.xzixi.framework.common.model.po.Role;
+import com.xzixi.framework.common.model.po.RoleAuthorityLink;
+import com.xzixi.framework.common.model.po.UserRoleLink;
+import com.xzixi.framework.common.model.vo.RoleVO;
 import com.xzixi.framework.boot.webmvc.exception.ServerException;
 import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
 import com.xzixi.framework.backend.service.IAuthorityService;

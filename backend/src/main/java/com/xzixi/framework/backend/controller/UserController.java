@@ -1,14 +1,14 @@
 package com.xzixi.framework.backend.controller;
 
-import com.xzixi.framework.backend.model.enums.MailType;
-import com.xzixi.framework.backend.model.params.UserSearchParams;
-import com.xzixi.framework.backend.model.po.Mail;
-import com.xzixi.framework.backend.model.po.MailContent;
-import com.xzixi.framework.backend.model.po.User;
-import com.xzixi.framework.backend.model.po.UserRoleLink;
-import com.xzixi.framework.backend.model.valid.UserSave;
-import com.xzixi.framework.backend.model.valid.UserUpdate;
-import com.xzixi.framework.backend.model.vo.UserVO;
+import com.xzixi.framework.common.model.enums.MailType;
+import com.xzixi.framework.common.model.params.UserSearchParams;
+import com.xzixi.framework.common.model.po.Mail;
+import com.xzixi.framework.common.model.po.MailContent;
+import com.xzixi.framework.common.model.po.User;
+import com.xzixi.framework.common.model.po.UserRoleLink;
+import com.xzixi.framework.common.model.valid.UserSave;
+import com.xzixi.framework.common.model.valid.UserUpdate;
+import com.xzixi.framework.common.model.vo.UserVO;
 import com.xzixi.framework.backend.util.SecurityUtils;
 import com.xzixi.framework.boot.webmvc.exception.ClientException;
 import com.xzixi.framework.boot.webmvc.exception.ServerException;
@@ -42,9 +42,9 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static com.xzixi.framework.backend.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
-import static com.xzixi.framework.backend.constant.SecurityConstant.*;
-import static com.xzixi.framework.backend.constant.UserConstant.*;
+import static com.xzixi.framework.common.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.framework.common.constant.SecurityConstant.*;
+import static com.xzixi.framework.common.constant.UserConstant.*;
 
 /**
  * @author 薛凌康

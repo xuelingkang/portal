@@ -1,6 +1,6 @@
 package com.xzixi.framework.backend.service.impl;
 
-import com.xzixi.framework.backend.model.po.Article;
+import com.xzixi.framework.common.model.po.Article;
 import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
 import com.xzixi.framework.backend.data.IArticleData;
 import com.xzixi.framework.backend.service.IArticleService;

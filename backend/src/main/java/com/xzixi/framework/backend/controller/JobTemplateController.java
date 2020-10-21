@@ -1,10 +1,10 @@
 package com.xzixi.framework.backend.controller;
 
-import com.xzixi.framework.backend.model.params.JobTemplateSearchParams;
-import com.xzixi.framework.backend.model.po.JobTemplate;
-import com.xzixi.framework.backend.model.valid.JobTemplateSave;
-import com.xzixi.framework.backend.model.valid.JobTemplateUpdate;
-import com.xzixi.framework.backend.model.vo.JobTemplateVO;
+import com.xzixi.framework.common.model.params.JobTemplateSearchParams;
+import com.xzixi.framework.common.model.po.JobTemplate;
+import com.xzixi.framework.common.model.valid.JobTemplateSave;
+import com.xzixi.framework.common.model.valid.JobTemplateUpdate;
+import com.xzixi.framework.common.model.vo.JobTemplateVO;
 import com.xzixi.framework.boot.webmvc.model.Result;
 import com.xzixi.framework.boot.webmvc.model.search.Pagination;
 import com.xzixi.framework.backend.service.IJobTemplateService;
@@ -19,7 +19,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.xzixi.framework.backend.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.framework.common.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * @author 薛凌康

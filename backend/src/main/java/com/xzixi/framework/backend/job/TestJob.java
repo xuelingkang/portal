@@ -1,6 +1,6 @@
 package com.xzixi.framework.backend.job;
 
-import com.xzixi.framework.backend.model.po.User;
+import com.xzixi.framework.common.model.po.User;
 import com.xzixi.framework.backend.service.IUserService;
 import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
 import lombok.extern.slf4j.Slf4j;

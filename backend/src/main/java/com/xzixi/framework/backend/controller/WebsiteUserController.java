@@ -1,8 +1,8 @@
 package com.xzixi.framework.backend.controller;
 
-import com.xzixi.framework.backend.model.enums.UserType;
-import com.xzixi.framework.backend.model.po.User;
-import com.xzixi.framework.backend.model.valid.WebsiteUserSave;
+import com.xzixi.framework.common.model.enums.UserType;
+import com.xzixi.framework.common.model.po.User;
+import com.xzixi.framework.common.model.valid.WebsiteUserSave;
 import com.xzixi.framework.boot.webmvc.model.Result;
 import com.xzixi.framework.backend.service.IUserService;
 import io.swagger.annotations.Api;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.xzixi.framework.backend.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
-import static com.xzixi.framework.backend.constant.UserConstant.USER_ACTIVATE_EXPIRE_DAY;
-import static com.xzixi.framework.backend.constant.UserConstant.USER_ACTIVATE_MESSAGE_TEMPLATE;
+import static com.xzixi.framework.common.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.framework.common.constant.UserConstant.USER_ACTIVATE_EXPIRE_DAY;
+import static com.xzixi.framework.common.constant.UserConstant.USER_ACTIVATE_MESSAGE_TEMPLATE;
 
 /**
  * @author 薛凌康

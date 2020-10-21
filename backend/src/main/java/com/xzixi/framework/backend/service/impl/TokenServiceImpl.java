@@ -1,7 +1,7 @@
 package com.xzixi.framework.backend.service.impl;
 
-import com.xzixi.framework.backend.constant.SecurityConstant;
-import com.xzixi.framework.backend.model.po.Token;
+import com.xzixi.framework.common.constant.SecurityConstant;
+import com.xzixi.framework.common.model.po.Token;
 import com.xzixi.framework.boot.webmvc.exception.ClientException;
 import com.xzixi.framework.backend.service.ITokenService;
 import io.jsonwebtoken.Jwts;

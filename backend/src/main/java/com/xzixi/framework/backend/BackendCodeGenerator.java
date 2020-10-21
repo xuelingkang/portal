@@ -20,7 +20,8 @@ public class BackendCodeGenerator {
         config.setTables(new String[]{"t_test"});
         config.setAuthor("xuelingkang");
         config.setBaseDir("/backend/src/main/java");
-        config.setEntityPackage("com.xzixi.framework.backend.model.po");
+        config.setEntityBaseDir("/common/src/main/java");
+        config.setEntityPackage("com.xzixi.framework.common.model.po");
         config.setMapperPackage("com.xzixi.framework.backend.mapper");
         config.setDataPackage("com.xzixi.framework.backend.data");
         config.setDataImplPackage("com.xzixi.framework.backend.data.impl");

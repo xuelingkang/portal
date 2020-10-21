@@ -4,13 +4,13 @@ import com.xzixi.framework.boot.webmvc.exception.ClientException;
 import com.xzixi.framework.boot.webmvc.exception.ProjectException;
 import com.xzixi.framework.boot.webmvc.exception.ServerException;
 import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
-import com.xzixi.framework.backend.constant.JobConstant;
+import com.xzixi.framework.common.constant.JobConstant;
 import com.xzixi.framework.backend.data.IJobData;
-import com.xzixi.framework.backend.model.po.JobParameter;
-import com.xzixi.framework.backend.model.po.JobTemplate;
-import com.xzixi.framework.backend.model.po.JobTemplateParameter;
-import com.xzixi.framework.backend.model.po.JobTrigger;
-import com.xzixi.framework.backend.model.vo.JobVO;
+import com.xzixi.framework.common.model.po.JobParameter;
+import com.xzixi.framework.common.model.po.JobTemplate;
+import com.xzixi.framework.common.model.po.JobTemplateParameter;
+import com.xzixi.framework.common.model.po.JobTrigger;
+import com.xzixi.framework.common.model.vo.JobVO;
 import com.xzixi.framework.backend.service.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.quartz.*;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * @author 薛凌康
  */
 @Service
-public class JobServiceImpl extends BaseServiceImpl<IJobData, com.xzixi.framework.backend.model.po.Job> implements IJobService {
+public class JobServiceImpl extends BaseServiceImpl<IJobData, com.xzixi.framework.common.model.po.Job> implements IJobService {
 
     @Autowired
     private IJobParameterService jobParameterService;
@@ -40,7 +40,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, com.xzixi.framewor
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void saveJob(com.xzixi.framework.backend.model.po.Job job, Collection<JobParameter> parameters) {
+    public void saveJob(com.xzixi.framework.common.model.po.Job job, Collection<JobParameter> parameters) {
         checkParameters(job.getJobTemplateId(), parameters);
         scheduleJob(job, parameters);
         if (!save(job)) {
@@ -54,7 +54,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, com.xzixi.framewor
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateJob(com.xzixi.framework.backend.model.po.Job job, Collection<JobParameter> parameters) {
+    public void updateJob(com.xzixi.framework.common.model.po.Job job, Collection<JobParameter> parameters) {
         checkParameters(job.getJobTemplateId(), parameters);
         if (!unscheduleJob(job)) {
             throw new ServerException(job, "关闭定时任务失败！");
@@ -75,7 +75,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, com.xzixi.framewor
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void removeJobsByIds(Collection<Integer> ids) {
-        Collection<com.xzixi.framework.backend.model.po.Job> jobs = listByIds(ids);
+        Collection<com.xzixi.framework.common.model.po.Job> jobs = listByIds(ids);
         if (!unscheduleJobs(jobs)) {
             throw new ServerException(jobs, "关闭定时任务失败！");
         }
@@ -92,8 +92,8 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, com.xzixi.framewor
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void pauseByIds(Collection<Integer> ids) {
-        Collection<com.xzixi.framework.backend.model.po.Job> jobs = listByIds(ids);
-        for (com.xzixi.framework.backend.model.po.Job job : jobs) {
+        Collection<com.xzixi.framework.common.model.po.Job> jobs = listByIds(ids);
+        for (com.xzixi.framework.common.model.po.Job job : jobs) {
             try {
                 scheduler.pauseTrigger(buildTriggerKey(job));
             } catch (SchedulerException e) {
@@ -105,8 +105,8 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, com.xzixi.framewor
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void resumeByIds(Collection<Integer> ids) {
-        Collection<com.xzixi.framework.backend.model.po.Job> jobs = listByIds(ids);
-        for (com.xzixi.framework.backend.model.po.Job job : jobs) {
+        Collection<com.xzixi.framework.common.model.po.Job> jobs = listByIds(ids);
+        for (com.xzixi.framework.common.model.po.Job job : jobs) {
             try {
                 scheduler.resumeTrigger(buildTriggerKey(job));
             } catch (SchedulerException e) {
@@ -116,7 +116,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, com.xzixi.framewor
     }
 
     @Override
-    public JobVO buildVO(com.xzixi.framework.backend.model.po.Job job, JobVO.BuildOption option) {
+    public JobVO buildVO(com.xzixi.framework.common.model.po.Job job, JobVO.BuildOption option) {
         JobVO jobVO = new JobVO(job);
         if (option.isTrigger()) {
             JobTrigger jobTrigger = jobTriggerService.getByJob(job);
@@ -130,7 +130,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, com.xzixi.framewor
     }
 
     @Override
-    public List<JobVO> buildVO(Collection<com.xzixi.framework.backend.model.po.Job> jobs, JobVO.BuildOption option) {
+    public List<JobVO> buildVO(Collection<com.xzixi.framework.common.model.po.Job> jobs, JobVO.BuildOption option) {
         List<JobVO> jobVOList = jobs.stream().map(JobVO::new).collect(Collectors.toList());
         if (option.isTrigger()) {
             List<JobTrigger> jobTriggers = jobTriggerService.listByJobs(jobs);
@@ -144,7 +144,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, com.xzixi.framewor
             });
         }
         if (option.isParameters()) {
-            List<JobParameter> parameters = jobParameterService.listByJobIds(jobs.stream().map(com.xzixi.framework.backend.model.po.Job::getId).collect(Collectors.toList()));
+            List<JobParameter> parameters = jobParameterService.listByJobIds(jobs.stream().map(com.xzixi.framework.common.model.po.Job::getId).collect(Collectors.toList()));
             if (CollectionUtils.isNotEmpty(parameters)) {
                 jobVOList.forEach(jobVO -> {
                     List<JobParameter> params = parameters.stream().filter(parameter -> Objects.equals(jobVO.getId(), parameter.getJobId()))
@@ -199,7 +199,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, com.xzixi.framewor
      * @param parameters 定时任务参数
      */
     @SuppressWarnings("unchecked")
-    private void scheduleJob(com.xzixi.framework.backend.model.po.Job job, Collection<JobParameter> parameters) {
+    private void scheduleJob(com.xzixi.framework.common.model.po.Job job, Collection<JobParameter> parameters) {
         // 任务模板
         JobTemplate jobTemplate = jobTemplateService.getById(job.getJobTemplateId());
         // 调度器名称
@@ -268,7 +268,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, com.xzixi.framewor
      *
      * @param job 定时任务
      */
-    private boolean unscheduleJob(com.xzixi.framework.backend.model.po.Job job) {
+    private boolean unscheduleJob(com.xzixi.framework.common.model.po.Job job) {
         try {
             return scheduler.unscheduleJob(buildTriggerKey(job));
         } catch (SchedulerException e) {
@@ -281,7 +281,7 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, com.xzixi.framewor
      *
      * @param jobs 定时任务集合
      */
-    private boolean unscheduleJobs(Collection<com.xzixi.framework.backend.model.po.Job> jobs) {
+    private boolean unscheduleJobs(Collection<com.xzixi.framework.common.model.po.Job> jobs) {
         List<TriggerKey> triggerKeys = buildTriggerKeys(jobs);
         try {
             return scheduler.unscheduleJobs(triggerKeys);
@@ -290,11 +290,11 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, com.xzixi.framewor
         }
     }
 
-    private TriggerKey buildTriggerKey(com.xzixi.framework.backend.model.po.Job job) {
+    private TriggerKey buildTriggerKey(com.xzixi.framework.common.model.po.Job job) {
         return new TriggerKey(job.getTriggerName(), job.getTriggerGroup());
     }
 
-    private List<TriggerKey> buildTriggerKeys(Collection<com.xzixi.framework.backend.model.po.Job> jobs) {
+    private List<TriggerKey> buildTriggerKeys(Collection<com.xzixi.framework.common.model.po.Job> jobs) {
         return jobs.stream().map(this::buildTriggerKey).collect(Collectors.toList());
     }
 }

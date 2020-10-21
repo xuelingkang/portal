@@ -1,6 +1,6 @@
 package com.xzixi.framework.backend.data;
 
-import com.xzixi.framework.backend.model.po.Article;
+import com.xzixi.framework.common.model.po.Article;
 import com.xzixi.framework.boot.webmvc.data.IBaseData;
 
 /**

@@ -1,6 +1,6 @@
 package com.xzixi.framework.backend.config.security;
 
-import com.xzixi.framework.backend.constant.SecurityConstant;
+import com.xzixi.framework.common.constant.SecurityConstant;
 import com.xzixi.framework.backend.service.ITokenService;
 import com.xzixi.framework.backend.util.WebUtils;
 import com.xzixi.framework.boot.webmvc.model.Result;

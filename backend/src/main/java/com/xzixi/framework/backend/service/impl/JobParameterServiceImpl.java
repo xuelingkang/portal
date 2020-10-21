@@ -1,7 +1,7 @@
 package com.xzixi.framework.backend.service.impl;
 
 import com.xzixi.framework.backend.data.IJobParameterData;
-import com.xzixi.framework.backend.model.po.JobParameter;
+import com.xzixi.framework.common.model.po.JobParameter;
 import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
 import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
 import com.xzixi.framework.backend.service.IJobParameterService;

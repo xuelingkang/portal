@@ -1,7 +1,7 @@
 package com.xzixi.framework.backend.config.security;
 
-import com.xzixi.framework.backend.model.po.Authority;
-import com.xzixi.framework.backend.model.vo.UserVO;
+import com.xzixi.framework.common.model.po.Authority;
+import com.xzixi.framework.common.model.vo.UserVO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections.CollectionUtils;

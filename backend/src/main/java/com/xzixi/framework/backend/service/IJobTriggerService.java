@@ -1,8 +1,8 @@
 package com.xzixi.framework.backend.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.xzixi.framework.backend.model.po.Job;
-import com.xzixi.framework.backend.model.po.JobTrigger;
+import com.xzixi.framework.common.model.po.Job;
+import com.xzixi.framework.common.model.po.JobTrigger;
 
 import java.util.Collection;
 import java.util.List;

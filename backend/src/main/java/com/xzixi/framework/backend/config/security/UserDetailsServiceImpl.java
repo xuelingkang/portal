@@ -2,8 +2,8 @@ package com.xzixi.framework.backend.config.security;
 
 import com.xzixi.framework.boot.webmvc.exception.ClientException;
 import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
-import com.xzixi.framework.backend.model.po.User;
-import com.xzixi.framework.backend.model.vo.UserVO;
+import com.xzixi.framework.common.model.po.User;
+import com.xzixi.framework.common.model.vo.UserVO;
 import com.xzixi.framework.backend.service.IUserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

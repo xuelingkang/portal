@@ -1,9 +1,9 @@
 package com.xzixi.framework.backend.config.security;
 
-import com.xzixi.framework.backend.constant.AuthorityConstant;
-import com.xzixi.framework.backend.model.enums.AuthorityMethod;
-import com.xzixi.framework.backend.model.enums.AuthorityProtocol;
-import com.xzixi.framework.backend.model.po.Authority;
+import com.xzixi.framework.common.constant.AuthorityConstant;
+import com.xzixi.framework.common.model.enums.AuthorityMethod;
+import com.xzixi.framework.common.model.enums.AuthorityProtocol;
+import com.xzixi.framework.common.model.po.Authority;
 import com.xzixi.framework.backend.service.IAuthorityService;
 import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
 import org.apache.commons.collections.CollectionUtils;

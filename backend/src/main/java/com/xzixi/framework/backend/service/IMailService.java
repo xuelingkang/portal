@@ -1,8 +1,8 @@
 package com.xzixi.framework.backend.service;
 
-import com.xzixi.framework.backend.model.po.Mail;
-import com.xzixi.framework.backend.model.po.MailContent;
-import com.xzixi.framework.backend.model.vo.MailVO;
+import com.xzixi.framework.common.model.po.Mail;
+import com.xzixi.framework.common.model.po.MailContent;
+import com.xzixi.framework.common.model.vo.MailVO;
 import com.xzixi.framework.boot.webmvc.service.IBaseService;
 import com.xzixi.framework.boot.webmvc.service.IVoService;
 

@@ -1,6 +1,6 @@
 package com.xzixi.framework.backend.service;
 
-import com.xzixi.framework.backend.model.po.RoleAuthorityLink;
+import com.xzixi.framework.common.model.po.RoleAuthorityLink;
 import com.xzixi.framework.boot.webmvc.service.IBaseService;
 
 import java.util.Collection;

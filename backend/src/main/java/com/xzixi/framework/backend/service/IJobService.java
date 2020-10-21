@@ -1,8 +1,8 @@
 package com.xzixi.framework.backend.service;
 
-import com.xzixi.framework.backend.model.po.Job;
-import com.xzixi.framework.backend.model.po.JobParameter;
-import com.xzixi.framework.backend.model.vo.JobVO;
+import com.xzixi.framework.common.model.po.Job;
+import com.xzixi.framework.common.model.po.JobParameter;
+import com.xzixi.framework.common.model.vo.JobVO;
 import com.xzixi.framework.boot.webmvc.service.IBaseService;
 import com.xzixi.framework.boot.webmvc.service.IVoService;
 

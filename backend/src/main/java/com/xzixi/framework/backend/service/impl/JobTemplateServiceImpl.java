@@ -1,8 +1,8 @@
 package com.xzixi.framework.backend.service.impl;
 
-import com.xzixi.framework.backend.model.po.JobTemplate;
-import com.xzixi.framework.backend.model.po.JobTemplateParameter;
-import com.xzixi.framework.backend.model.vo.JobTemplateVO;
+import com.xzixi.framework.common.model.po.JobTemplate;
+import com.xzixi.framework.common.model.po.JobTemplateParameter;
+import com.xzixi.framework.common.model.vo.JobTemplateVO;
 import com.xzixi.framework.boot.webmvc.exception.ServerException;
 import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
 import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;

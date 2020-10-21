@@ -256,6 +256,7 @@
             </properties>
             <modules>
                 <module>boot</module>
+                <module>common</module>
                 <module>backend</module>
                 <module>gateway</module>
                 <module>sso</module>
@@ -268,6 +269,7 @@
             </properties>
             <modules>
                 <module>boot</module>
+                <module>common</module>
                 <module>backend</module>
                 <module>gateway</module>
                 <module>sso</module>

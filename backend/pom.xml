@@ -44,6 +44,12 @@
             <artifactId>swagger2-spring-boot-starter</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 公共模块 -->
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- nacos服务注册发现 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

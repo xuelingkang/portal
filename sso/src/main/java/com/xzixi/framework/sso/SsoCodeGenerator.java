@@ -20,7 +20,8 @@ public class SsoCodeGenerator {
         config.setTables(new String[]{"t_test"});
         config.setAuthor("xuelingkang");
         config.setBaseDir("/sso/src/main/java");
-        config.setEntityPackage("com.xzixi.framework.sso.model.po");
+        config.setEntityBaseDir("/common/src/main/java");
+        config.setEntityPackage("com.xzixi.framework.common.model.po");
         config.setMapperPackage("com.xzixi.framework.sso.mapper");
         config.setDataPackage("com.xzixi.framework.sso.data");
         config.setDataImplPackage("com.xzixi.framework.sso.data.impl");

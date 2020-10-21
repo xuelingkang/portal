@@ -2,8 +2,8 @@ package com.xzixi.framework.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.xzixi.framework.backend.model.po.Job;
-import com.xzixi.framework.backend.model.po.JobTrigger;
+import com.xzixi.framework.common.model.po.Job;
+import com.xzixi.framework.common.model.po.JobTrigger;
 import com.xzixi.framework.backend.mapper.JobTriggerMapper;
 import com.xzixi.framework.backend.service.IJobTriggerService;
 import org.apache.commons.collections.CollectionUtils;
