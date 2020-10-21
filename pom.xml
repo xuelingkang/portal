@@ -258,6 +258,7 @@
                 <module>boot</module>
                 <module>backend</module>
                 <module>gateway</module>
+                <module>sso</module>
             </modules>
         </profile>
         <profile>
@@ -269,6 +270,7 @@
                 <module>boot</module>
                 <module>backend</module>
                 <module>gateway</module>
+                <module>sso</module>
             </modules>
         </profile>
         <profile>
