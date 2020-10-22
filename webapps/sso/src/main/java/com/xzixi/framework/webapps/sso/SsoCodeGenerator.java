@@ -19,8 +19,8 @@ public class SsoCodeGenerator {
         config.setTablePrefix("t_");
         config.setTables(new String[]{"t_test"});
         config.setAuthor("xuelingkang");
-        config.setBaseDir("/sso/src/main/java");
-        config.setEntityBaseDir("/common/src/main/java");
+        config.setBaseDir("/webapps/sso/src/main/java");
+        config.setEntityBaseDir("/webapps/common/src/main/java");
         config.setEntityPackage("com.xzixi.framework.webapps.common.model.po");
         config.setMapperPackage("com.xzixi.framework.webapps.sso.mapper");
         config.setDataPackage("com.xzixi.framework.webapps.sso.data");
