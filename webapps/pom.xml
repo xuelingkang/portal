@@ -29,6 +29,8 @@
         <module>sso</module>
         <module>system</module>
         <module>task</module>
+        <module>notice</module>
+        <module>queue</module>
     </modules>
 
     <build>
