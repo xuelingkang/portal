@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 8083
   jetty:
     acceptors: -1 # 接收线程数，默认-1，根据运行环境派生
     selectors: -1 # 选择器线程数，默认-1，根据运行环境派生
