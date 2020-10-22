@@ -6,7 +6,7 @@ import com.xzixi.framework.common.model.enums.UserType;
 import com.xzixi.framework.common.model.valid.UserSave;
 import com.xzixi.framework.common.model.valid.UserUpdate;
 import com.xzixi.framework.common.model.valid.WebsiteUserSave;
-import com.xzixi.framework.boot.swagger2.extension.annotation.IgnoreSwagger2Parameter;
+import com.xzixi.framework.boot.swagger2.annotations.IgnoreSwagger2Parameter;
 import com.xzixi.framework.boot.webmvc.model.BaseModel;
 import com.xzixi.framework.boot.webmvc.model.IBelonging;
 import io.swagger.annotations.ApiModel;

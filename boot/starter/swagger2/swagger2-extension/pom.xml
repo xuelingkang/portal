@@ -15,6 +15,12 @@
     <description>swagger2扩展</description>
 
     <dependencies>
+        <!-- 扩展的注解 -->
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
+            <artifactId>swagger2-annotations</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- swagger2 -->
         <dependency>
             <groupId>io.springfox</groupId>

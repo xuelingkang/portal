@@ -5,19 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>starter</artifactId>
+        <artifactId>swagger2</artifactId>
         <groupId>com.xzixi.framework</groupId>
         <version>2.0.0</version>
     </parent>
 
-    <artifactId>swagger2</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>swagger2-annotations</artifactId>
     <name>${project.artifactId}</name>
-    <description>swagger2文档</description>
+    <description>扩展的swagger2注解</description>
 
-    <modules>
-        <module>swagger2-annotations</module>
-        <module>swagger2-extension</module>
-        <module>swagger2-spring-boot-starter</module>
-    </modules>
 </project>

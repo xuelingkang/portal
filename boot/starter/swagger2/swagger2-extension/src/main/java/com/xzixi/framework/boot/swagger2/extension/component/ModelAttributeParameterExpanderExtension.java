@@ -12,7 +12,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.xzixi.framework.boot.swagger2.extension.util.FieldUtil;
-import com.xzixi.framework.boot.swagger2.extension.annotation.IgnoreSwagger2Parameter;
+import com.xzixi.framework.boot.swagger2.annotations.IgnoreSwagger2Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -21,11 +21,13 @@
             <artifactId>webmvc</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- swagger2扩展注解 -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
-            <artifactId>swagger2-extension</artifactId>
+            <artifactId>swagger2-annotations</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- swagger注解 -->
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>

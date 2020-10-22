@@ -1,4 +1,4 @@
-package com.xzixi.framework.boot.swagger2.extension.annotation;
+package com.xzixi.framework.boot.swagger2.annotations;
 
 import java.lang.annotation.*;
 

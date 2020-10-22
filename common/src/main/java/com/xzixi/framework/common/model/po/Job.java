@@ -2,7 +2,7 @@ package com.xzixi.framework.common.model.po;
 
 import com.xzixi.framework.common.model.valid.JobSave;
 import com.xzixi.framework.common.model.valid.JobUpdate;
-import com.xzixi.framework.boot.swagger2.extension.annotation.IgnoreSwagger2Parameter;
+import com.xzixi.framework.boot.swagger2.annotations.IgnoreSwagger2Parameter;
 import com.xzixi.framework.boot.webmvc.model.BaseModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

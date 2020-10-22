@@ -6,7 +6,7 @@ import com.xzixi.framework.common.model.enums.ArticleCategory;
 import com.xzixi.framework.common.model.enums.ArticleType;
 import com.xzixi.framework.common.model.valid.ArticleSave;
 import com.xzixi.framework.common.model.valid.ArticleUpdate;
-import com.xzixi.framework.boot.swagger2.extension.annotation.IgnoreSwagger2Parameter;
+import com.xzixi.framework.boot.swagger2.annotations.IgnoreSwagger2Parameter;
 import com.xzixi.framework.boot.webmvc.model.BaseModel;
 import com.xzixi.framework.boot.webmvc.model.IBelonging;
 import io.swagger.annotations.ApiModel;
