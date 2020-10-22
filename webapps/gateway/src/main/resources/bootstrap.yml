@@ -43,6 +43,12 @@ spring:
             - Path=/notice/**
           filters:
             - StripPrefix=1
+        - id: queue
+          uri: lb://@project.parent.artifactId@-queue
+          predicates:
+            - Path=/queue/**
+          filters:
+            - StripPrefix=1
 
 # 日志
 logging:
