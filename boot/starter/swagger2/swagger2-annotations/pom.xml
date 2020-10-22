@@ -13,5 +13,4 @@
     <artifactId>swagger2-annotations</artifactId>
     <name>${project.artifactId}</name>
     <description>扩展的swagger2注解</description>
-
 </project>
