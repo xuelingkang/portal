@@ -32,6 +32,7 @@
         <module>notice</module>
         <module>queue</module>
         <module>admin</module>
+        <module>master</module>
     </modules>
 
     <build>

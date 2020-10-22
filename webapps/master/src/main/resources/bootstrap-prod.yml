@@ -1,0 +1,12 @@
+# 生产环境
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+swagger2:
+  enable: false # 关闭swagger2
+
+log:
+  home: /var/log/portal/master # 日志目录

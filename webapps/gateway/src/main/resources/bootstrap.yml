@@ -55,6 +55,12 @@ spring:
             - Path=/admin/**
           filters:
             - StripPrefix=1
+        - id: master
+          uri: lb://@project.parent.artifactId@-master
+          predicates:
+            - Path=/master/**
+          filters:
+            - StripPrefix=1
 
 # 日志
 logging:
