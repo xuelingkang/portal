@@ -1,4 +1,4 @@
-package com.xzixi.framework.webapps.notice;
+package com.xzixi.framework.webapps.queue;
 
 import com.xzixi.framework.boot.webmvc.config.async.annotation.EnableFrameworkAsync;
 import com.xzixi.framework.boot.webmvc.config.cache.annotation.EnableFrameworkCache;
@@ -23,10 +23,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableFrameworkMail
 @EnableFrameworkMybatis
 @EnableFrameworkValidation
-@MapperScan(basePackages = "com.xzixi.framework.webapps.notice.mapper")
-public class NoticeApplication {
+@MapperScan(basePackages = "com.xzixi.framework.webapps.queue.mapper")
+public class QueueApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(NoticeApplication.class, args);
+        SpringApplication.run(QueueApplication.class, args);
     }
 }
