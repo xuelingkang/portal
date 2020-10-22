@@ -31,6 +31,12 @@ spring:
             - Path=/system/**
           filters:
             - StripPrefix=1
+        - id: task
+          uri: lb://@project.parent.artifactId@-task
+          predicates:
+            - Path=/task/**
+          filters:
+            - StripPrefix=1
 
 # 日志
 logging:

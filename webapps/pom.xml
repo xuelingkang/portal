@@ -28,6 +28,7 @@
         <module>gateway</module>
         <module>sso</module>
         <module>system</module>
+        <module>task</module>
     </modules>
 
     <build>
