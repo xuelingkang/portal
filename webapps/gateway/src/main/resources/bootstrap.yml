@@ -25,6 +25,12 @@ spring:
             - Path=/sso/**
           filters:
             - StripPrefix=1
+        - id: system
+          uri: lb://@project.parent.artifactId@-system
+          predicates:
+            - Path=/system/**
+          filters:
+            - StripPrefix=1
 
 # 日志
 logging:

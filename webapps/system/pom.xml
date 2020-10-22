@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>webapps</artifactId>
+        <groupId>com.xzixi.framework</groupId>
+        <version>2.0.0</version>
+    </parent>
+
+    <artifactId>system</artifactId>
+    <name>${project.artifactId}</name>
+    <description>用户、权限服务</description>
+
+    <properties>
+        <docker.skip>false</docker.skip>
+    </properties>
+
+    <dependencies>
+        <!-- 编译期增强 -->
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
+            <artifactId>enhance</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- 基础web框架 -->
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
+            <artifactId>webmvc</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- sftp连接池启动器 -->
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
+            <artifactId>sftp-client-spring-boot-starter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- swagger2启动器 -->
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
+            <artifactId>swagger2-spring-boot-starter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 公共模块 -->
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- nacos服务注册发现 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!-- web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- jetty -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
+        </dependency>
+        <!-- druid -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- mysql -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- commons-io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <!-- configuration processor -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
