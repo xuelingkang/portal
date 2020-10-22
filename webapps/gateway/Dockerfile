@@ -9,7 +9,7 @@ COPY $JAR_FILE app.jar
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone
 
-EXPOSE 8090
+EXPOSE 8000
 
 CMD java -Dfile.encoding=utf-8 -Djava.security.egd=file:/dev/./urandom $JAVA_OPTS -jar app.jar > /dev/null 2>&1
 

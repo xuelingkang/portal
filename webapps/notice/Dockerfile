@@ -11,7 +11,7 @@ COPY --from=registry.cn-zhangjiakou.aliyuncs.com/publicx/aspectjweaver:1.9.6 /as
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone
 
-EXPOSE 8080
+EXPOSE 8084
 
 CMD java -Dfile.encoding=utf-8 -Djava.security.egd=file:/dev/./urandom -javaagent:aspectjweaver.jar $JAVA_OPTS -jar app.jar > /dev/null 2>&1
 
