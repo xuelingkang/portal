@@ -1,0 +1,12 @@
+# 开发环境
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+swagger2:
+  enable: true # 启用swagger2
+
+log:
+  home: /data/logs/portal/admin # 日志目录

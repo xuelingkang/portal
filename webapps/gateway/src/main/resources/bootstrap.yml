@@ -49,6 +49,12 @@ spring:
             - Path=/queue/**
           filters:
             - StripPrefix=1
+        - id: admin
+          uri: lb://@project.parent.artifactId@-admin
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix=1
 
 # 日志
 logging:
