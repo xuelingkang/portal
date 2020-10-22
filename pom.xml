@@ -9,7 +9,7 @@
     <version>2.0.0</version>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
-    <description>个人门户前后台，博客、新闻、笔记、知识点整理等</description>
+    <description>个人门户，博客、新闻、笔记、知识点整理等</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -34,10 +34,6 @@
         <swagger-ui.version>2.9.2</swagger-ui.version>
         <swagger-models.version>1.5.21</swagger-models.version>
         <swagger-annotations.version>1.5.21</swagger-annotations.version>
-        <docker.image.prefix>registry.cn-zhangjiakou.aliyuncs.com/xzixi</docker.image.prefix>
-        <docker.image.tag>latest</docker.image.tag>
-        <docker.skip>true</docker.skip>
-        <docker.build.no-cache>false</docker.build.no-cache>
     </properties>
 
     <dependencyManagement>
@@ -178,22 +174,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>com.spotify</groupId>
-                <artifactId>dockerfile-maven-plugin</artifactId>
-                <version>1.4.13</version>
-                <configuration>
-                    <repository>${docker.image.prefix}/portal-${project.artifactId}</repository>
-                    <tag>${docker.image.tag}</tag>
-                    <skip>${docker.skip}</skip>
-                    <noCache>${docker.build.no-cache}</noCache>
-                    <contextDirectory>${basedir}</contextDirectory>
-                    <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-                    <buildArgs>
-                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
-                    </buildArgs>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
                 <version>2.2.5</version>
@@ -256,10 +236,7 @@
             </properties>
             <modules>
                 <module>boot</module>
-                <module>common</module>
-                <module>content</module>
-                <module>gateway</module>
-                <module>sso</module>
+                <module>webapps</module>
             </modules>
         </profile>
         <profile>
@@ -269,10 +246,7 @@
             </properties>
             <modules>
                 <module>boot</module>
-                <module>common</module>
-                <module>content</module>
-                <module>gateway</module>
-                <module>sso</module>
+                <module>webapps</module>
             </modules>
         </profile>
         <profile>
