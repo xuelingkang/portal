@@ -22,31 +22,35 @@
 关键模块maven坐标
 
 ```xml
-<dependencies>
-    <!-- 编译期增强 -->
-    <dependency>
-        <groupId>com.xzixi.framework</groupId>
-        <artifactId>enhance</artifactId>
-        <version>xxx</version>
-        <scope>provided</scope>
-    </dependency>
-    <!-- 基础web框架 -->
-    <dependency>
-        <groupId>com.xzixi.framework</groupId>
-        <artifactId>webmvc</artifactId>
-        <version>xxx</version>
-    </dependency>
-    <!-- sftp连接池启动器 -->
-    <dependency>
-        <groupId>com.xzixi.framework</groupId>
-        <artifactId>sftp-client-spring-boot-starter</artifactId>
-        <version>xxx</version>
-    </dependency>
-    <!-- swagger2启动器 -->
-    <dependency>
-        <groupId>com.xzixi.framework</groupId>
-        <artifactId>swagger2-spring-boot-starter</artifactId>
-        <version>xxx</version>
-    </dependency>
-</dependencies>
+<!-- 编译期增强 -->
+<dependency>
+    <groupId>com.xzixi.framework</groupId>
+    <artifactId>enhance</artifactId>
+    <version>xxx</version>
+    <scope>provided</scope>
+</dependency>
+```
+```xml
+<!-- 基础web框架 -->
+<dependency>
+    <groupId>com.xzixi.framework</groupId>
+    <artifactId>webmvc</artifactId>
+    <version>xxx</version>
+</dependency>
+```
+```xml
+<!-- sftp连接池启动器 -->
+<dependency>
+    <groupId>com.xzixi.framework</groupId>
+    <artifactId>sftp-client-spring-boot-starter</artifactId>
+    <version>xxx</version>
+</dependency>
+```
+```xml
+<!-- swagger2启动器 -->
+<dependency>
+    <groupId>com.xzixi.framework</groupId>
+    <artifactId>swagger2-spring-boot-starter</artifactId>
+    <version>xxx</version>
+</dependency>
 ```
