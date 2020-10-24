@@ -3,6 +3,7 @@ package com.xzixi.framework.webapps.task;
 import com.xzixi.framework.boot.webmvc.config.async.annotation.EnableFrameworkAsync;
 import com.xzixi.framework.boot.webmvc.config.cache.annotation.EnableFrameworkCache;
 import com.xzixi.framework.boot.webmvc.config.elasticsearch.annotation.EnableFrameworkElasticsearch;
+import com.xzixi.framework.boot.webmvc.config.exception.annotation.EnableFrameworkExceptionHandler;
 import com.xzixi.framework.boot.webmvc.config.json.annotation.EnableFrameworkJson;
 import com.xzixi.framework.boot.webmvc.config.mail.annotation.EnableFrameworkMail;
 import com.xzixi.framework.boot.webmvc.config.mybatis.annotation.EnableFrameworkMybatis;
@@ -23,6 +24,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableFrameworkMail
 @EnableFrameworkMybatis
 @EnableFrameworkValidation
+@EnableFrameworkExceptionHandler
 @MapperScan(basePackages = "com.xzixi.framework.webapps.task.mapper")
 public class TaskApplication {
 

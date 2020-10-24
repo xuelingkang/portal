@@ -1,4 +1,4 @@
-package com.xzixi.framework.boot.webmvc.aspect;
+package com.xzixi.framework.boot.webmvc.config.exception.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
@@ -27,12 +28,12 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 全局异常拦截
- *
- * @author 薛凌康
+ * @author xuelingkang
+ * @date 2020-10-24
  */
 @Slf4j
-public abstract class BaseControllerExceptionHandler {
+@RestControllerAdvice
+public class ControllerExceptionHandler {
 
     @Value("${spring.servlet.multipart.max-file-size}")
     private String maxFileSize;
@@ -72,7 +73,7 @@ public abstract class BaseControllerExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public Result<?> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
         String errMsg = String.format("参数类型转换错误（类型：%s，名称：%s，值：%s）！",
-            e.getParameter().getParameterType().getSimpleName(), e.getName(), e.getValue());
+                e.getParameter().getParameterType().getSimpleName(), e.getName(), e.getValue());
         return new Result<>(HttpStatus.BAD_REQUEST.value(), errMsg, null);
     }
 
