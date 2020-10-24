@@ -9,7 +9,7 @@
 3. 使用maven package命令打包`enhance`和`starter`模块
 4. 启动`content`、`sso`、`gateway`项目
 
-### boot模块说明
+## boot模块说明
 
 - [更新日志](./UPDATELOG.md)
 
