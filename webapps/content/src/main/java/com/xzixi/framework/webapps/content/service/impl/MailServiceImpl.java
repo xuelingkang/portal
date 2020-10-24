@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 @Service
 public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements IMailService {
 
-    @Value("${spring.mail.username}")
+    @Value("${spring.mail.username:}")
     private String mailUsername;
     @Autowired
     private IMailContentService mailContentService;

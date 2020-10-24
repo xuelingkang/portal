@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl extends BaseServiceImpl<IUserData, User> implements IUserService {
 
-    @Value("${user-activate-url}")
+    @Value("${user-activate-url:}")
     private String userActivateUrl;
     @Autowired
     private IRoleService roleService;

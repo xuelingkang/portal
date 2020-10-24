@@ -37,7 +37,7 @@ import java.util.Set;
 @RestControllerAdvice
 public class ControllerExceptionHandler {
 
-    @Value("${spring.servlet.multipart.max-file-size}")
+    @Value("${spring.servlet.multipart.max-file-size:1MB}")
     private String maxFileSize;
 
     /**

@@ -55,7 +55,7 @@ import static com.xzixi.framework.webapps.common.constant.UserConstant.*;
 @Validated
 public class UserController {
 
-    @Value("${reset-password-url}")
+    @Value("${reset-password-url:}")
     private String resetPasswordUrl;
     @Autowired
     private IUserService userService;
