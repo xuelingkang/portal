@@ -9,6 +9,7 @@ import com.xzixi.framework.boot.webmvc.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -32,6 +33,7 @@ import java.util.Set;
  * @date 2020-10-24
  */
 @Slf4j
+@Component
 @RestControllerAdvice
 public class ControllerExceptionHandler {
 

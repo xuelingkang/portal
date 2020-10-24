@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Configuration
-@ConditionalOnExpression("${swagger2.enable}")
+@ConditionalOnExpression("${swagger2.enable:false}")
 @EnableSwagger2Extension
 @EnableConfigurationProperties(Swagger2ExtensionProperties.class)
 public class Swagger2ExtensionAutoConfiguration {
@@ -40,22 +40,22 @@ public class Swagger2ExtensionAutoConfiguration {
 
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2)
-                .select()
-                // 只显示添加@Api注解的类
-                .apis(RequestHandlerSelectors.withClassAnnotation(Api.class))
-                .build()
-                .apiInfo(apiInfo())
-                .securitySchemes(securitySchemes())
-                .securityContexts(securityContexts());
+        Docket docket = new Docket(DocumentationType.SWAGGER_2);
+        docket.select().apis(RequestHandlerSelectors.withClassAnnotation(Api.class)).build().apiInfo(apiInfo());
+        if (properties.getAuthApi().isEnable()) {
+            docket.securitySchemes(securitySchemes()).securityContexts(securityContexts());
+        }
+        return docket;
     }
 
     @Bean
+    @ConditionalOnExpression("${swagger2.auth-api.enable:false}")
     public Swagger2Filter swagger2Filter() {
         return new Swagger2Filter(properties.getAuthApi().getTemplatePath());
     }
 
     @Bean
+    @ConditionalOnExpression("${swagger2.auth-api.enable:false}")
     public FilterRegistrationBean<Swagger2Filter> swaggerFilterFilterRegistrationBean(Swagger2Filter swagger2Filter) {
         FilterRegistrationBean<Swagger2Filter> registration = new FilterRegistrationBean<>();
         registration.setFilter(swagger2Filter);

@@ -14,6 +14,7 @@ public class Swagger2ExtensionProperties {
 
     @Data
     public static class AuthApi {
+        private boolean enable;
         private String excludeUrlReg;
         private String templatePath = "/default-authentication.json";
         private String paramName = "Authorization";

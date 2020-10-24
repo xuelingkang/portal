@@ -1,13 +1,13 @@
-package com.xzixi.framework.webapps.content.controller;
+package com.xzixi.framework.webapps.file.controller;
 
+import com.xzixi.framework.boot.sftp.client.component.ISftpClient;
+import com.xzixi.framework.boot.webmvc.model.Result;
+import com.xzixi.framework.boot.webmvc.model.search.Pagination;
 import com.xzixi.framework.webapps.common.model.enums.AttachmentType;
 import com.xzixi.framework.webapps.common.model.params.AttachmentSearchParams;
 import com.xzixi.framework.webapps.common.model.po.Attachment;
 import com.xzixi.framework.webapps.common.model.vo.AttachmentVO;
-import com.xzixi.framework.boot.webmvc.model.Result;
-import com.xzixi.framework.boot.webmvc.model.search.Pagination;
-import com.xzixi.framework.boot.sftp.client.component.ISftpClient;
-import com.xzixi.framework.webapps.content.service.IAttachmentService;
+import com.xzixi.framework.webapps.file.service.IAttachmentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

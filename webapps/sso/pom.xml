@@ -19,19 +19,6 @@
     </properties>
 
     <dependencies>
-        <!-- 编译期增强 -->
-        <dependency>
-            <groupId>com.xzixi.framework</groupId>
-            <artifactId>enhance</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- 基础web框架 -->
-        <dependency>
-            <groupId>com.xzixi.framework</groupId>
-            <artifactId>webmvc</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <!-- swagger2启动器 -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
