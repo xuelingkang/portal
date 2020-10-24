@@ -33,6 +33,7 @@
         <module>queue</module>
         <module>admin</module>
         <module>master</module>
+        <module>file</module>
     </modules>
 
     <build>
