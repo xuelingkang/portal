@@ -12,9 +12,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @EnableFrameworkJson
 @EnableFrameworkValidation
-public class AdminApplication {
+public class MasterApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AdminApplication.class, args);
+        SpringApplication.run(MasterApplication.class, args);
     }
 }
