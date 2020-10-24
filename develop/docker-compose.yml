@@ -1,9 +1,10 @@
 version: '3'
-services:
 
+services:
   mysql:
     image: mysql:8.0.21
     container_name: portal_mysql
+    restart: always
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -13,23 +14,23 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     ports:
       - "3306:3306"
-    restart: always
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
 
   redis:
     image: redis:6.0.6
     container_name: portal_redis
+    restart: always
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
     ports:
       - "6379:6379"
-    restart: always
     command: redis-server --appendonly yes --requirepass portal
 
   rabbitmq:
     image: rabbitmq:3.8.7-management
     container_name: portal_rabbitmq
+    restart: always
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -39,11 +40,11 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-    restart: always
 
   elasticsearch:
     image: elasticsearch:6.8.10
-    container_name: portal_elasticsearch
+    container_name: portal_es
+    restart: always
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -55,24 +56,24 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
-    restart: always
 
   kibana:
     image: kibana:6.8.10
     container_name: portal_kibana
+    restart: always
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
       - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     ports:
       - "5601:5601"
-    restart: always
     depends_on:
       - "elasticsearch"
 
   nacos:
     image: nacos/nacos-server:1.3.1
     container_name: portal_nacos
+    restart: always
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
@@ -82,4 +83,7 @@ services:
       - NACOS_AUTH_ENABLE=true
     ports:
       - "8848:8848"
-    restart: always
+
+networks:
+  default:
+    name: portal_dev
