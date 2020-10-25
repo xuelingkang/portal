@@ -4,7 +4,6 @@ import com.xzixi.framework.webapps.common.constant.AuthorityConstant;
 import com.xzixi.framework.webapps.common.model.enums.AuthorityMethod;
 import com.xzixi.framework.webapps.common.model.enums.AuthorityProtocol;
 import com.xzixi.framework.webapps.common.model.po.Authority;
-import com.xzixi.framework.webapps.content.service.IAuthorityService;
 import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;

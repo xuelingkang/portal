@@ -81,10 +81,6 @@ logging:
 swagger2:
   project-name: portal-@project.artifactId@
   project-version: @project.version@
-  auth-api:
-    exclude-url-reg: ^(?!(/login|/website/user|/user/reset-password|/user/activate)).*$
-    param-name: Authorization
-    header-name: x-access-token
 
 log:
   root-level: INFO # 日志级别

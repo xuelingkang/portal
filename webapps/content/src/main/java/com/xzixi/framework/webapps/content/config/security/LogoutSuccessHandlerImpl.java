@@ -1,7 +1,6 @@
 package com.xzixi.framework.webapps.content.config.security;
 
 import com.xzixi.framework.webapps.common.constant.SecurityConstant;
-import com.xzixi.framework.webapps.content.service.ITokenService;
 import com.xzixi.framework.webapps.content.util.WebUtils;
 import com.xzixi.framework.boot.webmvc.model.Result;
 import org.apache.commons.lang3.StringUtils;

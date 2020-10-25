@@ -4,8 +4,6 @@ import com.xzixi.framework.boot.webmvc.model.Result;
 import com.xzixi.framework.webapps.common.model.po.Token;
 import com.xzixi.framework.webapps.common.model.vo.TokenVO;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
-import com.xzixi.framework.webapps.content.service.ITokenService;
-import com.xzixi.framework.webapps.content.service.IUserService;
 import com.xzixi.framework.webapps.content.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

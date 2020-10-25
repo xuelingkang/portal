@@ -3,7 +3,6 @@ package com.xzixi.framework.webapps.content.config.security;
 import com.xzixi.framework.webapps.common.model.enums.UserType;
 import com.xzixi.framework.webapps.common.model.po.Authority;
 import com.xzixi.framework.webapps.common.model.po.Role;
-import com.xzixi.framework.webapps.content.service.IAuthorityService;
 import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;

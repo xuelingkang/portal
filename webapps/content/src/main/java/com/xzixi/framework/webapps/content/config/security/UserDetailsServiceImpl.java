@@ -4,7 +4,6 @@ import com.xzixi.framework.boot.webmvc.exception.ClientException;
 import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
 import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
-import com.xzixi.framework.webapps.content.service.IUserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

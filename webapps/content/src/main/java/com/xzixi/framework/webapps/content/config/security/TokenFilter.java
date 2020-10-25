@@ -4,8 +4,6 @@ import com.xzixi.framework.webapps.common.constant.SecurityConstant;
 import com.xzixi.framework.webapps.common.model.po.Token;
 import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
-import com.xzixi.framework.webapps.content.service.ITokenService;
-import com.xzixi.framework.webapps.content.service.IUserService;
 import com.xzixi.framework.webapps.content.util.WebUtils;
 import com.xzixi.framework.boot.webmvc.model.Result;
 import org.apache.commons.lang.StringUtils;
