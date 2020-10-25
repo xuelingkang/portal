@@ -1,8 +1,9 @@
 package com.xzixi.framework.webapps.common.model.po;
 
+import com.xzixi.framework.boot.webmvc.model.BaseModel;
+import com.xzixi.framework.webapps.common.model.enums.AuthorityMethod;
 import com.xzixi.framework.webapps.common.model.valid.RoleSave;
 import com.xzixi.framework.webapps.common.model.valid.RoleUpdate;
-import com.xzixi.framework.boot.webmvc.model.BaseModel;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -46,4 +47,7 @@ public class Role extends BaseModel {
     @NotNull(groups = {RoleSave.class}, message = "角色描述不能为空！")
     @Length(groups = {RoleSave.class, RoleUpdate.class}, max = 20, message = "角色描述不能超过20字！")
     private String description;
+
+    @ApiModelProperty(value = "应用id")
+    private AuthorityMethod appId;
 }

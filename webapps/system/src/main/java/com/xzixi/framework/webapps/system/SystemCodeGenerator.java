@@ -17,7 +17,7 @@ public class SystemCodeGenerator {
         config.setUsername("root");
         config.setPassword("root");
         config.setTablePrefix("t_");
-        config.setTables(new String[]{"t_test"});
+        config.setTables(new String[]{"t_app"});
         config.setAuthor("xuelingkang");
         config.setBaseDir("/webapps/system/src/main/java");
         config.setEntityBaseDir("/webapps/common/src/main/java");

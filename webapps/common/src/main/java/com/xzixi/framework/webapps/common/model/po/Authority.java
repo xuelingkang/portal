@@ -52,4 +52,7 @@ public class Authority extends BaseModel {
     @NotNull(groups = {AuthoritySave.class}, message = "权限描述不能为空！")
     @Length(groups = {AuthoritySave.class, AuthorityUpdate.class}, max = 200, message = "权限描述不能超过200字！")
     private String description;
+
+    @ApiModelProperty(value = "应用id")
+    private AuthorityMethod appId;
 }

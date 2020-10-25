@@ -32,12 +32,6 @@
             <artifactId>webmvc</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- sftp连接池启动器 -->
-        <dependency>
-            <groupId>com.xzixi.framework</groupId>
-            <artifactId>sftp-client-spring-boot-starter</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <!-- swagger2启动器 -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
