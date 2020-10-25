@@ -1,8 +1,11 @@
-package com.xzixi.framework.webapps.system.service;
+package com.xzixi.framework.webapps.sso.service;
 
 import com.xzixi.framework.webapps.common.model.po.Token;
 
 /**
+ * TODO 重构
+ *  支持accessToken和refreshToken
+ *
  * @author 薛凌康
  */
 public interface ITokenService {

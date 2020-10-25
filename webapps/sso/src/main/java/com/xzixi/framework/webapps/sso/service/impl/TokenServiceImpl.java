@@ -1,9 +1,9 @@
-package com.xzixi.framework.webapps.system.service.impl;
+package com.xzixi.framework.webapps.sso.service.impl;
 
 import com.xzixi.framework.boot.webmvc.exception.ClientException;
 import com.xzixi.framework.webapps.common.constant.SecurityConstant;
 import com.xzixi.framework.webapps.common.model.po.Token;
-import com.xzixi.framework.webapps.system.service.ITokenService;
+import com.xzixi.framework.webapps.sso.service.ITokenService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang.StringUtils;

@@ -18,6 +18,6 @@ public class AppServiceImpl extends BaseServiceImpl<IAppData, App> implements IA
 
     @Override
     public App getByUid(String uid) {
-        return getOne(new QueryParams<App>().eq("uid", uid));
+        return getOne(new QueryParams<>(new App().setUid(uid)));
     }
 }

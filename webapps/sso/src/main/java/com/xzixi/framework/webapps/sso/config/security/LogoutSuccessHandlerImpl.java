@@ -1,8 +1,9 @@
-package com.xzixi.framework.webapps.content.config.security;
+package com.xzixi.framework.webapps.sso.config.security;
 
-import com.xzixi.framework.webapps.common.constant.SecurityConstant;
-import com.xzixi.framework.webapps.content.util.WebUtils;
 import com.xzixi.framework.boot.webmvc.model.Result;
+import com.xzixi.framework.webapps.common.constant.SecurityConstant;
+import com.xzixi.framework.webapps.sso.service.ITokenService;
+import com.xzixi.framework.webapps.sso.util.WebUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import java.util.Objects;
 
 /**

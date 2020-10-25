@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -57,7 +58,7 @@ public class AppController {
     @GetMapping("/uid/{uid}")
     @ApiOperation(value = "根据uid查询应用")
     public Result<App> getByUid(
-            @ApiParam(value = "应用uid", required = true) @NotNull(message = "应用uid不能为空！") @PathVariable String uid) {
+            @ApiParam(value = "应用uid", required = true) @NotBlank(message = "应用uid不能为空！") @PathVariable String uid) {
         App app = appService.getByUid(uid);
         return new Result<>(app);
     }
@@ -75,7 +76,7 @@ public class AppController {
     @ApiOperation(value = "更新应用")
     public Result<?> update(@Validated({AppUpdate.class}) App app) {
         App appData = appService.getById(app.getId());
-        BeanUtils.copyProperties(app, appData);
+        BeanUtils.copyPropertiesIgnoreNull(app, appData);
         if (appService.updateById(appData)) {
             return new Result<>();
         }

@@ -22,10 +22,8 @@ spring:
 
 swagger2:
   enable: true # 启用swagger2
+  auth-api:
+    enable: true
 
 log:
   home: /data/logs/portal/sso # 日志目录
-
-reset-password-url: http://localhost:3000/reset-password.html
-
-user-activate-url: http://localhost:3000/user-activate.html

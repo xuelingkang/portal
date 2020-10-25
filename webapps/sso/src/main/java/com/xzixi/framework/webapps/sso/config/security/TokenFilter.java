@@ -1,11 +1,14 @@
-package com.xzixi.framework.webapps.content.config.security;
+package com.xzixi.framework.webapps.sso.config.security;
 
-import com.xzixi.framework.webapps.common.constant.SecurityConstant;
-import com.xzixi.framework.webapps.common.model.po.Token;
-import com.xzixi.framework.webapps.common.model.po.User;
-import com.xzixi.framework.webapps.common.model.vo.UserVO;
-import com.xzixi.framework.webapps.content.util.WebUtils;
+import com.xzixi.framework.boot.webmvc.exception.ClientException;
 import com.xzixi.framework.boot.webmvc.model.Result;
+import com.xzixi.framework.webapps.common.constant.SecurityConstant;
+import com.xzixi.framework.webapps.common.feign.RemoteUserService;
+import com.xzixi.framework.webapps.common.model.po.Token;
+import com.xzixi.framework.webapps.common.model.vo.UserDetailsImpl;
+import com.xzixi.framework.webapps.common.model.vo.UserVO;
+import com.xzixi.framework.webapps.sso.service.ITokenService;
+import com.xzixi.framework.webapps.sso.util.WebUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,11 +29,10 @@ import java.util.Objects;
 @Component
 public class TokenFilter extends OncePerRequestFilter {
 
-    private static final Long MINUTES_10 = 10 * 60 * 1000L;
     @Autowired
     private ITokenService tokenService;
     @Autowired
-    private IUserService userService;
+    private RemoteUserService remoteUserService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -39,7 +41,6 @@ public class TokenFilter extends OncePerRequestFilter {
             try {
                 Token token = tokenService.getToken(signature);
                 if (token != null) {
-                    token = checkExpireTime(token);
                     setAuthentication(token, response);
                 }
             } catch (Exception e) {
@@ -57,49 +58,35 @@ public class TokenFilter extends OncePerRequestFilter {
      * @param token token对象
      */
     private void setAuthentication(Token token, HttpServletResponse response) {
-        User user = userService.getById(token.getUserId(), false);
+        Result<UserVO> getByIdResult = remoteUserService.getById(token.getUserId());
+        if (getByIdResult.getCode() != 200) {
+            throw new ClientException(getByIdResult.getCode(), getByIdResult.getMessage());
+        }
 
-        if (user == null) {
+        UserVO userVO = getByIdResult.getData();
+        if (userVO == null) {
             Result<?> result = new Result<>(401, "账户不存在或已被删除！", null);
             WebUtils.printJson(response, result);
             return;
         }
 
         // 检查是否激活
-        if (!user.getActivated()) {
+        if (!userVO.getActivated()) {
             Result<?> result = new Result<>(401, "账户未激活！", null);
             WebUtils.printJson(response, result);
             return;
         }
 
         // 检查是否锁定
-        if (user.getLocked()) {
+        if (userVO.getLocked()) {
             Result<?> result = new Result<>(401, "账户已被锁定！", null);
             WebUtils.printJson(response, result);
             return;
         }
 
-        UserVO userVO = userService.buildVO(user, new UserVO.BuildOption(true, true));
-
         UserDetailsImpl userDetails = new UserDetailsImpl(userVO);
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails,
                 null, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-    }
-
-    /**
-     * 过期时间与当前时间对比，临近过期10分钟内的话，刷新token
-     *
-     * @param token Token
-     * @return Token
-     */
-    private Token checkExpireTime(Token token) {
-        long expireTime = token.getExpireTime();
-        long currentTime = System.currentTimeMillis();
-        if (expireTime - currentTime <= MINUTES_10) {
-            // 刷新token
-            token = tokenService.refreshToken(token.getSignature());
-        }
-        return token;
     }
 }

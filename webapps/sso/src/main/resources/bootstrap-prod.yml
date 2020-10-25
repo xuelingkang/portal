@@ -25,7 +25,3 @@ swagger2:
 
 log:
   home: /var/log/portal/sso # 日志目录
-
-reset-password-url: https://xzixi.com/reset-password.html
-
-user-activate-url: https://xzixi.com/user-activate.html

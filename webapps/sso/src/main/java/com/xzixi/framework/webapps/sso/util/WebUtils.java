@@ -1,4 +1,4 @@
-package com.xzixi.framework.webapps.content.util;
+package com.xzixi.framework.webapps.sso.util;
 
 import com.alibaba.fastjson.JSON;
 import com.xzixi.framework.boot.webmvc.exception.ProjectException;

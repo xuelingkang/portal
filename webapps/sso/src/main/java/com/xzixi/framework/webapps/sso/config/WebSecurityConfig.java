@@ -1,12 +1,10 @@
-package com.xzixi.framework.webapps.content.config;
+package com.xzixi.framework.webapps.sso.config;
 
-import com.xzixi.framework.webapps.content.config.security.TokenFilter;
+import com.xzixi.framework.webapps.sso.config.security.TokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.AccessDecisionManager;
-import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -17,8 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -45,10 +41,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private AccessDeniedHandler accessDeniedHandler;
     @Autowired
     private TokenFilter tokenFilter;
-    @Autowired
-    private FilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource;
-    @Autowired
-    private AccessDecisionManager accessDecisionManager;
     @Autowired
     @Qualifier("userDetailsServiceImpl")
     private UserDetailsService userDetailsService;
@@ -86,20 +78,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         // 基于token，所以不需要session
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests()
-                // 放开所有路径
-                .antMatchers("/**").permitAll()
-                // 真正的授权决策
-                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
-                    @Override
-                    public <O extends FilterSecurityInterceptor> O postProcess(O o) {
-                        // 匹配权限
-                        o.setSecurityMetadataSource(filterInvocationSecurityMetadataSource);
-                        // 授权决策
-                        o.setAccessDecisionManager(accessDecisionManager);
-                        return o;
-                    }
-                });
+        // 放开所有路径
+        http.authorizeRequests().antMatchers("/**").permitAll();
         http.formLogin()
                 .loginProcessingUrl("/login")
                 // 认证成功

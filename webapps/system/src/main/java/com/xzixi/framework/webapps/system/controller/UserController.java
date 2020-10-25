@@ -62,14 +62,20 @@ public class UserController {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    @GetMapping
+    @GetMapping("/page")
     @ApiOperation(value = "分页查询用户")
     public Result<Pagination<UserVO>> page(UserSearchParams searchParams) {
         searchParams.setDefaultOrders("createTime desc");
         Pagination<User> userPage = userService.page(searchParams.buildPagination(), searchParams.buildQueryParams());
-        userPage.getRecords().forEach(user -> user.setPassword(null));
         Pagination<UserVO> page = userService.buildVO(userPage, new UserVO.BuildOption(false, false));
         return new Result<>(page);
+    }
+
+    @GetMapping("/one")
+    @ApiOperation(value = "根据条件查询一个用户")
+    public Result<User> getOne(QueryParams<User> queryParams) {
+        User user = userService.getOne(queryParams);
+        return new Result<>(user);
     }
 
     @GetMapping("/{id}")
@@ -77,7 +83,6 @@ public class UserController {
     public Result<UserVO> getById(
             @ApiParam(value = "用户id", required = true) @NotNull(message = "用户id不能为空！") @PathVariable Integer id) {
         UserVO userVO = userService.buildVO(id, new UserVO.BuildOption(true, true));
-        userVO.setPassword(null);
         return new Result<>(userVO);
     }
 
@@ -153,6 +158,19 @@ public class UserController {
             return new Result<>();
         }
         throw new ServerException(ids, "解锁用户账户失败！");
+    }
+
+    @PatchMapping("/login-time")
+    @ApiOperation(value = "更新登录时间")
+    public Result<?> updateLoginTime(@ApiParam(value = "用户id", required = true) @NotNull(message = "用户id不能为空！") @RequestParam Integer id,
+                                     @ApiParam(value = "登录时间", required = true) @NotNull(message = "登录时间不能为空") @RequestParam Long loginTime) {
+        User user = new User();
+        user.setId(id);
+        user.setLoginTime(loginTime);
+        if (userService.updateByIdIgnoreNullProps(user)) {
+            return new Result<>();
+        }
+        throw new ServerException(id, "更新登录时间失败！");
     }
 
     @DeleteMapping

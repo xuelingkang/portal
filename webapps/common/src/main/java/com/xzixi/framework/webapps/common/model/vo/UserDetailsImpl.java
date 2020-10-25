@@ -1,7 +1,6 @@
-package com.xzixi.framework.webapps.content.config.security;
+package com.xzixi.framework.webapps.common.model.vo;
 
 import com.xzixi.framework.webapps.common.model.po.Authority;
-import com.xzixi.framework.webapps.common.model.vo.UserVO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections.CollectionUtils;

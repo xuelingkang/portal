@@ -1,10 +1,13 @@
-package com.xzixi.framework.webapps.content.config.security;
+package com.xzixi.framework.webapps.sso.config.security;
 
 import com.xzixi.framework.boot.webmvc.model.Result;
+import com.xzixi.framework.webapps.common.feign.RemoteUserService;
 import com.xzixi.framework.webapps.common.model.po.Token;
 import com.xzixi.framework.webapps.common.model.vo.TokenVO;
+import com.xzixi.framework.webapps.common.model.vo.UserDetailsImpl;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
-import com.xzixi.framework.webapps.content.util.WebUtils;
+import com.xzixi.framework.webapps.sso.service.ITokenService;
+import com.xzixi.framework.webapps.sso.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -15,15 +18,17 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 认证成功
+ * TODO 认证成功回调应用
  *
  * @author 薛凌康
  */
 @Component
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
+
     @Autowired
     private ITokenService tokenService;
     @Autowired
-    private IUserService userService;
+    private RemoteUserService remoteUserService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -35,12 +40,12 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
 
         // 返回token
         user.setPassword(null);
+        user.setLoginTime(token.getLoginTime());
         TokenVO tokenVO = new TokenVO(token).setUser(user);
         Result<TokenVO> result = new Result<>(200, "登录成功！", tokenVO);
         WebUtils.printJson(response, result);
 
         // 设置登录时间
-        user.setLoginTime(token.getLoginTime());
-        userService.updateByIdIgnoreNullProps(user);
+        remoteUserService.updateLoginTime(user.getId(), user.getLoginTime());
     }
 }
