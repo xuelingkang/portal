@@ -26,7 +26,7 @@
         <module>common</module>
         <module>content</module>
         <module>gateway</module>
-        <module>sso</module>
+        <module>sso-server</module>
         <module>system</module>
         <module>task</module>
         <module>notice</module>
