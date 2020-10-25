@@ -1,5 +1,7 @@
 package ${package.Controller};
 
+import io.swagger.annotations.Api;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 #if(${restControllerStyle})
@@ -10,6 +12,8 @@ import org.springframework.stereotype.Controller;
 #if(${superControllerClassPackage})
 import ${superControllerClassPackage};
 #end
+
+import static com.xzixi.framework.webapps.common.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * $!{table.comment} 前端控制器
@@ -22,7 +26,9 @@ import ${superControllerClassPackage};
 #else
 @Controller
 #end
-@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+@RequestMapping(value = "#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end", produces = RESPONSE_MEDIA_TYPE)
+@Api(tags = "${table.comment}")
+@Validated
 #if(${superControllerClass})
 public class ${table.controllerName} extends ${superControllerClass} {
 #else
