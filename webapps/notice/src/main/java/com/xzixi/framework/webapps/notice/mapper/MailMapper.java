@@ -1,7 +1,7 @@
-package com.xzixi.framework.webapps.content.mapper;
+package com.xzixi.framework.webapps.notice.mapper;
 
-import com.xzixi.framework.webapps.common.model.po.Mail;
 import com.xzixi.framework.boot.webmvc.mapper.IBaseMapper;
+import com.xzixi.framework.webapps.common.model.po.Mail;
 
 /**
  * @author 薛凌康

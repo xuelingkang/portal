@@ -57,10 +57,34 @@ spring:
       cache-null-values: true # 缓存为null的value，默认true
       time-to-live: 30m # 缓存有效时间
 
+  # 邮件
+  mail:
+    host: smtp.163.com
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          socketFactory:
+            # SSL证书Socket工厂
+            class: javax.net.ssl.SSLSocketFactory
+            # 使用SMTPS协议465端口
+            port: 465
+          ssl:
+            trust: smtp.163.com
+
+feign:
+  client:
+    config:
+      default:
+        requestInterceptors: com.xzixi.framework.boot.webmvc.config.feign.FeignRequestHeaderInterceptor
+
 # mybatis plus
 mybatis-plus:
   mapper-locations: classpath:/mapper/*Mapper.xml # mapper文件路径
-  type-handlers-package: com.xzixi.framework.webapps.common.typehandler
+  type-handlers-package: com.xzixi.framework.boot.webmvc.typehandler
   configuration:
     map-underscore-to-camel-case: true # 驼峰命名
     cache-enabled: true # 是否开启缓存

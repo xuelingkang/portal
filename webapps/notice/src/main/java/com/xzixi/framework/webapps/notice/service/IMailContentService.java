@@ -1,7 +1,7 @@
-package com.xzixi.framework.webapps.content.service;
+package com.xzixi.framework.webapps.notice.service;
 
-import com.xzixi.framework.webapps.common.model.po.MailContent;
 import com.xzixi.framework.boot.webmvc.service.IBaseService;
+import com.xzixi.framework.webapps.common.model.po.MailContent;
 
 import java.util.Collection;
 import java.util.List;

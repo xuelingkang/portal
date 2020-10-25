@@ -1,14 +1,13 @@
-package com.xzixi.framework.webapps.content.controller;
+package com.xzixi.framework.webapps.notice.controller;
 
+import com.xzixi.framework.boot.webmvc.model.Result;
+import com.xzixi.framework.boot.webmvc.model.search.Pagination;
 import com.xzixi.framework.webapps.common.model.enums.MailType;
 import com.xzixi.framework.webapps.common.model.params.MailSearchParams;
 import com.xzixi.framework.webapps.common.model.po.Mail;
 import com.xzixi.framework.webapps.common.model.valid.MailSave;
 import com.xzixi.framework.webapps.common.model.vo.MailVO;
-import com.xzixi.framework.webapps.content.util.SecurityUtils;
-import com.xzixi.framework.boot.webmvc.model.Result;
-import com.xzixi.framework.boot.webmvc.model.search.Pagination;
-import com.xzixi.framework.webapps.content.service.IMailService;
+import com.xzixi.framework.webapps.notice.service.IMailService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -55,7 +54,7 @@ public class MailController {
     @PostMapping
     @ApiOperation(value = "发送邮件")
     public Result<?> send(@Validated({MailSave.class}) @RequestBody MailVO mailVO) {
-        mailVO.setSendUserId(SecurityUtils.getCurrentUserId());
+//        mailVO.setSendUserId(SecurityUtils.getCurrentUserId());
         mailVO.setType(MailType.PUBLIC);
         mailVO.setCreateTime(System.currentTimeMillis());
         mailService.saveMail(mailVO, mailVO.getContent());

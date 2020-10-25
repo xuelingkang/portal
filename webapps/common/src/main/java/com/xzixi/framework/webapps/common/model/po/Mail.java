@@ -6,7 +6,7 @@ import com.xzixi.framework.webapps.common.model.enums.MailStatus;
 import com.xzixi.framework.webapps.common.model.enums.MailType;
 import com.xzixi.framework.webapps.common.model.valid.MailSave;
 import com.xzixi.framework.boot.webmvc.model.BaseModel;
-import com.xzixi.framework.webapps.common.typehandler.IntegerListTypeHandler;
+import com.xzixi.framework.boot.webmvc.typehandler.IntegerListTypeHandler;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

@@ -114,7 +114,7 @@ spring:
 # mybatis plus
 mybatis-plus:
   mapper-locations: classpath:/mapper/*Mapper.xml # mapper文件路径
-  type-handlers-package: com.xzixi.framework.webapps.common.typehandler
+  type-handlers-package: com.xzixi.framework.boot.webmvc.typehandler
   configuration:
     map-underscore-to-camel-case: true # 驼峰命名
     cache-enabled: true # 是否开启缓存

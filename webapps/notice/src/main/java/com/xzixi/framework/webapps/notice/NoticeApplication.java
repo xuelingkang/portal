@@ -1,9 +1,8 @@
 package com.xzixi.framework.webapps.notice;
 
-import com.xzixi.framework.boot.webmvc.config.async.annotation.EnableFrameworkAsync;
 import com.xzixi.framework.boot.webmvc.config.cache.annotation.EnableFrameworkCache;
-import com.xzixi.framework.boot.webmvc.config.elasticsearch.annotation.EnableFrameworkElasticsearch;
 import com.xzixi.framework.boot.webmvc.config.exception.annotation.EnableFrameworkExceptionHandler;
+import com.xzixi.framework.boot.webmvc.config.feign.EnableFrameworkFeign;
 import com.xzixi.framework.boot.webmvc.config.json.annotation.EnableFrameworkJson;
 import com.xzixi.framework.boot.webmvc.config.mail.annotation.EnableFrameworkMail;
 import com.xzixi.framework.boot.webmvc.config.mybatis.annotation.EnableFrameworkMybatis;
@@ -17,14 +16,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2020-10-22
  */
 @SpringBootApplication
-@EnableFrameworkAsync
 @EnableFrameworkCache
-@EnableFrameworkElasticsearch
 @EnableFrameworkJson
 @EnableFrameworkMail
 @EnableFrameworkMybatis
 @EnableFrameworkValidation
 @EnableFrameworkExceptionHandler
+@EnableFrameworkFeign
 @MapperScan(basePackages = "com.xzixi.framework.webapps.notice.mapper")
 public class NoticeApplication {
 

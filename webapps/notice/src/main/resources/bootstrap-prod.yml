@@ -33,6 +33,11 @@ spring:
         max-idle: 8 # 连接池中的最大空闲连接
         min-idle: 1 # 连接池中的最小空闲连接
 
+  # 邮件
+  mail:
+    username: xxxxxx@163.com
+    password: xxxxxx
+
 swagger2:
   enable: false # 关闭swagger2
 

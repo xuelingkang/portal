@@ -17,7 +17,6 @@ import com.xzixi.framework.boot.webmvc.model.search.Pagination;
 import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
 import com.xzixi.framework.boot.webmvc.service.IBelongingService;
 import com.xzixi.framework.boot.webmvc.util.BeanUtils;
-import com.xzixi.framework.webapps.content.service.IMailService;
 import com.xzixi.framework.webapps.content.service.IUserRoleLinkService;
 import com.xzixi.framework.webapps.content.service.IUserService;
 import io.swagger.annotations.Api;

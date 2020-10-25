@@ -1,10 +1,10 @@
-package com.xzixi.framework.webapps.content.service.impl;
+package com.xzixi.framework.webapps.notice.service.impl;
 
-import com.xzixi.framework.webapps.common.model.po.MailContent;
 import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
 import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
-import com.xzixi.framework.webapps.content.data.IMailContentData;
-import com.xzixi.framework.webapps.content.service.IMailContentService;
+import com.xzixi.framework.webapps.common.model.po.MailContent;
+import com.xzixi.framework.webapps.notice.data.IMailContentData;
+import com.xzixi.framework.webapps.notice.service.IMailContentService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
