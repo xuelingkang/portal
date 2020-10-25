@@ -51,6 +51,10 @@ public class ${entity} implements Serializable {
      * ${field.comment}
      */
   #end
+#else
+  #if(${swagger2} && ${field.keyFlag})
+    @ApiModelProperty(value = "${table.comment}id")
+  #end
 #end
 #if(${field.keyFlag})
 ## 主键
