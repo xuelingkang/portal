@@ -1,7 +1,7 @@
-package com.xzixi.framework.webapps.content.service;
+package com.xzixi.framework.webapps.task.service;
 
-import com.xzixi.framework.webapps.common.model.po.JobParameter;
 import com.xzixi.framework.boot.webmvc.service.IBaseService;
+import com.xzixi.framework.webapps.common.model.po.JobParameter;
 
 import java.util.Collection;
 import java.util.List;

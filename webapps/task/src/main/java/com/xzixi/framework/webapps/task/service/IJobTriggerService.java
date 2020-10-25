@@ -1,4 +1,4 @@
-package com.xzixi.framework.webapps.content.service;
+package com.xzixi.framework.webapps.task.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.xzixi.framework.webapps.common.model.po.Job;

@@ -1,11 +1,11 @@
-package com.xzixi.framework.webapps.content.service.impl;
+package com.xzixi.framework.webapps.task.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.xzixi.framework.webapps.common.model.po.Job;
 import com.xzixi.framework.webapps.common.model.po.JobTrigger;
-import com.xzixi.framework.webapps.content.mapper.JobTriggerMapper;
-import com.xzixi.framework.webapps.content.service.IJobTriggerService;
+import com.xzixi.framework.webapps.task.mapper.JobTriggerMapper;
+import com.xzixi.framework.webapps.task.service.IJobTriggerService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 

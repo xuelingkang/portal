@@ -1,4 +1,4 @@
-package com.xzixi.framework.webapps.content.mapper;
+package com.xzixi.framework.webapps.task.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xzixi.framework.webapps.common.model.po.JobTrigger;

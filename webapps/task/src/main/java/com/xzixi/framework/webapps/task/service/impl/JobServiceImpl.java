@@ -1,4 +1,4 @@
-package com.xzixi.framework.webapps.content.service.impl;
+package com.xzixi.framework.webapps.task.service.impl;
 
 import com.xzixi.framework.boot.webmvc.exception.ClientException;
 import com.xzixi.framework.boot.webmvc.exception.ProjectException;
@@ -10,8 +10,8 @@ import com.xzixi.framework.webapps.common.model.po.JobTemplate;
 import com.xzixi.framework.webapps.common.model.po.JobTemplateParameter;
 import com.xzixi.framework.webapps.common.model.po.JobTrigger;
 import com.xzixi.framework.webapps.common.model.vo.JobVO;
-import com.xzixi.framework.webapps.content.data.IJobData;
-import com.xzixi.framework.webapps.content.service.*;
+import com.xzixi.framework.webapps.task.data.IJobData;
+import com.xzixi.framework.webapps.task.service.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -229,9 +229,9 @@ public class JobServiceImpl extends BaseServiceImpl<IJobData, com.xzixi.framewor
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(job.getCronExpression());
         // 创建任务
         // 任务类
-        Class<? extends org.quartz.Job> jobClass;
+        Class<? extends Job> jobClass;
         try {
-            jobClass = (Class<? extends org.quartz.Job>) Class.forName(jobTemplate.getClassName());
+            jobClass = (Class<? extends Job>) Class.forName(jobTemplate.getClassName());
         } catch (ClassNotFoundException e) {
             throw new ProjectException("获取任务类对象出错！", e);
         }

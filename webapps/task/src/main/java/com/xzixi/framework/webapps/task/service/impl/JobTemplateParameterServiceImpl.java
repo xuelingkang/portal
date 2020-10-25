@@ -1,10 +1,10 @@
-package com.xzixi.framework.webapps.content.service.impl;
+package com.xzixi.framework.webapps.task.service.impl;
 
-import com.xzixi.framework.webapps.content.data.IJobTemplateParameterData;
-import com.xzixi.framework.webapps.common.model.po.JobTemplateParameter;
 import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
 import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
-import com.xzixi.framework.webapps.content.service.IJobTemplateParameterService;
+import com.xzixi.framework.webapps.common.model.po.JobTemplateParameter;
+import com.xzixi.framework.webapps.task.data.IJobTemplateParameterData;
+import com.xzixi.framework.webapps.task.service.IJobTemplateParameterService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;

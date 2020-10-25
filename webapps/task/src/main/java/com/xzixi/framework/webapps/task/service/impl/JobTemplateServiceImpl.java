@@ -1,14 +1,14 @@
-package com.xzixi.framework.webapps.content.service.impl;
+package com.xzixi.framework.webapps.task.service.impl;
 
-import com.xzixi.framework.webapps.common.model.po.JobTemplate;
-import com.xzixi.framework.webapps.common.model.po.JobTemplateParameter;
-import com.xzixi.framework.webapps.common.model.vo.JobTemplateVO;
 import com.xzixi.framework.boot.webmvc.exception.ServerException;
 import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
 import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
-import com.xzixi.framework.webapps.content.data.IJobTemplateData;
-import com.xzixi.framework.webapps.content.service.IJobTemplateParameterService;
-import com.xzixi.framework.webapps.content.service.IJobTemplateService;
+import com.xzixi.framework.webapps.common.model.po.JobTemplate;
+import com.xzixi.framework.webapps.common.model.po.JobTemplateParameter;
+import com.xzixi.framework.webapps.common.model.vo.JobTemplateVO;
+import com.xzixi.framework.webapps.task.data.IJobTemplateData;
+import com.xzixi.framework.webapps.task.service.IJobTemplateParameterService;
+import com.xzixi.framework.webapps.task.service.IJobTemplateService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

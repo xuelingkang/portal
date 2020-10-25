@@ -1,13 +1,13 @@
-package com.xzixi.framework.webapps.content.controller;
+package com.xzixi.framework.webapps.task.controller;
 
+import com.xzixi.framework.boot.webmvc.model.Result;
+import com.xzixi.framework.boot.webmvc.model.search.Pagination;
 import com.xzixi.framework.webapps.common.model.params.JobTemplateSearchParams;
 import com.xzixi.framework.webapps.common.model.po.JobTemplate;
 import com.xzixi.framework.webapps.common.model.valid.JobTemplateSave;
 import com.xzixi.framework.webapps.common.model.valid.JobTemplateUpdate;
 import com.xzixi.framework.webapps.common.model.vo.JobTemplateVO;
-import com.xzixi.framework.boot.webmvc.model.Result;
-import com.xzixi.framework.boot.webmvc.model.search.Pagination;
-import com.xzixi.framework.webapps.content.service.IJobTemplateService;
+import com.xzixi.framework.webapps.task.service.IJobTemplateService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

@@ -1,10 +1,10 @@
-package com.xzixi.framework.webapps.content.data.impl;
+package com.xzixi.framework.webapps.task.data.impl;
 
-import com.xzixi.framework.webapps.common.model.po.JobTemplateParameter;
 import com.xzixi.framework.boot.enhance.annotation.CacheEnhance;
 import com.xzixi.framework.boot.webmvc.data.impl.MybatisPlusDataImpl;
-import com.xzixi.framework.webapps.content.data.IJobTemplateParameterData;
-import com.xzixi.framework.webapps.content.mapper.JobTemplateParameterMapper;
+import com.xzixi.framework.webapps.common.model.po.JobTemplateParameter;
+import com.xzixi.framework.webapps.task.data.IJobTemplateParameterData;
+import com.xzixi.framework.webapps.task.mapper.JobTemplateParameterMapper;
 import org.springframework.stereotype.Service;
 
 /**
