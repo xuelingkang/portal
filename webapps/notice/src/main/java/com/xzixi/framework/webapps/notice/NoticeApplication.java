@@ -2,7 +2,6 @@ package com.xzixi.framework.webapps.notice;
 
 import com.xzixi.framework.boot.webmvc.config.cache.annotation.EnableFrameworkCache;
 import com.xzixi.framework.boot.webmvc.config.exception.annotation.EnableFrameworkExceptionHandler;
-import com.xzixi.framework.boot.webmvc.config.feign.EnableFrameworkFeign;
 import com.xzixi.framework.boot.webmvc.config.json.annotation.EnableFrameworkJson;
 import com.xzixi.framework.boot.webmvc.config.mail.annotation.EnableFrameworkMail;
 import com.xzixi.framework.boot.webmvc.config.mybatis.annotation.EnableFrameworkMybatis;
@@ -22,7 +21,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableFrameworkMybatis
 @EnableFrameworkValidation
 @EnableFrameworkExceptionHandler
-@EnableFrameworkFeign
 @MapperScan(basePackages = "com.xzixi.framework.webapps.notice.mapper")
 public class NoticeApplication {
 
