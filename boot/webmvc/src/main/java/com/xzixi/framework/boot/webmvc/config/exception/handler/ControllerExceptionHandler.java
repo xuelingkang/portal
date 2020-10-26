@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.xzixi.framework.boot.webmvc.exception.ClientException;
 import com.xzixi.framework.boot.webmvc.exception.ProjectException;
+import com.xzixi.framework.boot.webmvc.exception.RemoteException;
 import com.xzixi.framework.boot.webmvc.exception.ServerException;
 import com.xzixi.framework.boot.webmvc.model.Result;
 import lombok.extern.slf4j.Slf4j;
@@ -142,6 +143,18 @@ public class ControllerExceptionHandler {
      */
     @ExceptionHandler({ClientException.class})
     public Result<?> handleClientException(ClientException e, HttpServletResponse response) {
+        response.setStatus(e.getStatus());
+        return new Result<>(e.getStatus(), e.getMessage(), null);
+    }
+
+    /**
+     * 调用远程接口异常
+     *
+     * @param e RemoteException
+     * @return Result
+     */
+    @ExceptionHandler({RemoteException.class})
+    public Result<?> handleRemoteException(RemoteException e, HttpServletResponse response) {
         response.setStatus(e.getStatus());
         return new Result<>(e.getStatus(), e.getMessage(), null);
     }

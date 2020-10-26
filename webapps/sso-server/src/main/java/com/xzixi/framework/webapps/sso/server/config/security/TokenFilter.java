@@ -1,6 +1,6 @@
 package com.xzixi.framework.webapps.sso.server.config.security;
 
-import com.xzixi.framework.boot.webmvc.exception.ClientException;
+import com.xzixi.framework.boot.webmvc.exception.RemoteException;
 import com.xzixi.framework.boot.webmvc.model.Result;
 import com.xzixi.framework.webapps.common.constant.SecurityConstant;
 import com.xzixi.framework.webapps.common.feign.RemoteUserService;
@@ -60,7 +60,7 @@ public class TokenFilter extends OncePerRequestFilter {
     private void setAuthentication(Token token, HttpServletResponse response) {
         Result<UserVO> getByIdResult = remoteUserService.getById(token.getUserId());
         if (getByIdResult.getCode() != 200) {
-            throw new ClientException(getByIdResult.getCode(), getByIdResult.getMessage());
+            throw new RemoteException(getByIdResult.getCode(), getByIdResult.getMessage());
         }
 
         UserVO userVO = getByIdResult.getData();

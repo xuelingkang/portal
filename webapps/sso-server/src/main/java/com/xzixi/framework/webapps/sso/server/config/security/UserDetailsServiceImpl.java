@@ -1,6 +1,7 @@
 package com.xzixi.framework.webapps.sso.server.config.security;
 
 import com.xzixi.framework.boot.webmvc.exception.ClientException;
+import com.xzixi.framework.boot.webmvc.exception.RemoteException;
 import com.xzixi.framework.boot.webmvc.model.Result;
 import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
 import com.xzixi.framework.webapps.common.feign.RemoteUserService;
@@ -31,7 +32,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         Result<User> getOneUserResult = remoteUserService.getOne(new QueryParams<>(new User().setUsername(username)));
         if (getOneUserResult.getCode() != 200) {
-            throw new ClientException(getOneUserResult.getCode(), getOneUserResult.getMessage());
+            throw new RemoteException(getOneUserResult.getCode(), getOneUserResult.getMessage());
         }
 
         User user = getOneUserResult.getData();
@@ -41,7 +42,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         Result<UserVO> getByIdResult = remoteUserService.getById(user.getId());
         if (getByIdResult.getCode() != 200) {
-            throw new ClientException(getByIdResult.getCode(), getByIdResult.getMessage());
+            throw new RemoteException(getByIdResult.getCode(), getByIdResult.getMessage());
         }
 
         return new UserDetailsImpl(getByIdResult.getData());
