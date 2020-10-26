@@ -49,12 +49,10 @@ public class App extends BaseModel {
     private String name;
 
     @ApiModelProperty(value = "登录回调url")
-    @NotNull(groups = {AppSave.class, AppUpdate.class}, message = "登录回调url不能为空！")
     @Length(groups = {AppSave.class, AppUpdate.class}, max = 255, message = "登录回调url不能超过255字！")
     private String loginCallbackUrl;
 
     @ApiModelProperty(value = "登出回调url")
-    @NotNull(groups = {AppSave.class, AppUpdate.class}, message = "登出回调url不能为空！")
     @Length(groups = {AppSave.class, AppUpdate.class}, max = 255, message = "登出回调url不能超过255字！")
     private String logoutCallbackUrl;
 
