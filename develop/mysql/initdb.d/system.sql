@@ -29,8 +29,10 @@ DROP TABLE IF EXISTS `t_app`;
 CREATE TABLE `t_app` (
   `id` int NOT NULL AUTO_INCREMENT,
   `uid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '应用标识',
+  `secret` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '密钥',
   `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '应用名称',
-  `callback_url` varchar(255) COLLATE utf8mb4_bin NOT NULL COMMENT '登录回调url',
+  `login_callback_url` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '登录回调url',
+  `logout_callback_url` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '登出回调url',
   `seq` int NOT NULL DEFAULT '0' COMMENT '顺序',
   PRIMARY KEY (`id`),
   UNIQUE KEY `t_app_uk_uid` (`uid`),
@@ -44,7 +46,7 @@ CREATE TABLE `t_app` (
 
 LOCK TABLES `t_app` WRITE;
 /*!40000 ALTER TABLE `t_app` DISABLE KEYS */;
-INSERT INTO `t_app` VALUES (1,'admin','管理后台','http://admin.xzixi.com/admin/callback',100),(2,'master','前台','http://www.xzixi.com/master/callback',200);
+INSERT INTO `t_app` VALUES (1,'admin','2kd034jdkbwe4p','管理后台','http://admin.xzixi.com/admin/callback/login','http://admin.xzixi.com/admin/callback/logout',100),(2,'master','2kd034jdkbwe4p','前台','http://www.xzixi.com/master/callback/login','http://www.xzixi.com/master/callback/logout',200);
 /*!40000 ALTER TABLE `t_app` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,4 +235,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-10-25 18:57:06
+-- Dump completed on 2020-10-27  1:30:09
