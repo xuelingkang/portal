@@ -13,42 +13,10 @@ spring:
         password: portal
     gateway:
       routes:
-        - id: content
-          uri: lb://portal-content
-          predicates:
-            - Path=/content/**
-          filters:
-            - StripPrefix=1
         - id: sso
           uri: lb://portal-sso
           predicates:
             - Path=/sso/**
-          filters:
-            - StripPrefix=1
-        - id: system
-          uri: lb://portal-system
-          predicates:
-            - Path=/system/**
-          filters:
-            - StripPrefix=1
-        - id: task
-          uri: lb://portal-task
-          predicates:
-            - Path=/task/**
-          filters:
-            - StripPrefix=1
-        - id: notice
-          uri: lb://portal-notice
-          predicates:
-            - Path=/notice/**
-          filters:
-            - StripPrefix=1
-        - id: queue
-          uri: lb://portal-queue
-          predicates:
-            - Path=/queue/**
-          filters:
-            - StripPrefix=1
         - id: admin
           uri: lb://portal-admin
           predicates:
@@ -59,12 +27,6 @@ spring:
           uri: lb://portal-master
           predicates:
             - Path=/master/**
-          filters:
-            - StripPrefix=1
-        - id: file
-          uri: lb://portal-file
-          predicates:
-            - Path=/file/**
           filters:
             - StripPrefix=1
 
