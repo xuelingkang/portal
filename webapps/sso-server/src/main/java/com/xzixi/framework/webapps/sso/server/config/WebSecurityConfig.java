@@ -1,8 +1,11 @@
 package com.xzixi.framework.webapps.sso.server.config;
 
 import com.xzixi.framework.webapps.sso.server.config.security.TokenFilter;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,8 +21,13 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
+import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
+import java.security.Key;
+
 /**
  * 认证授权配置
+ * TODO 研究一下cas
  *
  * @author 薛凌康
  */
@@ -27,6 +35,8 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Value("${jwt.secret}")
+    private String jwtSecret;
     @Autowired
     private AuthenticationSuccessHandler authenticationSuccessHandler;
     @Autowired
@@ -44,6 +54,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    /**
+     * 使用密钥生成jwt加密需要的key
+     *
+     * @return key
+     */
+    @Bean
+    public Key key() {
+        byte[] secretBytes = DatatypeConverter.parseBase64Binary(jwtSecret);
+        return new SecretKeySpec(secretBytes, SignatureAlgorithm.HS256.getJcaName());
+    }
 
     /**
      * 定义认证用户信息获取来源，密码校验规则等

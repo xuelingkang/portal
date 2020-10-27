@@ -13,7 +13,7 @@ public interface ISignService {
     /**
      * 默认超时时间 5分钟
      */
-    long DEFAULT_TIMEOUT = 1000 * 60 * 5;
+    long DEFAULT_TIMEOUT = 5 * 60 * 1000;
 
     /**
      * 密钥参数名称
