@@ -1,8 +1,6 @@
-package com.xzixi.framework.webapps.common.service;
+package com.xzixi.framework.boot.webmvc.service;
 
 import java.util.Map;
-
-import static com.xzixi.framework.webapps.common.constant.SignConstant.DEFAULT_TIMEOUT;
 
 /**
  * 签名工具
@@ -11,6 +9,31 @@ import static com.xzixi.framework.webapps.common.constant.SignConstant.DEFAULT_T
  * @date 2020-10-27
  */
 public interface ISignService {
+
+    /**
+     * 默认超时时间 5分钟
+     */
+    long DEFAULT_TIMEOUT = 1000 * 60 * 5;
+
+    /**
+     * 密钥参数名称
+     */
+    String SECRET_NAME = "secret";
+
+    /**
+     * 时间戳参数名称
+     */
+    String TIMESTAMP_NAME = "timestamp";
+
+    /**
+     * 键值对格式
+     */
+    String PAIR_FORMAT = "%s=%s";
+
+    /**
+     * 键值对分隔符
+     */
+    String DELIMITER = "&";
 
     /**
      * 使用密钥对参数签名

@@ -1,9 +1,9 @@
-package com.xzixi.framework.webapps.common.service.impl;
+package com.xzixi.framework.boot.webmvc.service.impl;
 
 import com.xzixi.framework.boot.webmvc.exception.ClientException;
 import com.xzixi.framework.boot.webmvc.exception.ProjectException;
 import com.xzixi.framework.boot.webmvc.util.TypeUtils;
-import com.xzixi.framework.webapps.common.service.ISignService;
+import com.xzixi.framework.boot.webmvc.service.ISignService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -12,9 +12,9 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import static com.xzixi.framework.webapps.common.constant.SignConstant.*;
-
 /**
+ * MD5实现签名
+ *
  * @author xuelingkang
  * @date 2020-10-27
  */

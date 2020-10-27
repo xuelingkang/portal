@@ -1,7 +1,7 @@
 package com.xzixi.framework.webapps.common.component;
 
-import com.xzixi.framework.webapps.common.service.ISignService;
-import com.xzixi.framework.webapps.common.service.impl.Md5SignServiceImpl;
+import com.xzixi.framework.boot.webmvc.service.ISignService;
+import com.xzixi.framework.boot.webmvc.service.impl.Md5SignServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
