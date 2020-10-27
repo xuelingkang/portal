@@ -5,7 +5,6 @@ import com.xzixi.framework.boot.webmvc.exception.ProjectException;
 import com.xzixi.framework.boot.webmvc.util.TypeUtils;
 import com.xzixi.framework.webapps.common.service.ISignService;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.nio.charset.StandardCharsets;
@@ -20,11 +19,6 @@ import static com.xzixi.framework.webapps.common.constant.SignConstant.*;
  * @date 2020-10-27
  */
 public class Md5SignServiceImpl implements ISignService {
-
-    @Override
-    public String genSecret(int length) {
-        return RandomStringUtils.randomAlphanumeric(length);
-    }
 
     @Override
     public String genSign(Map<String, Object> params, String secret) {

@@ -13,14 +13,6 @@ import static com.xzixi.framework.webapps.common.constant.SignConstant.DEFAULT_T
 public interface ISignService {
 
     /**
-     * 生成随机密钥
-     *
-     * @param length 密钥长度
-     * @return 密钥
-     */
-    String genSecret(int length);
-
-    /**
      * 使用密钥对参数签名
      *
      * @param params 参数，必须包含时间戳
