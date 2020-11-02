@@ -135,28 +135,6 @@
         <appender-ref ref="ERROR" />
     </root>
 
-    <!-- mybatis日志 -->
-    <appender name="MYBATIS" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <!-- 日志文件输出的文件名 -->
-            <FileNamePattern>${HOME}/mybatis/log-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
-            <!-- 日志文件保留天数 -->
-            <MaxHistory>${MAX_HISTORY}</MaxHistory>
-            <!-- 日志文件最大的大小 -->
-            <MaxFileSize>${MAX_SIZE}</MaxFileSize>
-        </rollingPolicy>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-            <charset>${CHARSET}</charset>
-        </encoder>
-    </appender>
-
-    <!-- mybatis日志 -->
-    <logger name="com.xzixi.framework.webapps.task.mapper" level="TRACE" additivity="true">
-        <appender-ref ref="MYBATIS" />
-    </logger>
-
     <!-- 开发环境 -->
     <springProfile name="dev">
         <!-- 控制台输出 -->
@@ -167,6 +145,28 @@
                 <charset>${CHARSET}</charset>
             </encoder>
         </appender>
+
+        <!-- mybatis日志 -->
+        <appender name="MYBATIS" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <!-- 日志文件输出的文件名 -->
+                <FileNamePattern>${HOME}/mybatis/log-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
+                <!-- 日志文件保留天数 -->
+                <MaxHistory>${MAX_HISTORY}</MaxHistory>
+                <!-- 日志文件最大的大小 -->
+                <MaxFileSize>${MAX_SIZE}</MaxFileSize>
+            </rollingPolicy>
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+                <charset>${CHARSET}</charset>
+            </encoder>
+        </appender>
+
+        <!-- mybatis日志 -->
+        <logger name="com.xzixi.framework.webapps.task.mapper" level="TRACE" additivity="true">
+            <appender-ref ref="MYBATIS" />
+        </logger>
 
         <!-- 日志输出级别 -->
         <root level="${ROOT_LEVEL}">
