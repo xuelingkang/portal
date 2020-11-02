@@ -18,7 +18,6 @@
 | 3 | `webmvc` | 项目架构核心 |
 
 - [更新日志](./UPDATELOG.md)
-- 最新版本号: **2.1.0**
 
 关键模块maven坐标
 
@@ -27,7 +26,7 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>enhance</artifactId>
-    <version>xxx</version>
+    <version>2.1.0</version>
     <scope>provided</scope>
 </dependency>
 ```
@@ -36,7 +35,7 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>webmvc</artifactId>
-    <version>xxx</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 ```xml
@@ -44,7 +43,7 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>sftp-client-spring-boot-starter</artifactId>
-    <version>xxx</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 ```xml
@@ -52,6 +51,6 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>swagger2-spring-boot-starter</artifactId>
-    <version>xxx</version>
+    <version>2.1.0</version>
 </dependency>
 ```
