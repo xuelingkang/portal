@@ -1,3 +1,20 @@
+/*
+ * The xzixi framework is based on spring framework, which simplifies development.
+ * Copyright (C) 2020  xuelingkang@163.com.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /**
  * 数据层，只允许业务层调用，介于业务层和持久层之间，访问数据库和缓存，将数据访问独立分出一层，原因如下：<br>
  * 1. 由于数据层的代码在编译期生成，如果和业务层不分开可能会有方法重名导致变异报错，增加调试成本<br>
