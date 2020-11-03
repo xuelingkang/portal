@@ -35,16 +35,33 @@ public class Result<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /** 状态码 */
+    /**
+     * 状态码
+     */
     private int code = 200;
 
-    /** 消息 */
+    /**
+     * 当状态码不等于200时，可能需要一个subCode来表示具体的错误
+     */
+    private int subCode = 0;
+
+    /**
+     * 消息
+     */
     private String message;
 
-    /** 数据 */
+    /**
+     * 数据
+     */
     private T data;
 
     public Result(T data) {
+        this.data = data;
+    }
+
+    public Result(int code, String message, T data) {
+        this.code = code;
+        this.message = message;
         this.data = data;
     }
 }
