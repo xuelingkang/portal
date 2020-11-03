@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.xzixi.framework.boot.webmvc.config.cache.RedisConstant.*;
+import static com.xzixi.framework.boot.webmvc.config.cache.RedisCacheConstant.*;
 
 /**
  * 根据id集合生成删除缓存key

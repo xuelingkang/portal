@@ -20,7 +20,7 @@ package com.xzixi.framework.boot.webmvc.config.cache;
 /**
  * @author 薛凌康
  */
-public interface RedisConstant {
+public interface RedisCacheConstant {
 
     /** 正则key前缀 */
     String REGEX_KEY_PREFIX = "regex=";

@@ -18,6 +18,7 @@
 package com.xzixi.framework.boot.webmvc.config.cache.annotation;
 
 import com.xzixi.framework.boot.webmvc.config.cache.RedisCacheConfig;
+import com.xzixi.framework.boot.webmvc.config.redis.RedisConfig;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -25,6 +26,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import(RedisCacheConfig.class)
+@Import({RedisConfig.class, RedisCacheConfig.class})
 public @interface EnableFrameworkCache {
 }

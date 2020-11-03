@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.xzixi.framework.boot.webmvc.config.cache.RedisConstant.*;
+import static com.xzixi.framework.boot.webmvc.config.cache.RedisCacheConstant.*;
 
 /**
  * 根据id或id集合数组生成key

@@ -30,7 +30,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static com.xzixi.framework.boot.webmvc.config.cache.RedisConstant.*;
+import static com.xzixi.framework.boot.webmvc.config.cache.RedisCacheConstant.*;
 
 /**
  * 使用其他非正式参数生成key

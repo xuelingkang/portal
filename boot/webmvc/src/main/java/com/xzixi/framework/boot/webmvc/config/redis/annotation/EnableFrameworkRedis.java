@@ -15,27 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.boot.webmvc.config.cache.generator;
+package com.xzixi.framework.boot.webmvc.config.redis.annotation;
 
-import org.springframework.cache.interceptor.KeyGenerator;
+import com.xzixi.framework.boot.webmvc.config.redis.RedisConfig;
+import org.springframework.context.annotation.Import;
 
-import java.lang.reflect.Method;
-
-import static com.xzixi.framework.boot.webmvc.config.cache.RedisCacheConstant.*;
+import java.lang.annotation.*;
 
 /**
- * 根据id生成删除缓存key
- *
- * @author 薛凌康
+ * @author xuelingkang
+ * @date 2020-11-03
  */
-public class DefaultEvictByIdKeyGenerator implements KeyGenerator {
-
-    @Override
-    public Object generate(Object target, Method method, Object... params) {
-        return target.getClass().getName() +
-                KEY_SEPARATOR +
-                GET_BY_ID_METHOD_NAME +
-                KEY_SEPARATOR +
-                params[0];
-    }
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Import({RedisConfig.class})
+public @interface EnableFrameworkRedis {
 }

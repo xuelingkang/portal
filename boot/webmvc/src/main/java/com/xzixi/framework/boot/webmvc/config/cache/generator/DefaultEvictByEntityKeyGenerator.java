@@ -22,7 +22,7 @@ import org.springframework.cache.interceptor.KeyGenerator;
 
 import java.lang.reflect.Method;
 
-import static com.xzixi.framework.boot.webmvc.config.cache.RedisConstant.*;
+import static com.xzixi.framework.boot.webmvc.config.cache.RedisCacheConstant.*;
 
 /**
  * @author 薛凌康

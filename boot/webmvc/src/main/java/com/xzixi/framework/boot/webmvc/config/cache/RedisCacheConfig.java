@@ -17,7 +17,6 @@
 
 package com.xzixi.framework.boot.webmvc.config.cache;
 
-import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.xzixi.framework.boot.webmvc.config.cache.extension.FuzzyEvictRedisCacheManager;
 import com.xzixi.framework.boot.webmvc.config.cache.generator.*;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
@@ -31,16 +30,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.LinkedHashMap;
 
-import static com.xzixi.framework.boot.webmvc.config.cache.RedisConstant.KEYS_SEPARATOR;
-import static com.xzixi.framework.boot.webmvc.config.cache.RedisConstant.REGEX_KEY_PREFIX;
+import static com.xzixi.framework.boot.webmvc.config.cache.RedisCacheConstant.KEYS_SEPARATOR;
+import static com.xzixi.framework.boot.webmvc.config.cache.RedisCacheConstant.REGEX_KEY_PREFIX;
 
 /**
  * redis缓存配置
@@ -51,30 +47,6 @@ import static com.xzixi.framework.boot.webmvc.config.cache.RedisConstant.REGEX_K
 @Configuration
 @EnableConfigurationProperties(CacheProperties.class)
 public class RedisCacheConfig {
-
-    @Bean
-    public RedisSerializer<String> stringRedisSerializer() {
-        return new StringRedisSerializer();
-    }
-
-    @Bean
-    public RedisSerializer<Object> objectRedisSerializer() {
-        return new GenericFastJsonRedisSerializer();
-    }
-
-    @Bean
-    public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory connectionFactory,
-                                                       RedisSerializer<String> stringRedisSerializer,
-                                                       RedisSerializer<Object> objectRedisSerializer) {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(connectionFactory);
-        // key序列化
-        redisTemplate.setKeySerializer(stringRedisSerializer);
-        // value序列化
-        redisTemplate.setValueSerializer(objectRedisSerializer);
-        redisTemplate.afterPropertiesSet();
-        return redisTemplate;
-    }
 
     @Bean
     public CacheManager cacheManager(
