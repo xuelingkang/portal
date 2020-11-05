@@ -19,9 +19,36 @@ package com.xzixi.framework.webapps.sso.server.service;
 
 /**
  * @author xuelingkang
- * @date 2020-11-05
+ * @date 2020-11-03
  */
-public interface ITokenService {
+public interface IRefreshTokenService extends ITokenService {
 
-    String decodeJwtToken(String jwtToken);
+    /**
+     * 创建并保存jwtToken
+     *
+     * @param userId 用户id
+     * @return jwtToken
+     */
+    String createAndSave(int userId);
+
+    /**
+     * 验证refreshToken
+     *
+     * @param refreshToken jwtToken
+     */
+    void check(String refreshToken);
+
+    /**
+     * 删除refreshToken
+     *
+     * @param refreshToken jwtToken
+     */
+    void delete(String refreshToken);
+
+    /**
+     * 删除refreshToken
+     *
+     * @param redisKey redisKey
+     */
+    void logout(String redisKey);
 }

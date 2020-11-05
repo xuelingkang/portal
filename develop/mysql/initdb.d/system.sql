@@ -2,7 +2,7 @@ SET CHARACTER SET utf8mb4;
 CREATE DATABASE portal_system DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 USE portal_system;
 
--- MySQL dump 10.13  Distrib 8.0.21, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.22, for Linux (x86_64)
 --
 -- Host: 127.0.0.1    Database: portal_system
 -- ------------------------------------------------------
@@ -37,7 +37,7 @@ CREATE TABLE `t_app` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `t_app_uk_uid` (`uid`),
   UNIQUE KEY `t_app_uk_name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='应用';
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin COMMENT='应用';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -46,7 +46,7 @@ CREATE TABLE `t_app` (
 
 LOCK TABLES `t_app` WRITE;
 /*!40000 ALTER TABLE `t_app` DISABLE KEYS */;
-INSERT INTO `t_app` VALUES (1,'admin','2kd034jdkbwe4p','管理后台','http://admin.xzixi.com/admin/callback/login','http://admin.xzixi.com/admin/callback/logout',100),(2,'master','2kd034jdkbwe4p','前台','http://www.xzixi.com/master/callback/login','http://www.xzixi.com/master/callback/logout',200);
+INSERT INTO `t_app` VALUES (1,'sso','bdk6wxs8r6uBN0yxXkmAi6Ej1+2EHkrgnZHp!eNbbph_wcofvIKbYYBGjHfJG5JS','单点登录',NULL,NULL,100),(2,'admin','6JD-FX!eS8%ffyKw4ynSJ8kOYhyUQW4YA894@4sztV%6spTrgFA_TA2tQ6L5SitQ','管理后台','http://admin.xzixi.com/admin/callback/login','http://admin.xzixi.com/admin/callback/logout',200),(3,'master','x1cTC6s&O8kMf6wZ%nBN1E_TfVCA9!!lx+gInK%-mczcy@MaRgnT!ojnjriA&Lsz','前台','http://www.xzixi.com/master/callback/login','http://www.xzixi.com/master/callback/logout',300);
 /*!40000 ALTER TABLE `t_app` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,4 +235,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-10-27  1:30:09
+-- Dump completed on 2020-11-03 22:15:41

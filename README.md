@@ -6,8 +6,9 @@
 
 1. 在develop目录下执行命令`docker-compose up -d`
 2. webapps下除`common`、`admin`、`master`、`sso`、`gateway`外，其他项目设置VM参数：`-javaagent:/path/to/aspectjweaver/aspectjweaver-1.9.6.jar`
-3. 使用maven package命令打包`enhance`和`starter`模块
-4. 启动`content`、`sso`、`gateway`项目
+3. **重要**，`enhance`模块**不要**开启idea的`Enable annotation processing`选项
+4. 使用maven package命令打包`enhance`和`starter`模块
+5. 启动项目
 
 ## boot模块说明
 

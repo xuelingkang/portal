@@ -20,10 +20,11 @@ package com.xzixi.framework.webapps.sso.server.config.security;
 import com.xzixi.framework.boot.webmvc.model.Result;
 import com.xzixi.framework.webapps.common.feign.RemoteUserService;
 import com.xzixi.framework.webapps.common.model.po.Token;
+import com.xzixi.framework.webapps.common.model.vo.SsoServerLoginResponse;
 import com.xzixi.framework.webapps.common.model.vo.TokenVO;
 import com.xzixi.framework.webapps.common.model.vo.UserDetailsImpl;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
-import com.xzixi.framework.webapps.sso.server.service.ITokenService;
+import com.xzixi.framework.webapps.sso.server.service.ITokenService2;
 import com.xzixi.framework.webapps.sso.server.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -43,7 +44,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
 
     @Autowired
-    private ITokenService tokenService;
+    private ITokenService2 tokenService;
     @Autowired
     private RemoteUserService remoteUserService;
 
@@ -52,6 +53,12 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         UserVO user = userDetails.getUser();
 
+        // TODO 响应
+        long now = System.currentTimeMillis();
+        SsoServerLoginResponse ssoServerLoginResponse = new SsoServerLoginResponse();
+        ssoServerLoginResponse.setLoginTime(now);
+
+        // TODO 重构
         // 保存token
         Token token = tokenService.saveToken(user.getId());
 

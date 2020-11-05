@@ -19,9 +19,37 @@ package com.xzixi.framework.webapps.sso.server.service;
 
 /**
  * @author xuelingkang
- * @date 2020-11-05
+ * @date 2020-11-03
  */
-public interface ITokenService {
+public interface ISsoAccessTokenService extends ITokenService {
 
-    String decodeJwtToken(String jwtToken);
+    /**
+     * 创建并保存jwtToken
+     *
+     * @param userId 用户id
+     * @return jwtToken
+     */
+    String createAndSave(int userId);
+
+    /**
+     * 挂载ssoAccessToken，单点登出时使用
+     *
+     * @param ssoAccessToken jwtToken
+     * @param refreshToken jwtToken
+     */
+    void mount(String ssoAccessToken, String refreshToken);
+
+    /**
+     * 删除ssoAccessToken
+     *
+     * @param ssoAccessToken jwtToken
+     */
+    void delete(String ssoAccessToken);
+
+    /**
+     * 删除挂载的节点和ssoAccessToken
+     *
+     * @param redisKey redisKey
+     */
+    void logout(String redisKey);
 }

@@ -19,7 +19,7 @@ package com.xzixi.framework.webapps.sso.server.config.security;
 
 import com.xzixi.framework.boot.webmvc.model.Result;
 import com.xzixi.framework.webapps.common.constant.SecurityConstant;
-import com.xzixi.framework.webapps.sso.server.service.ITokenService;
+import com.xzixi.framework.webapps.sso.server.service.ITokenService2;
 import com.xzixi.framework.webapps.sso.server.util.WebUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +33,7 @@ import java.util.Objects;
 
 /**
  * 退出登录
+ * TODO 单点登出
  *
  * @author 薛凌康
  */
@@ -40,7 +41,7 @@ import java.util.Objects;
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
     @Autowired
-    private ITokenService tokenService;
+    private ITokenService2 tokenService;
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {

@@ -24,7 +24,7 @@ import com.xzixi.framework.webapps.common.feign.RemoteUserService;
 import com.xzixi.framework.webapps.common.model.po.Token;
 import com.xzixi.framework.webapps.common.model.vo.UserDetailsImpl;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
-import com.xzixi.framework.webapps.sso.server.service.ITokenService;
+import com.xzixi.framework.webapps.sso.server.service.ITokenService2;
 import com.xzixi.framework.webapps.sso.server.util.WebUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ import java.util.Objects;
 public class TokenFilter extends OncePerRequestFilter {
 
     @Autowired
-    private ITokenService tokenService;
+    private ITokenService2 tokenService;
     @Autowired
     private RemoteUserService remoteUserService;
 

@@ -20,7 +20,7 @@ package com.xzixi.framework.webapps.sso.server.service.impl;
 import com.xzixi.framework.boot.webmvc.exception.ClientException;
 import com.xzixi.framework.webapps.common.constant.SecurityConstant;
 import com.xzixi.framework.webapps.common.model.po.Token;
-import com.xzixi.framework.webapps.sso.server.service.ITokenService;
+import com.xzixi.framework.webapps.sso.server.service.ITokenService2;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang.StringUtils;
@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
  * @author 薛凌康
  */
 @Service
-public class TokenServiceImpl implements ITokenService {
+public class TokenService2Impl implements ITokenService2 {
 
     private static final String LOGIN_USER_KEY = "LOGIN_USER_KEY";
     private static Key keySingleTon = null;
@@ -97,7 +97,7 @@ public class TokenServiceImpl implements ITokenService {
      */
     private Key getKeyInstance() {
         if (keySingleTon == null) {
-            synchronized (TokenServiceImpl.class) {
+            synchronized (TokenService2Impl.class) {
                 if (keySingleTon == null) {
                     byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(SecurityConstant.AUTHENTICATION_JWT_SECRET);
                     keySingleTon = new SecretKeySpec(apiKeySecretBytes, SignatureAlgorithm.HS256.getJcaName());
