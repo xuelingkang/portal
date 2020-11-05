@@ -171,9 +171,10 @@ public class ControllerExceptionHandler {
      * @return Result
      */
     @ExceptionHandler({RemoteException.class})
-    public Result<?> handleRemoteException(RemoteException e, HttpServletResponse response) {
-        response.setStatus(e.getStatus());
-        return new Result<>(e.getStatus(), e.getMessage(), null);
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public Result<?> handleRemoteException(RemoteException e) {
+        log.error("调用远程服务异常，状态码：{}，异常信息：{}", e.getStatus(), e.getMessage());
+        return new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务端异常！", null);
     }
 
     /**
