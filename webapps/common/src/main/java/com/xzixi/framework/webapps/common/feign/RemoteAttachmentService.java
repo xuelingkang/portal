@@ -35,17 +35,17 @@ import java.util.List;
  * @author xuelingkang
  * @date 2020-10-25
  */
-@FeignClient(value = "portal-file", path = "/attachment")
+@FeignClient(value = "portal-file", path = "/attachment", contextId = "attachment")
 public interface RemoteAttachmentService {
 
     @PostMapping("/{type}")
-    Result<AttachmentVO> upload(MultipartFile file, @PathVariable AttachmentType type);
+    Result<AttachmentVO> upload(MultipartFile file, @PathVariable("type") AttachmentType type);
 
     @GetMapping
     Result<Pagination<AttachmentVO>> page(AttachmentSearchParams searchParams);
 
     @GetMapping("/{id}")
-    Result<AttachmentVO> getById(@PathVariable Integer id);
+    Result<AttachmentVO> getById(@PathVariable("id") Integer id);
 
     @DeleteMapping
     Result<?> remove(List<Integer> ids);

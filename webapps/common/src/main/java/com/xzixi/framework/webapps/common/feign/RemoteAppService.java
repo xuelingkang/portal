@@ -30,17 +30,17 @@ import java.util.List;
  * @author xuelingkang
  * @date 2020-10-25
  */
-@FeignClient(value = "portal-system", path = "/app")
+@FeignClient(value = "portal-system", path = "/app", contextId = "app")
 public interface RemoteAppService {
 
     @GetMapping
     Result<Pagination<App>> page(AppSearchParams searchParams);
 
     @GetMapping("/{id}")
-    Result<App> getById(@PathVariable Integer id);
+    Result<App> getById(@PathVariable("id") Integer id);
 
     @GetMapping("/uid/{uid}")
-    Result<App> getByUid(@PathVariable String uid);
+    Result<App> getByUid(@PathVariable("uid") String uid);
 
     @PostMapping
     Result<?> save(App app);

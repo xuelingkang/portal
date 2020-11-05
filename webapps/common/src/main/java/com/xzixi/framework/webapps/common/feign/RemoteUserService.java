@@ -27,12 +27,13 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author xuelingkang
  * @date 2020-10-25
  */
-@FeignClient(value = "portal-system", path = "/user")
+@FeignClient(value = "portal-system", path = "/user", contextId = "user")
 public interface RemoteUserService {
 
     @GetMapping("/page")
@@ -42,8 +43,8 @@ public interface RemoteUserService {
     Result<User> getOne(QueryParams<User> queryParams);
 
     @GetMapping("/{id}")
-    Result<UserVO> getById(@PathVariable Integer id);
+    Result<UserVO> getById(@PathVariable("id") Integer id);
 
     @PatchMapping("/login-time")
-    Result<?> updateLoginTime(Integer id, Long loginTime);
+    Result<?> updateLoginTime(@RequestParam("id") Integer id, @RequestParam("loginTime") Long loginTime);
 }

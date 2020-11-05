@@ -23,7 +23,6 @@ import com.xzixi.framework.boot.webmvc.config.redis.annotation.EnableFrameworkRe
 import com.xzixi.framework.boot.webmvc.config.validation.annotation.EnableFrameworkValidation;
 import com.xzixi.framework.webapps.common.component.annotation.EnableCommonComponents;
 import com.xzixi.framework.webapps.common.feign.annotation.EnableCommonRemoteServices;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -38,7 +37,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableFrameworkExceptionHandler
 @EnableCommonRemoteServices
 @EnableCommonComponents
-@MapperScan(basePackages = "com.xzixi.framework.webapps.sso.mapper")
 public class SsoApplication {
 
     public static void main(String[] args) {

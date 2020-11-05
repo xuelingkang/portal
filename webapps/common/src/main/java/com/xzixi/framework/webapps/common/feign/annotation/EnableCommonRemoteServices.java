@@ -17,10 +17,7 @@
 
 package com.xzixi.framework.webapps.common.feign.annotation;
 
-import com.xzixi.framework.webapps.common.feign.RemoteAppService;
-import com.xzixi.framework.webapps.common.feign.RemoteAttachmentService;
-import com.xzixi.framework.webapps.common.feign.RemoteUserService;
-import org.springframework.context.annotation.Import;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 
 import java.lang.annotation.*;
 
@@ -31,6 +28,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import({RemoteAppService.class, RemoteAttachmentService.class, RemoteUserService.class})
+@EnableFeignClients(basePackages = {"com.xzixi.framework.webapps.common.feign"})
 public @interface EnableCommonRemoteServices {
 }
