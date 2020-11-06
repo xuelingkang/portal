@@ -18,6 +18,7 @@
 package com.xzixi.framework.webapps.sso.server.service.impl;
 
 import com.xzixi.framework.boot.core.exception.ClientException;
+import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
 import com.xzixi.framework.webapps.sso.server.service.ITokenService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -29,6 +30,7 @@ import java.security.Key;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author xuelingkang
@@ -41,18 +43,24 @@ public abstract class AbstractTokenService implements ITokenService {
     @Autowired
     protected RedisTemplate<String, Object> redisTemplate;
 
-    abstract String getClaimsKey();
-
     /**
      * 将uuid保存到map中，加密并返回一个jwtToken
      *
      * @param uuid uuid
      * @return jwtToken
      */
-    protected String getJwtToken(String uuid) {
+    @Override
+    public String getJwtToken(String uuid) {
         Map<String, Object> claims = new HashMap<>();
         claims.put(getClaimsKey(), uuid);
         return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS256, key).compact();
+    }
+
+    @Override
+    public TokenInfo createToken() {
+        String uuid = UUID.randomUUID().toString();
+        String jwtToken = getJwtToken(uuid);
+        return new TokenInfo(uuid, jwtToken);
     }
 
     /**
@@ -61,15 +69,16 @@ public abstract class AbstractTokenService implements ITokenService {
      * @param jwtToken jwtToken
      * @return uuid
      */
+    @Override
     public String decodeJwtToken(String jwtToken) {
         if (StringUtils.isEmpty(jwtToken) || Objects.equals("null", jwtToken)) {
-            throw new ClientException(401, "无效的jwtToken！");
+            throw new ClientException(401, "认证信息无效！");
         }
         Map<String, Object> jwtClaims;
         try {
             jwtClaims = Jwts.parser().setSigningKey(key).parseClaimsJws(jwtToken).getBody();
         } catch (Exception e) {
-            throw new ClientException(401, "无效的jwtToken！");
+            throw new ClientException(401, "认证信息无效！");
         }
         if (jwtClaims != null) {
             Object uuid = jwtClaims.get(getClaimsKey());
@@ -77,6 +86,6 @@ public abstract class AbstractTokenService implements ITokenService {
                 return uuid.toString();
             }
         }
-        throw new ClientException(401, "无效的jwtToken！");
+        throw new ClientException(401, "认证信息无效！");
     }
 }

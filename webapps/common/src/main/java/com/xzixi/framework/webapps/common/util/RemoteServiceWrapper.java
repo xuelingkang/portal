@@ -15,43 +15,33 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.sso.server.service;
+package com.xzixi.framework.webapps.common.util;
 
-import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
+import com.xzixi.framework.boot.core.exception.ClientException;
+import com.xzixi.framework.boot.core.exception.RemoteException;
+import com.xzixi.framework.boot.core.model.Result;
+import org.springframework.util.Assert;
 
 /**
  * @author xuelingkang
  * @date 2020-11-05
  */
-public interface ITokenService {
+public class RemoteServiceWrapper {
 
-    /**
-     * jwtToken中保存了一个map
-     *
-     * @return map key
-     */
-    String getClaimsKey();
+    public static void checkResult(Result<?> result) {
+        Assert.notNull(result, "result不能为空！");
+        int code = result.getCode();
+        if (code == 200) {
+            return;
+        }
+        if (code >= 400 && code < 500) {
+            throw new ClientException(code, result.getMessage());
+        }
+        throw new RemoteException(code, result.getMessage());
+    }
 
-    /**
-     * 加密uuid
-     *
-     * @param uuid uuid
-     * @return jwtToken
-     */
-    String getJwtToken(String uuid);
-
-    /**
-     * 创建token
-     *
-     * @return TokenInfo
-     */
-    TokenInfo createToken();
-
-    /**
-     * 解密jwtToken
-     *
-     * @param jwtToken jwtToken
-     * @return uuid
-     */
-    String decodeJwtToken(String jwtToken);
+    public static <T> T getData(Result<T> result) {
+        checkResult(result);
+        return result.getData();
+    }
 }

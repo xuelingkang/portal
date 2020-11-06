@@ -17,9 +17,10 @@
 
 package com.xzixi.framework.webapps.sso.server.service.impl;
 
-import com.xzixi.framework.webapps.sso.server.service.IRefreshTokenService;
+import com.xzixi.framework.webapps.sso.server.model.SsoAccessTokenMountValue;
+import com.xzixi.framework.webapps.sso.server.model.SsoAccessTokenValue;
+import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
 import com.xzixi.framework.webapps.sso.server.service.ISsoAccessTokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -34,41 +35,47 @@ import static com.xzixi.framework.webapps.common.constant.TokenConstant.*;
 @Service
 public class SsoAccessTokenServiceImpl extends AbstractTokenService implements ISsoAccessTokenService {
 
-    @Autowired
-    private IRefreshTokenService refreshTokenService;
-
     @Override
     public String getClaimsKey() {
         return "SSO_ACCESS_LOGIN_USER_KEY";
     }
 
     @Override
-    public String createAndSave(int userId) {
+    public TokenInfo createAndSave(int userId, String refreshToken) {
         String uuid = UUID.randomUUID().toString();
         String jwtToken = getJwtToken(uuid);
-        redisTemplate.boundValueOps(getRedisKey(uuid)).set(userId, SSO_ACCESS_TOKEN_EXPIRE_MINUTE, TimeUnit.MINUTES);
-        return jwtToken;
+        SsoAccessTokenValue ssoAccessTokenValue = new SsoAccessTokenValue(userId, refreshToken);
+        redisTemplate.boundValueOps(getRedisKey(uuid)).set(ssoAccessTokenValue, SSO_ACCESS_TOKEN_EXPIRE_MINUTE, TimeUnit.MINUTES);
+        return new TokenInfo(uuid, jwtToken);
     }
 
     @Override
-    public void mount(String ssoAccessToken, String refreshToken) {
-        String refreshTokenUuid = refreshTokenService.decodeJwtToken(refreshToken);
-        String ssoAccessTokenUuid = this.decodeJwtToken(ssoAccessToken);
-        String key = String.format(SSO_ACCESS_TOKEN_NODE_KEY_TEMPLATE, refreshTokenUuid, ssoAccessTokenUuid);
-        redisTemplate.boundValueOps(key).set(ssoAccessToken, SSO_ACCESS_TOKEN_NODE_EXPIRE_MINUTE, TimeUnit.MINUTES);
+    public SsoAccessTokenValue getTokenValue(String ssoAccessTokenUuid) {
+        return (SsoAccessTokenValue) redisTemplate.boundValueOps(getRedisKey(ssoAccessTokenUuid)).get();
     }
 
     @Override
-    public void delete(String ssoAccessToken) {
-        // TODO
+    public void delete(String ssoAccessTokenUuid) {
+        redisTemplate.opsForValue().getOperations().delete(getRedisKey(ssoAccessTokenUuid));
     }
 
     @Override
-    public void logout(String redisKey) {
-        // TODO
+    public void mount(String ssoAccessTokenUuid, String ssoAccessToken, String refreshTokenUuid) {
+        String key = getMountKey(ssoAccessTokenUuid, refreshTokenUuid);
+        SsoAccessTokenMountValue ssoAccessTokenMountValue = new SsoAccessTokenMountValue(ssoAccessToken);
+        redisTemplate.boundValueOps(key).set(ssoAccessTokenMountValue, SSO_ACCESS_TOKEN_NODE_EXPIRE_MINUTE, TimeUnit.MINUTES);
+    }
+
+    @Override
+    public SsoAccessTokenMountValue getTokenMountValue(String mountKey) {
+        return (SsoAccessTokenMountValue) redisTemplate.boundValueOps(mountKey).get();
     }
 
     private String getRedisKey(String uuid) {
         return String.format(SSO_ACCESS_TOKEN_KEY_TEMPLATE, uuid);
+    }
+
+    private String getMountKey(String ssoAccessTokenUuid, String refreshTokenUuid) {
+        return String.format(SSO_ACCESS_TOKEN_NODE_KEY_TEMPLATE, refreshTokenUuid, ssoAccessTokenUuid);
     }
 }

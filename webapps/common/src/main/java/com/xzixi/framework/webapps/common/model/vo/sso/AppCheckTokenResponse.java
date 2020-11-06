@@ -15,43 +15,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.sso.server.service;
+package com.xzixi.framework.webapps.common.model.vo.sso;
 
-import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * @author xuelingkang
- * @date 2020-11-05
+ * @date 2020-11-07
  */
-public interface ITokenService {
+@Data
+@ApiModel(description = "应用检查token响应")
+public class AppCheckTokenResponse implements Serializable {
 
-    /**
-     * jwtToken中保存了一个map
-     *
-     * @return map key
-     */
-    String getClaimsKey();
+    private static final long serialVersionUID = 1L;
 
-    /**
-     * 加密uuid
-     *
-     * @param uuid uuid
-     * @return jwtToken
-     */
-    String getJwtToken(String uuid);
+    @ApiModelProperty(value = "登录用户id")
+    private Integer userId;
 
-    /**
-     * 创建token
-     *
-     * @return TokenInfo
-     */
-    TokenInfo createToken();
+    @ApiModelProperty(value = "app站点的x-access-token失效时间")
+    private Long accessExpireTime;
 
-    /**
-     * 解密jwtToken
-     *
-     * @param jwtToken jwtToken
-     * @return uuid
-     */
-    String decodeJwtToken(String jwtToken);
+    @ApiModelProperty(value = "x-refresh-token失效时间")
+    private Long refreshExpireTime;
 }

@@ -57,11 +57,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("用户名：" + username + "不存在！");
         }
 
-        Result<UserVO> getByIdResult = remoteUserService.getById(user.getId());
-        if (getByIdResult.getCode() != 200) {
-            throw new RemoteException(getByIdResult.getCode(), getByIdResult.getMessage());
-        }
-
-        return new UserDetailsImpl(getByIdResult.getData());
+        return new UserDetailsImpl(new UserVO(user));
     }
 }

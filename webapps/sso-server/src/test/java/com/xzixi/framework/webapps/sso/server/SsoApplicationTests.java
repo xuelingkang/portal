@@ -17,7 +17,14 @@
 
 package com.xzixi.framework.webapps.sso.server;
 
+import com.alibaba.fastjson.JSON;
+import com.xzixi.framework.webapps.sso.server.model.SsoAccessTokenValue;
+import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
+import com.xzixi.framework.webapps.sso.server.service.ISsoAccessTokenService;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -27,5 +34,21 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Slf4j
 public class SsoApplicationTests {
+
+    @Autowired
+    private ISsoAccessTokenService ssoAccessTokenService;
+
+    @Test
+    public void testSave() {
+        TokenInfo info = ssoAccessTokenService.createAndSave(1, "123");
+        log.info(JSON.toJSONString(info));
+    }
+
+    @Test
+    public void testGet() {
+        SsoAccessTokenValue ssoAccessTokenValue = ssoAccessTokenService.getTokenValue("7a70be74-1d79-43dc-a783-4cbe248aae8e");
+        log.info(JSON.toJSONString(ssoAccessTokenValue));
+    }
 }

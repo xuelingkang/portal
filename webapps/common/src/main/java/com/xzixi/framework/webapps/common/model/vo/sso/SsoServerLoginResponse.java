@@ -15,11 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.common.model.vo;
+package com.xzixi.framework.webapps.common.model.vo.sso;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.io.Serializable;
 
 /**
  * sso-server登录成功响应
@@ -29,7 +31,7 @@ import lombok.Data;
  */
 @Data
 @ApiModel(description = "sso-server登录成功响应")
-public class SsoServerLoginResponse {
+public class SsoServerLoginResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -45,7 +47,7 @@ public class SsoServerLoginResponse {
     @ApiModelProperty(value = "登录时间")
     private Long loginTime;
 
-    @ApiModelProperty(value = "x-access-token失效时间")
+    @ApiModelProperty(value = "sso站点的x-access-token失效时间")
     private Long accessExpireTime;
 
     @ApiModelProperty(value = "x-refresh-token失效时间")

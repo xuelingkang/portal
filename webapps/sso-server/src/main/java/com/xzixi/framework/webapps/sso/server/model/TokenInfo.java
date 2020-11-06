@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.boot.core.model;
+package com.xzixi.framework.webapps.sso.server.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,50 +24,17 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * 返回结果
- *
- * @author 薛凌康
+ * @author xuelingkang
+ * @date 2020-11-05
  */
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-public class Result<T> implements Serializable {
+@NoArgsConstructor
+@AllArgsConstructor
+public class TokenInfo implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 状态码
-     */
-    private int code = 200;
+    private String uuid;
 
-    /**
-     * 当状态码不等于200时，可能需要一个subCode来表示具体的错误
-     */
-    private int subCode = 0;
-
-    /**
-     * 消息
-     */
-    private String message;
-
-    /**
-     * 数据
-     */
-    private T data;
-
-    public Result(T data) {
-        this(200, 0, null, data);
-    }
-
-    public Result(int code, int subCode) {
-        this(code, subCode, null, null);
-    }
-
-    public Result(int code, int subCode, String message) {
-        this(code, subCode, message, null);
-    }
-
-    public Result(int code, String message, T data) {
-        this(code, 0, message, data);
-    }
+    private String jwtToken;
 }

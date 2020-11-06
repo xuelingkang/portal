@@ -15,43 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.sso.server.service;
+package com.xzixi.framework.webapps.sso.server.model;
 
-import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author xuelingkang
  * @date 2020-11-05
  */
-public interface ITokenService {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AppAccessTokenValue {
 
-    /**
-     * jwtToken中保存了一个map
-     *
-     * @return map key
-     */
-    String getClaimsKey();
+    private Integer userId;
 
-    /**
-     * 加密uuid
-     *
-     * @param uuid uuid
-     * @return jwtToken
-     */
-    String getJwtToken(String uuid);
-
-    /**
-     * 创建token
-     *
-     * @return TokenInfo
-     */
-    TokenInfo createToken();
-
-    /**
-     * 解密jwtToken
-     *
-     * @param jwtToken jwtToken
-     * @return uuid
-     */
-    String decodeJwtToken(String jwtToken);
+    private String refreshToken;
 }

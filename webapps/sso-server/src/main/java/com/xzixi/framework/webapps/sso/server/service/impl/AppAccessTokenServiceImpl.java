@@ -17,13 +17,12 @@
 
 package com.xzixi.framework.webapps.sso.server.service.impl;
 
+import com.xzixi.framework.webapps.sso.server.model.AppAccessTokenValue;
+import com.xzixi.framework.webapps.sso.server.model.AppAccessTokenMountValue;
+import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
 import com.xzixi.framework.webapps.sso.server.service.IAppAccessTokenService;
-import com.xzixi.framework.webapps.sso.server.service.IRefreshTokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -36,44 +35,57 @@ import static com.xzixi.framework.webapps.common.constant.TokenConstant.*;
 @Service
 public class AppAccessTokenServiceImpl extends AbstractTokenService implements IAppAccessTokenService {
 
-    @Autowired
-    private IRefreshTokenService refreshTokenService;
-
     @Override
     public String getClaimsKey() {
         return "APP_ACCESS_LOGIN_USER_KEY";
     }
 
     @Override
-    public String createAndSave(int userId, String appUid) {
+    public TokenInfo createAndSave(int userId, String appUid, String refreshToken) {
         String uuid = UUID.randomUUID().toString();
         String jwtToken = getJwtToken(uuid);
-        redisTemplate.boundValueOps(getRedisKey(uuid, appUid)).set(userId, APP_ACCESS_TOKEN_FOR_CHECK_EXPIRE_MINUTE, TimeUnit.MINUTES);
-        return jwtToken;
+        AppAccessTokenValue appAccessTokenValue = new AppAccessTokenValue(userId, refreshToken);
+        redisTemplate.boundValueOps(getRedisKey(uuid, appUid)).set(appAccessTokenValue, APP_ACCESS_TOKEN_FOR_CHECK_EXPIRE_MINUTE, TimeUnit.MINUTES);
+        return new TokenInfo(uuid, jwtToken);
     }
 
     @Override
-    public void check(String appAccessToken, String appUid) {
-        // TODO
+    public AppAccessTokenValue getTokenValue(String appAccessTokenUUid, String appUid) {
+        return (AppAccessTokenValue) redisTemplate.boundValueOps(getRedisKey(appAccessTokenUUid, appUid)).get();
     }
 
     @Override
-    public void mount(String appAccessToken, String appUid, String refreshToken) {
-        String refreshTokenUuid = refreshTokenService.decodeJwtToken(refreshToken);
-        String appAccessTokenUuid = this.decodeJwtToken(appAccessToken);
-        String key = String.format(APP_ACCESS_TOKEN_NODE_KEY_TEMPLATE, refreshTokenUuid, appUid, appAccessTokenUuid);
-        Map<String, String> map = new HashMap<>();
-        map.put(APP_ACCESS_TOKEN, appAccessToken);
-        map.put(APP_UID, appUid);
-        redisTemplate.boundValueOps(key).set(map, APP_ACCESS_TOKEN_NODE_EXPIRE_MINUTE, TimeUnit.MINUTES);
+    public void delete(String appAccessTokenUUid, String appUid) {
+        redisTemplate.opsForValue().getOperations().delete(getRedisKey(appAccessTokenUUid, appUid));
     }
 
     @Override
-    public void logout(String redisKey) {
-        // TODO
+    public void mount(String appAccessTokenUuid, String appAccessToken, String appUid, String refreshTokenUuid) {
+        String key = getMountKey(appAccessTokenUuid, appUid, refreshTokenUuid);
+        AppAccessTokenMountValue appAccessTokenMountValue = new AppAccessTokenMountValue(appUid, appAccessToken);
+        redisTemplate.boundValueOps(key).set(appAccessTokenMountValue, APP_ACCESS_TOKEN_NODE_EXPIRE_MINUTE, TimeUnit.MINUTES);
+    }
+
+    @Override
+    public AppAccessTokenMountValue getMountTokenValue(String mountKey) {
+        return (AppAccessTokenMountValue) redisTemplate.boundValueOps(mountKey).get();
+    }
+
+    @Override
+    public long getMountExpire(String appAccessTokenUuid, String appUid, String refreshTokenUuid) {
+        String key = getMountKey(appAccessTokenUuid, appUid, refreshTokenUuid);
+        Long expire = redisTemplate.opsForValue().getOperations().getExpire(key, TimeUnit.MILLISECONDS);
+        if (expire == null) {
+            return 0;
+        }
+        return expire;
     }
 
     private String getRedisKey(String appUid, String uuid) {
         return String.format(APP_ACCESS_TOKEN_FOR_CHECK_KEY_TEMPLATE, appUid, uuid);
+    }
+
+    private String getMountKey(String appAccessTokenUuid, String appUid, String refreshTokenUuid) {
+        return String.format(APP_ACCESS_TOKEN_NODE_KEY_TEMPLATE, refreshTokenUuid, appUid, appAccessTokenUuid);
     }
 }

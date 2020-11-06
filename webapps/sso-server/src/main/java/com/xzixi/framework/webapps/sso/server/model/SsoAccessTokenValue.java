@@ -15,36 +15,22 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.common.model.vo;
+package com.xzixi.framework.webapps.sso.server.model;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
- * sso-client登录成功响应
- *
  * @author xuelingkang
- * @date 2020-10-27
+ * @date 2020-11-05
  */
 @Data
-@ApiModel(description = "sso-client登录成功响应")
-public class SsoClientLoginResponse {
+@NoArgsConstructor
+@AllArgsConstructor
+public class SsoAccessTokenValue {
 
-    private static final long serialVersionUID = 1L;
+    private Integer userId;
 
-    @ApiModelProperty(value = "x-access-token")
-    private String accessToken;
-
-    @ApiModelProperty(value = "x-refresh-token")
     private String refreshToken;
-
-    @ApiModelProperty(value = "登录时间")
-    private Long loginTime;
-
-    @ApiModelProperty(value = "x-access-token失效时间")
-    private Long accessExpireTime;
-
-    @ApiModelProperty(value = "x-refresh-token失效时间")
-    private Long refreshExpireTime;
 }

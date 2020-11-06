@@ -25,7 +25,6 @@ public interface TokenConstant {
 
     /**
      * refreshTokenKey模板
-     * <p>value userId
      * <p>占位符 refreshToken加密保存的uuid
      * <p>sso维护
      */
@@ -33,7 +32,6 @@ public interface TokenConstant {
 
     /**
      * ssoAccessTokenKey模板
-     * <p>value userId
      * <p>占位符 ssoAccessToken加密保存的uuid
      * <p>sso维护
      */
@@ -41,7 +39,6 @@ public interface TokenConstant {
 
     /**
      * appAccessTokenForCheckKey模板
-     * <p>value userId
      * <p>占位符1 appUid
      * <p>占位符2 appAccessToken加密保存的uuid
      * <p>sso维护
@@ -50,7 +47,6 @@ public interface TokenConstant {
 
     /**
      * ssoAccessTokenNodeKey模板
-     * <p>value ssoAccessToken
      * <p>占位符1 refreshToken加密保存的uuid
      * <p>占位符2 ssoAccessToken加密保存的uuid
      * <p>sso维护
@@ -59,7 +55,6 @@ public interface TokenConstant {
 
     /**
      * appAccessTokenNodeKey模板
-     * <p>value appAccessToken, appUid
      * <p>占位符1 refreshToken加密保存的uuid
      * <p>占位符2 appUid
      * <p>占位符3 appAccessToken加密保存的uuid
@@ -69,19 +64,10 @@ public interface TokenConstant {
 
     /**
      * appAccessTokenKey模板
-     * <p>value userId
      * <p>占位符 appAccessToken
      * <p>app维护
      */
     String APP_ACCESS_TOKEN_KEY_TEMPLATE = "token::%s";
-
-    /**
-     * appAccessTokenRefreshKey模板
-     * <p>value refreshToken
-     * <p>占位符 appAccessToken
-     * <p>app维护
-     */
-    String APP_ACCESS_TOKEN_REFRESH_KEY_TEMPLATE = "token::%s::refresh";
 
     /**
      * refreshTokenKey过期时间，7天

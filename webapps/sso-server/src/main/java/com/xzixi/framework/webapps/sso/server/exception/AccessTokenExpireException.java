@@ -15,43 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.sso.server.service;
-
-import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
+package com.xzixi.framework.webapps.sso.server.exception;
 
 /**
  * @author xuelingkang
- * @date 2020-11-05
+ * @date 2020-11-06
  */
-public interface ITokenService {
-
-    /**
-     * jwtToken中保存了一个map
-     *
-     * @return map key
-     */
-    String getClaimsKey();
-
-    /**
-     * 加密uuid
-     *
-     * @param uuid uuid
-     * @return jwtToken
-     */
-    String getJwtToken(String uuid);
-
-    /**
-     * 创建token
-     *
-     * @return TokenInfo
-     */
-    TokenInfo createToken();
-
-    /**
-     * 解密jwtToken
-     *
-     * @param jwtToken jwtToken
-     * @return uuid
-     */
-    String decodeJwtToken(String jwtToken);
+public class AccessTokenExpireException extends RuntimeException {
 }

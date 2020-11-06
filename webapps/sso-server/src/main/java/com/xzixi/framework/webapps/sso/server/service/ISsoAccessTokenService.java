@@ -17,6 +17,10 @@
 
 package com.xzixi.framework.webapps.sso.server.service;
 
+import com.xzixi.framework.webapps.sso.server.model.SsoAccessTokenMountValue;
+import com.xzixi.framework.webapps.sso.server.model.SsoAccessTokenValue;
+import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
+
 /**
  * @author xuelingkang
  * @date 2020-11-03
@@ -27,29 +31,40 @@ public interface ISsoAccessTokenService extends ITokenService {
      * 创建并保存jwtToken
      *
      * @param userId 用户id
-     * @return jwtToken
+     * @param refreshToken jwtToken
+     * @return TokenInfo
      */
-    String createAndSave(int userId);
+    TokenInfo createAndSave(int userId, String refreshToken);
 
     /**
-     * 挂载ssoAccessToken，单点登出时使用
+     * 获取ssoAccessToken保存的信息
      *
-     * @param ssoAccessToken jwtToken
-     * @param refreshToken jwtToken
+     * @param ssoAccessTokenUuid uuid
+     * @return SsoAccessTokenValue
      */
-    void mount(String ssoAccessToken, String refreshToken);
+    SsoAccessTokenValue getTokenValue(String ssoAccessTokenUuid);
 
     /**
      * 删除ssoAccessToken
      *
-     * @param ssoAccessToken jwtToken
+     * @param ssoAccessTokenUuid uuid
      */
-    void delete(String ssoAccessToken);
+    void delete(String ssoAccessTokenUuid);
 
     /**
-     * 删除挂载的节点和ssoAccessToken
+     * 挂载ssoAccessToken
      *
-     * @param redisKey redisKey
+     * @param ssoAccessTokenUuid uuid
+     * @param ssoAccessToken jwtToken
+     * @param refreshTokenUuid uuid
      */
-    void logout(String redisKey);
+    void mount(String ssoAccessTokenUuid, String ssoAccessToken, String refreshTokenUuid);
+
+    /**
+     * 获取挂载值
+     *
+     * @param mountKey redisKey
+     * @return SsoAccessTokenMountValue
+     */
+    SsoAccessTokenMountValue getTokenMountValue(String mountKey);
 }

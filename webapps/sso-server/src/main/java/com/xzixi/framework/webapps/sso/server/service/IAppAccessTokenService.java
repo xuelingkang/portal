@@ -17,46 +17,68 @@
 
 package com.xzixi.framework.webapps.sso.server.service;
 
+import com.xzixi.framework.webapps.sso.server.model.AppAccessTokenMountValue;
+import com.xzixi.framework.webapps.sso.server.model.AppAccessTokenValue;
+import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
+
 /**
  * @author xuelingkang
  * @date 2020-11-04
  */
 public interface IAppAccessTokenService extends ITokenService {
 
-    String APP_ACCESS_TOKEN = "APP_ACCESS_TOKEN";
-
-    String APP_UID = "APP_UID";
-
     /**
      * 创建并保存jwtToken
      *
      * @param userId 用户id
      * @param appUid 应用uid
-     * @return jwtToken
-     */
-    String createAndSave(int userId, String appUid);
-
-    /**
-     * 验证appAccessToken，通过后删除
-     *
-     * @param appAccessToken jwtToken
-     * @param appUid 应用uid
-     */
-    void check(String appAccessToken, String appUid);
-
-    /**
-     * 挂载appAccessToken，单点登出时使用
-     *
-     * @param appAccessToken jwtToken
-     * @param appUid 应用uid
      * @param refreshToken jwtToken
+     * @return TokenInfo
      */
-    void mount(String appAccessToken, String appUid, String refreshToken);
+    TokenInfo createAndSave(int userId, String appUid, String refreshToken);
 
     /**
-     * 删除挂载的节点，回调应用登出接口
+     * 获取appAccessToken中保存的信息
      *
-     * @param redisKey redisKey
+     * @param appAccessTokenUUid uuid
+     * @param appUid 应用uid
+     * @return AppAccessTokenValue
      */
-    void logout(String redisKey);
+    AppAccessTokenValue getTokenValue(String appAccessTokenUUid, String appUid);
+
+    /**
+     * 删除appAccessToken
+     *
+     * @param appAccessTokenUUid uuid
+     * @param appUid 应用uid
+     */
+    void delete(String appAccessTokenUUid, String appUid);
+
+    /**
+     * 挂载appAccessToken
+     *
+     * @param appAccessTokenUuid uuid
+     * @param appAccessToken jwtToken
+     * @param appUid 应用uid
+     * @param refreshTokenUuid uuid
+     */
+    void mount(String appAccessTokenUuid, String appAccessToken, String appUid, String refreshTokenUuid);
+
+    /**
+     * 获取挂载值
+     *
+     * @param mountKey redisKey
+     * @return AppAccessTokenMountValue
+     */
+    AppAccessTokenMountValue getMountTokenValue(String mountKey);
+
+    /**
+     * 获取挂载过期时间
+     *
+     * @param appAccessTokenUuid uuid
+     * @param appUid 应用uid
+     * @param refreshTokenUuid uuid
+     * @return 过期时间，毫秒
+     */
+    long getMountExpire(String appAccessTokenUuid, String appUid, String refreshTokenUuid);
 }

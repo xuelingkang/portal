@@ -17,6 +17,8 @@
 
 package com.xzixi.framework.webapps.sso.server.service.impl;
 
+import com.xzixi.framework.webapps.sso.server.model.RefreshTokenValue;
+import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
 import com.xzixi.framework.webapps.sso.server.service.IRefreshTokenService;
 import org.springframework.stereotype.Service;
 
@@ -39,26 +41,31 @@ public class RefreshTokenServiceImpl extends AbstractTokenService implements IRe
     }
 
     @Override
-    public String createAndSave(int userId) {
+    public TokenInfo createAndSave(int userId) {
         String uuid = UUID.randomUUID().toString();
         String jwtToken = getJwtToken(uuid);
-        redisTemplate.boundValueOps(getRedisKey(uuid)).set(userId, REFRESH_TOKEN_EXPIRE_MINUTE, TimeUnit.MINUTES);
-        return jwtToken;
+        RefreshTokenValue refreshTokenValue = new RefreshTokenValue(userId);
+        redisTemplate.boundValueOps(getRedisKey(uuid)).set(refreshTokenValue, REFRESH_TOKEN_EXPIRE_MINUTE, TimeUnit.MINUTES);
+        return new TokenInfo(uuid, jwtToken);
     }
 
     @Override
-    public void check(String refreshToken) {
-        // TODO
+    public RefreshTokenValue getTokenValue(String refreshTokenUuid) {
+        return (RefreshTokenValue) redisTemplate.boundValueOps(getRedisKey(refreshTokenUuid)).get();
     }
 
     @Override
-    public void delete(String refreshToken) {
-        // TODO
+    public void delete(String refreshTokenUuid) {
+        redisTemplate.opsForValue().getOperations().delete(getRedisKey(refreshTokenUuid));
     }
 
     @Override
-    public void logout(String redisKey) {
-        // TODO
+    public long getExpire(String refreshTokenUuid) {
+        Long expire = redisTemplate.opsForValue().getOperations().getExpire(getRedisKey(refreshTokenUuid), TimeUnit.MILLISECONDS);
+        if (expire == null) {
+            return 0;
+        }
+        return expire;
     }
 
     private String getRedisKey(String uuid) {

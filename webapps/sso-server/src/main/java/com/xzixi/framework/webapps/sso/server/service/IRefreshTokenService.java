@@ -17,6 +17,9 @@
 
 package com.xzixi.framework.webapps.sso.server.service;
 
+import com.xzixi.framework.webapps.sso.server.model.RefreshTokenValue;
+import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
+
 /**
  * @author xuelingkang
  * @date 2020-11-03
@@ -27,28 +30,30 @@ public interface IRefreshTokenService extends ITokenService {
      * 创建并保存jwtToken
      *
      * @param userId 用户id
-     * @return jwtToken
+     * @return TokenInfo
      */
-    String createAndSave(int userId);
+    TokenInfo createAndSave(int userId);
 
     /**
-     * 验证refreshToken
+     * 获取refreshToken保存的信息
      *
-     * @param refreshToken jwtToken
+     * @param refreshTokenUuid uuid
+     * @return RefreshTokenValue
      */
-    void check(String refreshToken);
-
-    /**
-     * 删除refreshToken
-     *
-     * @param refreshToken jwtToken
-     */
-    void delete(String refreshToken);
+    RefreshTokenValue getTokenValue(String refreshTokenUuid);
 
     /**
      * 删除refreshToken
      *
-     * @param redisKey redisKey
+     * @param refreshTokenUuid uuid
      */
-    void logout(String redisKey);
+    void delete(String refreshTokenUuid);
+
+    /**
+     * 获取refreshToken的过期时间
+     *
+     * @param refreshTokenUuid uuid
+     * @return 过期时间，毫秒
+     */
+    long getExpire(String refreshTokenUuid);
 }
