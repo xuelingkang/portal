@@ -53,7 +53,7 @@ import java.util.Set;
 @Slf4j
 @Component
 @RestControllerAdvice
-public class ControllerExceptionHandler {
+public class GlobalControllerExceptionHandler {
 
     @Value("${spring.servlet.multipart.max-file-size:1MB}")
     private String maxFileSize;

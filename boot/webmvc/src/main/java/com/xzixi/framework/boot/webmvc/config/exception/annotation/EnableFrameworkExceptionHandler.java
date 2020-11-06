@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.boot.webmvc.config.exception.annotation;
 
-import com.xzixi.framework.boot.webmvc.config.exception.handler.ControllerExceptionHandler;
+import com.xzixi.framework.boot.webmvc.config.exception.handler.GlobalControllerExceptionHandler;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -29,6 +29,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import(ControllerExceptionHandler.class)
+@Import(GlobalControllerExceptionHandler.class)
 public @interface EnableFrameworkExceptionHandler {
 }
