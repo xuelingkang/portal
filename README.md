@@ -1,4 +1,4 @@
-# 个人门户服务端
+# 简化开发框架
 
 `Talk is cheap. Show you my code.`
 
@@ -26,7 +26,7 @@
 
 - [更新日志](./UPDATELOG.md)
 
-关键模块maven坐标
+## maven坐标
 
 ```xml
 <!-- sftp连接池启动器 -->
