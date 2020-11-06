@@ -13,16 +13,16 @@
 ## boot模块说明
 
 | 编号 | 名称 | 描述 |
-| :---: | :---: | :---: |
-| 1 | `enhance` | 使用注解驱动器实现编译期增强 |
-| 2 | `starter` | 自定义的springboot启动器 |
-| 3 | `core` | 公共接口和对象等 |
-| 4 | `persistent` | 持久层接口 |
-| 5 | `mybatis` | 扩展mybatis-plus实现持久层 |
-| 6 | `elasticsearch` | 扩展elasticsearch实现持久层 |
-| 7 | `redis` | redis配置 |
-| 8 | `cache` | 缓存配置，依赖了redis配置 |
-| 9 | `webmvc` | 常用依赖、配置 |
+| --- | --- | --- |
+| 1 | `starter` | 自定义的springboot启动器 |
+| 2 | `core` | 公共接口和对象等 |
+| 3 | `persistent` | 持久层接口 |
+| 4 | `mybatis` | 扩展mybatis-plus实现持久层 |
+| 5 | `elasticsearch` | 扩展elasticsearch实现持久层 |
+| 6 | `redis` | redis配置 |
+| 7 | `cache` | 缓存配置，依赖了redis配置 |
+| 8 | `webmvc` | 常用依赖、配置 |
+| 9 | `enhance` | 使用注解驱动器实现编译期增强，配合`mybatis`、`cache`，可以自动管理缓存 |
 
 - [更新日志](./UPDATELOG.md)
 
