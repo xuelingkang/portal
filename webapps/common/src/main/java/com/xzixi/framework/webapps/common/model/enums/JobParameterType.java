@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.webapps.common.model.enums;
 
-import com.xzixi.framework.boot.webmvc.model.IBaseEnum;
+import com.xzixi.framework.boot.core.model.IBaseEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.math.NumberUtils;

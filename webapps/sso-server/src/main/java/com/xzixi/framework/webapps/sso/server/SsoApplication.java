@@ -19,7 +19,7 @@ package com.xzixi.framework.webapps.sso.server;
 
 import com.xzixi.framework.boot.webmvc.config.exception.annotation.EnableFrameworkExceptionHandler;
 import com.xzixi.framework.boot.webmvc.config.json.annotation.EnableFrameworkJson;
-import com.xzixi.framework.boot.webmvc.config.redis.annotation.EnableFrameworkRedis;
+import com.xzixi.framework.boot.redis.annotation.EnableFrameworkRedis;
 import com.xzixi.framework.boot.webmvc.config.validation.annotation.EnableFrameworkValidation;
 import com.xzixi.framework.webapps.common.component.annotation.EnableCommonComponents;
 import com.xzixi.framework.webapps.common.feign.annotation.EnableCommonRemoteServices;

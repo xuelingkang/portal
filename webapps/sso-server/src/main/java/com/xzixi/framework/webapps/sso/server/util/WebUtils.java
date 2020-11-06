@@ -18,8 +18,8 @@
 package com.xzixi.framework.webapps.sso.server.util;
 
 import com.alibaba.fastjson.JSON;
-import com.xzixi.framework.boot.webmvc.exception.ProjectException;
-import com.xzixi.framework.boot.webmvc.model.Result;
+import com.xzixi.framework.boot.core.exception.ProjectException;
+import com.xzixi.framework.boot.core.model.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
 

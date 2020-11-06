@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.webapps.common.model.vo;
 
-import com.xzixi.framework.boot.webmvc.util.BeanUtils;
+import com.xzixi.framework.boot.core.util.BeanUtils;
 import com.xzixi.framework.webapps.common.model.po.Attachment;
 import com.xzixi.framework.webapps.common.model.po.Mail;
 import com.xzixi.framework.webapps.common.model.po.MailContent;

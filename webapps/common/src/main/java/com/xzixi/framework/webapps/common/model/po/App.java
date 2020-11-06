@@ -20,7 +20,7 @@ package com.xzixi.framework.webapps.common.model.po;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.xzixi.framework.boot.webmvc.model.BaseModel;
+import com.xzixi.framework.boot.core.model.BaseModel;
 import com.xzixi.framework.webapps.common.model.valid.AppSave;
 import com.xzixi.framework.webapps.common.model.valid.AppUpdate;
 import io.swagger.annotations.ApiModel;

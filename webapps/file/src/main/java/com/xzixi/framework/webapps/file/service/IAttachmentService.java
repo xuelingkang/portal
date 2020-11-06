@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.webapps.file.service;
 
-import com.xzixi.framework.boot.webmvc.service.IBaseService;
+import com.xzixi.framework.boot.persistent.service.IBaseService;
 import com.xzixi.framework.boot.webmvc.service.IVoService;
 import com.xzixi.framework.webapps.common.model.po.Attachment;
 import com.xzixi.framework.webapps.common.model.vo.AttachmentVO;

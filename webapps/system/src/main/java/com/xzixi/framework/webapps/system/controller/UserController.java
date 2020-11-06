@@ -17,13 +17,13 @@
 
 package com.xzixi.framework.webapps.system.controller;
 
-import com.xzixi.framework.boot.webmvc.exception.ClientException;
-import com.xzixi.framework.boot.webmvc.exception.ServerException;
-import com.xzixi.framework.boot.webmvc.model.Result;
-import com.xzixi.framework.boot.webmvc.model.search.Pagination;
-import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
+import com.xzixi.framework.boot.core.exception.ClientException;
+import com.xzixi.framework.boot.core.exception.ServerException;
+import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.boot.core.model.search.Pagination;
+import com.xzixi.framework.boot.core.model.search.QueryParams;
 import com.xzixi.framework.boot.webmvc.service.IBelongingService;
-import com.xzixi.framework.boot.webmvc.util.BeanUtils;
+import com.xzixi.framework.boot.core.util.BeanUtils;
 import com.xzixi.framework.webapps.common.model.params.UserSearchParams;
 import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.common.model.po.UserRoleLink;

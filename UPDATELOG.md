@@ -1,7 +1,7 @@
 - **current**
   - 拆分redis配置和缓存配置，新增注解@EnableFrameworkRedis
   - 全局异常拦截修正
-  - maven依赖修正
+  - 将mybatis、elasticsearch、redis、cache从webmvc模块中拆分出来
 - **2020.11.02 v2.1.0**
   - 代码生成器增加默认模板配置
   - 代码生成器跨项目生成代码

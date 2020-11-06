@@ -19,7 +19,7 @@ package com.xzixi.framework.webapps.content.data.impl;
 
 import com.xzixi.framework.webapps.common.model.po.ArticleTagLink;
 import com.xzixi.framework.boot.enhance.annotation.CacheEnhance;
-import com.xzixi.framework.boot.webmvc.data.impl.MybatisPlusDataImpl;
+import com.xzixi.framework.boot.mybatis.data.impl.MybatisPlusDataImpl;
 import com.xzixi.framework.webapps.content.data.IArticleTagLinkData;
 import com.xzixi.framework.webapps.content.mapper.ArticleTagLinkMapper;
 import org.springframework.stereotype.Service;

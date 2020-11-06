@@ -7,7 +7,7 @@
     <parent>
         <artifactId>portal</artifactId>
         <groupId>com.xzixi.framework</groupId>
-        <version>2.1.0</version>
+        <version>3.0.0</version>
     </parent>
 
     <artifactId>boot</artifactId>
@@ -18,6 +18,12 @@
     <modules>
         <module>enhance</module>
         <module>starter</module>
+        <module>core</module>
+        <module>persistent</module>
+        <module>mybatis</module>
+        <module>elasticsearch</module>
+        <module>redis</module>
+        <module>cache</module>
         <module>webmvc</module>
     </modules>
 </project>

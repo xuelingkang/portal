@@ -16,7 +16,13 @@
 | :---: | :---: | :---: |
 | 1 | `enhance` | 使用注解驱动器实现编译期增强 |
 | 2 | `starter` | 自定义的springboot启动器 |
-| 3 | `webmvc` | 项目架构核心 |
+| 3 | `core` | 公共接口和对象等 |
+| 4 | `persistent` | 持久层接口 |
+| 5 | `mybatis` | 扩展mybatis-plus实现持久层 |
+| 6 | `elasticsearch` | 扩展elasticsearch实现持久层 |
+| 7 | `redis` | redis配置 |
+| 8 | `cache` | 缓存配置，依赖了redis配置 |
+| 9 | `webmvc` | 常用依赖、配置 |
 
 - [更新日志](./UPDATELOG.md)
 
@@ -27,16 +33,8 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>enhance</artifactId>
-    <version>2.1.0</version>
+    <version>3.0.0</version>
     <scope>provided</scope>
-</dependency>
-```
-```xml
-<!-- 基础web框架 -->
-<dependency>
-    <groupId>com.xzixi.framework</groupId>
-    <artifactId>webmvc</artifactId>
-    <version>2.1.0</version>
 </dependency>
 ```
 ```xml
@@ -44,7 +42,7 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>sftp-client-spring-boot-starter</artifactId>
-    <version>2.1.0</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 ```xml
@@ -52,6 +50,46 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>swagger2-spring-boot-starter</artifactId>
-    <version>2.1.0</version>
+    <version>3.0.0</version>
+</dependency>
+```
+```xml
+<!-- mybatis-plus实现持久层 -->
+<dependency>
+    <groupId>com.xzixi.framework</groupId>
+    <artifactId>mybatis</artifactId>
+    <version>3.0.0</version>
+</dependency>
+```
+```xml
+<!-- elasticsearch实现持久层 -->
+<dependency>
+    <groupId>com.xzixi.framework</groupId>
+    <artifactId>elasticsearch</artifactId>
+    <version>3.0.0</version>
+</dependency>
+```
+```xml
+<!-- redis配置 -->
+<dependency>
+    <groupId>com.xzixi.framework</groupId>
+    <artifactId>redis</artifactId>
+    <version>3.0.0</version>
+</dependency>
+```
+```xml
+<!-- 缓存配置 -->
+<dependency>
+    <groupId>com.xzixi.framework</groupId>
+    <artifactId>cache</artifactId>
+    <version>3.0.0</version>
+</dependency>
+```
+```xml
+<!-- 常用依赖、配置 -->
+<dependency>
+    <groupId>com.xzixi.framework</groupId>
+    <artifactId>webmvc</artifactId>
+    <version>3.0.0</version>
 </dependency>
 ```

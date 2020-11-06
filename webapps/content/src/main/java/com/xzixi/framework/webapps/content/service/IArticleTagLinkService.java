@@ -18,7 +18,7 @@
 package com.xzixi.framework.webapps.content.service;
 
 import com.xzixi.framework.webapps.common.model.po.ArticleTagLink;
-import com.xzixi.framework.boot.webmvc.service.IBaseService;
+import com.xzixi.framework.boot.persistent.service.IBaseService;
 
 /**
  * @author 薛凌康

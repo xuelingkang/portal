@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.webapps.common.model.po;
 
-import com.xzixi.framework.boot.webmvc.model.BaseModel;
+import com.xzixi.framework.boot.core.model.BaseModel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.webapps.system.service.impl;
 
-import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
+import com.xzixi.framework.boot.persistent.service.impl.BaseServiceImpl;
 import com.xzixi.framework.webapps.common.model.po.UserLink;
 import com.xzixi.framework.webapps.system.data.IUserLinkData;
 import com.xzixi.framework.webapps.system.service.IUserLinkService;

@@ -19,11 +19,11 @@ package com.xzixi.framework.boot.webmvc.config.exception.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.xzixi.framework.boot.webmvc.exception.ClientException;
-import com.xzixi.framework.boot.webmvc.exception.ProjectException;
-import com.xzixi.framework.boot.webmvc.exception.RemoteException;
-import com.xzixi.framework.boot.webmvc.exception.ServerException;
-import com.xzixi.framework.boot.webmvc.model.Result;
+import com.xzixi.framework.boot.core.exception.ClientException;
+import com.xzixi.framework.boot.core.exception.ProjectException;
+import com.xzixi.framework.boot.core.exception.RemoteException;
+import com.xzixi.framework.boot.core.exception.ServerException;
+import com.xzixi.framework.boot.core.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

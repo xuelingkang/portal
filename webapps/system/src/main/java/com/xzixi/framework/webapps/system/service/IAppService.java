@@ -18,7 +18,7 @@
 package com.xzixi.framework.webapps.system.service;
 
 import com.xzixi.framework.webapps.common.model.po.App;
-import com.xzixi.framework.boot.webmvc.service.IBaseService;
+import com.xzixi.framework.boot.persistent.service.IBaseService;
 
 /**
  * 应用 服务类

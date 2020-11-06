@@ -17,8 +17,8 @@
 
 package com.xzixi.framework.webapps.notice.service.impl;
 
-import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
-import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
+import com.xzixi.framework.boot.core.model.search.QueryParams;
+import com.xzixi.framework.boot.persistent.service.impl.BaseServiceImpl;
 import com.xzixi.framework.webapps.common.model.po.MailContent;
 import com.xzixi.framework.webapps.notice.data.IMailContentData;
 import com.xzixi.framework.webapps.notice.service.IMailContentService;

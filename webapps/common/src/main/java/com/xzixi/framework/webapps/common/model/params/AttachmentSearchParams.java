@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.webapps.common.model.params;
 
-import com.xzixi.framework.boot.webmvc.model.search.BaseSearchParams;
+import com.xzixi.framework.boot.core.model.search.BaseSearchParams;
 import com.xzixi.framework.webapps.common.model.po.Attachment;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;

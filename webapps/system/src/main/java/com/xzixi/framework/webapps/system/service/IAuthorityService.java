@@ -17,8 +17,8 @@
 
 package com.xzixi.framework.webapps.system.service;
 
-import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
-import com.xzixi.framework.boot.webmvc.service.IBaseService;
+import com.xzixi.framework.boot.core.model.search.QueryParams;
+import com.xzixi.framework.boot.persistent.service.IBaseService;
 import com.xzixi.framework.boot.webmvc.service.IVoService;
 import com.xzixi.framework.webapps.common.model.po.Authority;
 import com.xzixi.framework.webapps.common.model.po.Role;

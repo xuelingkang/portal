@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.webapps.system.data.impl;
 
-import com.xzixi.framework.boot.webmvc.data.impl.MybatisPlusDataImpl;
+import com.xzixi.framework.boot.mybatis.data.impl.MybatisPlusDataImpl;
 import com.xzixi.framework.webapps.system.data.IAppData;
 import com.xzixi.framework.webapps.system.mapper.AppMapper;
 import com.xzixi.framework.webapps.common.model.po.App;

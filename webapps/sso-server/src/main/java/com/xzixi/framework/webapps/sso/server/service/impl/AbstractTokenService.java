@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.webapps.sso.server.service.impl;
 
-import com.xzixi.framework.boot.webmvc.exception.ClientException;
+import com.xzixi.framework.boot.core.exception.ClientException;
 import com.xzixi.framework.webapps.sso.server.service.ITokenService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -18,7 +18,7 @@
 package com.xzixi.framework.webapps.system.mapper;
 
 import com.xzixi.framework.webapps.common.model.po.App;
-import com.xzixi.framework.boot.webmvc.mapper.IBaseMapper;
+import com.xzixi.framework.boot.mybatis.mapper.IBaseMapper;
 
 /**
  * 应用 Mapper 接口

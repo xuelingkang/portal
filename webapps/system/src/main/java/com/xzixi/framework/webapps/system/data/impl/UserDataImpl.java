@@ -18,7 +18,7 @@
 package com.xzixi.framework.webapps.system.data.impl;
 
 import com.xzixi.framework.boot.enhance.annotation.CacheEnhance;
-import com.xzixi.framework.boot.webmvc.data.impl.MybatisPlusDataImpl;
+import com.xzixi.framework.boot.mybatis.data.impl.MybatisPlusDataImpl;
 import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.system.data.IUserData;
 import com.xzixi.framework.webapps.system.mapper.UserMapper;

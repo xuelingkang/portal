@@ -18,7 +18,7 @@
 package com.xzixi.framework.webapps.content.data;
 
 import com.xzixi.framework.webapps.common.model.po.ArticleContent;
-import com.xzixi.framework.boot.webmvc.data.IBaseData;
+import com.xzixi.framework.boot.persistent.data.IBaseData;
 
 /**
  * @author xuelingkang

@@ -17,10 +17,10 @@
 
 package com.xzixi.framework.webapps.sso.server.config.security;
 
-import com.xzixi.framework.boot.webmvc.exception.ClientException;
-import com.xzixi.framework.boot.webmvc.exception.RemoteException;
-import com.xzixi.framework.boot.webmvc.model.Result;
-import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
+import com.xzixi.framework.boot.core.exception.ClientException;
+import com.xzixi.framework.boot.core.exception.RemoteException;
+import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.boot.core.model.search.QueryParams;
 import com.xzixi.framework.webapps.common.feign.RemoteUserService;
 import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.common.model.vo.UserDetailsImpl;

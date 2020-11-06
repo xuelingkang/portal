@@ -19,7 +19,7 @@ package com.xzixi.framework.webapps.content.data.impl;
 
 import com.xzixi.framework.webapps.content.data.IArticleContentEsData;
 import com.xzixi.framework.webapps.common.model.po.ArticleContent;
-import com.xzixi.framework.boot.webmvc.data.impl.ElasticsearchDataImpl;
+import com.xzixi.framework.boot.elasticsearch.data.impl.ElasticsearchDataImpl;
 import org.springframework.stereotype.Service;
 
 /**

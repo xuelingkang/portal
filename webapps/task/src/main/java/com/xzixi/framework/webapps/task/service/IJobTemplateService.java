@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.webapps.task.service;
 
-import com.xzixi.framework.boot.webmvc.service.IBaseService;
+import com.xzixi.framework.boot.persistent.service.IBaseService;
 import com.xzixi.framework.boot.webmvc.service.IVoService;
 import com.xzixi.framework.webapps.common.model.po.JobTemplate;
 import com.xzixi.framework.webapps.common.model.po.JobTemplateParameter;

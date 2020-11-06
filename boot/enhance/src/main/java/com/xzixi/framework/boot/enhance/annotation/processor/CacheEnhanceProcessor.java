@@ -122,8 +122,8 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     private static final String COLLECTORS = "java.util.stream.Collectors";
     private static final String COLLECTION = "java.util.Collection";
     private static final String LIST = "java.util.List";
-    private static final String PAGINATION = "com.xzixi.framework.boot.webmvc.model.search.Pagination";
-    private static final String QUERY_PARAMS = "com.xzixi.framework.boot.webmvc.model.search.QueryParams";
+    private static final String PAGINATION = "com.xzixi.framework.boot.core.model.search.Pagination";
+    private static final String QUERY_PARAMS = "com.xzixi.framework.boot.core.model.search.QueryParams";
 
     private static final String ROLLBACK_FOR = "rollbackFor";
     private static final String CACHE_NAMES = "cacheNames";

@@ -17,8 +17,8 @@
 
 package com.xzixi.framework.boot.webmvc.service;
 
-import com.xzixi.framework.boot.webmvc.model.BaseModel;
-import com.xzixi.framework.boot.webmvc.model.search.Pagination;
+import com.xzixi.framework.boot.core.model.BaseModel;
+import com.xzixi.framework.boot.core.model.search.Pagination;
 
 import java.io.Serializable;
 import java.util.Collection;

@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.webapps.system.controller;
 
-import com.xzixi.framework.boot.webmvc.model.Result;
+import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.system.service.IUserLinkService;
 import com.xzixi.framework.webapps.system.service.IUserService;

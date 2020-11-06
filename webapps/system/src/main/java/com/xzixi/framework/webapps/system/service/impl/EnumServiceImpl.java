@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.webapps.system.service.impl;
 
-import com.xzixi.framework.boot.webmvc.model.IBaseEnum;
+import com.xzixi.framework.boot.core.model.IBaseEnum;
 import com.xzixi.framework.webapps.common.model.vo.EnumItemVO;
 import com.xzixi.framework.webapps.common.model.vo.EnumVO;
 import com.xzixi.framework.webapps.system.service.IEnumService;

@@ -18,7 +18,7 @@
 package com.xzixi.framework.webapps.content.mapper;
 
 import com.xzixi.framework.webapps.common.model.po.ArticleTagLink;
-import com.xzixi.framework.boot.webmvc.mapper.IBaseMapper;
+import com.xzixi.framework.boot.mybatis.mapper.IBaseMapper;
 
 /**
  * @author 薛凌康

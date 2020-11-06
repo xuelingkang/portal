@@ -17,13 +17,13 @@
 
 package com.xzixi.framework.webapps.content;
 
+import com.xzixi.framework.boot.cache.annotation.EnableFrameworkCache;
 import com.xzixi.framework.boot.webmvc.config.async.annotation.EnableFrameworkAsync;
-import com.xzixi.framework.boot.webmvc.config.cache.annotation.EnableFrameworkCache;
-import com.xzixi.framework.boot.webmvc.config.elasticsearch.annotation.EnableFrameworkElasticsearch;
+import com.xzixi.framework.boot.elasticsearch.annotation.EnableFrameworkElasticsearch;
 import com.xzixi.framework.boot.webmvc.config.exception.annotation.EnableFrameworkExceptionHandler;
 import com.xzixi.framework.boot.webmvc.config.json.annotation.EnableFrameworkJson;
 import com.xzixi.framework.boot.webmvc.config.mail.annotation.EnableFrameworkMail;
-import com.xzixi.framework.boot.webmvc.config.mybatis.annotation.EnableFrameworkMybatis;
+import com.xzixi.framework.boot.mybatis.annotation.EnableFrameworkMybatis;
 import com.xzixi.framework.boot.webmvc.config.validation.annotation.EnableFrameworkValidation;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;

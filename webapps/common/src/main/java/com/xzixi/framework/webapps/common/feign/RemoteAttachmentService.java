@@ -17,8 +17,8 @@
 
 package com.xzixi.framework.webapps.common.feign;
 
-import com.xzixi.framework.boot.webmvc.model.Result;
-import com.xzixi.framework.boot.webmvc.model.search.Pagination;
+import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.boot.core.model.search.Pagination;
 import com.xzixi.framework.webapps.common.model.enums.AttachmentType;
 import com.xzixi.framework.webapps.common.model.params.AttachmentSearchParams;
 import com.xzixi.framework.webapps.common.model.vo.AttachmentVO;

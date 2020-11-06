@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.webapps.system.service;
 
-import com.xzixi.framework.boot.webmvc.service.IBaseService;
+import com.xzixi.framework.boot.persistent.service.IBaseService;
 import com.xzixi.framework.webapps.common.model.po.RoleAuthorityLink;
 
 import java.util.Collection;

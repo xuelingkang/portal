@@ -17,8 +17,8 @@
 
 package com.xzixi.framework.webapps.system.service.impl;
 
-import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
-import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
+import com.xzixi.framework.boot.core.model.search.QueryParams;
+import com.xzixi.framework.boot.persistent.service.impl.BaseServiceImpl;
 import com.xzixi.framework.webapps.common.model.po.UserRoleLink;
 import com.xzixi.framework.webapps.system.data.IUserRoleLinkData;
 import com.xzixi.framework.webapps.system.service.IUserRoleLinkService;

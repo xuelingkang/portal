@@ -17,10 +17,10 @@
 
 package com.xzixi.framework.webapps.task.service.impl;
 
-import com.xzixi.framework.boot.webmvc.exception.ClientException;
-import com.xzixi.framework.boot.webmvc.exception.ProjectException;
-import com.xzixi.framework.boot.webmvc.exception.ServerException;
-import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
+import com.xzixi.framework.boot.core.exception.ClientException;
+import com.xzixi.framework.boot.core.exception.ProjectException;
+import com.xzixi.framework.boot.core.exception.ServerException;
+import com.xzixi.framework.boot.persistent.service.impl.BaseServiceImpl;
 import com.xzixi.framework.webapps.common.constant.JobConstant;
 import com.xzixi.framework.webapps.common.model.po.JobParameter;
 import com.xzixi.framework.webapps.common.model.po.JobTemplate;

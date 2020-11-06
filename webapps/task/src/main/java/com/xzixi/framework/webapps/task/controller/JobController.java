@@ -17,9 +17,9 @@
 
 package com.xzixi.framework.webapps.task.controller;
 
-import com.xzixi.framework.boot.webmvc.model.Result;
-import com.xzixi.framework.boot.webmvc.model.search.Pagination;
-import com.xzixi.framework.boot.webmvc.util.BeanUtils;
+import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.boot.core.model.search.Pagination;
+import com.xzixi.framework.boot.core.util.BeanUtils;
 import com.xzixi.framework.webapps.common.model.params.JobSearchParams;
 import com.xzixi.framework.webapps.common.model.po.Job;
 import com.xzixi.framework.webapps.common.model.valid.JobSave;

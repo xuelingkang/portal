@@ -17,8 +17,8 @@
 
 package com.xzixi.framework.webapps.queue;
 
-import com.xzixi.framework.boot.webmvc.generator.CodeGenerator;
-import com.xzixi.framework.boot.webmvc.generator.CodeGeneratorConfig;
+import com.xzixi.framework.boot.mybatis.generator.CodeGenerator;
+import com.xzixi.framework.boot.mybatis.generator.CodeGeneratorConfig;
 
 /**
  * @author xuelingkang

@@ -17,8 +17,8 @@
 
 package com.xzixi.framework.webapps.notice.controller;
 
-import com.xzixi.framework.boot.webmvc.model.Result;
-import com.xzixi.framework.boot.webmvc.model.search.Pagination;
+import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.boot.core.model.search.Pagination;
 import com.xzixi.framework.webapps.common.model.enums.MailType;
 import com.xzixi.framework.webapps.common.model.params.MailSearchParams;
 import com.xzixi.framework.webapps.common.model.po.Mail;

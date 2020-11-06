@@ -17,8 +17,8 @@
 
 package com.xzixi.framework.webapps.system.controller;
 
-import com.xzixi.framework.boot.webmvc.exception.ClientException;
-import com.xzixi.framework.boot.webmvc.model.Result;
+import com.xzixi.framework.boot.core.exception.ClientException;
+import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.webapps.common.model.vo.EnumVO;
 import com.xzixi.framework.webapps.system.service.IEnumService;
 import io.swagger.annotations.Api;

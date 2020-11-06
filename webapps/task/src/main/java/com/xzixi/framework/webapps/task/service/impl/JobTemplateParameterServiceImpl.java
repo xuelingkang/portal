@@ -17,8 +17,8 @@
 
 package com.xzixi.framework.webapps.task.service.impl;
 
-import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
-import com.xzixi.framework.boot.webmvc.service.impl.BaseServiceImpl;
+import com.xzixi.framework.boot.core.model.search.QueryParams;
+import com.xzixi.framework.boot.persistent.service.impl.BaseServiceImpl;
 import com.xzixi.framework.webapps.common.model.po.JobTemplateParameter;
 import com.xzixi.framework.webapps.task.data.IJobTemplateParameterData;
 import com.xzixi.framework.webapps.task.service.IJobTemplateParameterService;

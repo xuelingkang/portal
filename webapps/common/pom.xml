@@ -7,7 +7,7 @@
     <parent>
         <artifactId>webapps</artifactId>
         <groupId>com.xzixi.framework</groupId>
-        <version>2.1.0</version>
+        <version>3.0.0</version>
     </parent>
 
     <artifactId>common</artifactId>
@@ -15,7 +15,7 @@
     <description>公共实体类和接口</description>
 
     <dependencies>
-        <!-- 基础web框架 -->
+        <!-- 常用依赖、配置 -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>webmvc</artifactId>
@@ -37,22 +37,17 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
         </dependency>
-        <!-- feign -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-openfeign-core</artifactId>
-        </dependency>
-        <!-- mybatis plus 注解 -->
+        <!-- mybatis plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-annotation</artifactId>
         </dependency>
-        <!-- validator 注解 -->
+        <!-- validator -->
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
-        <!-- elasticsearch 注解 -->
+        <!-- elasticsearch -->
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-elasticsearch</artifactId>

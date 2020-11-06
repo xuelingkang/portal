@@ -18,7 +18,7 @@
 package com.xzixi.framework.webapps.task.data.impl;
 
 import com.xzixi.framework.boot.enhance.annotation.CacheEnhance;
-import com.xzixi.framework.boot.webmvc.data.impl.MybatisPlusDataImpl;
+import com.xzixi.framework.boot.mybatis.data.impl.MybatisPlusDataImpl;
 import com.xzixi.framework.webapps.common.model.po.Job;
 import com.xzixi.framework.webapps.task.data.IJobData;
 import com.xzixi.framework.webapps.task.mapper.JobMapper;

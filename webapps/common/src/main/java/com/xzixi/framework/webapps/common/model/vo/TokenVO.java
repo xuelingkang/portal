@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.webapps.common.model.vo;
 
-import com.xzixi.framework.boot.webmvc.util.BeanUtils;
+import com.xzixi.framework.boot.core.util.BeanUtils;
 import com.xzixi.framework.webapps.common.model.po.Token;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

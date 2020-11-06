@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.boot.webmvc.service;
 
-import com.xzixi.framework.boot.webmvc.model.IBelonging;
+import com.xzixi.framework.boot.core.model.IBelonging;
 
 /**
  * @author 薛凌康

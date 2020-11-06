@@ -18,7 +18,7 @@
 package com.xzixi.framework.webapps.sso.server.config.security;
 
 import com.xzixi.framework.webapps.sso.server.util.WebUtils;
-import com.xzixi.framework.boot.webmvc.model.Result;
+import com.xzixi.framework.boot.core.model.Result;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;

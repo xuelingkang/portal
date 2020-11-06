@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.webapps.sso.server.config.security;
 
-import com.xzixi.framework.boot.webmvc.model.Result;
+import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.webapps.sso.server.util.WebUtils;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

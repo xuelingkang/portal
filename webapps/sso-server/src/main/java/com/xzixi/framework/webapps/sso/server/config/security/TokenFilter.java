@@ -17,8 +17,8 @@
 
 package com.xzixi.framework.webapps.sso.server.config.security;
 
-import com.xzixi.framework.boot.webmvc.exception.RemoteException;
-import com.xzixi.framework.boot.webmvc.model.Result;
+import com.xzixi.framework.boot.core.exception.RemoteException;
+import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.webapps.common.constant.SecurityConstant;
 import com.xzixi.framework.webapps.common.feign.RemoteUserService;
 import com.xzixi.framework.webapps.common.model.po.Token;

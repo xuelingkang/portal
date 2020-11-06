@@ -17,7 +17,7 @@
 
 package com.xzixi.framework.webapps.common.model.po;
 
-import com.xzixi.framework.boot.webmvc.model.BaseModel;
+import com.xzixi.framework.boot.core.model.BaseModel;
 import com.xzixi.framework.webapps.common.model.enums.AuthorityMethod;
 import com.xzixi.framework.webapps.common.model.valid.RoleSave;
 import com.xzixi.framework.webapps.common.model.valid.RoleUpdate;

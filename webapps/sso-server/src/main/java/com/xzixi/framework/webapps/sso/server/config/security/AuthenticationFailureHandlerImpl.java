@@ -18,7 +18,7 @@
 package com.xzixi.framework.webapps.sso.server.config.security;
 
 import com.xzixi.framework.webapps.sso.server.util.WebUtils;
-import com.xzixi.framework.boot.webmvc.model.Result;
+import com.xzixi.framework.boot.core.model.Result;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;

@@ -17,9 +17,9 @@
 
 package com.xzixi.framework.webapps.common.feign;
 
-import com.xzixi.framework.boot.webmvc.model.Result;
-import com.xzixi.framework.boot.webmvc.model.search.Pagination;
-import com.xzixi.framework.boot.webmvc.model.search.QueryParams;
+import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.boot.core.model.search.Pagination;
+import com.xzixi.framework.boot.core.model.search.QueryParams;
 import com.xzixi.framework.webapps.common.model.params.UserSearchParams;
 import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;

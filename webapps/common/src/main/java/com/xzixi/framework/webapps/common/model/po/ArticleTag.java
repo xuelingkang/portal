@@ -19,8 +19,8 @@ package com.xzixi.framework.webapps.common.model.po;
 
 import com.xzixi.framework.webapps.common.model.valid.ArticleSave;
 import com.xzixi.framework.webapps.common.model.valid.ArticleUpdate;
-import com.xzixi.framework.boot.webmvc.model.BaseModel;
-import com.xzixi.framework.boot.webmvc.model.IBelonging;
+import com.xzixi.framework.boot.core.model.BaseModel;
+import com.xzixi.framework.boot.core.model.IBelonging;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
