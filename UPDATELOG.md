@@ -1,5 +1,4 @@
 - **current**
-  - 拆分redis配置和缓存配置，新增注解@EnableFrameworkRedis
   - 全局异常拦截修正
   - 将mybatis、elasticsearch、redis、cache从webmvc模块中拆分出来
 - **2020.11.02 v2.1.0**
