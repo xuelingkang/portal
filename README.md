@@ -29,15 +29,6 @@
 关键模块maven坐标
 
 ```xml
-<!-- 编译期增强 -->
-<dependency>
-    <groupId>com.xzixi.framework</groupId>
-    <artifactId>enhance</artifactId>
-    <version>3.0.0</version>
-    <scope>provided</scope>
-</dependency>
-```
-```xml
 <!-- sftp连接池启动器 -->
 <dependency>
     <groupId>com.xzixi.framework</groupId>
@@ -91,5 +82,14 @@
     <groupId>com.xzixi.framework</groupId>
     <artifactId>webmvc</artifactId>
     <version>3.0.0</version>
+</dependency>
+```
+```xml
+<!-- 编译期增强 -->
+<dependency>
+    <groupId>com.xzixi.framework</groupId>
+    <artifactId>enhance</artifactId>
+    <version>3.0.0</version>
+    <scope>provided</scope>
 </dependency>
 ```
