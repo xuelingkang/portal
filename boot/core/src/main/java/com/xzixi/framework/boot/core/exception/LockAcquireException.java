@@ -15,21 +15,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.boot.redis.annotation;
-
-import com.xzixi.framework.boot.redis.config.RedisConfig;
-import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
-import org.springframework.context.annotation.Import;
-
-import java.lang.annotation.*;
+package com.xzixi.framework.boot.core.exception;
 
 /**
  * @author xuelingkang
- * @date 2020-11-03
+ * @date 2020-11-07
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Import({RedisConfig.class, RedisLockService.class})
-public @interface EnableFrameworkRedis {
+public class LockAcquireException extends Exception {
+
+    public LockAcquireException(String message) {
+        super(message);
+    }
 }

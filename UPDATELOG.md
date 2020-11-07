@@ -1,6 +1,7 @@
 - **current**
   - 全局异常拦截修正
   - 将mybatis、elasticsearch、redis、cache从webmvc模块中拆分出来
+  - redis实现可重入分布式锁
 - **2020.11.02 v2.1.0**
   - 代码生成器增加默认模板配置
   - 代码生成器跨项目生成代码

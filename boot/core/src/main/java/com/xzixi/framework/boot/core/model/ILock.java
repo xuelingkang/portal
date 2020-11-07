@@ -15,21 +15,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.boot.redis.annotation;
+package com.xzixi.framework.boot.core.model;
 
-import com.xzixi.framework.boot.redis.config.RedisConfig;
-import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
-import org.springframework.context.annotation.Import;
-
-import java.lang.annotation.*;
+import com.xzixi.framework.boot.core.exception.LockAcquireException;
+import com.xzixi.framework.boot.core.exception.LockReleaseException;
 
 /**
+ * 分布式锁
+ *
  * @author xuelingkang
- * @date 2020-11-03
+ * @date 2020-11-07
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Import({RedisConfig.class, RedisLockService.class})
-public @interface EnableFrameworkRedis {
+public interface ILock {
+
+    /**
+     * 获取锁
+     *
+     * @throws LockAcquireException 获取锁失败
+     */
+    void acquire() throws LockAcquireException;
+
+    /**
+     * 释放锁
+     *
+     * @throws LockReleaseException 释放锁失败
+     */
+    void release() throws LockReleaseException;
 }

@@ -18,6 +18,11 @@
 package com.xzixi.framework.webapps.sso.server;
 
 import com.alibaba.fastjson.JSON;
+import com.xzixi.framework.boot.core.exception.LockAcquireException;
+import com.xzixi.framework.boot.core.exception.LockReleaseException;
+import com.xzixi.framework.boot.core.model.ILock;
+import com.xzixi.framework.boot.core.util.Utils;
+import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
 import com.xzixi.framework.webapps.sso.server.model.SsoAccessTokenValue;
 import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
 import com.xzixi.framework.webapps.sso.server.service.ISsoAccessTokenService;
@@ -39,6 +44,8 @@ public class SsoApplicationTests {
 
     @Autowired
     private ISsoAccessTokenService ssoAccessTokenService;
+    @Autowired
+    private RedisLockService redisLockService;
 
     @Test
     public void testSave() {
@@ -50,5 +57,21 @@ public class SsoApplicationTests {
     public void testGet() {
         SsoAccessTokenValue ssoAccessTokenValue = ssoAccessTokenService.getTokenValue("7a70be74-1d79-43dc-a783-4cbe248aae8e");
         log.info(JSON.toJSONString(ssoAccessTokenValue));
+    }
+
+    @Test
+    public void testAcquireRedisLock() throws LockAcquireException {
+        ILock lock = redisLockService.getLock("lock::test", 10000, 30000);
+        log.info(lock.toString());
+        lock.acquire();
+    }
+
+    @Test
+    public void testReleaseRedisLock() throws LockReleaseException, LockAcquireException {
+        ILock lock = redisLockService.getLock("lock::test", "123", 40000, 100000);
+        log.info(lock.toString());
+        lock.acquire();
+        Utils.safeSleep(10000);
+        lock.release();
     }
 }
