@@ -19,7 +19,6 @@
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>sftp-client</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <!-- 自定义启动器需要依赖spring-boot-starter -->
         <dependency>

@@ -19,7 +19,6 @@
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>redis</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <!-- cache -->
         <dependency>

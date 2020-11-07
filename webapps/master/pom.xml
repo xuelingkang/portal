@@ -23,13 +23,11 @@
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>swagger2-spring-boot-starter</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <!-- 公共模块 -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>common</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <!-- nacos服务注册发现 -->
         <dependency>
@@ -65,4 +63,13 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

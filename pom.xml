@@ -169,6 +169,86 @@
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>${swagger-ui.version}</version>
             </dependency>
+
+            <!-- 以下是自己造的轮子 -->
+            <!-- sftp连接池 -->
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>sftp-client</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- sftp连接池启动器 -->
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>sftp-client-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- swagger2扩展 -->
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>swagger2-extension</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- swagger2扩展注解 -->
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>swagger2-annotations</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- swagger2启动器 -->
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>swagger2-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- 公共接口和对象等 -->
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- 持久层接口 -->
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>persistent</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- mybatis-plus持久层实现 -->
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- elasticsearch持久层实现 -->
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- redis配置 -->
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>redis</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- 缓存配置 -->
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>cache</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- 常用依赖、配置 -->
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>webmvc</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- 编译期增强 -->
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>enhance</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

@@ -19,7 +19,6 @@
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <!-- servlet api -->
         <dependency>

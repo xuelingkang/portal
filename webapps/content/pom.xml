@@ -23,38 +23,32 @@
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>enhance</artifactId>
-            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <!-- swagger2启动器 -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>swagger2-spring-boot-starter</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <!-- 公共模块 -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>common</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <!-- mybatis -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>mybatis</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <!-- elasticsearch -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>elasticsearch</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <!-- cache -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>cache</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <!-- nacos服务注册发现 -->
         <dependency>
@@ -101,4 +95,13 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
