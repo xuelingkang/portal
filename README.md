@@ -2,14 +2,6 @@
 
 `Talk is cheap. Show you my code.`
 
-## 启动开发环境
-
-1. 在develop目录下执行命令`docker-compose up -d`
-2. webapps下除`admin`、`master`、`sso`、`gateway`外，其他项目设置VM参数：`-javaagent:/path/to/aspectjweaver/aspectjweaver-1.9.6.jar`
-3. **重要**，`enhance`模块**不要**开启idea的`Enable annotation processing`选项
-4. 使用maven package命令打包`enhance`和`starter`模块
-5. 启动项目
-
 ## boot模块说明
 
 | 编号 | 名称 | 描述 |
@@ -26,14 +18,31 @@
 
 - [更新日志](./UPDATELOG.md)
 
-## maven坐标
+## 使用方式
+
+### 导入依赖管理
+
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
+            <artifactId>boot</artifactId>
+            <version>2.1.2</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+```
+
+### 导入需要的包
 
 ```xml
 <!-- sftp连接池启动器 -->
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>sftp-client-spring-boot-starter</artifactId>
-    <version>2.1.1</version>
 </dependency>
 ```
 ```xml
@@ -41,7 +50,6 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>swagger2-spring-boot-starter</artifactId>
-    <version>2.1.1</version>
 </dependency>
 ```
 ```xml
@@ -49,7 +57,6 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>mybatis</artifactId>
-    <version>2.1.1</version>
 </dependency>
 ```
 ```xml
@@ -57,7 +64,6 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>elasticsearch</artifactId>
-    <version>2.1.1</version>
 </dependency>
 ```
 ```xml
@@ -65,7 +71,6 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>redis</artifactId>
-    <version>2.1.1</version>
 </dependency>
 ```
 ```xml
@@ -73,7 +78,6 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>cache</artifactId>
-    <version>2.1.1</version>
 </dependency>
 ```
 ```xml
@@ -81,7 +85,6 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>webmvc</artifactId>
-    <version>2.1.1</version>
 </dependency>
 ```
 ```xml
@@ -89,7 +92,14 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>enhance</artifactId>
-    <version>2.1.1</version>
     <scope>provided</scope>
 </dependency>
 ```
+
+## 启动webapp
+
+1. 在develop目录下执行命令`docker-compose up -d`
+2. webapps下除`admin`、`master`、`sso`、`gateway`外，其他项目设置VM参数：`-javaagent:/path/to/aspectjweaver/aspectjweaver-1.9.6.jar`
+3. **重要**，`enhance`模块**不要**开启idea的`Enable annotation processing`选项
+4. 使用maven package命令打包`enhance`和`starter`模块
+5. 启动项目
