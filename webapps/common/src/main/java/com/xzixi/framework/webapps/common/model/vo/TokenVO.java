@@ -32,8 +32,6 @@ import lombok.NoArgsConstructor;
 @ApiModel(description = "令牌")
 public class TokenVO extends Token {
 
-    private static final long serialVersionUID = 1L;
-
     @ApiModelProperty(value = "用户")
     private UserVO user;
 
