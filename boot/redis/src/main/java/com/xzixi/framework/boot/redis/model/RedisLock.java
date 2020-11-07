@@ -102,6 +102,11 @@ public class RedisLock implements ILock {
         }
     }
 
+    @Override
+    public void safeRelease() {
+        stringRedisTemplate.execute(RELEASE_SCRIPT, Collections.singletonList(this.name), this.value);
+    }
+
     /**
      * 尝试获取锁
      *

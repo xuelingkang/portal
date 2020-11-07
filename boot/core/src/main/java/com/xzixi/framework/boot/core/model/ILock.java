@@ -41,4 +41,9 @@ public interface ILock {
      * @throws LockReleaseException 释放锁失败
      */
     void release() throws LockReleaseException;
+
+    /**
+     * 释放锁，忽略异常
+     */
+    void safeRelease();
 }
