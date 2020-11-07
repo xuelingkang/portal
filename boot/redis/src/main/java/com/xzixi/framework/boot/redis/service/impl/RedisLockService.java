@@ -17,6 +17,7 @@
 
 package com.xzixi.framework.boot.redis.service.impl;
 
+import com.xzixi.framework.boot.core.model.ILock;
 import com.xzixi.framework.boot.core.service.ILockService;
 import com.xzixi.framework.boot.redis.model.RedisLock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +52,7 @@ public class RedisLockService implements ILockService {
     }
 
     @Override
-    public RedisLock getLock(String name, String value, long waitTimeout, long leaseTimeout) {
+    public ILock getLock(String name, String value, long waitTimeout, long leaseTimeout) {
         return new RedisLock(name, value, waitTimeout, leaseTimeout, stringRedisTemplate);
     }
 }
