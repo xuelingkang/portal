@@ -31,9 +31,7 @@ import java.io.Serializable;
  */
 @Data
 @ApiModel(description = "sso-client登录成功响应")
-public class SsoClientLoginResponse implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class SsoClientLoginResponse {
 
     @ApiModelProperty(value = "x-access-token")
     private String accessToken;

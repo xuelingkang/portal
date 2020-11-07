@@ -21,17 +21,13 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.io.Serializable;
-
 /**
  * @author xuelingkang
  * @date 2020-11-05
  */
 @Data
 @ApiModel(description = "刷新accessToken响应")
-public class RefreshAccessTokenResponse implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class RefreshAccessTokenResponse {
 
     @ApiModelProperty(value = "新的accessToken")
     private String accessToken;

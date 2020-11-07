@@ -23,7 +23,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -33,9 +32,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(description = "枚举")
-public class EnumVO implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class EnumVO {
 
     @ApiModelProperty(value = "名称")
     private String name;

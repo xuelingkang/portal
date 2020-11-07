@@ -21,8 +21,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
 /**
  * @author xuelingkang
  * @date 2020-11-05
@@ -30,9 +28,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TokenInfo implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class TokenInfo {
 
     private String uuid;
 

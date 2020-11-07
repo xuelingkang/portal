@@ -21,8 +21,6 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.io.Serializable;
-
 /**
  * sso-server登录成功响应
  *
@@ -31,9 +29,7 @@ import java.io.Serializable;
  */
 @Data
 @ApiModel(description = "sso-server登录成功响应")
-public class SsoServerLoginResponse implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class SsoServerLoginResponse {
 
     @ApiModelProperty(value = "sso站点的x-access-token")
     private String ssoAccessToken;

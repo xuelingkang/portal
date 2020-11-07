@@ -21,8 +21,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
 /**
  * 返回结果
  *
@@ -31,9 +29,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Result<T> implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Result<T> {
 
     /**
      * 状态码
