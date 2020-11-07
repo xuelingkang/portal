@@ -1,4 +1,5 @@
-- **current**
+- **2020.11.08 v2.1.1**
+  - 修正maven依赖bug
   - 全局异常拦截修正
   - 将mybatis、elasticsearch、redis、cache从webmvc模块中拆分出来
   - redis实现可重入分布式锁

@@ -33,7 +33,7 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>sftp-client-spring-boot-starter</artifactId>
-    <version>3.0.0</version>
+    <version>2.1.1</version>
 </dependency>
 ```
 ```xml
@@ -41,7 +41,7 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>swagger2-spring-boot-starter</artifactId>
-    <version>3.0.0</version>
+    <version>2.1.1</version>
 </dependency>
 ```
 ```xml
@@ -49,7 +49,7 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>mybatis</artifactId>
-    <version>3.0.0</version>
+    <version>2.1.1</version>
 </dependency>
 ```
 ```xml
@@ -57,7 +57,7 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>elasticsearch</artifactId>
-    <version>3.0.0</version>
+    <version>2.1.1</version>
 </dependency>
 ```
 ```xml
@@ -65,7 +65,7 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>redis</artifactId>
-    <version>3.0.0</version>
+    <version>2.1.1</version>
 </dependency>
 ```
 ```xml
@@ -73,7 +73,7 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>cache</artifactId>
-    <version>3.0.0</version>
+    <version>2.1.1</version>
 </dependency>
 ```
 ```xml
@@ -81,7 +81,7 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>webmvc</artifactId>
-    <version>3.0.0</version>
+    <version>2.1.1</version>
 </dependency>
 ```
 ```xml
@@ -89,7 +89,7 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>enhance</artifactId>
-    <version>3.0.0</version>
+    <version>2.1.1</version>
     <scope>provided</scope>
 </dependency>
 ```
