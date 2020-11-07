@@ -30,12 +30,11 @@ spring:
           filters:
             - StripPrefix=1
 
-# 日志
 logging:
   config: classpath:logback-spring.xml
 
 log:
-  root-level: INFO # 日志级别
-  max-size: 1024MB # 日志最大大小
-  max-history: 30 # 日志保留天数
-  charset: UTF-8 # 日志编码
+  root-level: INFO
+  max-size: 1024MB
+  max-history: 30
+  charset: UTF-8

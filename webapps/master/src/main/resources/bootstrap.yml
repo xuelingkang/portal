@@ -1,8 +1,5 @@
 server:
   port: 8087
-  jetty:
-    acceptors: -1 # 接收线程数，默认-1，根据运行环境派生
-    selectors: -1 # 选择器线程数，默认-1，根据运行环境派生
 
 spring:
   profiles:
@@ -18,15 +15,14 @@ spring:
 
   servlet:
     multipart:
-      max-file-size: 50MB # 单个文件的最大值
-      max-request-size: 200MB # 多个文件的总大小
+      max-file-size: 50MB
+      max-request-size: 200MB
 
-# 日志
 logging:
   config: classpath:logback-spring.xml
 
 swagger2:
-  project-name: portal-@project.artifactId@
+  project-name: ${spring.application.name}
   project-version: @project.version@
   auth-api:
     exclude-url-reg: ^(?!(/login|/website/user|/user/reset-password|/user/activate)).*$
@@ -34,7 +30,7 @@ swagger2:
     header-name: x-access-token
 
 log:
-  root-level: INFO # 日志级别
-  max-size: 1024MB # 日志最大大小
-  max-history: 30 # 日志保留天数
-  charset: UTF-8 # 日志编码
+  root-level: INFO
+  max-size: 1024MB
+  max-history: 30
+  charset: UTF-8

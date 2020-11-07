@@ -5,4 +5,4 @@ spring:
         server-addr: localhost:8848
 
 log:
-  home: /data/logs/portal/gateway # 日志目录
+  home: /data/logs/portal/gateway
