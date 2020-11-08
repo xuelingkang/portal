@@ -19,6 +19,7 @@ package com.xzixi.framework.boot.redis.annotation;
 
 import com.xzixi.framework.boot.redis.config.RedisConfig;
 import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
+import com.xzixi.framework.boot.redis.service.impl.RedisPipelineService;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -30,6 +31,6 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import({RedisConfig.class, RedisLockService.class})
+@Import({RedisConfig.class, RedisLockService.class, RedisPipelineService.class})
 public @interface EnableFrameworkRedis {
 }
