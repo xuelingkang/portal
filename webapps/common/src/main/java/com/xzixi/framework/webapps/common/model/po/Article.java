@@ -18,15 +18,14 @@
 package com.xzixi.framework.webapps.common.model.po;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.xzixi.framework.boot.core.model.BaseModel;
+import com.xzixi.framework.boot.swagger2.annotations.IgnoreSwagger2Parameter;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.enums.ArticleAccess;
 import com.xzixi.framework.webapps.common.model.enums.ArticleCategory;
 import com.xzixi.framework.webapps.common.model.enums.ArticleType;
 import com.xzixi.framework.webapps.common.model.valid.ArticleSave;
 import com.xzixi.framework.webapps.common.model.valid.ArticleUpdate;
-import com.xzixi.framework.boot.swagger2.annotations.IgnoreSwagger2Parameter;
-import com.xzixi.framework.boot.core.model.BaseModel;
-import com.xzixi.framework.boot.core.model.IBelonging;
-import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -45,7 +44,7 @@ import javax.validation.constraints.Null;
 @Data
 @ApiModel(description = "文章")
 @Document(indexName = ProjectConstant.INDEX_NAME_PREFIX + "article")
-public class Article extends BaseModel implements IBelonging {
+public class Article extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -120,9 +119,4 @@ public class Article extends BaseModel implements IBelonging {
     @TableLogic
     @IgnoreSwagger2Parameter
     private Boolean deleted;
-
-    @Override
-    public Integer ownerId() {
-        return userId;
-    }
 }

@@ -22,7 +22,6 @@ import com.xzixi.framework.boot.core.exception.ServerException;
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.Pagination;
 import com.xzixi.framework.boot.core.model.search.QueryParams;
-import com.xzixi.framework.boot.webmvc.service.IBelongingService;
 import com.xzixi.framework.boot.core.util.BeanUtils;
 import com.xzixi.framework.webapps.common.model.params.UserSearchParams;
 import com.xzixi.framework.webapps.common.model.po.User;
@@ -68,8 +67,6 @@ public class UserController {
     private String resetPasswordUrl;
     @Autowired
     private IUserService userService;
-    @Autowired
-    private IBelongingService belongingService;
     @Autowired
     private IUserRoleLinkService userRoleLinkService;
 //    @Autowired
@@ -134,7 +131,7 @@ public class UserController {
     @PutMapping("/personal")
     @ApiOperation(value = "更新个人信息")
     public Result<?> selfUpdate(@Validated({UserUpdate.class}) User user) {
-        belongingService.checkOwner(user);
+//        belongingService.checkOwner(user);
         User userData = userService.getById(user.getId());
         // 清除不可更新的属性
         String[] ignoreProperties = {"createTime", "loginTime", "locked", "deleted", "password", "type"};

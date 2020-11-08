@@ -18,7 +18,6 @@
 package com.xzixi.framework.webapps.common.model.po;
 
 import com.xzixi.framework.boot.core.model.BaseModel;
-import com.xzixi.framework.boot.core.model.IBelonging;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -28,7 +27,7 @@ import lombok.Data;
  */
 @Data
 @ApiModel(description = "文章收藏夹")
-public class ArticleCollection extends BaseModel implements IBelonging {
+public class ArticleCollection extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,9 +42,4 @@ public class ArticleCollection extends BaseModel implements IBelonging {
 
     @ApiModelProperty(value = "创建时间")
     private Long createTime;
-
-    @Override
-    public Integer ownerId() {
-        return userId;
-    }
 }

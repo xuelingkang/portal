@@ -18,14 +18,13 @@
 package com.xzixi.framework.webapps.common.model.po;
 
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.xzixi.framework.boot.core.model.BaseModel;
+import com.xzixi.framework.boot.swagger2.annotations.IgnoreSwagger2Parameter;
 import com.xzixi.framework.webapps.common.model.enums.Sex;
 import com.xzixi.framework.webapps.common.model.enums.UserType;
 import com.xzixi.framework.webapps.common.model.valid.UserSave;
 import com.xzixi.framework.webapps.common.model.valid.UserUpdate;
 import com.xzixi.framework.webapps.common.model.valid.WebsiteUserSave;
-import com.xzixi.framework.boot.swagger2.annotations.IgnoreSwagger2Parameter;
-import com.xzixi.framework.boot.core.model.BaseModel;
-import com.xzixi.framework.boot.core.model.IBelonging;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -40,7 +39,7 @@ import javax.validation.constraints.*;
  */
 @Data
 @ApiModel(description = "用户")
-public class User extends BaseModel implements IBelonging {
+public class User extends BaseModel {
 
     private static final long serialVersionUID = 1L;
 
@@ -100,9 +99,4 @@ public class User extends BaseModel implements IBelonging {
     @TableLogic
     @IgnoreSwagger2Parameter
     private Boolean deleted;
-
-    @Override
-    public Integer ownerId() {
-        return id;
-    }
 }
