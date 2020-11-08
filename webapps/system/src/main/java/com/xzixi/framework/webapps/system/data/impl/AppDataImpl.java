@@ -17,10 +17,11 @@
 
 package com.xzixi.framework.webapps.system.data.impl;
 
+import com.xzixi.framework.boot.enhance.annotation.CacheEnhance;
 import com.xzixi.framework.boot.mybatis.data.impl.MybatisPlusDataImpl;
+import com.xzixi.framework.webapps.common.model.po.App;
 import com.xzixi.framework.webapps.system.data.IAppData;
 import com.xzixi.framework.webapps.system.mapper.AppMapper;
-import com.xzixi.framework.webapps.common.model.po.App;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,6 +31,6 @@ import org.springframework.stereotype.Service;
  * @date 2020-10-25
  */
 @Service
+@CacheEnhance(baseCacheName = "app:base", casualCacheName = "app:casual")
 public class AppDataImpl extends MybatisPlusDataImpl<AppMapper, App> implements IAppData {
-
 }

@@ -17,9 +17,18 @@
 
 package com.xzixi.framework.webapps.system;
 
+import com.alibaba.fastjson.JSON;
+import com.xzixi.framework.webapps.common.model.po.App;
+import com.xzixi.framework.webapps.system.service.IAppService;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author xuelingkang
@@ -27,5 +36,15 @@ import org.springframework.test.context.junit4.SpringRunner;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Slf4j
 public class SystemApplicationTests {
+
+    @Autowired
+    private IAppService appService;
+
+    @Test
+    public void testListByIds() {
+        List<App> apps = appService.listByIds(Arrays.asList(1, 2, 3));
+        log.info(JSON.toJSONString(apps));
+    }
 }
