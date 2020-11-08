@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @author xuelingkang
@@ -50,8 +51,9 @@ public class RedisPipelineService {
      * @param keys key有序集合
      * @return values，和入ids顺序和长度，查询不到的用null占位
      */
-    public List<Object> get(Collection<String> keys) {
-        return redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
+    @SuppressWarnings("unchecked")
+    public <T> List<T> get(Collection<String> keys) {
+        List<Object> values = redisTemplate.executePipelined((RedisCallback<Object>) connection -> {
             for (String key : keys) {
                 byte[] keyBytes = stringRedisSerializer.serialize(key);
                 assert keyBytes != null;
@@ -59,6 +61,7 @@ public class RedisPipelineService {
             }
             return null;
         });
+        return values.stream().map(value -> (T) value).collect(Collectors.toList());
     }
 
     /**
