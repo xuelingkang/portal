@@ -46,7 +46,7 @@ CREATE TABLE `t_app` (
 
 LOCK TABLES `t_app` WRITE;
 /*!40000 ALTER TABLE `t_app` DISABLE KEYS */;
-INSERT INTO `t_app` VALUES (1,'sso','bdk6wxs8r6uBN0yxXkmAi6Ej1+2EHkrgnZHp!eNbbph_wcofvIKbYYBGjHfJG5JS','单点登录',NULL,NULL,100),(2,'admin','6JD-FX!eS8%ffyKw4ynSJ8kOYhyUQW4YA894@4sztV%6spTrgFA_TA2tQ6L5SitQ','管理后台','http://admin.xzixi.com/admin/callback/login','http://admin.xzixi.com/admin/callback/logout',200),(3,'master','x1cTC6s&O8kMf6wZ%nBN1E_TfVCA9!!lx+gInK%-mczcy@MaRgnT!ojnjriA&Lsz','前台','http://www.xzixi.com/master/callback/login','http://www.xzixi.com/master/callback/logout',300);
+INSERT INTO `t_app` VALUES (1,'sso','bdk6wxs8r6uBN0yxXkmAi6Ej1+2EHkrgnZHp!eNbbph_wcofvIKbYYBGjHfJG5JS','单点登录',NULL,NULL,100),(2,'admin','6JD-FX!eS8%ffyKw4ynSJ8kOYhyUQW4YA894@4sztV%6spTrgFA_TA2tQ6L5SitQ','管理后台','http://admin.xzixi.com/admin/login/callback','http://admin.xzixi.com/admin/logout/callback',200),(3,'master','x1cTC6s&O8kMf6wZ%nBN1E_TfVCA9!!lx+gInK%-mczcy@MaRgnT!ojnjriA&Lsz','前台','http://www.xzixi.com/master/login/callback','http://www.xzixi.com/master/logout/callback',300);
 /*!40000 ALTER TABLE `t_app` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,4 +235,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-03 22:15:41
+-- Dump completed on 2020-11-08 14:02:04
