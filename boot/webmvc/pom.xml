@@ -15,6 +15,11 @@
     <description>常用依赖、配置</description>
 
     <dependencies>
+        <!-- autoconfigure -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
         <!-- 公共接口和对象等 -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>

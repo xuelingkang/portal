@@ -15,31 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.boot.webmvc.config.validation;
+package com.xzixi.framework.boot.webmvc.config;
 
-import org.hibernate.validator.HibernateValidator;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.validation.Validation;
-import javax.validation.Validator;
-
 /**
- * 参数校验
- *
  * @author 薛凌康
  */
 @Configuration
-public class ValidationConfig {
+public class MailConfig {
 
-    @Bean
-    public Validator validator() {
-        return Validation
-                .byProvider(HibernateValidator.class)
-                .configure()
-                // 快速返回模式，有一个验证失败立即返回错误信息
-                .failFast(true)
-                .buildValidatorFactory()
-                .getValidator();
+    static {
+        // 防止中文名字附件base64加密以后，名字太长被截断，导致中文乱码问题
+        System.setProperty("mail.mime.splitlongparameters", "false");
     }
 }

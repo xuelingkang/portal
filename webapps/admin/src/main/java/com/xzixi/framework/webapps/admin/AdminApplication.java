@@ -17,9 +17,6 @@
 
 package com.xzixi.framework.webapps.admin;
 
-import com.xzixi.framework.boot.webmvc.config.exception.annotation.EnableFrameworkExceptionHandler;
-import com.xzixi.framework.boot.webmvc.config.json.annotation.EnableFrameworkJson;
-import com.xzixi.framework.boot.webmvc.config.validation.annotation.EnableFrameworkValidation;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -28,9 +25,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2020-10-22
  */
 @SpringBootApplication
-@EnableFrameworkJson
-@EnableFrameworkValidation
-@EnableFrameworkExceptionHandler
 public class AdminApplication {
 
     public static void main(String[] args) {

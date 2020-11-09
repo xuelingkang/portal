@@ -35,9 +35,4 @@ public class Components {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    @Bean
-    public ISignService md5SignService() {
-        return new Md5SignServiceImpl();
-    }
 }

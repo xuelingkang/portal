@@ -15,6 +15,11 @@
     <description>缓存配置</description>
 
     <dependencies>
+        <!-- autoconfigure -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
         <!-- redis -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
