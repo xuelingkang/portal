@@ -45,7 +45,7 @@ public class DefaultEvictByEntitiesKeyGenerator implements KeyGenerator {
         }
         return StringUtils.join(
                 collection.stream().map(entity ->
-                        target.getClass().getName() +
+                        target.getClass().getSimpleName() +
                                 KEY_SEPARATOR +
                                 GET_BY_ID_METHOD_NAME +
                                 KEY_SEPARATOR +

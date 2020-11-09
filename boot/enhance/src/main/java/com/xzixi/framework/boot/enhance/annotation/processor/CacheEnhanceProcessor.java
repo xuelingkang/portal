@@ -19,7 +19,6 @@ package com.xzixi.framework.boot.enhance.annotation.processor;
 
 import com.sun.tools.javac.code.BoundKind;
 import com.sun.tools.javac.code.Flags;
-import com.sun.tools.javac.code.Symbol;
 import com.sun.tools.javac.code.TypeTag;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.util.List;
@@ -69,7 +68,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
             }
             if (cacheEnhance.listByIds()) {
                 classDecl.defs = classDecl.defs.appendList(List.of(redisCacheTimeToLiveDecl(),
-                        redisPipelineServiceDecl(), listByIdsDecl(cacheEnhance, ((Symbol.ClassSymbol) element).fullname.toString(), modelClassName)));
+                        redisPipelineServiceDecl(), listByIdsDecl(cacheEnhance, classDecl.name.toString(), modelClassName)));
             }
             if (cacheEnhance.getOne()) {
                 classDecl.defs = classDecl.defs.append(getOneDecl(cacheEnhance, modelClassName));

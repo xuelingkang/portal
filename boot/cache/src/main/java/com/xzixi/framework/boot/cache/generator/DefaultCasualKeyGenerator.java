@@ -44,7 +44,7 @@ public class DefaultCasualKeyGenerator implements KeyGenerator {
 
     @Override
     public Object generate(Object target, Method method, Object... params) {
-        return target.getClass().getName() +
+        return target.getClass().getSimpleName() +
                 KEY_SEPARATOR +
                 method.getName() +
                 KEY_SEPARATOR +

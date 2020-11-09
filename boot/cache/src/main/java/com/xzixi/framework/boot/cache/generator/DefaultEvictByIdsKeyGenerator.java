@@ -40,7 +40,7 @@ public class DefaultEvictByIdsKeyGenerator implements KeyGenerator {
         }
         return StringUtils.join(
                 ((Collection<?>) params[0]).stream().map(id ->
-                        target.getClass().getName() +
+                        target.getClass().getSimpleName() +
                                 KEY_SEPARATOR +
                                 GET_BY_ID_METHOD_NAME +
                                 KEY_SEPARATOR +

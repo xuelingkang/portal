@@ -35,7 +35,7 @@ public class DefaultEvictByEntityKeyGenerator implements KeyGenerator {
         if (id == null) {
             return "";
         }
-        return target.getClass().getName() +
+        return target.getClass().getSimpleName() +
                 KEY_SEPARATOR +
                 GET_BY_ID_METHOD_NAME +
                 KEY_SEPARATOR +

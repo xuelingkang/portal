@@ -32,7 +32,7 @@ public class DefaultEvictByIdKeyGenerator implements KeyGenerator {
 
     @Override
     public Object generate(Object target, Method method, Object... params) {
-        return target.getClass().getName() +
+        return target.getClass().getSimpleName() +
                 KEY_SEPARATOR +
                 GET_BY_ID_METHOD_NAME +
                 KEY_SEPARATOR +
