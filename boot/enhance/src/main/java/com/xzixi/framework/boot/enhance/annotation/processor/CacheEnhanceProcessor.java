@@ -123,8 +123,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     private static final String EXCEPTION_DOT_CLASS = "java.lang.Exception.class";
     private static final String EXCEPTION_CLASS = "java.lang.Exception";
     private static final String STRING_CLASS = "java.lang.String";
-    private static final String INTEGER_CLASS = "java.lang.Integer";
-    private static final String LONG_CLASS = "java.lang.Long";
     private static final String COLLECTION_UTILS_CLASS = "org.apache.commons.collections.CollectionUtils";
     private static final String OBJECTS_CLASS = "java.util.Objects";
     private static final String SERIALIZABLE_CLASS = "java.io.Serializable";
@@ -254,7 +252,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         JCTree.JCStatement defIdsSizeStat = treeMaker.VarDef(
                 treeMaker.Modifiers(0),
                 getNameFromString(idsSize),
-                memberAccess(INTEGER_CLASS),
+                treeMaker.TypeIdent(TypeTag.INT),
                 treeMaker.Apply(List.nil(), memberAccess(idsCallSize), List.nil())
         );
         // List<ModelClass> result = new ArrayList<>(idsSize);
@@ -356,7 +354,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         JCTree.JCStatement defInitStat = treeMaker.VarDef(
                 treeMaker.Modifiers(0),
                 getNameFromString(i),
-                memberAccess(INTEGER_CLASS),
+                treeMaker.TypeIdent(TypeTag.INT),
                 treeMaker.Literal(0)
         );
         // i < idsSize;
@@ -454,7 +452,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         JCTree.JCStatement defRedisCacheTimeToLiveInSeconds = treeMaker.VarDef(
                 treeMaker.Modifiers(0),
                 getNameFromString(redisCacheTimeToLiveInSeconds),
-                memberAccess(LONG_CLASS),
+                treeMaker.TypeIdent(TypeTag.LONG),
                 treeMaker.Apply(List.nil(), memberAccess(redisCacheTimeToLiveCallGetSeconds), List.nil())
         );
         // Stream<T> selectFromDbStream = selectFromDb.stream();
