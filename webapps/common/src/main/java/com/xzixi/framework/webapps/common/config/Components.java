@@ -15,10 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.common.component;
+package com.xzixi.framework.webapps.common.config;
 
-import com.xzixi.framework.boot.webmvc.service.ISignService;
-import com.xzixi.framework.boot.webmvc.service.impl.Md5SignServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

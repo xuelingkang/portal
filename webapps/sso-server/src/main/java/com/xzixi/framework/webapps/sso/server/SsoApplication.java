@@ -17,8 +17,6 @@
 
 package com.xzixi.framework.webapps.sso.server;
 
-import com.xzixi.framework.webapps.common.component.annotation.EnableCommonComponents;
-import com.xzixi.framework.webapps.common.feign.annotation.EnableCommonRemoteServices;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -27,8 +25,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2020-10-21
  */
 @SpringBootApplication
-@EnableCommonRemoteServices
-@EnableCommonComponents
 public class SsoApplication {
 
     public static void main(String[] args) {

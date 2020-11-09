@@ -15,20 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.common.component.annotation;
+package com.xzixi.framework.webapps.common.config;
 
-import com.xzixi.framework.webapps.common.component.Components;
-import org.springframework.context.annotation.Import;
-
-import java.lang.annotation.*;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author xuelingkang
- * @date 2020-10-26
+ * @date 2020-11-09
  */
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
-@Import({Components.class})
-public @interface EnableCommonComponents {
+@Configuration
+@EnableFeignClients(basePackages = {"com.xzixi.framework.webapps.common.feign"})
+public class FeignConfig {
 }
