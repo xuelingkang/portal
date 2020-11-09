@@ -532,47 +532,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     }
 
     /**
-     * listByIds
-     * <p>这个方法不加缓存，调用getById方法提高缓存的命中率
-     */
-    public JCTree.JCMethodDecl listByIdsDecl(String modelClassName) {
-        final String method = "listByIds";
-        final String idList = "idList";
-        final String idListCallStream = "idList.stream";
-        final String stream = "stream";
-        final String streamCallMap = "stream.map";
-        final String tStream = "tStream";
-        final String id = "id";
-        final String thisCallGetById = "this.getById";
-        final String tStreamCallCollect = "tStream.collect";
-        final String collectorsCallToList = String.format("%s.toList", COLLECTORS_CLASS);
-        // 注解列表
-        List<JCTree.JCAnnotation> annotationList = List.of(override());
-        // 访问修饰词和注解列表
-        JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
-        // 方法名
-        Name name = getNameFromString(method);
-        // 返回值类型
-        JCTree.JCExpression returnType = listType(modelClassName);
-        // 参数列表
-        List<JCTree.JCVariableDecl> parameters = List.of(extendsWildCollectionParamDecl(idList, SERIALIZABLE_CLASS));
-        // Stream<? extends Serializable> stream = idList.stream()
-        JCTree.JCStatement defStreamStat = treeMaker.VarDef(treeMaker.Modifiers(0), getNameFromString(stream), extendsWildStreamType(SERIALIZABLE_CLASS),
-            treeMaker.Apply(List.nil(), memberAccess(idListCallStream), List.nil()));
-        // Stream<T> tStream = stream.map(id -> this.getById(id))
-        JCTree.JCStatement defTStreamStat = treeMaker.VarDef(treeMaker.Modifiers(0), getNameFromString(tStream), streamType(modelClassName),
-            treeMaker.Apply(List.nil(), memberAccess(streamCallMap),
-                List.of(treeMaker.Lambda(List.of(typeParamDecl(id, SERIALIZABLE_CLASS)),
-                    treeMaker.Apply(List.nil(), memberAccess(thisCallGetById), List.of(memberAccess(id)))))));
-        // return tStream.collect(Collectors.toList())
-        JCTree.JCStatement returnStat = treeMaker.Return(treeMaker.Apply(List.nil(), memberAccess(tStreamCallCollect),
-            List.of(treeMaker.Apply(List.nil(), memberAccess(collectorsCallToList), List.nil()))));
-        // 方法体
-        JCTree.JCBlock block = treeMaker.Block(0, List.of(defStreamStat, defTStreamStat, returnStat));
-        return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
-    }
-
-    /**
      * getOne
      */
     public JCTree.JCMethodDecl getOneDecl(CacheEnhance cacheEnhance, String modelClassName) {
