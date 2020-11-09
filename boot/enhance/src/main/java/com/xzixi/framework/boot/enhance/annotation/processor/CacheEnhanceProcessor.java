@@ -140,7 +140,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     private static final String PAIR_CLASS = "org.apache.commons.lang3.tuple.Pair";
     private static final String IMMUTABLE_PAIR_CLASS = "org.apache.commons.lang3.tuple.ImmutablePair";
 
-    private static final String MINUTES = "java.util.concurrent.TimeUnit.MINUTES";
+    private static final String SECONDS = "java.util.concurrent.TimeUnit.SECONDS";
     private static final String SET_IF_ABSENT = "org.springframework.data.redis.connection.RedisStringCommands.SetOption.SET_IF_ABSENT";
 
     private static final String ROLLBACK_FOR = "rollbackFor";
@@ -403,11 +403,11 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      *             if (CollectionUtils.isNotEmpty(selectFromDb)) {
      *                 result.addAll(selectFromDb);
      *                 try {
-     *                     long redisCacheTimeToLiveInMinute = redisCacheTimeToLive.toMinutes();
+     *                     long redisCacheTimeToLiveInSeconds = redisCacheTimeToLive.getSeconds();
      *                     Stream<T> selectFromDbStream = selectFromDb.stream();
      *                     Stream<Pair<String, T>> pairsStream = selectFromDbStream.map(model -> ImmutablePair.of(String.format("[cacheEnhance.baseCacheName()]::[modelClassName]:[getById]:%s", model.getId()), model));
      *                     List<Pair<String, T>> pairs = pairsStream.collect(Collectors.toList());
-     *                     redisPipelineService.set(pairs, redisCacheTimeToLiveInMinute, TimeUnit.MICROSECONDS, RedisStringCommands.SetOption.SET_IF_ABSENT);
+     *                     redisPipelineService.set(pairs, redisCacheTimeToLiveInSeconds, TimeUnit.SECONDS, RedisStringCommands.SetOption.SET_IF_ABSENT);
      *                 } catch (Exception ignore) {}
      *             }
      *         }
@@ -421,8 +421,8 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         final String selectFromDb = "selectFromDb";
         final String superCallListByIds = "super.listByIds";
         final String resultCallAddAll = "result.addAll";
-        final String redisCacheTimeToLiveInMinute = "redisCacheTimeToLiveInMinute";
-        final String redisCacheTimeToLiveCallToMinutes = "redisCacheTimeToLive.toMinutes";
+        final String redisCacheTimeToLiveInSeconds = "redisCacheTimeToLiveInSeconds";
+        final String redisCacheTimeToLiveCallGetSeconds = "redisCacheTimeToLive.getSeconds";
         final String selectFromDbStream = "selectFromDbStream";
         final String selectFromDbCallStream = "selectFromDb.stream";
         final String pairsStream = "pairsStream";
@@ -450,12 +450,12 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // result.addAll(selectFromDb);
         JCTree.JCStatement resultAddAllStat = treeMaker.Exec(treeMaker.Apply(List.nil(), memberAccess(resultCallAddAll), List.of(memberAccess(selectFromDb))));
         // try 开始
-        // long redisCacheTimeToLiveInMinute = redisCacheTimeToLive.toMinutes();
-        JCTree.JCStatement defRedisCacheTimeToLiveInMinute = treeMaker.VarDef(
+        // long redisCacheTimeToLiveInSeconds = redisCacheTimeToLive.getSeconds();
+        JCTree.JCStatement defRedisCacheTimeToLiveInSeconds = treeMaker.VarDef(
                 treeMaker.Modifiers(0),
-                getNameFromString(redisCacheTimeToLiveInMinute),
+                getNameFromString(redisCacheTimeToLiveInSeconds),
                 memberAccess(LONG_CLASS),
-                treeMaker.Apply(List.nil(), memberAccess(redisCacheTimeToLiveCallToMinutes), List.nil())
+                treeMaker.Apply(List.nil(), memberAccess(redisCacheTimeToLiveCallGetSeconds), List.nil())
         );
         // Stream<T> selectFromDbStream = selectFromDb.stream();
         JCTree.JCStatement defSelectFromDbStreamStat = treeMaker.VarDef(
@@ -508,18 +508,18 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
                         List.of(treeMaker.Apply(List.nil(), memberAccess(collectorsCallToList), List.nil()))
                 )
         );
-        // redisPipelineService.set(pairs, redisCacheTimeToLiveInMinute, TimeUnit.MICROSECONDS, RedisStringCommands.SetOption.SET_IF_ABSENT);
+        // redisPipelineService.set(pairs, redisCacheTimeToLiveInSeconds, TimeUnit.MICROSECONDS, RedisStringCommands.SetOption.SET_IF_ABSENT);
         JCTree.JCStatement redisPipelineServiceSetStat = treeMaker.Exec(treeMaker.Apply(
                 List.nil(),
                 memberAccess(redisPipelineServiceCallSet),
                 List.of(
                         memberAccess(pairs),
-                        memberAccess(redisCacheTimeToLiveInMinute),
-                        memberAccess(MINUTES),
+                        memberAccess(redisCacheTimeToLiveInSeconds),
+                        memberAccess(SECONDS),
                         memberAccess(SET_IF_ABSENT)
                 )
         ));
-        JCTree.JCBlock tryBlock = treeMaker.Block(0, List.of(defRedisCacheTimeToLiveInMinute, defSelectFromDbStreamStat, defPairStreamStat, defPairsStat, redisPipelineServiceSetStat));
+        JCTree.JCBlock tryBlock = treeMaker.Block(0, List.of(defRedisCacheTimeToLiveInSeconds, defSelectFromDbStreamStat, defPairStreamStat, defPairsStat, redisPipelineServiceSetStat));
         // catch (Exception ignore) {}
         JCTree.JCCatch catchStat = treeMaker.Catch(typeParamDecl("ignore", EXCEPTION_CLASS), treeMaker.Block(0, List.nil()));
         JCTree.JCTry tryStat = treeMaker.Try(tryBlock, List.of(catchStat), null);
