@@ -1,4 +1,5 @@
 - **current**
+  - 新增RedisPipelineService
   - 优化CacheEnhanceProcessor生成的listByIds方法
 - **2020.11.08 v2.1.2**
   - 优化依赖管理
