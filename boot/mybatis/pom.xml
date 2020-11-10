@@ -15,11 +15,6 @@
     <description>mybatis-plus持久层实现</description>
 
     <dependencies>
-        <!-- autoconfigure -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-        </dependency>
         <!-- persistent -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>

@@ -15,25 +15,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.admin;
+package com.xzixi.framework.boot.webmvc.config.exception.annotation;
 
-import com.xzixi.framework.boot.webmvc.config.exception.annotation.EnableFrameworkExceptionHandler;
-import com.xzixi.framework.boot.webmvc.config.json.annotation.EnableFrameworkJson;
-import com.xzixi.framework.boot.webmvc.config.validation.annotation.EnableFrameworkValidation;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.xzixi.framework.boot.webmvc.config.exception.handler.GlobalControllerExceptionHandler;
+import org.springframework.context.annotation.Import;
+
+import java.lang.annotation.*;
 
 /**
  * @author xuelingkang
- * @date 2020-10-22
+ * @date 2020-10-24
  */
-@SpringBootApplication
-@EnableFrameworkJson
-@EnableFrameworkValidation
-@EnableFrameworkExceptionHandler
-public class AdminApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(AdminApplication.class, args);
-    }
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Import(GlobalControllerExceptionHandler.class)
+public @interface EnableFrameworkExceptionHandler {
 }

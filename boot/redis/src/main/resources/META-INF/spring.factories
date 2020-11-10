@@ -1,4 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.xzixi.framework.boot.redis.config.RedisConfig,\
-  com.xzixi.framework.boot.redis.service.impl.RedisLockService,\
-  com.xzixi.framework.boot.redis.service.impl.RedisPipelineService

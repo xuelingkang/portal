@@ -15,25 +15,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.admin;
+package com.xzixi.framework.boot.webmvc.config.validation.annotation;
 
-import com.xzixi.framework.boot.webmvc.config.exception.annotation.EnableFrameworkExceptionHandler;
-import com.xzixi.framework.boot.webmvc.config.json.annotation.EnableFrameworkJson;
-import com.xzixi.framework.boot.webmvc.config.validation.annotation.EnableFrameworkValidation;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.xzixi.framework.boot.webmvc.config.validation.ValidationConfig;
+import org.springframework.context.annotation.Import;
 
-/**
- * @author xuelingkang
- * @date 2020-10-22
- */
-@SpringBootApplication
-@EnableFrameworkJson
-@EnableFrameworkValidation
-@EnableFrameworkExceptionHandler
-public class AdminApplication {
+import java.lang.annotation.*;
 
-    public static void main(String[] args) {
-        SpringApplication.run(AdminApplication.class, args);
-    }
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Import(ValidationConfig.class)
+public @interface EnableFrameworkValidation {
 }

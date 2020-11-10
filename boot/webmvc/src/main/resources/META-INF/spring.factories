@@ -1,7 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.xzixi.framework.boot.webmvc.config.AsyncTaskExecutorConfig,\
-  com.xzixi.framework.boot.webmvc.config.GlobalControllerExceptionHandler,\
-  com.xzixi.framework.boot.webmvc.config.FastJsonConfig,\
-  com.xzixi.framework.boot.webmvc.config.MailConfig,\
-  com.xzixi.framework.boot.webmvc.config.ValidationConfig,\
-  com.xzixi.framework.boot.webmvc.service.impl.Md5SignServiceImpl

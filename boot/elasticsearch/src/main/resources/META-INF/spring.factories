@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.xzixi.framework.boot.elasticsearch.config.ElasticsearchConfig
