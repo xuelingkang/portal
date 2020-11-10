@@ -15,22 +15,19 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.common.config;
+package com.xzixi.framework.webapps.common.feign.annotation;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+
+import java.lang.annotation.*;
 
 /**
  * @author xuelingkang
- * @date 2020-10-26
+ * @date 2020-10-25
  */
-@Configuration
-public class Components {
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@EnableFeignClients(basePackages = {"com.xzixi.framework.webapps.common.feign"})
+public @interface EnableCommonRemoteServices {
 }

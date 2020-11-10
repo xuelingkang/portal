@@ -1,3 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.xzixi.framework.webapps.common.config.Components,\
-  com.xzixi.framework.webapps.common.config.FeignConfig
