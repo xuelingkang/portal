@@ -28,6 +28,6 @@ import org.springframework.stereotype.Service;
  * @author 薛凌康
  */
 @Service
-@CacheEnhance(baseCacheName = "attachment:base", casualCacheName = "attachment:casual")
+@CacheEnhance
 public class AttachmentDataImpl extends MybatisPlusDataImpl<AttachmentMapper, Attachment> implements IAttachmentData {
 }

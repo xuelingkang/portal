@@ -28,6 +28,6 @@ import org.springframework.stereotype.Service;
  * @author 薛凌康
  */
 @Service
-@CacheEnhance(baseCacheName = "mail:base", casualCacheName = "mail:casual")
+@CacheEnhance
 public class MailDataImpl extends MybatisPlusDataImpl<MailMapper, Mail> implements IMailData {
 }

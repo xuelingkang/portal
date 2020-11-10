@@ -28,6 +28,6 @@ import org.springframework.stereotype.Service;
  * @author 薛凌康
  */
 @Service
-@CacheEnhance(baseCacheName = "articleTag:base", casualCacheName = "articleTag:casual")
+@CacheEnhance
 public class ArticleTagDataImpl extends MybatisPlusDataImpl<ArticleTagMapper, ArticleTag> implements IArticleTagData {
 }

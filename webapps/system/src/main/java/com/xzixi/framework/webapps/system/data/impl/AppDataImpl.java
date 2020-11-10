@@ -31,6 +31,6 @@ import org.springframework.stereotype.Service;
  * @date 2020-10-25
  */
 @Service
-@CacheEnhance(baseCacheName = "app:base", casualCacheName = "app:casual")
+@CacheEnhance
 public class AppDataImpl extends MybatisPlusDataImpl<AppMapper, App> implements IAppData {
 }

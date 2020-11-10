@@ -22,15 +22,14 @@ package com.xzixi.framework.boot.enhance.annotation.util;
  */
 public class StringUtils {
 
-    public static boolean isBlank(CharSequence cs) {
-        int strLen;
-        if (cs != null && (strLen = cs.length()) != 0) {
-            for(int i = 0; i < strLen; ++i) {
-                if (!Character.isWhitespace(cs.charAt(i))) {
-                    return false;
-                }
-            }
+    /**
+     * 首字母转小写
+     */
+    public static String toLowerCaseHead(String str) {
+        if (Character.isLowerCase(str.charAt(0))) {
+            return str;
+        } else {
+            return Character.toLowerCase(str.charAt(0)) + str.substring(1);
         }
-        return true;
     }
 }

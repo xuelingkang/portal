@@ -28,6 +28,6 @@ import org.springframework.stereotype.Service;
  * @author 薛凌康
  */
 @Service
-@CacheEnhance(baseCacheName = "user:base", casualCacheName = "user:casual")
+@CacheEnhance
 public class UserDataImpl extends MybatisPlusDataImpl<UserMapper, User> implements IUserData {
 }

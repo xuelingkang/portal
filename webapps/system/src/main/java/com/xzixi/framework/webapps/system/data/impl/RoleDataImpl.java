@@ -28,6 +28,6 @@ import org.springframework.stereotype.Service;
  * @author 薛凌康
  */
 @Service
-@CacheEnhance(baseCacheName = "role:base", casualCacheName = "role:casual")
+@CacheEnhance
 public class RoleDataImpl extends MybatisPlusDataImpl<RoleMapper, Role> implements IRoleData {
 }

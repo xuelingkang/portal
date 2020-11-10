@@ -28,6 +28,6 @@ import org.springframework.stereotype.Service;
  * @author 薛凌康
  */
 @Service
-@CacheEnhance(baseCacheName = "jobTemplate:base", casualCacheName = "jobTemplate:casual")
+@CacheEnhance
 public class JobTemplateDataImpl extends MybatisPlusDataImpl<JobTemplateMapper, JobTemplate> implements IJobTemplateData {
 }
