@@ -19,11 +19,9 @@ package com.xzixi.framework.webapps.notice.mapper;
 
 import com.xzixi.framework.boot.mybatis.mapper.IBaseMapper;
 import com.xzixi.framework.webapps.common.model.po.MailContent;
-import org.springframework.stereotype.Repository;
 
 /**
  * @author 薛凌康
  */
-@Repository
 public interface MailContentMapper extends IBaseMapper<MailContent> {
 }

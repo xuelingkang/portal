@@ -19,11 +19,9 @@ package com.xzixi.framework.webapps.task.mapper;
 
 import com.xzixi.framework.boot.mybatis.mapper.IBaseMapper;
 import com.xzixi.framework.webapps.common.model.po.Job;
-import org.springframework.stereotype.Repository;
 
 /**
  * @author 薛凌康
  */
-@Repository
 public interface JobMapper extends IBaseMapper<Job> {
 }
