@@ -2,7 +2,6 @@ package ${package.Mapper};
 
 import ${package.Entity}.${entity};
 import ${superMapperClassPackage};
-import org.springframework.stereotype.Repository;
 
 /**
  * $!{table.comment} Mapper 接口
@@ -10,6 +9,5 @@ import org.springframework.stereotype.Repository;
  * @author ${author}
  * @date ${date}
  */
-@Repository
 public interface ${table.mapperName} extends ${superMapperClass}<${entity}> {
 }
