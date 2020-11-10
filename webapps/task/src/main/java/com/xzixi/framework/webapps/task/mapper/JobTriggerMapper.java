@@ -19,11 +19,9 @@ package com.xzixi.framework.webapps.task.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.xzixi.framework.webapps.common.model.po.JobTrigger;
-import org.springframework.stereotype.Repository;
 
 /**
  * @author 薛凌康
  */
-@Repository
 public interface JobTriggerMapper extends BaseMapper<JobTrigger> {
 }
