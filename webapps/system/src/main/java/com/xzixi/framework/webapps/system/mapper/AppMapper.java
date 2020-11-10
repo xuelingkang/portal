@@ -17,8 +17,9 @@
 
 package com.xzixi.framework.webapps.system.mapper;
 
-import com.xzixi.framework.webapps.common.model.po.App;
 import com.xzixi.framework.boot.mybatis.mapper.IBaseMapper;
+import com.xzixi.framework.webapps.common.model.po.App;
+import org.springframework.stereotype.Repository;
 
 /**
  * 应用 Mapper 接口
@@ -26,6 +27,6 @@ import com.xzixi.framework.boot.mybatis.mapper.IBaseMapper;
  * @author xuelingkang
  * @date 2020-10-25
  */
+@Repository
 public interface AppMapper extends IBaseMapper<App> {
-
 }

@@ -17,12 +17,14 @@
 
 package com.xzixi.framework.webapps.content.mapper;
 
-import com.xzixi.framework.webapps.common.model.po.ArticleContent;
 import com.xzixi.framework.boot.mybatis.mapper.IBaseMapper;
+import com.xzixi.framework.webapps.common.model.po.ArticleContent;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author xuelingkang
  * @date 2020-09-26
  */
+@Repository
 public interface ArticleContentMapper extends IBaseMapper<ArticleContent> {
 }

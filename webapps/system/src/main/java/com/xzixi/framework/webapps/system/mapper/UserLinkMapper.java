@@ -19,9 +19,11 @@ package com.xzixi.framework.webapps.system.mapper;
 
 import com.xzixi.framework.boot.mybatis.mapper.IBaseMapper;
 import com.xzixi.framework.webapps.common.model.po.UserLink;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author 薛凌康
  */
+@Repository
 public interface UserLinkMapper extends IBaseMapper<UserLink> {
 }

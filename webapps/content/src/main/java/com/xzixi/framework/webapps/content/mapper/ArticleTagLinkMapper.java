@@ -17,11 +17,13 @@
 
 package com.xzixi.framework.webapps.content.mapper;
 
-import com.xzixi.framework.webapps.common.model.po.ArticleTagLink;
 import com.xzixi.framework.boot.mybatis.mapper.IBaseMapper;
+import com.xzixi.framework.webapps.common.model.po.ArticleTagLink;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author 薛凌康
  */
+@Repository
 public interface ArticleTagLinkMapper extends IBaseMapper<ArticleTagLink> {
 }
