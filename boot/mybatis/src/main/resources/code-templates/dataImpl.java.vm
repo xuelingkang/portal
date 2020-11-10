@@ -14,5 +14,4 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ${dataImplClass} extends ${superDataImplClass}<${table.mapperName}, ${entity}> implements ${dataClass} {
-
 }

@@ -10,5 +10,4 @@ import ${superServiceClassPackage};
  * @date ${date}
  */
 public interface ${table.serviceName} extends ${superServiceClass}<${entity}> {
-
 }
