@@ -18,10 +18,9 @@
 package com.xzixi.framework.webapps.notice;
 
 import com.xzixi.framework.boot.cache.annotation.EnableFrameworkCache;
+import com.xzixi.framework.boot.mybatis.annotation.EnableFrameworkMybatis;
 import com.xzixi.framework.boot.webmvc.config.exception.annotation.EnableFrameworkExceptionHandler;
 import com.xzixi.framework.boot.webmvc.config.json.annotation.EnableFrameworkJson;
-import com.xzixi.framework.boot.webmvc.config.mail.annotation.EnableFrameworkMail;
-import com.xzixi.framework.boot.mybatis.annotation.EnableFrameworkMybatis;
 import com.xzixi.framework.boot.webmvc.config.validation.annotation.EnableFrameworkValidation;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -34,7 +33,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 @EnableFrameworkCache
 @EnableFrameworkJson
-@EnableFrameworkMail
 @EnableFrameworkMybatis
 @EnableFrameworkValidation
 @EnableFrameworkExceptionHandler
@@ -42,6 +40,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class NoticeApplication {
 
     public static void main(String[] args) {
+        System.setProperty("mail.mime.splitlongparameters", "false");
         SpringApplication.run(NoticeApplication.class, args);
     }
 }
