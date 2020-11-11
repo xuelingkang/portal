@@ -19,12 +19,6 @@
     </properties>
 
     <dependencies>
-        <!-- 编译期增强 -->
-        <dependency>
-            <groupId>com.xzixi.framework</groupId>
-            <artifactId>enhance</artifactId>
-            <scope>provided</scope>
-        </dependency>
         <!-- swagger2启动器 -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
@@ -81,6 +75,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
+        <!-- 编译期增强 -->
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
+            <artifactId>enhance</artifactId>
+            <scope>provided</scope>
         </dependency>
         <!-- lombok -->
         <dependency>

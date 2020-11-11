@@ -19,12 +19,6 @@
     </properties>
 
     <dependencies>
-        <!-- 编译期增强 -->
-        <dependency>
-            <groupId>com.xzixi.framework</groupId>
-            <artifactId>enhance</artifactId>
-            <scope>provided</scope>
-        </dependency>
         <!-- swagger2启动器 -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
@@ -76,6 +70,12 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <!-- 编译期增强 -->
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
+            <artifactId>enhance</artifactId>
+            <scope>provided</scope>
         </dependency>
         <!-- lombok -->
         <dependency>
