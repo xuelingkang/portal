@@ -25,6 +25,10 @@
         </dependency>
         <dependency>
             <groupId>com.xzixi.framework</groupId>
+            <artifactId>webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
             <artifactId>common</artifactId>
         </dependency>
         <dependency>

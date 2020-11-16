@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.xzixi.framework.boot.webmvc.config.AsyncTaskExecutorConfig,\
+  com.xzixi.framework.boot.webmvc.config.FastJsonConfig,\
+  com.xzixi.framework.boot.webmvc.config.ValidationConfig,\
+  com.xzixi.framework.boot.webmvc.config.WebmvcConfig

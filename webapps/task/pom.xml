@@ -25,11 +25,19 @@
         </dependency>
         <dependency>
             <groupId>com.xzixi.framework</groupId>
+            <artifactId>webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
             <artifactId>common</artifactId>
         </dependency>
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>mybatis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
+            <artifactId>redis</artifactId>
         </dependency>
         <dependency>
             <groupId>com.xzixi.framework</groupId>

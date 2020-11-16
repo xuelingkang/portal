@@ -17,13 +17,6 @@
 
 package com.xzixi.framework.webapps.content;
 
-import com.xzixi.framework.boot.cache.annotation.EnableFrameworkCache;
-import com.xzixi.framework.boot.elasticsearch.annotation.EnableFrameworkElasticsearch;
-import com.xzixi.framework.boot.mybatis.annotation.EnableFrameworkMybatis;
-import com.xzixi.framework.boot.webmvc.config.async.annotation.EnableFrameworkAsync;
-import com.xzixi.framework.boot.webmvc.config.exception.annotation.EnableFrameworkExceptionHandler;
-import com.xzixi.framework.boot.webmvc.config.json.annotation.EnableFrameworkJson;
-import com.xzixi.framework.boot.webmvc.config.validation.annotation.EnableFrameworkValidation;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,17 +25,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author 薛凌康
  */
 @SpringBootApplication
-@EnableFrameworkAsync
-@EnableFrameworkCache
-@EnableFrameworkElasticsearch
-@EnableFrameworkJson
-@EnableFrameworkMybatis
-@EnableFrameworkValidation
-@EnableFrameworkExceptionHandler
 @MapperScan(basePackages = "com.xzixi.framework.webapps.content.mapper")
 public class ContentApplication {
 
     public static void main(String[] args) {
+        System.setProperty("es.set.netty.runtime.available.processors", "false");
         SpringApplication.run(ContentApplication.class, args);
     }
 }
