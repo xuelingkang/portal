@@ -15,12 +15,10 @@
     <description>elasticsearch持久层实现</description>
 
     <dependencies>
-        <!-- persistent -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>persistent</artifactId>
         </dependency>
-        <!-- elasticsearch -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-elasticsearch</artifactId>

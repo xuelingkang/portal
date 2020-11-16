@@ -19,22 +19,18 @@
     </properties>
 
     <dependencies>
-        <!-- swagger2启动器 -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>swagger2-spring-boot-starter</artifactId>
         </dependency>
-        <!-- 公共模块 -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>common</artifactId>
         </dependency>
-        <!-- nacos服务注册发现 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
-        <!-- web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -45,18 +41,15 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- jetty -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency>
-        <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
-        <!-- test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

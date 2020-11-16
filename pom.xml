@@ -38,7 +38,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- spring boot -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -46,7 +45,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- spring cloud -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -54,7 +52,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- spring cloud alibaba -->
             <dependency>
                 <groupId>com.alibaba.cloud</groupId>
                 <artifactId>spring-cloud-alibaba-dependencies</artifactId>
@@ -62,80 +59,67 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- druid -->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
                 <version>${druid.version}</version>
             </dependency>
-            <!-- mybatis plus -->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
-            <!-- mybatis plus 注解 -->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-annotation</artifactId>
                 <version>${mybatis-plus.version}</version>
             </dependency>
-            <!-- mybatis plus 代码生成器 -->
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-generator</artifactId>
                 <version>${mybatis-plus-generator.version}</version>
             </dependency>
-            <!-- 模板引擎 -->
             <dependency>
                 <groupId>org.apache.velocity</groupId>
                 <artifactId>velocity-engine-core</artifactId>
                 <version>${velocity.version}</version>
             </dependency>
-            <!-- jwt -->
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>${jwt.version}</version>
             </dependency>
-            <!-- commons-lang3 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
             </dependency>
-            <!-- commons-io -->
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
             </dependency>
-            <!-- commons-collections -->
             <dependency>
                 <groupId>commons-collections</groupId>
                 <artifactId>commons-collections</artifactId>
                 <version>${commons-collection.version}</version>
             </dependency>
-            <!-- fastjson -->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
-            <!-- json-lib -->
             <dependency>
                 <groupId>net.sf.json-lib</groupId>
                 <artifactId>json-lib</artifactId>
                 <version>${json-lib.version}</version>
                 <classifier>jdk15</classifier>
             </dependency>
-            <!-- sftp -->
             <dependency>
                 <groupId>com.jcraft</groupId>
                 <artifactId>jsch</artifactId>
                 <version>${jsch.version}</version>
             </dependency>
-            <!-- swagger2 -->
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
@@ -151,19 +135,16 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <!-- swagger-annotations -->
             <dependency>
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-annotations</artifactId>
                 <version>${swagger-annotations.version}</version>
             </dependency>
-            <!-- swagger-models -->
             <dependency>
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-models</artifactId>
                 <version>${swagger-models.version}</version>
             </dependency>
-            <!-- swagger-ui -->
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
@@ -171,79 +152,66 @@
             </dependency>
 
             <!-- 以下是自己造的轮子 -->
-            <!-- sftp连接池 -->
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>sftp-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- sftp连接池启动器 -->
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>sftp-client-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- swagger2扩展 -->
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>swagger2-extension</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- swagger2扩展注解 -->
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>swagger2-annotations</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- swagger2启动器 -->
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>swagger2-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- 公共接口和对象等 -->
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>core</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- 持久层接口 -->
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>persistent</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- mybatis-plus持久层实现 -->
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>mybatis</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- elasticsearch持久层实现 -->
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>elasticsearch</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- redis配置 -->
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>redis</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- 缓存配置 -->
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>cache</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- 常用依赖、配置 -->
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>webmvc</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!-- 编译期增强 -->
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>enhance</artifactId>

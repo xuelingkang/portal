@@ -15,7 +15,6 @@
     <description>持久层接口</description>
 
     <dependencies>
-        <!-- 公共接口和对象等 -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>core</artifactId>

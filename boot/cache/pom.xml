@@ -15,12 +15,10 @@
     <description>缓存配置</description>
 
     <dependencies>
-        <!-- redis -->
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>redis</artifactId>
         </dependency>
-        <!-- cache -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
