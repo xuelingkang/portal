@@ -58,6 +58,14 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
             String modelSimpleClassName = StringUtils.toLowerCaseHead(modelClassName.substring(modelClassName.lastIndexOf(".") + 1));
             CacheNames cacheNames = new CacheNames(modelSimpleClassName + ":base", modelSimpleClassName + ":casual");
 
+            /*
+             * 防止编译报错
+             * 通过debug javac的编译过程发现
+             * debug教程：https://zhuanlan.zhihu.com/p/98116873，https://xuqiang.me/2019-07-13-debug-javac-in-idea.html
+             * 直接原因是treeMaker的pos小了，根本原因没找到
+             * 暂时这样解决，将treeMaker的pos设置为int最大值
+             */
+            treeMaker.at(Integer.MAX_VALUE);
             // 修改类，追加方法
             if (cacheEnhance.getById()) {
                 classDecl.defs = classDecl.defs.append(getByIdDecl(cacheNames, modelClassName));
