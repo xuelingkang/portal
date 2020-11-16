@@ -25,7 +25,6 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.types.Expiration;
 import org.springframework.data.redis.serializer.RedisSerializer;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,7 +36,6 @@ import java.util.stream.Collectors;
  * @author xuelingkang
  * @date 2020-11-08
  */
-@Service
 public class RedisPipelineService {
 
     private static final int DEFAULT_BATCH_SIZE = 100;

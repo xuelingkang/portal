@@ -41,10 +41,6 @@
         </dependency>
         <dependency>
             <groupId>com.xzixi.framework</groupId>
-            <artifactId>redis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.xzixi.framework</groupId>
             <artifactId>cache</artifactId>
         </dependency>
         <dependency>

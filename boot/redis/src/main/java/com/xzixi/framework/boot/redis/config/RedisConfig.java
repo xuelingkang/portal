@@ -18,6 +18,8 @@
 package com.xzixi.framework.boot.redis.config;
 
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
+import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
+import com.xzixi.framework.boot.redis.service.impl.RedisPipelineService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -54,5 +56,15 @@ public class RedisConfig {
         redisTemplate.setValueSerializer(objectRedisSerializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
+    }
+
+    @Bean
+    public RedisPipelineService redisPipelineService() {
+        return new RedisPipelineService();
+    }
+
+    @Bean
+    public RedisLockService redisLockService() {
+        return new RedisLockService();
     }
 }

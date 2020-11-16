@@ -22,7 +22,6 @@ import com.xzixi.framework.boot.core.service.ILockService;
 import com.xzixi.framework.boot.redis.model.RedisLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
@@ -30,7 +29,6 @@ import java.util.UUID;
  * @author xuelingkang
  * @date 2020-11-07
  */
-@Component
 public class RedisLockService implements ILockService {
 
     @Autowired
