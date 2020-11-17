@@ -20,6 +20,7 @@ package com.xzixi.framework.boot.cache.generator;
 import com.alibaba.fastjson.JSON;
 import com.xzixi.framework.boot.core.model.search.Pagination;
 import com.xzixi.framework.boot.core.util.TypeUtils;
+import lombok.Data;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.interceptor.KeyGenerator;
@@ -30,24 +31,27 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static com.xzixi.framework.boot.cache.RedisCacheConstant.*;
-
 /**
  * 使用其他非正式参数生成key
  *
  * @author 薛凌康
  */
+@Data
 public class DefaultCasualKeyGenerator implements KeyGenerator {
 
-    private static final String PAGE_PARAM_TEMPLATE = "%s" + PARAM_SEPARATOR + "%s" + PARAM_SEPARATOR + "%s";
     private static final String SPACE_REG = "\\s+";
+
+    private String keySeparator;
+    private String paramSeparator;
+    private String emptyParam;
+    private String nullParam;;
 
     @Override
     public Object generate(Object target, Method method, Object... params) {
         return target.getClass().getSimpleName() +
-                KEY_SEPARATOR +
+                keySeparator +
                 method.getName() +
-                KEY_SEPARATOR +
+                keySeparator +
                 writeParams(params);
     }
 
@@ -55,7 +59,7 @@ public class DefaultCasualKeyGenerator implements KeyGenerator {
         if (params.length > 0) {
             return StringUtils.join(Arrays.stream(params).map(param -> {
                 if (param == null) {
-                    return NULL_PARAM;
+                    return nullParam;
                 }
                 if (TypeUtils.isSimpleValueType(param.getClass())) {
                     return param;
@@ -69,18 +73,18 @@ public class DefaultCasualKeyGenerator implements KeyGenerator {
                     String orderInfo;
                     if (orders != null && ArrayUtils.isNotEmpty(orders)) {
                         orderInfo = StringUtils.join(
-                            Arrays.stream(orders).map(order -> order.replaceAll(SPACE_REG, PARAM_SEPARATOR))
+                            Arrays.stream(orders).map(order -> order.replaceAll(SPACE_REG, paramSeparator))
                                 .collect(Collectors.toList()),
-                            PARAM_SEPARATOR);
+                                paramSeparator);
                     } else {
                         orderInfo = "";
                     }
-                    return String.format(PAGE_PARAM_TEMPLATE, current, size, orderInfo);
+                    return String.format("%s" + paramSeparator + "%s" + paramSeparator + "%s", current, size, orderInfo);
                 }
                 return DigestUtils.md5DigestAsHex(toJson(param).getBytes(StandardCharsets.UTF_8));
-            }).collect(Collectors.toList()), PARAM_SEPARATOR);
+            }).collect(Collectors.toList()), paramSeparator);
         }
-        return EMPTY_PARAM;
+        return emptyParam;
     }
 
     private String toJson(Object obj) {

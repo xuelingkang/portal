@@ -18,6 +18,7 @@
 package com.xzixi.framework.boot.cache.generator;
 
 import com.xzixi.framework.boot.core.model.BaseModel;
+import lombok.Data;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.interceptor.KeyGenerator;
@@ -26,14 +27,17 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.xzixi.framework.boot.cache.RedisCacheConstant.*;
-
 /**
  * 根据entity集合的元素id生成删除缓存key
  *
  * @author 薛凌康
  */
+@Data
 public class DefaultEvictByEntitiesKeyGenerator implements KeyGenerator {
+
+    private String keySeparator;
+    private String keysSeparator;
+    private String getByIdMethodName;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -46,11 +50,11 @@ public class DefaultEvictByEntitiesKeyGenerator implements KeyGenerator {
         return StringUtils.join(
                 collection.stream().map(entity ->
                         target.getClass().getSimpleName() +
-                                KEY_SEPARATOR +
-                                GET_BY_ID_METHOD_NAME +
-                                KEY_SEPARATOR +
+                                keySeparator +
+                                getByIdMethodName +
+                                keySeparator +
                                 entity.getId())
                         .collect(Collectors.toList()),
-                KEYS_SEPARATOR);
+                keysSeparator);
     }
 }

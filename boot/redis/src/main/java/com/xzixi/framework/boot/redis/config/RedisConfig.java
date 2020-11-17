@@ -20,12 +20,15 @@ package com.xzixi.framework.boot.redis.config;
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
 import com.xzixi.framework.boot.redis.service.impl.RedisPipelineService;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.util.UUID;
 
 /**
  * @author xuelingkang
@@ -59,12 +62,20 @@ public class RedisConfig {
     }
 
     @Bean
+    @ConditionalOnMissingBean(RedisPipelineService.class)
     public RedisPipelineService redisPipelineService() {
-        return new RedisPipelineService();
+        RedisPipelineService redisPipelineService = new RedisPipelineService();
+        redisPipelineService.setDefaultBatchSize(100);
+        return redisPipelineService;
     }
 
     @Bean
+    @ConditionalOnMissingBean(RedisLockService.class)
     public RedisLockService redisLockService() {
+        RedisLockService redisLockService = new RedisLockService();
+        redisLockService.setDefaultWaitTimeout(30000L);
+        redisLockService.setDefaultLeaseTimeout(10000L);
+        redisLockService.setDefaultValueGenerator(() -> UUID.randomUUID().toString());
         return new RedisLockService();
     }
 }

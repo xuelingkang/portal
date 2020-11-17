@@ -18,6 +18,7 @@
 package com.xzixi.framework.boot.webmvc.config;
 
 import org.hibernate.validator.HibernateValidator;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,6 +34,7 @@ import javax.validation.Validator;
 public class ValidationConfig {
 
     @Bean
+    @ConditionalOnMissingBean(Validator.class)
     public Validator validator() {
         return Validation
                 .byProvider(HibernateValidator.class)

@@ -20,6 +20,7 @@ package com.xzixi.framework.boot.cache.config;
 import com.xzixi.framework.boot.cache.extension.FuzzyEvictRedisCacheManager;
 import com.xzixi.framework.boot.cache.generator.*;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -35,9 +36,6 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 
 import java.util.LinkedHashMap;
 
-import static com.xzixi.framework.boot.cache.RedisCacheConstant.KEYS_SEPARATOR;
-import static com.xzixi.framework.boot.cache.RedisCacheConstant.REGEX_KEY_PREFIX;
-
 /**
  * redis缓存配置
  *
@@ -47,6 +45,39 @@ import static com.xzixi.framework.boot.cache.RedisCacheConstant.REGEX_KEY_PREFIX
 @Configuration
 @EnableConfigurationProperties(CacheProperties.class)
 public class RedisCacheConfig {
+
+    /**
+     * 正则key前缀
+     */
+    private static final String REGEX_KEY_PREFIX = "regex=";
+    /**
+     * 多个key之间的分隔符
+     */
+    private static final String KEYS_SEPARATOR = ",";
+    /**
+     * key层次分隔符
+     */
+    private static final String KEY_SEPARATOR = ":";
+    /**
+     * getById方法名
+     */
+    private static final String GET_BY_ID_METHOD_NAME = "getById";
+    /**
+     * 值为null的参数
+     */
+    private static final String NULL_PARAM = "null";
+    /**
+     * 无参方法key
+     */
+    private static final String EMPTY_PARAM = "emptyParam";
+    /**
+     * 参数分隔符
+     */
+    private static final String PARAM_SEPARATOR = "_";
+    /**
+     * 正则key通配符
+     */
+    private static final String WILDCARD = "*";
 
     @Bean
     public CacheManager cacheManager(
@@ -79,8 +110,12 @@ public class RedisCacheConfig {
      * @return KeyGenerator
      */
     @Bean
+    @ConditionalOnMissingBean(name = "defaultEvictByIdKeyGenerator")
     public KeyGenerator defaultEvictByIdKeyGenerator() {
-        return new DefaultEvictByIdKeyGenerator();
+        DefaultEvictByIdKeyGenerator keyGenerator = new DefaultEvictByIdKeyGenerator();
+        keyGenerator.setKeySeparator(KEY_SEPARATOR);
+        keyGenerator.setGetByIdMethodName(GET_BY_ID_METHOD_NAME);
+        return keyGenerator;
     }
 
     /**
@@ -89,8 +124,14 @@ public class RedisCacheConfig {
      * @return KeyGenerator
      */
     @Bean
+    @ConditionalOnMissingBean(name = "defaultEvictByIdsKeyGenerator")
     public KeyGenerator defaultEvictByIdsKeyGenerator() {
-        return new DefaultEvictByIdsKeyGenerator();
+        DefaultEvictByIdsKeyGenerator keyGenerator = new DefaultEvictByIdsKeyGenerator();
+        keyGenerator.setKeySeparator(KEY_SEPARATOR);
+        keyGenerator.setKeysSeparator(KEYS_SEPARATOR);
+        keyGenerator.setGetByIdMethodName(GET_BY_ID_METHOD_NAME);
+        keyGenerator.setWildcard(WILDCARD);
+        return keyGenerator;
     }
 
     /**
@@ -99,8 +140,12 @@ public class RedisCacheConfig {
      * @return KeyGenerator
      */
     @Bean
+    @ConditionalOnMissingBean(name = "defaultEvictByEntityKeyGenerator")
     public KeyGenerator defaultEvictByEntityKeyGenerator() {
-        return new DefaultEvictByEntityKeyGenerator();
+        DefaultEvictByEntityKeyGenerator keyGenerator = new DefaultEvictByEntityKeyGenerator();
+        keyGenerator.setKeySeparator(KEY_SEPARATOR);
+        keyGenerator.setGetByIdMethodName(GET_BY_ID_METHOD_NAME);
+        return keyGenerator;
     }
 
     /**
@@ -109,8 +154,13 @@ public class RedisCacheConfig {
      * @return KeyGenerator
      */
     @Bean
+    @ConditionalOnMissingBean(name = "defaultEvictByEntitiesKeyGenerator")
     public KeyGenerator defaultEvictByEntitiesKeyGenerator() {
-        return new DefaultEvictByEntitiesKeyGenerator();
+        DefaultEvictByEntitiesKeyGenerator keyGenerator = new DefaultEvictByEntitiesKeyGenerator();
+        keyGenerator.setKeySeparator(KEY_SEPARATOR);
+        keyGenerator.setKeysSeparator(KEYS_SEPARATOR);
+        keyGenerator.setGetByIdMethodName(GET_BY_ID_METHOD_NAME);
+        return keyGenerator;
     }
 
     /**
@@ -119,8 +169,13 @@ public class RedisCacheConfig {
      * @return KeyGenerator
      */
     @Bean
+    @ConditionalOnMissingBean(name = "defaultBaseKeyGenerator")
     public KeyGenerator defaultBaseKeyGenerator() {
-        return new DefaultBaseKeyGenerator();
+        DefaultBaseKeyGenerator keyGenerator = new DefaultBaseKeyGenerator();
+        keyGenerator.setKeySeparator(KEY_SEPARATOR);
+        keyGenerator.setParamSeparator(PARAM_SEPARATOR);
+        keyGenerator.setEmptyParam(EMPTY_PARAM);
+        return keyGenerator;
     }
 
     /**
@@ -129,7 +184,13 @@ public class RedisCacheConfig {
      * @return KeyGenerator
      */
     @Bean
+    @ConditionalOnMissingBean(name = "defaultCasualKeyGenerator")
     public KeyGenerator defaultCasualKeyGenerator() {
-        return new DefaultCasualKeyGenerator();
+        DefaultCasualKeyGenerator keyGenerator = new DefaultCasualKeyGenerator();
+        keyGenerator.setKeySeparator(KEY_SEPARATOR);
+        keyGenerator.setEmptyParam(EMPTY_PARAM);
+        keyGenerator.setNullParam(NULL_PARAM);
+        keyGenerator.setParamSeparator(PARAM_SEPARATOR);
+        return keyGenerator;
     }
 }

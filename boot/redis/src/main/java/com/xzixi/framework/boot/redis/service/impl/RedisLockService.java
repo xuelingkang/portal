@@ -20,10 +20,10 @@ package com.xzixi.framework.boot.redis.service.impl;
 import com.xzixi.framework.boot.core.model.ILock;
 import com.xzixi.framework.boot.core.service.ILockService;
 import com.xzixi.framework.boot.redis.model.RedisLock;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
-
-import java.util.UUID;
 
 /**
  * @author xuelingkang
@@ -31,23 +31,20 @@ import java.util.UUID;
  */
 public class RedisLockService implements ILockService {
 
+    @Getter
+    @Setter
+    private long defaultWaitTimeout;
+
+    @Getter
+    @Setter
+    private long defaultLeaseTimeout;
+
+    @Getter
+    @Setter
+    private DefaultValueGenerator defaultValueGenerator;
+
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
-
-    @Override
-    public long getDefaultWaitTimeout() {
-        return 30000;
-    }
-
-    @Override
-    public long getDefaultLeaseTimeout() {
-        return 10000;
-    }
-
-    @Override
-    public String getDefaultValue() {
-        return UUID.randomUUID().toString();
-    }
 
     @Override
     public ILock getLock(String name, String value, long waitTimeout, long leaseTimeout) {

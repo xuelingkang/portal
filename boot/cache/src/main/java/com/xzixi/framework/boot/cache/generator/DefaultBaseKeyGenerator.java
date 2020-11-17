@@ -19,6 +19,7 @@ package com.xzixi.framework.boot.cache.generator;
 
 import com.xzixi.framework.boot.core.exception.ProjectException;
 import com.xzixi.framework.boot.core.util.TypeUtils;
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.interceptor.KeyGenerator;
 
@@ -27,30 +28,33 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.xzixi.framework.boot.cache.RedisCacheConstant.*;
-
 /**
  * 根据id或id集合数组生成key
  *
  * @author 薛凌康
  */
+@Data
 public class DefaultBaseKeyGenerator implements KeyGenerator {
+
+    private String keySeparator;
+    private String paramSeparator;
+    private String emptyParam;
 
     @Override
     public Object generate(Object target, Method method, Object... params) {
         return target.getClass().getSimpleName() +
-                KEY_SEPARATOR +
+                keySeparator +
                 method.getName() +
-                KEY_SEPARATOR +
+                keySeparator +
                 writeParams(params);
     }
 
     private String writeParams(Object... params) {
         List<Object> objects = toList(params);
         if (objects.size() > 0) {
-            return StringUtils.join(objects, PARAM_SEPARATOR);
+            return StringUtils.join(objects, paramSeparator);
         }
-        return EMPTY_PARAM;
+        return emptyParam;
     }
 
     private List<Object> toList(Object... params) {

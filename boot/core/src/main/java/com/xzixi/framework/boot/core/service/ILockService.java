@@ -39,11 +39,11 @@ public interface ILockService {
     long getDefaultLeaseTimeout();
 
     /**
-     * 默认值
+     * 默认值生成器
      *
-     * @return String
+     * @return DefaultValueGenerator
      */
-    String getDefaultValue();
+    DefaultValueGenerator getDefaultValueGenerator();
 
     /**
      * 使用默认超时时间和值获取分布式锁
@@ -52,7 +52,7 @@ public interface ILockService {
      * @return ILock
      */
     default ILock getLock(String name) {
-        return getLock(name, getDefaultValue(), getDefaultWaitTimeout(), getDefaultLeaseTimeout());
+        return getLock(name, getDefaultValueGenerator().generate(), getDefaultWaitTimeout(), getDefaultLeaseTimeout());
     }
 
     /**
@@ -75,7 +75,7 @@ public interface ILockService {
      * @return ILock
      */
     default ILock getLock(String name, long waitTimeout, long leaseTimeout) {
-        return getLock(name, getDefaultValue(), waitTimeout, leaseTimeout);
+        return getLock(name, getDefaultValueGenerator().generate(), waitTimeout, leaseTimeout);
     }
 
     /**
@@ -88,4 +88,8 @@ public interface ILockService {
      * @return ILock
      */
     ILock getLock(String name, String value, long waitTimeout, long leaseTimeout);
+
+    interface DefaultValueGenerator {
+        String generate();
+    }
 }

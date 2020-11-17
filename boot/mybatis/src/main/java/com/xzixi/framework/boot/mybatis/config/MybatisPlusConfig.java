@@ -18,6 +18,7 @@
 package com.xzixi.framework.boot.mybatis.config;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +39,7 @@ public class MybatisPlusConfig {
      * @return PaginationInterceptor
      */
     @Bean
+    @ConditionalOnMissingBean(PaginationInterceptor.class)
     public PaginationInterceptor paginationInterceptor() {
         return new PaginationInterceptor().setLimit(-1).setOverflow(true);
     }

@@ -18,6 +18,8 @@
 package com.xzixi.framework.boot.redis.service.impl;
 
 import com.google.common.collect.Lists;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.RedisStringCommands;
@@ -38,7 +40,9 @@ import java.util.stream.Collectors;
  */
 public class RedisPipelineService {
 
-    private static final int DEFAULT_BATCH_SIZE = 100;
+    @Getter
+    @Setter
+    private int defaultBatchSize;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -55,7 +59,7 @@ public class RedisPipelineService {
      * @return values，和入ids顺序和长度，查询不到的用null占位
      */
     public <T> List<T> get(Collection<String> keys) {
-        return get(keys, DEFAULT_BATCH_SIZE);
+        return get(keys, defaultBatchSize);
     }
 
     /**
@@ -90,7 +94,7 @@ public class RedisPipelineService {
      * @param <P> Pair&lt;String, ?>
      */
     public <P extends Pair<String, ?>> void set(Collection<P> pairs, long expire, TimeUnit timeUnit, RedisStringCommands.SetOption setOption) {
-        set(pairs, expire, timeUnit, setOption, DEFAULT_BATCH_SIZE);
+        set(pairs, expire, timeUnit, setOption, defaultBatchSize);
     }
 
     /**
@@ -125,7 +129,7 @@ public class RedisPipelineService {
      * @param keys key集合
      */
     public void del(Collection<String> keys) {
-        del(keys, DEFAULT_BATCH_SIZE);
+        del(keys, defaultBatchSize);
     }
 
     /**

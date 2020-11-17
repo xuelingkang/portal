@@ -19,6 +19,7 @@ package com.xzixi.framework.boot.webmvc.config;
 
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -36,6 +37,7 @@ import java.util.List;
 public class FastJsonConfig {
 
     @Bean
+    @ConditionalOnMissingBean(name = "fastJsonHttpMessageConverter")
     public HttpMessageConverter<?> fastJsonHttpMessageConverter() {
         FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
         // 配置信息

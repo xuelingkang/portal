@@ -17,6 +17,7 @@
 
 package com.xzixi.framework.boot.cache.generator;
 
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cache.interceptor.KeyGenerator;
 
@@ -24,28 +25,32 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-import static com.xzixi.framework.boot.cache.RedisCacheConstant.*;
-
 /**
  * 根据id集合生成删除缓存key
  *
  * @author 薛凌康
  */
+@Data
 public class DefaultEvictByIdsKeyGenerator implements KeyGenerator {
+
+    private String keySeparator;
+    private String keysSeparator;
+    private String getByIdMethodName;
+    private String wildcard;
 
     @Override
     public Object generate(Object target, Method method, Object... params) {
         if (params.length == 0) {
-            return WILDCARD;
+            return wildcard;
         }
         return StringUtils.join(
                 ((Collection<?>) params[0]).stream().map(id ->
                         target.getClass().getSimpleName() +
-                                KEY_SEPARATOR +
-                                GET_BY_ID_METHOD_NAME +
-                                KEY_SEPARATOR +
+                                keySeparator +
+                                getByIdMethodName +
+                                keySeparator +
                                 id)
                         .collect(Collectors.toList()),
-                KEYS_SEPARATOR);
+                keysSeparator);
     }
 }

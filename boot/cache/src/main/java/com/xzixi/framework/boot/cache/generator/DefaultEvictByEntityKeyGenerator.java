@@ -18,16 +18,19 @@
 package com.xzixi.framework.boot.cache.generator;
 
 import com.xzixi.framework.boot.core.model.BaseModel;
+import lombok.Data;
 import org.springframework.cache.interceptor.KeyGenerator;
 
 import java.lang.reflect.Method;
 
-import static com.xzixi.framework.boot.cache.RedisCacheConstant.*;
-
 /**
  * @author 薛凌康
  */
+@Data
 public class DefaultEvictByEntityKeyGenerator implements KeyGenerator {
+
+    private String keySeparator;
+    private String getByIdMethodName;
 
     @Override
     public Object generate(Object target, Method method, Object... params) {
@@ -36,9 +39,9 @@ public class DefaultEvictByEntityKeyGenerator implements KeyGenerator {
             return "";
         }
         return target.getClass().getSimpleName() +
-                KEY_SEPARATOR +
-                GET_BY_ID_METHOD_NAME +
-                KEY_SEPARATOR +
+                keySeparator +
+                getByIdMethodName +
+                keySeparator +
                 id;
     }
 }

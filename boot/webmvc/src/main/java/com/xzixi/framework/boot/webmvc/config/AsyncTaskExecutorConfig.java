@@ -17,6 +17,7 @@
 
 package com.xzixi.framework.boot.webmvc.config;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,6 +42,7 @@ public class AsyncTaskExecutorConfig {
      * @return TaskExecutor
      */
     @Bean
+    @ConditionalOnMissingBean(TaskExecutor.class)
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
         // 核心线程数量，默认1
