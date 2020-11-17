@@ -22,7 +22,7 @@ package com.xzixi.framework.webapps.sso.server.service.impl;
 import com.xzixi.framework.boot.core.exception.LockAcquireException;
 import com.xzixi.framework.boot.core.model.ILock;
 import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
-import com.xzixi.framework.webapps.common.feign.RemoteAppService;
+import com.xzixi.framework.webapps.remote.service.RemoteAppService;
 import com.xzixi.framework.webapps.common.model.po.App;
 import com.xzixi.framework.webapps.common.model.vo.sso.AppCheckTokenResponse;
 import com.xzixi.framework.webapps.common.model.vo.sso.RefreshAccessTokenResponse;

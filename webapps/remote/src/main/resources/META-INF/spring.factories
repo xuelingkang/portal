@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.xzixi.framework.webapps.remote.config.RemoteConfig

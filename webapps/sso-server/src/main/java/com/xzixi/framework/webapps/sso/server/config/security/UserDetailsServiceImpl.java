@@ -23,7 +23,7 @@ import com.xzixi.framework.boot.core.exception.ClientException;
 import com.xzixi.framework.boot.core.exception.RemoteException;
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.QueryParams;
-import com.xzixi.framework.webapps.common.feign.RemoteUserService;
+import com.xzixi.framework.webapps.remote.service.RemoteUserService;
 import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.common.model.vo.UserDetailsImpl;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;

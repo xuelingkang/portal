@@ -17,38 +17,36 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.common.feign;
+package com.xzixi.framework.webapps.remote.service;
 
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.Pagination;
-import com.xzixi.framework.webapps.common.model.enums.AttachmentType;
-import com.xzixi.framework.webapps.common.model.params.AttachmentSearchParams;
-import com.xzixi.framework.webapps.common.model.vo.AttachmentVO;
+import com.xzixi.framework.boot.core.model.search.QueryParams;
+import com.xzixi.framework.webapps.common.model.params.UserSearchParams;
+import com.xzixi.framework.webapps.common.model.po.User;
+import com.xzixi.framework.webapps.common.model.vo.UserVO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @author xuelingkang
  * @date 2020-10-25
  */
-@FeignClient(value = "portal-file", path = "/attachment", contextId = "attachment")
-public interface RemoteAttachmentService {
+@FeignClient(value = "portal-system", path = "/user", contextId = "user")
+public interface RemoteUserService {
 
-    @PostMapping("/{type}")
-    Result<AttachmentVO> upload(MultipartFile file, @PathVariable("type") AttachmentType type);
+    @GetMapping("/page")
+    Result<Pagination<UserVO>> page(UserSearchParams searchParams);
 
-    @GetMapping
-    Result<Pagination<AttachmentVO>> page(AttachmentSearchParams searchParams);
+    @GetMapping("/one")
+    Result<User> getOne(QueryParams<User> queryParams);
 
     @GetMapping("/{id}")
-    Result<AttachmentVO> getById(@PathVariable("id") Integer id);
+    Result<UserVO> getById(@PathVariable("id") Integer id);
 
-    @DeleteMapping
-    Result<?> remove(List<Integer> ids);
+    @PatchMapping("/login-time")
+    Result<?> updateLoginTime(@RequestParam("id") Integer id, @RequestParam("loginTime") Long loginTime);
 }

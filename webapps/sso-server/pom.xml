@@ -33,6 +33,10 @@
         </dependency>
         <dependency>
             <groupId>com.xzixi.framework</groupId>
+            <artifactId>remote</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
             <artifactId>redis</artifactId>
         </dependency>
         <dependency>

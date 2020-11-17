@@ -27,7 +27,7 @@ import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.Pagination;
 import com.xzixi.framework.boot.core.util.Utils;
 import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
-import com.xzixi.framework.webapps.common.feign.RemoteAppService;
+import com.xzixi.framework.webapps.remote.service.RemoteAppService;
 import com.xzixi.framework.webapps.common.model.params.AppSearchParams;
 import com.xzixi.framework.webapps.common.model.po.App;
 import com.xzixi.framework.webapps.sso.server.model.SsoAccessTokenValue;
