@@ -28,7 +28,7 @@
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>boot</artifactId>
-            <version>2.1.2</version>
+            <version>2.2.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>

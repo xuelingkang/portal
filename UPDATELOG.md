@@ -1,8 +1,9 @@
-- **current**
+- **2020.11.17 v2.2.0**
   - 新增RedisPipelineService
   - 优化CacheEnhanceProcessor生成的listByIds方法
   - 简化@CacheEnhance注解，去掉baseCacheName和casualCacheName
   - 将@EnableXXX注解替换为autoconfigure
+  - 修复自定义Annotation Processor导致编译报错的问题
 - **2020.11.08 v2.1.2**
   - 优化依赖管理
 - **2020.11.08 v2.1.1**
