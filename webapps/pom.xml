@@ -34,6 +34,7 @@
         <module>admin</module>
         <module>master</module>
         <module>file</module>
+        <module>remote</module>
     </modules>
 
     <dependencyManagement>
@@ -41,6 +42,11 @@
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>remote</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

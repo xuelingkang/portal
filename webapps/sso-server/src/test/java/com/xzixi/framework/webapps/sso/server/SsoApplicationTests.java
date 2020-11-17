@@ -1,10 +1,12 @@
 /*
- * The xzixi framework is based on spring framework, which simplifies development.
+ * The spring-based xzixi framework simplifies development.
+ *
  * Copyright (C) 2020  xuelingkang@163.com.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or any later version.
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -12,7 +14,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package com.xzixi.framework.webapps.sso.server;
@@ -21,8 +23,13 @@ import com.alibaba.fastjson.JSON;
 import com.xzixi.framework.boot.core.exception.LockAcquireException;
 import com.xzixi.framework.boot.core.exception.LockReleaseException;
 import com.xzixi.framework.boot.core.model.ILock;
+import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.boot.core.model.search.Pagination;
 import com.xzixi.framework.boot.core.util.Utils;
 import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
+import com.xzixi.framework.webapps.common.feign.RemoteAppService;
+import com.xzixi.framework.webapps.common.model.params.AppSearchParams;
+import com.xzixi.framework.webapps.common.model.po.App;
 import com.xzixi.framework.webapps.sso.server.model.SsoAccessTokenValue;
 import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
 import com.xzixi.framework.webapps.sso.server.service.ISsoAccessTokenService;
@@ -46,6 +53,8 @@ public class SsoApplicationTests {
     private ISsoAccessTokenService ssoAccessTokenService;
     @Autowired
     private RedisLockService redisLockService;
+    @Autowired
+    private RemoteAppService remoteAppService;
 
     @Test
     public void testSave() {
@@ -73,5 +82,15 @@ public class SsoApplicationTests {
         lock.acquire();
         Utils.safeSleep(10000);
         lock.release();
+    }
+
+    @Test
+    public void testAppPage() {
+        AppSearchParams params = new AppSearchParams();
+        App app = new App();
+        app.setId(1);
+        params.setModel(app);
+        Result<Pagination<App>> result = remoteAppService.page(params);
+        log.info(result.toString());
     }
 }
