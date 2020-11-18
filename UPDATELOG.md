@@ -1,3 +1,6 @@
+- **current**
+  - 优化enhance模块生成的listByIds方法
+  - enhance模块追加方法和属性时增加检查，防止重复定义
 - **2020.11.17 v2.2.0**
   - 新增RedisPipelineService
   - 优化CacheEnhanceProcessor生成的listByIds方法
