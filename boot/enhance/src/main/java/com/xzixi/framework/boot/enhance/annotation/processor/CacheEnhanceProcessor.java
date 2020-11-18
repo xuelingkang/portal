@@ -74,7 +74,8 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
             }
             if (cacheEnhance.listByIds()) {
                 classDecl.defs = classDecl.defs.appendList(List.of(redisCacheTimeToLiveDecl(),
-                        redisPipelineServiceDecl(), listByIdsDecl(cacheNames, classDecl.name.toString(), modelClassName)));
+                        redisPipelineServiceDecl(), defaultBaseKeyGeneratorDecl(),
+                        listByIdsDecl(cacheNames, modelClassName)));
             }
             if (cacheEnhance.getOne()) {
                 classDecl.defs = classDecl.defs.append(getOneDecl(cacheNames, modelClassName));
@@ -128,9 +129,12 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     private static final String EXCEPTION_DOT_CLASS = "java.lang.Exception.class";
     private static final String EXCEPTION_CLASS = "java.lang.Exception";
     private static final String STRING_CLASS = "java.lang.String";
+    private static final String CLASS_CLASS = "java.lang.Class";
+    private static final String METHOD_CLASS = "java.lang.reflect.Method";
     private static final String COLLECTION_UTILS_CLASS = "org.apache.commons.collections.CollectionUtils";
     private static final String OBJECTS_CLASS = "java.util.Objects";
     private static final String SERIALIZABLE_CLASS = "java.io.Serializable";
+    private static final String SERIALIZABLE_DOT_CLASS = "java.io.Serializable.class";
     private static final String STREAM_CLASS = "java.util.stream.Stream";
     private static final String COLLECTORS_CLASS = "java.util.stream.Collectors";
     private static final String COLLECTION_CLASS = "java.util.Collection";
@@ -140,6 +144,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     private static final String QUERY_PARAMS_CLASS = "com.xzixi.framework.boot.core.model.search.QueryParams";
     private static final String DURATION_CLASS = "java.time.Duration";
     private static final String REDIS_PIPELINE_SERVICE_CLASS = "com.xzixi.framework.boot.redis.service.impl.RedisPipelineService";
+    private static final String KEY_GENERATOR_CLASS = "org.springframework.cache.interceptor.KeyGenerator";
     private static final String PAIR_CLASS = "org.apache.commons.lang3.tuple.Pair";
     private static final String IMMUTABLE_PAIR_CLASS = "org.apache.commons.lang3.tuple.ImmutablePair";
 
@@ -213,10 +218,23 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
     }
 
     /**
+     * <pre>
+     *     {@code
+     *     @Autowired
+     *     private KeyGenerator defaultBaseKeyGenerator;
+     *     }
+     * </pre>
+     */
+    private JCTree.JCVariableDecl defaultBaseKeyGeneratorDecl() {
+        List<JCTree.JCAnnotation> annotationList = List.of(autowired());
+        return privateTypeParamDecl(DEFAULT_BASE_KEY_GENERATOR, KEY_GENERATOR_CLASS, annotationList);
+    }
+
+    /**
      * listByIds
      * <p>这个方法不加缓存，使用redis pipeline查询getById方法的缓存
      */
-    public JCTree.JCMethodDecl listByIdsDecl(CacheNames cacheNames, String className, String modelClassName) {
+    public JCTree.JCMethodDecl listByIdsDecl(CacheNames cacheNames, String modelClassName) {
         final String getById = "getById";
         final String method = "listByIds";
         final String idList = "idList";
@@ -236,6 +254,12 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         final String values = "values";
         final String redisPipelineServiceCallGet = "redisPipelineService.get";
         final String idsNotFound = "idsNotFound";
+        final String thisObject = "this";
+        final String clazz = "clazz";
+        final String thisCallGetClass = "this.getClass";
+        final String methodRef = "methodRef";
+        final String clazzCallGetDeclaredMethod = "clazz.getDeclaredMethod";
+        final String defaultBaseKeyGeneratorCallGenerate = "defaultBaseKeyGenerator.generate";
         // 注解列表
         List<JCTree.JCAnnotation> annotationList = List.of(override());
         // 访问修饰词和注解列表
@@ -246,6 +270,31 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         JCTree.JCExpression returnType = listType(modelClassName);
         // 参数列表
         List<JCTree.JCVariableDecl> parameters = List.of(extendsWildCollectionParamDecl(idList, SERIALIZABLE_CLASS));
+        // Class clazz = this.getClass();
+        JCTree.JCStatement defClazzStat = treeMaker.VarDef(
+                treeMaker.Modifiers(0),
+                getNameFromString(clazz),
+                memberAccess(CLASS_CLASS),
+                treeMaker.Apply(List.nil(), memberAccess(thisCallGetClass), List.nil())
+        );
+        // Method methodRef = null;
+        JCTree.JCStatement defMethodRefStat = treeMaker.VarDef(
+                treeMaker.Modifiers(0),
+                getNameFromString(methodRef),
+                memberAccess(METHOD_CLASS),
+                treeMaker.Literal(TypeTag.BOT, null)
+        );
+        // methodRef = clazz.getDeclaredMethod("getById", Serializable.class);
+        JCTree.JCStatement assignMethodRef = treeMaker.Exec(
+                treeMaker.Assign(
+                        memberAccess(methodRef),
+                        treeMaker.Apply(List.nil(), memberAccess(clazzCallGetDeclaredMethod), List.of(treeMaker.Literal(getById), memberAccess(SERIALIZABLE_DOT_CLASS)))
+                )
+        );
+        JCTree.JCBlock tryBlock = treeMaker.Block(0, List.of(assignMethodRef));
+        // catch (Exception ignore) {}
+        JCTree.JCCatch catchStat = treeMaker.Catch(typeParamDecl("ignore", EXCEPTION_CLASS), treeMaker.Block(0, List.nil()));
+        JCTree.JCTry tryStat = treeMaker.Try(tryBlock, List.of(catchStat), null);
         // List<? extends Serializable> ids = new ArrayList<>(idList);
         JCTree.JCStatement defIdsStat = treeMaker.VarDef(
                 treeMaker.Modifiers(0),
@@ -287,8 +336,12 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
                                                 List.nil(),
                                                 memberAccess(stringCallFormat),
                                                 List.of(
-                                                        treeMaker.Literal(cacheNames.getBaseCacheName() + "::" + className + ":" + getById + ":%s"),
-                                                        memberAccess(id)
+                                                        treeMaker.Literal(cacheNames.getBaseCacheName() + "::%s"),
+                                                        treeMaker.Apply(
+                                                                List.nil(),
+                                                                memberAccess(defaultBaseKeyGeneratorCallGenerate),
+                                                                List.of(memberAccess(thisObject), memberAccess(methodRef), memberAccess(id))
+                                                        )
                                                 )
                                         )
                                 )
@@ -323,10 +376,10 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // for循环
         JCTree.JCStatement forLoopStat = forLoop(modelClassName);
         // if
-        JCTree.JCStatement ifStat = ifStat(cacheNames, className, modelClassName);
+        JCTree.JCStatement ifStat = ifStat(cacheNames, modelClassName);
         JCTree.JCStatement returnStat = treeMaker.Return(memberAccess(result));
-        JCTree.JCBlock block = treeMaker.Block(0, List.of(defIdsStat, defIdsSizeStat, defResultStat, defIdsStreamStat,
-                defKeysStreamStat, defKeysStat, defValuesStat, defIdsNotFoundStat, forLoopStat, ifStat, returnStat));
+        JCTree.JCBlock block = treeMaker.Block(0, List.of(defClazzStat, defMethodRefStat, tryStat, defIdsStat, defIdsSizeStat, defResultStat,
+                defIdsStreamStat, defKeysStreamStat, defKeysStat, defValuesStat, defIdsNotFoundStat, forLoopStat, ifStat, returnStat));
         return treeMaker.MethodDef(modifiers, name, returnType, List.nil(), parameters, List.nil(), block, null);
     }
 
@@ -408,7 +461,8 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      *                 try {
      *                     long redisCacheTimeToLiveInSeconds = redisCacheTimeToLive.getSeconds();
      *                     Stream<T> selectFromDbStream = selectFromDb.stream();
-     *                     Stream<Pair<String, T>> pairsStream = selectFromDbStream.map(model -> ImmutablePair.of(String.format("[cacheEnhance.baseCacheName()]::[modelClassName]:[getById]:%s", model.getId()), model));
+     *                     Stream<Pair<String, T>> pairsStream = selectFromDbStream
+     *                             .map(model -> ImmutablePair.of(String.format("[cacheEnhance.baseCacheName()]::%s", defaultBaseKeyGenerator.generate(this, methodRef, model.getId())), model));
      *                     List<Pair<String, T>> pairs = pairsStream.collect(Collectors.toList());
      *                     redisPipelineService.set(pairs, redisCacheTimeToLiveInSeconds, TimeUnit.SECONDS, RedisStringCommands.SetOption.SET_IF_ABSENT);
      *                 } catch (Exception ignore) {}
@@ -417,8 +471,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      *     }
      * </pre>
      */
-    public JCTree.JCStatement ifStat(CacheNames cacheNames, String className, String modelClassName) {
-        final String getById = "getById";
+    public JCTree.JCStatement ifStat(CacheNames cacheNames, String modelClassName) {
         final String idsNotFound = "idsNotFound";
         final String collectionUtilsCallIsNotEmpty = String.format("%s.isNotEmpty", COLLECTION_UTILS_CLASS);
         final String selectFromDb = "selectFromDb";
@@ -438,6 +491,9 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         final String pairsStreamCallCollect = "pairsStream.collect";
         final String collectorsCallToList = String.format("%s.toList", COLLECTORS_CLASS);
         final String redisPipelineServiceCallSet = "redisPipelineService.set";
+        final String thisObject = "this";
+        final String methodRef = "methodRef";
+        final String defaultBaseKeyGeneratorCallGenerate = "defaultBaseKeyGenerator.generate";
         // CollectionUtils.isNotEmpty(idsNotFound)
         JCTree.JCParens ifCondStat = treeMaker.Parens(treeMaker.Apply(List.nil(), memberAccess(collectionUtilsCallIsNotEmpty), List.of(memberAccess(idsNotFound))));
         // List<T> selectFromDb = super.listByIds(idsNotFound);
@@ -467,7 +523,8 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
                 streamType(modelClassName),
                 treeMaker.Apply(List.nil(), memberAccess(selectFromDbCallStream), List.nil())
         );
-        // Stream<Pair<String, T>> pairsStream = selectFromDbStream.map(model -> ImmutablePair.of(String.format("[cacheEnhance.baseCacheName()]::[modelClassName]:[getById]:%s", model.getId()), model));
+        // Stream<Pair<String, T>> pairsStream = selectFromDbStream
+        //         .map(model -> ImmutablePair.of(String.format("[cacheEnhance.baseCacheName()]::%s", defaultBaseKeyGenerator.generate(this, methodRef, model.getId())), model));
         JCTree.JCTypeApply pairType = pairType(STRING_CLASS);
         JCTree.JCStatement defPairStreamStat = treeMaker.VarDef(
                 treeMaker.Modifiers(0),
@@ -485,11 +542,19 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
                                                                 List.nil(),
                                                                 memberAccess(stringCallFormat),
                                                                 List.of(
-                                                                        treeMaker.Literal(cacheNames.getBaseCacheName() + "::" + className + ":" + getById + ":%s"),
+                                                                        treeMaker.Literal(cacheNames.getBaseCacheName() + "::%s"),
                                                                         treeMaker.Apply(
                                                                                 List.nil(),
-                                                                                memberAccess(modelCallGetId),
-                                                                                List.nil()
+                                                                                memberAccess(defaultBaseKeyGeneratorCallGenerate),
+                                                                                List.of(
+                                                                                        memberAccess(thisObject),
+                                                                                        memberAccess(methodRef),
+                                                                                        treeMaker.Apply(
+                                                                                                List.nil(),
+                                                                                                memberAccess(modelCallGetId),
+                                                                                                List.nil()
+                                                                                        )
+                                                                                )
                                                                         )
                                                                 )
                                                         ),
