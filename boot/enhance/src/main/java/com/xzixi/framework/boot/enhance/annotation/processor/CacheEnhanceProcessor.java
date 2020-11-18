@@ -45,6 +45,8 @@ import java.util.Set;
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class CacheEnhanceProcessor extends AbstractBaseProcessor {
 
+    private JCTree.JCClassDecl classDecl;
+
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         // 遍历所有@CacheEnhance标注的类
@@ -52,7 +54,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
             CacheEnhance cacheEnhance = element.getAnnotation(CacheEnhance.class);
 
             // 类定义
-            JCTree.JCClassDecl classDecl = (JCTree.JCClassDecl) elements.getTree(element);
+            classDecl = (JCTree.JCClassDecl) elements.getTree(element);
 
             // 当前类对应的实体类的类名
             String modelClassName = ((JCTree.JCTypeApply) classDecl.extending.getTree()).arguments.get(1).type.toString();
@@ -68,49 +70,58 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
              * 暂时这样解决，将treeMaker的pos设置为int最大值
              */
             treeMaker.at(Integer.MAX_VALUE);
-            // 修改类，追加方法
-            if (cacheEnhance.getById()) {
+            // 修改类，追加方法，检查状态，防止重复定义
+            if (cacheEnhance.getById() && hasNotDefMethod(GET_BY_ID)) {
                 classDecl.defs = classDecl.defs.append(getByIdDecl(cacheNames, modelClassName));
             }
             if (cacheEnhance.listByIds()) {
-                classDecl.defs = classDecl.defs.appendList(List.of(redisCacheTimeToLiveDecl(),
-                        redisPipelineServiceDecl(), defaultBaseKeyGeneratorDecl(),
-                        listByIdsDecl(cacheNames, modelClassName)));
+                if (hasNotDefVariable(REDIS_CACHE_TIME_TO_LIVE)) {
+                    classDecl.defs = classDecl.defs.append(redisCacheTimeToLiveDecl());
+                }
+                if (hasNotDefVariable(REDIS_PIPELINE_SERVICE)) {
+                    classDecl.defs = classDecl.defs.append(redisPipelineServiceDecl());
+                }
+                if (hasNotDefVariable(DEFAULT_BASE_KEY_GENERATOR)) {
+                    classDecl.defs = classDecl.defs.append(defaultBaseKeyGeneratorDecl());
+                }
+                if (hasNotDefMethod(LIST_BY_IDS)) {
+                    classDecl.defs = classDecl.defs.append(listByIdsDecl(cacheNames, modelClassName));
+                }
             }
-            if (cacheEnhance.getOne()) {
+            if (cacheEnhance.getOne() && hasNotDefMethod(GET_ONE)) {
                 classDecl.defs = classDecl.defs.append(getOneDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.list()) {
+            if (cacheEnhance.list() && hasNotDefMethod(LIST)) {
                 classDecl.defs = classDecl.defs.append(listDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.page()) {
+            if (cacheEnhance.page() && hasNotDefMethod(PAGE)) {
                 classDecl.defs = classDecl.defs.append(pageDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.count()) {
+            if (cacheEnhance.count() && hasNotDefMethod(COUNT)) {
                 classDecl.defs = classDecl.defs.append(countDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.updateById()) {
+            if (cacheEnhance.updateById() && hasNotDefMethod(UPDATE_BY_ID)) {
                 classDecl.defs = classDecl.defs.append(updateByIdDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.updateBatchById()) {
+            if (cacheEnhance.updateBatchById() && hasNotDefMethod(UPDATE_BATCH_BY_ID)) {
                 classDecl.defs = classDecl.defs.append(updateBatchByIdDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.save()) {
+            if (cacheEnhance.save() && hasNotDefMethod(SAVE)) {
                 classDecl.defs = classDecl.defs.append(saveDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.saveBatch()) {
+            if (cacheEnhance.saveBatch() && hasNotDefMethod(SAVE_BATCH)) {
                 classDecl.defs = classDecl.defs.append(saveBatchDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.saveOrUpdate()) {
+            if (cacheEnhance.saveOrUpdate() && hasNotDefMethod(SAVE_OR_UPDATE)) {
                 classDecl.defs = classDecl.defs.append(saveOrUpdateDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.saveOrUpdateBatch()) {
+            if (cacheEnhance.saveOrUpdateBatch() && hasNotDefMethod(SAVE_OR_UPDATE_BATCH)) {
                 classDecl.defs = classDecl.defs.append(saveOrUpdateBatchDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.removeById()) {
+            if (cacheEnhance.removeById() && hasNotDefMethod(REMOVE_BY_ID)) {
                 classDecl.defs = classDecl.defs.append(removeByIdDecl(cacheNames));
             }
-            if (cacheEnhance.removeByIds()) {
+            if (cacheEnhance.removeByIds() && hasNotDefMethod(REMOVE_BY_IDS)) {
                 classDecl.defs = classDecl.defs.append(removeByIdsDecl(cacheNames));
             }
         }
@@ -169,11 +180,25 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
 
     private static final String REDIS_CACHE_TIME_TO_LIVE_EXPRESSION = "${spring.cache.redis.time-to-live}";
 
+    private static final String GET_BY_ID = "getById";
+    private static final String LIST_BY_IDS = "listByIds";
+    private static final String GET_ONE = "getOne";
+    private static final String LIST = "list";
+    private static final String PAGE = "page";
+    private static final String COUNT = "count";
+    private static final String UPDATE_BY_ID = "updateById";
+    private static final String UPDATE_BATCH_BY_ID = "updateBatchById";
+    private static final String SAVE = "save";
+    private static final String SAVE_BATCH = "saveBatch";
+    private static final String SAVE_OR_UPDATE = "saveOrUpdate";
+    private static final String SAVE_OR_UPDATE_BATCH = "saveOrUpdateBatch";
+    private static final String REMOVE_BY_ID = "removeById";
+    private static final String REMOVE_BY_IDS = "removeByIds";
+
     /**
      * getById
      */
     private JCTree.JCMethodDecl getByIdDecl(CacheNames cacheNames, String modelClassName) {
-        final String method = "getById";
         final String superMethod = "super.getById";
         final String id = "id";
         // 注解列表
@@ -181,7 +206,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = getNameFromString(method);
+        Name name = getNameFromString(GET_BY_ID);
         // 返回值类型
         JCTree.JCExpression returnType = memberAccess(modelClassName);
         // 参数列表
@@ -235,8 +260,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      * <p>这个方法不加缓存，使用redis pipeline查询getById方法的缓存
      */
     public JCTree.JCMethodDecl listByIdsDecl(CacheNames cacheNames, String modelClassName) {
-        final String getById = "getById";
-        final String method = "listByIds";
         final String idList = "idList";
         final String id = "id";
         final String ids = "ids";
@@ -265,7 +288,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = getNameFromString(method);
+        Name name = getNameFromString(LIST_BY_IDS);
         // 返回值类型
         JCTree.JCExpression returnType = listType(modelClassName);
         // 参数列表
@@ -288,7 +311,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         JCTree.JCStatement assignMethodRef = treeMaker.Exec(
                 treeMaker.Assign(
                         memberAccess(methodRef),
-                        treeMaker.Apply(List.nil(), memberAccess(clazzCallGetDeclaredMethod), List.of(treeMaker.Literal(getById), memberAccess(SERIALIZABLE_DOT_CLASS)))
+                        treeMaker.Apply(List.nil(), memberAccess(clazzCallGetDeclaredMethod), List.of(treeMaker.Literal(GET_BY_ID), memberAccess(SERIALIZABLE_DOT_CLASS)))
                 )
         );
         JCTree.JCBlock tryBlock = treeMaker.Block(0, List.of(assignMethodRef));
@@ -603,7 +626,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      * getOne
      */
     public JCTree.JCMethodDecl getOneDecl(CacheNames cacheNames, String modelClassName) {
-        final String method = "getOne";
         final String superMethod = "super.getOne";
         final String queryParams = "queryParams";
         final String throwEx = "throwEx";
@@ -612,7 +634,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = getNameFromString(method);
+        Name name = getNameFromString(GET_ONE);
         // 返回值类型
         JCTree.JCExpression returnType = memberAccess(modelClassName);
         // 参数列表
@@ -626,7 +648,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      * list
      */
     public JCTree.JCMethodDecl listDecl(CacheNames cacheNames, String modelClassName) {
-        final String method = "list";
         final String superMethod = "super.list";
         final String queryParams = "queryParams";
         // 注解列表
@@ -634,7 +655,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = getNameFromString(method);
+        Name name = getNameFromString(LIST);
         // 返回值类型
         JCTree.JCExpression returnType = listType(modelClassName);
         // 参数列表
@@ -648,7 +669,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      * page
      */
     public JCTree.JCMethodDecl pageDecl(CacheNames cacheNames, String modelClassName) {
-        final String method = "page";
         final String superMethod = "super.page";
         final String page = "page";
         final String queryParams = "queryParams";
@@ -657,7 +677,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = getNameFromString(method);
+        Name name = getNameFromString(PAGE);
         // 返回值类型
         JCTree.JCExpression returnType = paginationType(modelClassName);
         // 参数列表
@@ -671,7 +691,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      * count
      */
     private JCTree.JCMethodDecl countDecl(CacheNames cacheNames, String modelClassName) {
-        final String method = "count";
         final String superMethod = "super.count";
         final String queryParams = "queryParams";
         // 注解列表
@@ -679,7 +698,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = getNameFromString(method);
+        Name name = getNameFromString(COUNT);
         // 返回值类型
         JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.LONG);
         // 参数列表
@@ -693,7 +712,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      * updateById
      */
     private JCTree.JCMethodDecl updateByIdDecl(CacheNames cacheNames, String modelClassName) {
-        final String method = "updateById";
         final String superMethod = "super.updateById";
         final String entity = "entity";
         // 注解列表
@@ -702,7 +720,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = getNameFromString(method);
+        Name name = getNameFromString(UPDATE_BY_ID);
         // 返回值类型
         JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
         // 参数列表
@@ -716,7 +734,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      * updateBatchById
      */
     private JCTree.JCMethodDecl updateBatchByIdDecl(CacheNames cacheNames, String modelClassName) {
-        final String method = "updateBatchById";
         final String superMethod = "super.updateBatchById";
         final String entityList = "entityList";
         final String batchSize = "batchSize";
@@ -726,7 +743,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = getNameFromString(method);
+        Name name = getNameFromString(UPDATE_BATCH_BY_ID);
         // 返回值类型
         JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
         // 参数列表
@@ -740,7 +757,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      * save
      */
     private JCTree.JCMethodDecl saveDecl(CacheNames cacheNames, String modelClassName) {
-        final String method = "save";
         final String superMethod = "super.save";
         final String entity = "entity";
         // 注解列表
@@ -748,7 +764,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = getNameFromString(method);
+        Name name = getNameFromString(SAVE);
         // 返回值类型
         JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
         // 参数列表
@@ -762,7 +778,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      * saveBatch
      */
     private JCTree.JCMethodDecl saveBatchDecl(CacheNames cacheNames, String modelClassName) {
-        final String method = "saveBatch";
         final String superMethod = "super.saveBatch";
         final String entityList = "entityList";
         final String batchSize = "batchSize";
@@ -771,7 +786,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = getNameFromString(method);
+        Name name = getNameFromString(SAVE_BATCH);
         // 返回值类型
         JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
         // 参数列表
@@ -785,7 +800,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      * saveOrUpdate
      */
     private JCTree.JCMethodDecl saveOrUpdateDecl(CacheNames cacheNames, String modelClassName) {
-        final String method = "saveOrUpdate";
         final String superMethod = "super.saveOrUpdate";
         final String entity = "entity";
         // 注解列表
@@ -794,7 +808,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = getNameFromString(method);
+        Name name = getNameFromString(SAVE_OR_UPDATE);
         // 返回值类型
         JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
         // 参数列表
@@ -808,7 +822,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      * saveOrUpdateBatch
      */
     private JCTree.JCMethodDecl saveOrUpdateBatchDecl(CacheNames cacheNames, String modelClassName) {
-        final String method = "saveOrUpdateBatch";
         final String superMethod = "super.saveOrUpdateBatch";
         final String entityList = "entityList";
         final String batchSize = "batchSize";
@@ -818,7 +831,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = getNameFromString(method);
+        Name name = getNameFromString(SAVE_OR_UPDATE_BATCH);
         // 返回值类型
         JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
         // 参数列表
@@ -832,7 +845,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      * removeById
      */
     private JCTree.JCMethodDecl removeByIdDecl(CacheNames cacheNames) {
-        final String method = "removeById";
         final String superMethod = "super.removeById";
         final String id = "id";
         // 注解列表
@@ -841,7 +853,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = getNameFromString(method);
+        Name name = getNameFromString(REMOVE_BY_ID);
         // 返回值类型
         JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
         // 参数列表
@@ -855,7 +867,6 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      * removeByIds
      */
     private JCTree.JCMethodDecl removeByIdsDecl(CacheNames cacheNames) {
-        final String method = "removeByIds";
         final String superMethod = "super.removeByIds";
         final String idList = "idList";
         // 注解列表
@@ -864,7 +875,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
         // 访问修饰词和注解列表
         JCTree.JCModifiers modifiers = treeMaker.Modifiers(Flags.PUBLIC, annotationList);
         // 方法名
-        Name name = getNameFromString(method);
+        Name name = getNameFromString(REMOVE_BY_IDS);
         // 返回值类型
         JCTree.JCExpression returnType = treeMaker.TypeIdent(TypeTag.BOOLEAN);
         // 参数列表
@@ -1144,5 +1155,25 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
                 expressions,
                 null
         );
+    }
+
+    /**
+     * 检查是否未定义方法
+     *
+     * @return boolean
+     */
+    private boolean hasNotDefMethod(String name) {
+        return classDecl.defs.stream()
+                .noneMatch(tree -> tree instanceof JCTree.JCMethodDecl && ((JCTree.JCMethodDecl) tree).name.toString().equals(name));
+    }
+
+    /**
+     * 检查是否未定义属性
+     *
+     * @return boolean
+     */
+    private boolean hasNotDefVariable(String name) {
+        return classDecl.defs.stream()
+                .noneMatch(tree -> tree instanceof JCTree.JCVariableDecl && ((JCTree.JCVariableDecl) tree).name.toString().equals(name));
     }
 }
