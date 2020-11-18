@@ -45,8 +45,6 @@ import java.util.Set;
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 public class CacheEnhanceProcessor extends AbstractBaseProcessor {
 
-    private JCTree.JCClassDecl classDecl;
-
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         // 遍历所有@CacheEnhance标注的类
@@ -54,7 +52,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
             CacheEnhance cacheEnhance = element.getAnnotation(CacheEnhance.class);
 
             // 类定义
-            classDecl = (JCTree.JCClassDecl) elements.getTree(element);
+            JCTree.JCClassDecl classDecl = (JCTree.JCClassDecl) elements.getTree(element);
 
             // 当前类对应的实体类的类名
             String modelClassName = ((JCTree.JCTypeApply) classDecl.extending.getTree()).arguments.get(1).type.toString();
@@ -71,57 +69,57 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
              */
             treeMaker.at(Integer.MAX_VALUE);
             // 修改类，追加方法，检查状态，防止重复定义
-            if (cacheEnhance.getById() && hasNotDefMethod(GET_BY_ID)) {
+            if (cacheEnhance.getById() && hasNotDefMethod(classDecl, GET_BY_ID)) {
                 classDecl.defs = classDecl.defs.append(getByIdDecl(cacheNames, modelClassName));
             }
             if (cacheEnhance.listByIds()) {
-                if (hasNotDefVariable(REDIS_CACHE_TIME_TO_LIVE)) {
+                if (hasNotDefVariable(classDecl, REDIS_CACHE_TIME_TO_LIVE)) {
                     classDecl.defs = classDecl.defs.append(redisCacheTimeToLiveDecl());
                 }
-                if (hasNotDefVariable(REDIS_PIPELINE_SERVICE)) {
+                if (hasNotDefVariable(classDecl, REDIS_PIPELINE_SERVICE)) {
                     classDecl.defs = classDecl.defs.append(redisPipelineServiceDecl());
                 }
-                if (hasNotDefVariable(DEFAULT_BASE_KEY_GENERATOR)) {
+                if (hasNotDefVariable(classDecl, DEFAULT_BASE_KEY_GENERATOR)) {
                     classDecl.defs = classDecl.defs.append(defaultBaseKeyGeneratorDecl());
                 }
-                if (hasNotDefMethod(LIST_BY_IDS)) {
+                if (hasNotDefMethod(classDecl, LIST_BY_IDS)) {
                     classDecl.defs = classDecl.defs.append(listByIdsDecl(cacheNames, modelClassName));
                 }
             }
-            if (cacheEnhance.getOne() && hasNotDefMethod(GET_ONE)) {
+            if (cacheEnhance.getOne() && hasNotDefMethod(classDecl, GET_ONE)) {
                 classDecl.defs = classDecl.defs.append(getOneDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.list() && hasNotDefMethod(LIST)) {
+            if (cacheEnhance.list() && hasNotDefMethod(classDecl, LIST)) {
                 classDecl.defs = classDecl.defs.append(listDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.page() && hasNotDefMethod(PAGE)) {
+            if (cacheEnhance.page() && hasNotDefMethod(classDecl, PAGE)) {
                 classDecl.defs = classDecl.defs.append(pageDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.count() && hasNotDefMethod(COUNT)) {
+            if (cacheEnhance.count() && hasNotDefMethod(classDecl, COUNT)) {
                 classDecl.defs = classDecl.defs.append(countDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.updateById() && hasNotDefMethod(UPDATE_BY_ID)) {
+            if (cacheEnhance.updateById() && hasNotDefMethod(classDecl, UPDATE_BY_ID)) {
                 classDecl.defs = classDecl.defs.append(updateByIdDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.updateBatchById() && hasNotDefMethod(UPDATE_BATCH_BY_ID)) {
+            if (cacheEnhance.updateBatchById() && hasNotDefMethod(classDecl, UPDATE_BATCH_BY_ID)) {
                 classDecl.defs = classDecl.defs.append(updateBatchByIdDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.save() && hasNotDefMethod(SAVE)) {
+            if (cacheEnhance.save() && hasNotDefMethod(classDecl, SAVE)) {
                 classDecl.defs = classDecl.defs.append(saveDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.saveBatch() && hasNotDefMethod(SAVE_BATCH)) {
+            if (cacheEnhance.saveBatch() && hasNotDefMethod(classDecl, SAVE_BATCH)) {
                 classDecl.defs = classDecl.defs.append(saveBatchDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.saveOrUpdate() && hasNotDefMethod(SAVE_OR_UPDATE)) {
+            if (cacheEnhance.saveOrUpdate() && hasNotDefMethod(classDecl, SAVE_OR_UPDATE)) {
                 classDecl.defs = classDecl.defs.append(saveOrUpdateDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.saveOrUpdateBatch() && hasNotDefMethod(SAVE_OR_UPDATE_BATCH)) {
+            if (cacheEnhance.saveOrUpdateBatch() && hasNotDefMethod(classDecl, SAVE_OR_UPDATE_BATCH)) {
                 classDecl.defs = classDecl.defs.append(saveOrUpdateBatchDecl(cacheNames, modelClassName));
             }
-            if (cacheEnhance.removeById() && hasNotDefMethod(REMOVE_BY_ID)) {
+            if (cacheEnhance.removeById() && hasNotDefMethod(classDecl, REMOVE_BY_ID)) {
                 classDecl.defs = classDecl.defs.append(removeByIdDecl(cacheNames));
             }
-            if (cacheEnhance.removeByIds() && hasNotDefMethod(REMOVE_BY_IDS)) {
+            if (cacheEnhance.removeByIds() && hasNotDefMethod(classDecl, REMOVE_BY_IDS)) {
                 classDecl.defs = classDecl.defs.append(removeByIdsDecl(cacheNames));
             }
         }
@@ -1162,7 +1160,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      *
      * @return boolean
      */
-    private boolean hasNotDefMethod(String name) {
+    private boolean hasNotDefMethod(JCTree.JCClassDecl classDecl, String name) {
         return classDecl.defs.stream()
                 .noneMatch(tree -> tree instanceof JCTree.JCMethodDecl && ((JCTree.JCMethodDecl) tree).name.toString().equals(name));
     }
@@ -1172,7 +1170,7 @@ public class CacheEnhanceProcessor extends AbstractBaseProcessor {
      *
      * @return boolean
      */
-    private boolean hasNotDefVariable(String name) {
+    private boolean hasNotDefVariable(JCTree.JCClassDecl classDecl, String name) {
         return classDecl.defs.stream()
                 .noneMatch(tree -> tree instanceof JCTree.JCVariableDecl && ((JCTree.JCVariableDecl) tree).name.toString().equals(name));
     }
