@@ -27,7 +27,7 @@ import com.xzixi.framework.webapps.common.model.po.App;
 import com.xzixi.framework.webapps.common.model.vo.sso.AppCheckTokenResponse;
 import com.xzixi.framework.webapps.common.model.vo.sso.RefreshAccessTokenResponse;
 import com.xzixi.framework.webapps.common.model.vo.sso.SsoServerLoginResponse;
-import com.xzixi.framework.webapps.common.util.RemoteServiceWrapper;
+import com.xzixi.framework.webapps.remote.util.RemoteServiceWrapper;
 import com.xzixi.framework.webapps.sso.server.exception.AccessTokenExpireException;
 import com.xzixi.framework.webapps.sso.server.exception.AuthException;
 import com.xzixi.framework.webapps.sso.server.exception.RefreshTokenExpireException;

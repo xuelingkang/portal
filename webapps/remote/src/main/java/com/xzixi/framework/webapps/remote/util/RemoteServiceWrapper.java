@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.common.util;
+package com.xzixi.framework.webapps.remote.util;
 
 import com.xzixi.framework.boot.core.exception.ClientException;
 import com.xzixi.framework.boot.core.exception.RemoteException;
