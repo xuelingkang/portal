@@ -22,6 +22,7 @@ package com.xzixi.framework.webapps.remote.config;
 import feign.Feign;
 import feign.QueryMapEncoder;
 import feign.hystrix.HystrixFeign;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +40,7 @@ public class RemoteConfig {
     @Bean
     @Scope("prototype")
     @ConditionalOnProperty(name = "feign.hystrix.enabled")
+    @ConditionalOnBean(QueryMapEncoder.class)
     public Feign.Builder feignHystrixBuilder(QueryMapEncoder queryMapEncoder) {
         return HystrixFeign.builder().queryMapEncoder(queryMapEncoder);
     }
