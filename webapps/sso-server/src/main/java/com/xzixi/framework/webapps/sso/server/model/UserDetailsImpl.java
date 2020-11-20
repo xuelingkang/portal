@@ -17,9 +17,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.common.model.vo;
+package com.xzixi.framework.webapps.sso.server.model;
 
 import com.xzixi.framework.webapps.common.model.po.Authority;
+import com.xzixi.framework.webapps.common.model.vo.UserVO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections.CollectionUtils;

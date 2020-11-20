@@ -24,7 +24,7 @@ import com.xzixi.framework.webapps.remote.service.RemoteUserService;
 import com.xzixi.framework.webapps.common.model.po.Token;
 import com.xzixi.framework.webapps.common.model.vo.sso.SsoServerLoginResponse;
 import com.xzixi.framework.webapps.common.model.vo.TokenVO;
-import com.xzixi.framework.webapps.common.model.vo.UserDetailsImpl;
+import com.xzixi.framework.webapps.sso.server.model.UserDetailsImpl;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
 import com.xzixi.framework.webapps.sso.server.service.ITokenService2;
 import com.xzixi.framework.webapps.sso.server.util.WebUtils;

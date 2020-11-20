@@ -19,12 +19,16 @@
 
 package com.xzixi.framework.boot.webmvc.config;
 
+import com.xzixi.framework.boot.webmvc.component.ObjectQueryMapEncoder;
 import com.xzixi.framework.boot.webmvc.controller.GlobalControllerExceptionHandler;
 import com.xzixi.framework.boot.webmvc.service.ISignService;
 import com.xzixi.framework.boot.webmvc.service.impl.Md5SignServiceImpl;
+import feign.QueryMapEncoder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * @author xuelingkang
@@ -43,5 +47,17 @@ public class WebmvcConfig {
     @ConditionalOnMissingBean(name = "globalControllerExceptionHandler")
     public GlobalControllerExceptionHandler globalControllerExceptionHandler() {
         return new GlobalControllerExceptionHandler();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(PasswordEncoder.class)
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(QueryMapEncoder.class)
+    public QueryMapEncoder queryMapEncoder() {
+        return new ObjectQueryMapEncoder();
     }
 }
