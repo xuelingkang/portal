@@ -20,7 +20,9 @@
 package com.xzixi.framework.boot.webmvc.config;
 
 import org.hibernate.validator.HibernateValidator;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.validation.ValidationAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -33,10 +35,11 @@ import javax.validation.Validator;
  * @author 薛凌康
  */
 @Configuration
+@AutoConfigureBefore(ValidationAutoConfiguration.class)
 public class ValidationConfig {
 
     @Bean
-    @ConditionalOnMissingBean(Validator.class)
+    @ConditionalOnMissingBean
     public Validator validator() {
         return Validation
                 .byProvider(HibernateValidator.class)

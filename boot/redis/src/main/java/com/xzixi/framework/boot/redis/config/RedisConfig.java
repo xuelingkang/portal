@@ -22,7 +22,9 @@ package com.xzixi.framework.boot.redis.config;
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
 import com.xzixi.framework.boot.redis.service.impl.RedisPipelineService;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -37,19 +39,23 @@ import java.util.UUID;
  * @date 2020-11-03
  */
 @Configuration
+@AutoConfigureBefore(RedisAutoConfiguration.class)
 public class RedisConfig {
 
     @Bean
+    @ConditionalOnMissingBean(name = "stringRedisSerializer")
     public RedisSerializer<String> stringRedisSerializer() {
         return new StringRedisSerializer();
     }
 
     @Bean
+    @ConditionalOnMissingBean(name = "objectRedisSerializer")
     public RedisSerializer<Object> objectRedisSerializer() {
         return new GenericFastJsonRedisSerializer();
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory connectionFactory,
                                                        RedisSerializer<String> stringRedisSerializer,
                                                        RedisSerializer<Object> objectRedisSerializer) {
@@ -64,7 +70,7 @@ public class RedisConfig {
     }
 
     @Bean
-    @ConditionalOnMissingBean(RedisPipelineService.class)
+    @ConditionalOnMissingBean
     public RedisPipelineService redisPipelineService() {
         RedisPipelineService redisPipelineService = new RedisPipelineService();
         redisPipelineService.setDefaultBatchSize(100);
@@ -72,7 +78,7 @@ public class RedisConfig {
     }
 
     @Bean
-    @ConditionalOnMissingBean(RedisLockService.class)
+    @ConditionalOnMissingBean
     public RedisLockService redisLockService() {
         RedisLockService redisLockService = new RedisLockService();
         redisLockService.setDefaultWaitTimeout(30000L);

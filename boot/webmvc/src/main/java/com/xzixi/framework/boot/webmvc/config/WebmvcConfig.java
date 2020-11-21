@@ -25,8 +25,10 @@ import com.xzixi.framework.boot.webmvc.service.ISignService;
 import com.xzixi.framework.boot.webmvc.service.impl.Md5SignServiceImpl;
 import feign.QueryMapEncoder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -34,6 +36,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @author xuelingkang
  * @date 2020-11-12
  */
+@EnableAsync(mode = AdviceMode.ASPECTJ)
 @Configuration
 public class WebmvcConfig {
 
@@ -50,13 +53,13 @@ public class WebmvcConfig {
     }
 
     @Bean
-    @ConditionalOnMissingBean(PasswordEncoder.class)
+    @ConditionalOnMissingBean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    @ConditionalOnMissingBean(QueryMapEncoder.class)
+    @ConditionalOnMissingBean
     public QueryMapEncoder queryMapEncoder() {
         return new ObjectQueryMapEncoder();
     }

@@ -21,8 +21,12 @@ package com.xzixi.framework.boot.cache.config;
 
 import com.xzixi.framework.boot.cache.extension.FuzzyEvictRedisCacheManager;
 import com.xzixi.framework.boot.cache.generator.*;
+import com.xzixi.framework.boot.redis.config.RedisConfig;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -46,6 +50,8 @@ import java.util.LinkedHashMap;
 @EnableCaching(mode = AdviceMode.ASPECTJ)
 @Configuration
 @EnableConfigurationProperties(CacheProperties.class)
+@AutoConfigureBefore(RedisAutoConfiguration.class)
+@AutoConfigureAfter(RedisConfig.class)
 public class RedisCacheConfig {
 
     /**
@@ -82,6 +88,7 @@ public class RedisCacheConfig {
     private static final String WILDCARD = "*";
 
     @Bean
+    @ConditionalOnMissingBean
     public CacheManager cacheManager(
             RedisConnectionFactory connectionFactory,
             CacheProperties cacheProperties,

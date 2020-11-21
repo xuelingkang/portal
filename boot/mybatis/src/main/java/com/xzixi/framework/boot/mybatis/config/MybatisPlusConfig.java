@@ -41,7 +41,7 @@ public class MybatisPlusConfig {
      * @return PaginationInterceptor
      */
     @Bean
-    @ConditionalOnMissingBean(PaginationInterceptor.class)
+    @ConditionalOnMissingBean
     public PaginationInterceptor paginationInterceptor() {
         return new PaginationInterceptor().setLimit(-1).setOverflow(true);
     }
