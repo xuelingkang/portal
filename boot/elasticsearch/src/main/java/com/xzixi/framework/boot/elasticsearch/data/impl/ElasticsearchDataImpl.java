@@ -70,7 +70,7 @@ public class ElasticsearchDataImpl<T extends BaseModel> implements IBaseData<T> 
 
     @SuppressWarnings("unchecked")
     public ElasticsearchDataImpl() {
-        // 获取T的实际类型，第二个泛型参数
+        // 获取T的实际类型
         this.clazz = (Class<T>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         // 获取Document注解
         Document document = clazz.getDeclaredAnnotation(Document.class);

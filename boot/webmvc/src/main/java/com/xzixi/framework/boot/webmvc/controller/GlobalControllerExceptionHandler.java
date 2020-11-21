@@ -23,11 +23,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.xzixi.framework.boot.core.exception.ClientException;
 import com.xzixi.framework.boot.core.exception.ProjectException;
-import com.xzixi.framework.boot.core.exception.RemoteException;
 import com.xzixi.framework.boot.core.exception.ServerException;
 import com.xzixi.framework.boot.core.model.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -53,6 +53,7 @@ import java.util.Set;
  */
 @Slf4j
 @RestControllerAdvice
+@Order
 public class GlobalControllerExceptionHandler {
 
     @Value("${spring.servlet.multipart.max-file-size:1MB}")
@@ -162,19 +163,6 @@ public class GlobalControllerExceptionHandler {
     public Result<?> handleClientException(ClientException e, HttpServletResponse response) {
         response.setStatus(e.getStatus());
         return new Result<>(e.getStatus(), e.getMessage(), null);
-    }
-
-    /**
-     * 调用远程接口异常
-     *
-     * @param e RemoteException
-     * @return Result
-     */
-    @ExceptionHandler({RemoteException.class})
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Result<?> handleRemoteException(RemoteException e) {
-        log.error("调用远程服务异常，状态码：{}，异常信息：{}", e.getStatus(), e.getMessage());
-        return new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "服务端异常！", null);
     }
 
     /**

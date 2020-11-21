@@ -22,12 +22,11 @@ package com.xzixi.framework.webapps.sso.server.service.impl;
 import com.xzixi.framework.boot.core.exception.LockAcquireException;
 import com.xzixi.framework.boot.core.model.ILock;
 import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
-import com.xzixi.framework.webapps.remote.service.RemoteAppService;
 import com.xzixi.framework.webapps.common.model.po.App;
 import com.xzixi.framework.webapps.common.model.vo.sso.AppCheckTokenResponse;
 import com.xzixi.framework.webapps.common.model.vo.sso.RefreshAccessTokenResponse;
 import com.xzixi.framework.webapps.common.model.vo.sso.SsoServerLoginResponse;
-import com.xzixi.framework.webapps.remote.util.RemoteServiceWrapper;
+import com.xzixi.framework.webapps.remote.service.RemoteAppService;
 import com.xzixi.framework.webapps.sso.server.exception.AccessTokenExpireException;
 import com.xzixi.framework.webapps.sso.server.exception.AuthException;
 import com.xzixi.framework.webapps.sso.server.exception.RefreshTokenExpireException;
@@ -69,7 +68,7 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     public SsoServerLoginResponse login(int userId, String appUid) {
         // 查询应用信息
-        App app = RemoteServiceWrapper.getData(remoteAppService.getByUid(appUid));
+        App app = remoteAppService.getByUid(appUid).getData();
 
         long now = System.currentTimeMillis();
         // 生成并保存token
@@ -133,7 +132,7 @@ public class AuthServiceImpl implements IAuthService {
             appAccessTokenService.mount(appAccessTokenUuid, appAccessToken, appUid, refreshTokenUuid);
 
             // 查询应用信息
-            App app = RemoteServiceWrapper.getData(remoteAppService.getByUid(appUid));
+            App app = remoteAppService.getByUid(appUid).getData();
 
             SsoServerLoginResponse response = new SsoServerLoginResponse();
             response.setSsoAccessToken(ssoAccessToken);

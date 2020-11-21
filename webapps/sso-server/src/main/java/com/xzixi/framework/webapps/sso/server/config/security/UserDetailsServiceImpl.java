@@ -20,13 +20,12 @@
 package com.xzixi.framework.webapps.sso.server.config.security;
 
 import com.xzixi.framework.boot.core.exception.ClientException;
-import com.xzixi.framework.boot.core.exception.RemoteException;
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.QueryParams;
-import com.xzixi.framework.webapps.remote.service.RemoteUserService;
 import com.xzixi.framework.webapps.common.model.po.User;
-import com.xzixi.framework.webapps.sso.server.model.UserDetailsImpl;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
+import com.xzixi.framework.webapps.remote.service.RemoteUserService;
+import com.xzixi.framework.webapps.sso.server.model.UserDetailsImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,9 +49,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         Result<User> getOneUserResult = remoteUserService.getOne(new QueryParams<>(new User().setUsername(username)));
-        if (getOneUserResult.getCode() != 200) {
-            throw new RemoteException(getOneUserResult.getCode(), getOneUserResult.getMessage());
-        }
 
         User user = getOneUserResult.getData();
         if (user == null) {

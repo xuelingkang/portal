@@ -84,7 +84,7 @@ public class AppController {
 
     @PostMapping
     @ApiOperation(value = "保存应用")
-    public Result<?> save(@Validated({AppSave.class}) App app) {
+    public Result<?> save(@Validated({AppSave.class}) @RequestBody App app) {
         if (appService.save(app)) {
             return new Result<>();
         }
@@ -93,7 +93,7 @@ public class AppController {
 
     @PutMapping
     @ApiOperation(value = "更新应用")
-    public Result<?> update(@Validated({AppUpdate.class}) App app) {
+    public Result<?> update(@Validated({AppUpdate.class}) @RequestBody App app) {
         App appData = appService.getById(app.getId());
         BeanUtils.copyPropertiesIgnoreNull(app, appData);
         if (appService.updateById(appData)) {

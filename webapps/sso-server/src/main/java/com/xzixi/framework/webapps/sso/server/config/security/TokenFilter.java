@@ -19,13 +19,12 @@
 
 package com.xzixi.framework.webapps.sso.server.config.security;
 
-import com.xzixi.framework.boot.core.exception.RemoteException;
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.webapps.common.constant.SecurityConstant;
-import com.xzixi.framework.webapps.remote.service.RemoteUserService;
 import com.xzixi.framework.webapps.common.model.po.Token;
-import com.xzixi.framework.webapps.sso.server.model.UserDetailsImpl;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
+import com.xzixi.framework.webapps.remote.service.RemoteUserService;
+import com.xzixi.framework.webapps.sso.server.model.UserDetailsImpl;
 import com.xzixi.framework.webapps.sso.server.service.ITokenService2;
 import com.xzixi.framework.webapps.sso.server.util.WebUtils;
 import org.apache.commons.lang.StringUtils;
@@ -78,9 +77,6 @@ public class TokenFilter extends OncePerRequestFilter {
      */
     private void setAuthentication(Token token, HttpServletResponse response) {
         Result<UserVO> getByIdResult = remoteUserService.getById(token.getUserId());
-        if (getByIdResult.getCode() != 200) {
-            throw new RemoteException(getByIdResult.getCode(), getByIdResult.getMessage());
-        }
 
         UserVO userVO = getByIdResult.getData();
         if (userVO == null) {

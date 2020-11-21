@@ -27,9 +27,9 @@ import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.Pagination;
 import com.xzixi.framework.boot.core.util.Utils;
 import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
-import com.xzixi.framework.webapps.remote.service.RemoteAppService;
 import com.xzixi.framework.webapps.common.model.params.AppSearchParams;
 import com.xzixi.framework.webapps.common.model.po.App;
+import com.xzixi.framework.webapps.remote.service.RemoteAppService;
 import com.xzixi.framework.webapps.sso.server.model.SsoAccessTokenValue;
 import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
 import com.xzixi.framework.webapps.sso.server.service.ISsoAccessTokenService;
@@ -39,6 +39,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author xuelingkang
@@ -92,5 +95,11 @@ public class SsoApplicationTests {
         params.setModel(app);
         Result<Pagination<App>> result = remoteAppService.page(params);
         log.info(result.toString());
+    }
+
+    @Test
+    public void testDeleteApp() {
+        List<Integer> ids = Arrays.asList(4, 5);
+        remoteAppService.remove(ids);
     }
 }

@@ -19,6 +19,7 @@
 
 package com.xzixi.framework.webapps.remote.config;
 
+import com.xzixi.framework.webapps.remote.controller.RemoteServiceExceptionHandler;
 import feign.Feign;
 import feign.QueryMapEncoder;
 import feign.hystrix.HystrixFeign;
@@ -43,5 +44,10 @@ public class RemoteConfig {
     @ConditionalOnBean(QueryMapEncoder.class)
     public Feign.Builder feignHystrixBuilder(QueryMapEncoder queryMapEncoder) {
         return HystrixFeign.builder().queryMapEncoder(queryMapEncoder);
+    }
+
+    @Bean
+    public RemoteServiceExceptionHandler remoteServiceExceptionHandler() {
+        return new RemoteServiceExceptionHandler();
     }
 }
