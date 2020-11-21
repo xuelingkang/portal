@@ -26,6 +26,7 @@ import com.xzixi.framework.webapps.common.model.params.UserSearchParams;
 import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.cloud.openfeign.SpringQueryMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,10 +40,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface RemoteUserService {
 
     @GetMapping("/page")
-    Result<Pagination<UserVO>> page(UserSearchParams searchParams);
+    Result<Pagination<UserVO>> page(@SpringQueryMap UserSearchParams searchParams);
 
     @GetMapping("/one")
-    Result<User> getOne(QueryParams<User> queryParams);
+    Result<User> getOne(@SpringQueryMap QueryParams<User> queryParams);
 
     @GetMapping("/{id}")
     Result<UserVO> getById(@PathVariable("id") Integer id);

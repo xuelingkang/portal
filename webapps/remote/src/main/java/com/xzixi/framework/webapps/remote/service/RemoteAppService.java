@@ -52,5 +52,5 @@ public interface RemoteAppService {
     Result<?> update(@RequestBody App app);
 
     @DeleteMapping
-    Result<?> remove(List<Integer> ids);
+    Result<?> remove(@RequestParam("ids") List<Integer> ids);
 }

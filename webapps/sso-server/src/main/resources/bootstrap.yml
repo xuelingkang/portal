@@ -25,6 +25,11 @@ spring:
 feign:
   hystrix:
     enabled: true
+  client:
+    config:
+      default:
+        connect-timeout: 500
+        read-timeout: 60000
 
 hystrix:
   command:
@@ -34,7 +39,7 @@ hystrix:
           enabled: true
         isolation:
           thread:
-            timeoutInMilliseconds: 6000
+            timeoutInMilliseconds: 60000
 
 logging:
   config: classpath:logback-spring.xml

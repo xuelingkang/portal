@@ -25,10 +25,8 @@ import com.xzixi.framework.webapps.common.model.enums.AttachmentType;
 import com.xzixi.framework.webapps.common.model.params.AttachmentSearchParams;
 import com.xzixi.framework.webapps.common.model.vo.AttachmentVO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.cloud.openfeign.SpringQueryMap;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -44,11 +42,11 @@ public interface RemoteAttachmentService {
     Result<AttachmentVO> upload(MultipartFile file, @PathVariable("type") AttachmentType type);
 
     @GetMapping
-    Result<Pagination<AttachmentVO>> page(AttachmentSearchParams searchParams);
+    Result<Pagination<AttachmentVO>> page(@SpringQueryMap AttachmentSearchParams searchParams);
 
     @GetMapping("/{id}")
     Result<AttachmentVO> getById(@PathVariable("id") Integer id);
 
     @DeleteMapping
-    Result<?> remove(List<Integer> ids);
+    Result<?> remove(@RequestParam List<Integer> ids);
 }
