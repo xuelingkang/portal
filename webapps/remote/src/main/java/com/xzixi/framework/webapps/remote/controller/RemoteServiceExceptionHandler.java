@@ -44,7 +44,7 @@ public class RemoteServiceExceptionHandler {
     /**
      * 调用远程接口异常，且没有fallback时，返回远程接口的异常
      *
-     * @param e FeignException
+     * @param e HystrixRuntimeException
      * @param response HttpServletResponse
      * @return Result
      */
