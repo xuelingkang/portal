@@ -26,6 +26,7 @@ import com.xzixi.framework.webapps.common.model.params.AttachmentSearchParams;
 import com.xzixi.framework.webapps.common.model.vo.AttachmentVO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,8 +39,8 @@ import java.util.List;
 @FeignClient(value = "portal-file", path = "/attachment", contextId = "attachment")
 public interface RemoteAttachmentService {
 
-    @PostMapping("/{type}")
-    Result<AttachmentVO> upload(MultipartFile file, @PathVariable("type") AttachmentType type);
+    @PostMapping(value = "/{type}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    Result<AttachmentVO> upload(@RequestPart("file") MultipartFile file, @PathVariable("type") AttachmentType type);
 
     @GetMapping
     Result<Pagination<AttachmentVO>> page(@SpringQueryMap AttachmentSearchParams searchParams);
@@ -48,5 +49,5 @@ public interface RemoteAttachmentService {
     Result<AttachmentVO> getById(@PathVariable("id") Integer id);
 
     @DeleteMapping
-    Result<?> remove(@RequestParam List<Integer> ids);
+    Result<?> remove(@RequestParam("ids") List<Integer> ids);
 }
