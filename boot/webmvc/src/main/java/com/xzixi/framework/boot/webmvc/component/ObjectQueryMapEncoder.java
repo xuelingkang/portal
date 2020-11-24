@@ -20,10 +20,11 @@
 package com.xzixi.framework.boot.webmvc.component;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import com.xzixi.framework.boot.core.exception.ProjectException;
+import com.xzixi.framework.boot.core.util.TypeUtils;
 import feign.QueryMapEncoder;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -56,45 +57,50 @@ public class ObjectQueryMapEncoder implements QueryMapEncoder {
 
     @SuppressWarnings("unchecked")
     private List<Pair<String, Object>> parsePairs(Object object, String prefix) {
+        if (object == null) {
+            return new ArrayList<>();
+        }
+
+        Class<?> clazz = object.getClass();
+
+        if (TypeUtils.isSimpleValueType(clazz)) {
+            if (StringUtils.isBlank(prefix)) {
+                throw new ProjectException("缺少参数名称！");
+            }
+            return Collections.singletonList(ImmutablePair.of(prefix, object));
+        }
+
+        if (Collection.class.isAssignableFrom(clazz)) {
+            if (StringUtils.isBlank(prefix)) {
+                throw new ProjectException("缺少参数名称！");
+            }
+            Collection<?> collection = (Collection<?>) object;
+            if (CollectionUtils.isEmpty(collection)) {
+                return new ArrayList<>();
+            }
+            List<Pair<String, Object>> result = new ArrayList<>();
+            List<Object> list = new ArrayList<>(collection);
+            for (int i = 0; i < list.size(); i++) {
+                Object obj = list.get(i);
+                String prefixI = prefix + LEFT + i + RIGHT;
+                result.addAll(parsePairs(obj, prefixI));
+            }
+            return result;
+        }
+
         Map<String, Object> map = JSON.parseObject(JSON.toJSONString(object), Map.class);
-
-        List<Pair<String, Object>> simplePairs = new ArrayList<>();
-        List<Pair<String, JSONObject>> objectPairs = new ArrayList<>();
-        List<Pair<String, JSONArray>> arrayPairs = new ArrayList<>();
-
+        List<Pair<String, Object>> result = new ArrayList<>();
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
-            if (value instanceof JSONObject) {
-                ImmutablePair<String, JSONObject> pair = ImmutablePair.of(prefix + key, (JSONObject) value);
-                objectPairs.add(pair);
-                continue;
+            String prefixKey;
+            if (StringUtils.isBlank(prefix)) {
+                prefixKey = key;
+            } else {
+                prefixKey = prefix + DOT + key;
             }
-            if (value instanceof JSONArray) {
-                ImmutablePair<String, JSONArray> pair = ImmutablePair.of(prefix + key, (JSONArray) value);
-                arrayPairs.add(pair);
-                continue;
-            }
-            ImmutablePair<String, Object> pair = ImmutablePair.of(prefix + key, value);
-            simplePairs.add(pair);
+            result.addAll(parsePairs(value, prefixKey));
         }
-
-        if (CollectionUtils.isNotEmpty(objectPairs)) {
-            for (Pair<String, JSONObject> pair : objectPairs) {
-                simplePairs.addAll(parsePairs(pair.getRight(), pair.getKey() + DOT));
-            }
-        }
-
-        if (CollectionUtils.isNotEmpty(arrayPairs)) {
-            for (int i = 0; i < arrayPairs.size(); i++) {
-                Pair<String, JSONArray> pair = arrayPairs.get(i);
-                String prefixI = pair.getLeft() + LEFT + i + RIGHT + DOT;
-                for (Object obj : pair.getRight()) {
-                    simplePairs.addAll(parsePairs(obj, prefixI));
-                }
-            }
-        }
-
-        return simplePairs;
+        return result;
     }
 }

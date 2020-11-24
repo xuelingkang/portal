@@ -41,7 +41,7 @@ public class TypeUtils {
     public static boolean isSimpleValueType(Class<?> clazz) {
         return (ClassUtils.isPrimitiveOrWrapper(clazz) || clazz.isEnum() || CharSequence.class.isAssignableFrom(clazz)
                 || Number.class.isAssignableFrom(clazz) || Date.class.isAssignableFrom(clazz) || URI.class==clazz
-                || URL.class==clazz || Locale.class==clazz || Class.class==clazz);
+                || URL.class==clazz || Locale.class==clazz || Class.class==clazz) || clazz.isEnum();
     }
 
     /**
