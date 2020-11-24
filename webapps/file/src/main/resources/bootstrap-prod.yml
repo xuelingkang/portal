@@ -14,6 +14,11 @@ spring:
     port: 6379
     password: portal
 
+sftp-client:
+  host: file-server
+  username: portalfile
+  password: portal
+
 swagger2:
   enable: false
 
