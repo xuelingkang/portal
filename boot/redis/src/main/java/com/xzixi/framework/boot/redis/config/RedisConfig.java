@@ -22,6 +22,7 @@ package com.xzixi.framework.boot.redis.config;
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
 import com.xzixi.framework.boot.redis.service.impl.RedisPipelineService;
+import com.xzixi.framework.boot.redis.service.impl.RedisScanService;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
@@ -85,5 +86,13 @@ public class RedisConfig {
         redisLockService.setDefaultLeaseTimeout(10000L);
         redisLockService.setDefaultValueGenerator(() -> UUID.randomUUID().toString());
         return new RedisLockService();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public RedisScanService redisScanService() {
+        RedisScanService redisScanService = new RedisScanService();
+        redisScanService.setDefaultBatchSize(100);
+        return redisScanService;
     }
 }

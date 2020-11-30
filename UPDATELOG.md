@@ -2,6 +2,7 @@
   - 增加转换@SpringQueryMap参数的工具
   - 全局异常拦截的顺序调整到最低
   - 修复调用远程接口异常拦截
+  - 增加RedisScanService
 - **2020.11.18 v2.2.1**
   - 优化enhance模块生成的listByIds方法
   - enhance模块追加方法和属性时增加检查，防止重复定义
