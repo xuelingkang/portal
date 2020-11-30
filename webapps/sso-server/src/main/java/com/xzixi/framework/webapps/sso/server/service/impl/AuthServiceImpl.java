@@ -21,7 +21,10 @@ package com.xzixi.framework.webapps.sso.server.service.impl;
 
 import com.xzixi.framework.boot.core.exception.LockAcquireException;
 import com.xzixi.framework.boot.core.model.ILock;
+import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
+import com.xzixi.framework.boot.redis.service.impl.RedisScanService;
+import com.xzixi.framework.boot.webmvc.service.ISignService;
 import com.xzixi.framework.webapps.common.model.po.App;
 import com.xzixi.framework.webapps.common.model.vo.sso.AppCheckTokenResponse;
 import com.xzixi.framework.webapps.common.model.vo.sso.RefreshAccessTokenResponse;
@@ -30,17 +33,24 @@ import com.xzixi.framework.webapps.remote.service.RemoteAppService;
 import com.xzixi.framework.webapps.sso.server.exception.AccessTokenExpireException;
 import com.xzixi.framework.webapps.sso.server.exception.AuthException;
 import com.xzixi.framework.webapps.sso.server.exception.RefreshTokenExpireException;
-import com.xzixi.framework.webapps.sso.server.model.AppAccessTokenValue;
-import com.xzixi.framework.webapps.sso.server.model.RefreshTokenValue;
-import com.xzixi.framework.webapps.sso.server.model.SsoAccessTokenValue;
-import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
+import com.xzixi.framework.webapps.sso.server.model.*;
 import com.xzixi.framework.webapps.sso.server.service.IAppAccessTokenService;
 import com.xzixi.framework.webapps.sso.server.service.IAuthService;
 import com.xzixi.framework.webapps.sso.server.service.IRefreshTokenService;
 import com.xzixi.framework.webapps.sso.server.service.ISsoAccessTokenService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static com.xzixi.framework.webapps.common.constant.TokenConstant.*;
@@ -49,10 +59,14 @@ import static com.xzixi.framework.webapps.common.constant.TokenConstant.*;
  * @author xuelingkang
  * @date 2020-11-05
  */
+@Slf4j
 @Service
 public class AuthServiceImpl implements IAuthService {
 
+    private static final String SSO_SERVER_APP_UID = "sso";
     private static final String LOCK_PREFIX = "lock::authentication::";
+    private static final String MOUNT_KEY_TEMPLATE = "token::refresh::%s::";
+    private static final String MOUNT_KEY_SSO_TEMPLATE = MOUNT_KEY_TEMPLATE + "sso::";
 
     @Autowired
     private IRefreshTokenService refreshTokenService;
@@ -64,6 +78,10 @@ public class AuthServiceImpl implements IAuthService {
     private RemoteAppService remoteAppService;
     @Autowired
     private RedisLockService redisLockService;
+    @Autowired
+    private RedisScanService redisScanService;
+    @Autowired
+    private ISignService signService;
 
     @Override
     public SsoServerLoginResponse login(int userId, String appUid) {
@@ -286,6 +304,78 @@ public class AuthServiceImpl implements IAuthService {
 
     @Override
     public void logout(String refreshToken) {
-        // TODO 加分布式锁
+        // 解密refreshToken获取uuid
+        String refreshTokenUuid = refreshTokenService.decodeJwtToken(refreshToken);
+
+        ILock lock = redisLockService.getLock(LOCK_PREFIX + refreshTokenUuid);
+        try {
+            lock.acquire();
+            String pattern = String.format(MOUNT_KEY_TEMPLATE, refreshTokenUuid);
+            while (true) {
+                List<String> keys = redisScanService.scan(pattern);
+                if (CollectionUtils.isEmpty(keys)) {
+                    break;
+                }
+                logoutApps(keys, refreshTokenUuid);
+            }
+            refreshTokenService.delete(refreshTokenUuid);
+        } catch (LockAcquireException e) {
+            throw new AuthException();
+        } finally {
+            lock.safeRelease();
+        }
+    }
+
+    /**
+     * 登出所有应用包括sso
+     *
+     * @param keys redis key
+     */
+    private void logoutApps(List<String> keys, String refreshTokenUuid) {
+        // 查询sso应用信息
+        App ssoServer = remoteAppService.getByUid(SSO_SERVER_APP_UID).getData();
+
+        for (String key : keys) {
+            if (key.startsWith(String.format(MOUNT_KEY_SSO_TEMPLATE, refreshTokenUuid))) {
+                // 登出sso
+                SsoAccessTokenMountValue ssoAccessTokenMountValue = ssoAccessTokenService.getTokenMountValue(key);
+                String ssoAccessToken = ssoAccessTokenMountValue.getSsoAccessToken();
+                String ssoAccessTokenUuid = ssoAccessTokenService.decodeJwtToken(ssoAccessToken);
+                ssoAccessTokenService.delete(ssoAccessTokenUuid);
+                ssoAccessTokenService.unmount(ssoAccessTokenUuid, refreshTokenUuid);
+                continue;
+            }
+
+            // 登出app
+            AppAccessTokenMountValue appAccessTokenMountValue = appAccessTokenService.getMountTokenValue(key);
+            String appUid = appAccessTokenMountValue.getAppUid();
+            String appAccessToken = appAccessTokenMountValue.getAppAccessToken();
+            String appAccessTokenUuid = appAccessTokenService.decodeJwtToken(appAccessToken);
+            // 查询app信息
+            App app = remoteAppService.getByUid(appUid).getData();
+
+            // 构造签名和参数
+            long now = System.currentTimeMillis();
+            Map<String, Object> params = new HashMap<>();
+            params.put("accessToken", appAccessToken);
+            params.put("appUid", SSO_SERVER_APP_UID);
+            params.put(ISignService.TIMESTAMP_NAME, now);
+            String sign = signService.genSign(params, ssoServer.getSecret());
+
+            // 构造app登出请求
+            MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+            params.forEach((name, value) -> queryParams.add(name, String.valueOf(value)));
+            queryParams.add("sign", sign);
+            String uri = UriComponentsBuilder.fromHttpUrl(app.getLogoutCallbackUrl()).queryParams(queryParams).toUriString();
+            WebClient.create(uri)
+                    .get()
+                    .accept(MediaType.APPLICATION_JSON)
+                    .retrieve()
+                    .bodyToMono(Result.class)
+                    .subscribe();
+
+            // 卸载app挂载的key
+            appAccessTokenService.unmount(appAccessTokenUuid, appUid, refreshTokenUuid);
+        }
     }
 }

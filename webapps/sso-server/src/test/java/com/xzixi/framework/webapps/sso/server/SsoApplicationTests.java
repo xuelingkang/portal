@@ -27,6 +27,7 @@ import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.Pagination;
 import com.xzixi.framework.boot.core.util.Utils;
 import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
+import com.xzixi.framework.boot.webmvc.service.ISignService;
 import com.xzixi.framework.webapps.common.model.params.AppSearchParams;
 import com.xzixi.framework.webapps.common.model.po.App;
 import com.xzixi.framework.webapps.remote.service.RemoteAppService;
@@ -39,9 +40,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author xuelingkang
@@ -58,6 +64,8 @@ public class SsoApplicationTests {
     private RedisLockService redisLockService;
     @Autowired
     private RemoteAppService remoteAppService;
+    @Autowired
+    private ISignService signService;
 
     @Test
     public void testSave() {
@@ -101,5 +109,24 @@ public class SsoApplicationTests {
     public void testDeleteApp() {
         List<Integer> ids = Arrays.asList(4, 5);
         remoteAppService.remove(ids);
+    }
+
+    @Test
+    public void testUri() {
+        App ssoServer = remoteAppService.getByUid("sso").getData();
+        long now = System.currentTimeMillis();
+        Map<String, Object> params = new HashMap<>();
+        params.put("accessToken", "appAccessToken");
+        params.put("appUid", "sso");
+        params.put(ISignService.TIMESTAMP_NAME, now);
+        String sign = signService.genSign(params, ssoServer.getSecret());
+
+        App app = remoteAppService.getByUid("admin").getData();
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        params.forEach((name, value) -> queryParams.add(name, String.valueOf(value)));
+        queryParams.add("sign", sign);
+        String uri = UriComponentsBuilder.fromHttpUrl(app.getLogoutCallbackUrl()).queryParams(queryParams).toUriString();
+
+        log.info("sign: {}, uri: {}", sign, uri);
     }
 }

@@ -69,6 +69,12 @@ public class AppAccessTokenServiceImpl extends AbstractTokenService implements I
     }
 
     @Override
+    public void unmount(String appAccessTokenUuid, String appUid, String refreshTokenUuid) {
+        String key = getMountKey(appAccessTokenUuid, appUid, refreshTokenUuid);
+        redisTemplate.boundValueOps(key).expire(0, TimeUnit.SECONDS);
+    }
+
+    @Override
     public AppAccessTokenMountValue getMountTokenValue(String mountKey) {
         return (AppAccessTokenMountValue) redisTemplate.boundValueOps(mountKey).get();
     }

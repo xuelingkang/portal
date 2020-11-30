@@ -63,6 +63,14 @@ public interface ISsoAccessTokenService extends ITokenService {
     void mount(String ssoAccessTokenUuid, String ssoAccessToken, String refreshTokenUuid);
 
     /**
+     * 卸载ssoAccessToken
+     *
+     * @param ssoAccessTokenUuid uuid
+     * @param refreshTokenUuid uuid
+     */
+    void unmount(String ssoAccessTokenUuid, String refreshTokenUuid);
+
+    /**
      * 获取挂载值
      *
      * @param mountKey redisKey

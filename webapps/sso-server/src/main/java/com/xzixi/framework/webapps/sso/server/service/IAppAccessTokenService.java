@@ -67,6 +67,15 @@ public interface IAppAccessTokenService extends ITokenService {
     void mount(String appAccessTokenUuid, String appAccessToken, String appUid, String refreshTokenUuid);
 
     /**
+     * 卸载appAccessToken
+     *
+     * @param appAccessTokenUuid uuid
+     * @param appUid 应用uid
+     * @param refreshTokenUuid uuid
+     */
+    void unmount(String appAccessTokenUuid, String appUid, String refreshTokenUuid);
+
+    /**
      * 获取挂载值
      *
      * @param mountKey redisKey
