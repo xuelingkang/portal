@@ -36,6 +36,10 @@
             <artifactId>remote</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.xzixi.framework</groupId>
+            <artifactId>sso-client</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
