@@ -25,6 +25,7 @@ import com.xzixi.framework.webapps.common.model.enums.MailStatus;
 import com.xzixi.framework.webapps.common.model.po.Mail;
 import com.xzixi.framework.webapps.common.model.po.MailContent;
 import com.xzixi.framework.webapps.common.model.vo.MailVO;
+import com.xzixi.framework.webapps.notice.constant.MailConstant;
 import com.xzixi.framework.webapps.notice.data.IMailData;
 import com.xzixi.framework.webapps.notice.service.IMailContentService;
 import com.xzixi.framework.webapps.notice.service.IMailService;
@@ -39,8 +40,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static com.xzixi.framework.webapps.notice.constant.MailConstant.SEND_MAIL_USER_ID;
 
 /**
  * @author 薛凌康
@@ -67,7 +66,7 @@ public class MailServiceImpl extends BaseServiceImpl<IMailData, Mail> implements
     public void saveMail(Mail mail, MailContent content) {
         mail.setStatus(MailStatus.UNSENT);
         if (mail.getSendUserId() == null) {
-            mail.setSendUserId(SEND_MAIL_USER_ID);
+            mail.setSendUserId(MailConstant.SEND_MAIL_USER_ID);
         }
         if (!save(mail)) {
             throw new ServerException(mail, "保存邮件失败！");

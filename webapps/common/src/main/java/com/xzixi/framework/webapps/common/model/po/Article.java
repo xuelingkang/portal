@@ -22,6 +22,7 @@ package com.xzixi.framework.webapps.common.model.po;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.xzixi.framework.boot.core.model.BaseModel;
 import com.xzixi.framework.boot.swagger2.annotations.IgnoreSwagger2Parameter;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.enums.ArticleAccess;
 import com.xzixi.framework.webapps.common.model.enums.ArticleCategory;
 import com.xzixi.framework.webapps.common.model.enums.ArticleType;
@@ -39,14 +40,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
-import static com.xzixi.framework.webapps.common.constant.ProjectConstant.INDEX_NAME_PREFIX;
-
 /**
  * @author 薛凌康
  */
 @Data
 @ApiModel(description = "文章")
-@Document(indexName = INDEX_NAME_PREFIX + "article")
+@Document(indexName = ProjectConstant.INDEX_NAME_PREFIX + "article")
 public class Article extends BaseModel {
 
     private static final long serialVersionUID = 1L;

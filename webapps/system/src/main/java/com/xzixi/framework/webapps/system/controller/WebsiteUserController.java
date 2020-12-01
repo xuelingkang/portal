@@ -20,6 +20,7 @@
 package com.xzixi.framework.webapps.system.controller;
 
 import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.common.model.valid.WebsiteUserSave;
 import com.xzixi.framework.webapps.system.service.IUserService;
@@ -31,13 +32,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
-
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/website/user", produces = RESPONSE_MEDIA_TYPE)
+@RequestMapping(value = "/website/user", produces = ProjectConstant.RESPONSE_MEDIA_TYPE)
 @Api(tags = "网站用户")
 public class WebsiteUserController {
 

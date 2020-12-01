@@ -19,13 +19,15 @@
 
 package com.xzixi.framework.webapps.file.controller;
 
-import com.xzixi.framework.boot.sftp.client.component.ISftpClient;
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.Pagination;
+import com.xzixi.framework.boot.sftp.client.component.ISftpClient;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.enums.AttachmentType;
 import com.xzixi.framework.webapps.common.model.params.AttachmentSearchParams;
 import com.xzixi.framework.webapps.common.model.po.Attachment;
 import com.xzixi.framework.webapps.common.model.vo.AttachmentVO;
+import com.xzixi.framework.webapps.file.constant.AttachmentConstant;
 import com.xzixi.framework.webapps.file.service.IAttachmentService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,19 +46,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
-import static com.xzixi.framework.webapps.file.constant.AttachmentConstant.*;
-import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
-
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/attachment", produces = RESPONSE_MEDIA_TYPE)
+@RequestMapping(value = "/attachment", produces = ProjectConstant.RESPONSE_MEDIA_TYPE)
 @Api(tags = "附件")
 @Validated
 public class AttachmentController {
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(String.format("yyyy%sMM", SEPARATOR));
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(String.format("yyyy%sMM", AttachmentConstant.SEPARATOR));
     @Autowired
     private IAttachmentService attachmentService;
     @Autowired
@@ -79,17 +78,17 @@ public class AttachmentController {
         // type小写
         String lowerCaseType = type.name().toLowerCase();
         // 相对路径
-        String relativePath = lowerCaseType + SEPARATOR + FORMATTER.format(LocalDate.now());
+        String relativePath = lowerCaseType + AttachmentConstant.SEPARATOR + FORMATTER.format(LocalDate.now());
         // 目录绝对路径
-        String absoluteAddress = BASE_ADDRESS + SEPARATOR + relativePath;
+        String absoluteAddress = AttachmentConstant.BASE_ADDRESS + AttachmentConstant.SEPARATOR + relativePath;
         // 使用sftp上传到文件服务器
         sftpClient.open(sftp -> sftp.upload(absoluteAddress, name, file.getInputStream()));
         // 将附件信息保存到数据库
         Attachment attachment = new Attachment();
         attachment.setType(type);
-        attachment.setName(originalFilename != null? originalFilename: DEFAULT_NAME);
-        attachment.setUrl(BASE_URL + SEPARATOR + relativePath + SEPARATOR + name);
-        attachment.setAddress(absoluteAddress + SEPARATOR + name);
+        attachment.setName(originalFilename != null? originalFilename: AttachmentConstant.DEFAULT_NAME);
+        attachment.setUrl(AttachmentConstant.BASE_URL + AttachmentConstant.SEPARATOR + relativePath + AttachmentConstant.SEPARATOR + name);
+        attachment.setAddress(absoluteAddress + AttachmentConstant.SEPARATOR + name);
         attachment.setCreateTime(System.currentTimeMillis());
         attachmentService.save(attachment);
         AttachmentVO attachmentVO = attachmentService.buildVO(attachment, new AttachmentVO.BuildOption());

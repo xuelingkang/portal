@@ -17,21 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.sso.client.controller;
-
-import com.xzixi.framework.webapps.common.constant.ProjectConstant;
-import io.swagger.annotations.Api;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+package com.xzixi.framework.webapps.sso.server.constant;
 
 /**
  * @author xuelingkang
  * @date 2020-12-01
  */
-@RestController
-@RequestMapping(value = "/sso", produces = ProjectConstant.RESPONSE_MEDIA_TYPE)
-@Api(tags = "sso")
-@Validated
-public class SsoController {
+public interface SsoServerConstant {
+
+    String APP_UID = "sso";
 }

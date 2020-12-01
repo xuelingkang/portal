@@ -20,21 +20,12 @@
 package com.xzixi.framework.boot.sftp.client.starter.autoconfigure;
 
 import lombok.Data;
+import org.apache.commons.pool2.impl.BaseObjectPoolConfig;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_BLOCK_WHEN_EXHAUSTED;
-import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_EVICTOR_SHUTDOWN_TIMEOUT_MILLIS;
-import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_FAIRNESS;
-import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_JMX_ENABLE;
-import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_LIFO;
-import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_NUM_TESTS_PER_EVICTION_RUN;
-import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_TEST_ON_BORROW;
-import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_TEST_ON_CREATE;
-import static org.apache.commons.pool2.impl.BaseObjectPoolConfig.DEFAULT_TEST_ON_RETURN;
-import static org.apache.commons.pool2.impl.GenericObjectPoolConfig.*;
 
 /**
  * sftp连接池配置参数
@@ -98,30 +89,30 @@ public class SftpClientProperties {
          * 对象最大数量
          * 默认值是8
          */
-        private int maxTotal = DEFAULT_MAX_TOTAL;
+        private int maxTotal = GenericObjectPoolConfig.DEFAULT_MAX_TOTAL;
         /**
          * 最大空闲对象数量
          * 默认值是8
          */
-        private int maxIdle = DEFAULT_MAX_IDLE;
+        private int maxIdle = GenericObjectPoolConfig.DEFAULT_MAX_IDLE;
         /**
          * 最小空闲对象数量
          * 默认值是0
          */
-        private int minIdle = DEFAULT_MIN_IDLE;
+        private int minIdle = GenericObjectPoolConfig.DEFAULT_MIN_IDLE;
         /**
          * 对象池存储空闲对象是使用的LinkedBlockingDeque，它本质上是一个支持FIFO和FILO的双向的队列，
          * common-pool2中的LinkedBlockingDeque不是Java原生的队列，而有common-pool2重新写的一个双向队列。
          * 如果为true，表示使用FIFO获取对象。
          * 默认值是true
          */
-        private boolean lifo = DEFAULT_LIFO;
+        private boolean lifo = BaseObjectPoolConfig.DEFAULT_LIFO;
         /**
          * common-pool2实现的LinkedBlockingDeque双向阻塞队列使用的是Lock锁。
          * 这个参数就是表示在实例化一个LinkedBlockingDeque时，是否使用lock的公平锁。
          * 默认值是false
          */
-        private boolean fairness = DEFAULT_FAIRNESS;
+        private boolean fairness = BaseObjectPoolConfig.DEFAULT_FAIRNESS;
         /**
          * 当没有空闲连接时，获取一个对象的最大等待时间。如果这个值小于0，则永不超时，一直等待，直到有空闲对象到来。
          * 如果大于0，则等待maxWaitMillis长时间，如果没有空闲对象，将抛出NoSuchElementException异常。
@@ -141,7 +132,7 @@ public class SftpClientProperties {
          * (evictor继承自TimerTask，由ScheduledThreadPoolExecutor进行调度)
          * 默认值是10000L，即10秒
          */
-        private long evictorShutdownTimeoutMillis = DEFAULT_EVICTOR_SHUTDOWN_TIMEOUT_MILLIS;
+        private long evictorShutdownTimeoutMillis = BaseObjectPoolConfig.DEFAULT_EVICTOR_SHUTDOWN_TIMEOUT_MILLIS;
         /**
          * 对象最小的空间时间，如果小于等于0，取Long的最大值，如果大于0，当对象的空闲时间超过这个值，
          * 并且当前空闲对象的数量大于最小空闲数量(minIdle)时，执行移除操作。
@@ -153,22 +144,22 @@ public class SftpClientProperties {
          * 检测空闲对象线程每次检测的空闲对象的数量。如果这个值小于0，则每次检测的空闲对象数量等于当前空闲对象数量除以这个值的绝对值，并对结果向上取整。
          * 默认值是3
          */
-        private int numTestsPerEvictionRun = DEFAULT_NUM_TESTS_PER_EVICTION_RUN;
+        private int numTestsPerEvictionRun = BaseObjectPoolConfig.DEFAULT_NUM_TESTS_PER_EVICTION_RUN;
         /**
          * 在创建对象时检测对象是否有效，true是，默认值是false。做了这个配置会降低性能。
          * 默认值是false
          */
-        private boolean testOnCreate = DEFAULT_TEST_ON_CREATE;
+        private boolean testOnCreate = BaseObjectPoolConfig.DEFAULT_TEST_ON_CREATE;
         /**
          * 在从对象池获取对象时是否检测对象有效，true是；默认值是false。做了这个配置会降低性能。
          * 默认值是false
          */
-        private boolean testOnBorrow = DEFAULT_TEST_ON_BORROW;
+        private boolean testOnBorrow = BaseObjectPoolConfig.DEFAULT_TEST_ON_BORROW;
         /**
          * 在向对象池中归还对象时是否检测对象有效，true是，默认值是false。做了这个配置会降低性能。
          * 默认值是false
          */
-        private boolean testOnReturn = DEFAULT_TEST_ON_RETURN;
+        private boolean testOnReturn = BaseObjectPoolConfig.DEFAULT_TEST_ON_RETURN;
         /**
          * 在检测空闲对象线程检测到对象不需要移除时，是否检测对象的有效性。
          * true是，默认值是false。建议配置为true，不影响性能，并且保证安全性。
@@ -185,12 +176,12 @@ public class SftpClientProperties {
          * 当对象池没有空闲对象时，新的获取对象的请求是否阻塞。true阻塞。
          * 默认值是true
          */
-        private boolean blockWhenExhausted = DEFAULT_BLOCK_WHEN_EXHAUSTED;
+        private boolean blockWhenExhausted = BaseObjectPoolConfig.DEFAULT_BLOCK_WHEN_EXHAUSTED;
         /**
          * 是否注册JMX
          * 默认值是true
          */
-        private boolean jmxEnabled = DEFAULT_JMX_ENABLE;
+        private boolean jmxEnabled = BaseObjectPoolConfig.DEFAULT_JMX_ENABLE;
         /**
          * JMX前缀
          * 默认值是pool

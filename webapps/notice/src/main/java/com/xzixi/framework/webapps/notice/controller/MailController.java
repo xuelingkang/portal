@@ -21,6 +21,7 @@ package com.xzixi.framework.webapps.notice.controller;
 
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.Pagination;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.enums.MailType;
 import com.xzixi.framework.webapps.common.model.params.MailSearchParams;
 import com.xzixi.framework.webapps.common.model.po.Mail;
@@ -38,13 +39,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
-
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/mail", produces = RESPONSE_MEDIA_TYPE)
+@RequestMapping(value = "/mail", produces = ProjectConstant.RESPONSE_MEDIA_TYPE)
 @Api(tags = "邮件")
 @Validated
 public class MailController {

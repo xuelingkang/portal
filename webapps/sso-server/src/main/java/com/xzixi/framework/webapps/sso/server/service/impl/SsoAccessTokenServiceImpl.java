@@ -19,6 +19,7 @@
 
 package com.xzixi.framework.webapps.sso.server.service.impl;
 
+import com.xzixi.framework.webapps.sso.server.constant.TokenConstant;
 import com.xzixi.framework.webapps.sso.server.model.SsoAccessTokenMountValue;
 import com.xzixi.framework.webapps.sso.server.model.SsoAccessTokenValue;
 import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
@@ -27,8 +28,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-import static com.xzixi.framework.webapps.sso.server.constant.TokenConstant.*;
 
 /**
  * @author xuelingkang
@@ -47,7 +46,7 @@ public class SsoAccessTokenServiceImpl extends AbstractTokenService implements I
         String uuid = UUID.randomUUID().toString();
         String jwtToken = getJwtToken(uuid);
         SsoAccessTokenValue ssoAccessTokenValue = new SsoAccessTokenValue(userId, refreshToken);
-        redisTemplate.boundValueOps(getRedisKey(uuid)).set(ssoAccessTokenValue, SSO_ACCESS_TOKEN_EXPIRE_MINUTE, TimeUnit.MINUTES);
+        redisTemplate.boundValueOps(getRedisKey(uuid)).set(ssoAccessTokenValue, TokenConstant.SSO_ACCESS_TOKEN_EXPIRE_MINUTE, TimeUnit.MINUTES);
         return new TokenInfo(uuid, jwtToken);
     }
 
@@ -65,7 +64,7 @@ public class SsoAccessTokenServiceImpl extends AbstractTokenService implements I
     public void mount(String ssoAccessTokenUuid, String ssoAccessToken, String refreshTokenUuid) {
         String key = getMountKey(ssoAccessTokenUuid, refreshTokenUuid);
         SsoAccessTokenMountValue ssoAccessTokenMountValue = new SsoAccessTokenMountValue(ssoAccessToken);
-        redisTemplate.boundValueOps(key).set(ssoAccessTokenMountValue, SSO_ACCESS_TOKEN_NODE_EXPIRE_MINUTE, TimeUnit.MINUTES);
+        redisTemplate.boundValueOps(key).set(ssoAccessTokenMountValue, TokenConstant.SSO_ACCESS_TOKEN_NODE_EXPIRE_MINUTE, TimeUnit.MINUTES);
     }
 
     @Override
@@ -80,10 +79,10 @@ public class SsoAccessTokenServiceImpl extends AbstractTokenService implements I
     }
 
     private String getRedisKey(String uuid) {
-        return String.format(SSO_ACCESS_TOKEN_KEY_TEMPLATE, uuid);
+        return String.format(TokenConstant.SSO_ACCESS_TOKEN_KEY_TEMPLATE, uuid);
     }
 
     private String getMountKey(String ssoAccessTokenUuid, String refreshTokenUuid) {
-        return String.format(SSO_ACCESS_TOKEN_NODE_KEY_TEMPLATE, refreshTokenUuid, ssoAccessTokenUuid);
+        return String.format(TokenConstant.SSO_ACCESS_TOKEN_NODE_KEY_TEMPLATE, refreshTokenUuid, ssoAccessTokenUuid);
     }
 }

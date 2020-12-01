@@ -20,6 +20,7 @@
 package com.xzixi.framework.boot.core.model.search;
 
 import com.xzixi.framework.boot.core.model.BaseModel;
+import com.xzixi.framework.boot.core.util.TypeUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -28,8 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Consumer;
-
-import static com.xzixi.framework.boot.core.util.TypeUtils.parseObject;
 
 /**
  * 查询参数，<b>列名一律使用实体类的属性名</b><br>
@@ -95,7 +94,7 @@ public class QueryParams<T extends BaseModel> {
 
     public QueryParams<T> eq(boolean condition, String name, Object value) {
         if (condition) {
-            this.eqMap.put(name, parseObject(value));
+            this.eqMap.put(name, TypeUtils.parseObject(value));
         }
         return this;
     }
@@ -106,7 +105,7 @@ public class QueryParams<T extends BaseModel> {
 
     public QueryParams<T> ne(boolean condition, String name, Object value) {
         if (condition) {
-            this.neMap.put(name, parseObject(value));
+            this.neMap.put(name, TypeUtils.parseObject(value));
         }
         return this;
     }
@@ -117,7 +116,7 @@ public class QueryParams<T extends BaseModel> {
 
     public QueryParams<T> lt(boolean condition, String name, Object value) {
         if (condition) {
-            this.ltMap.put(name, parseObject(value));
+            this.ltMap.put(name, TypeUtils.parseObject(value));
         }
         return this;
     }
@@ -128,7 +127,7 @@ public class QueryParams<T extends BaseModel> {
 
     public QueryParams<T> le(boolean condition, String name, Object value) {
         if (condition) {
-            this.leMap.put(name, parseObject(value));
+            this.leMap.put(name, TypeUtils.parseObject(value));
         }
         return this;
     }
@@ -139,7 +138,7 @@ public class QueryParams<T extends BaseModel> {
 
     public QueryParams<T> gt(boolean condition, String name, Object value) {
         if (condition) {
-            this.gtMap.put(name, parseObject(value));
+            this.gtMap.put(name, TypeUtils.parseObject(value));
         }
         return this;
     }
@@ -150,7 +149,7 @@ public class QueryParams<T extends BaseModel> {
 
     public QueryParams<T> ge(boolean condition, String name, Object value) {
         if (condition) {
-            this.geMap.put(name, parseObject(value));
+            this.geMap.put(name, TypeUtils.parseObject(value));
         }
         return this;
     }
@@ -161,7 +160,7 @@ public class QueryParams<T extends BaseModel> {
 
     public QueryParams<T> like(boolean condition, String name, Object value) {
         if (condition) {
-            this.likeMap.put(name, parseObject(value));
+            this.likeMap.put(name, TypeUtils.parseObject(value));
         }
         return this;
     }
@@ -172,7 +171,7 @@ public class QueryParams<T extends BaseModel> {
 
     public QueryParams<T> notLike(boolean condition, String name, Object value) {
         if (condition) {
-            this.notLikeMap.put(name, parseObject(value));
+            this.notLikeMap.put(name, TypeUtils.parseObject(value));
         }
         return this;
     }

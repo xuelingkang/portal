@@ -44,8 +44,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static com.baomidou.mybatisplus.core.toolkit.StringUtils.camelToUnderline;
-
 /**
  * mybatis-plus实现
  *
@@ -117,9 +115,9 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
                 String[] arr = OrderUtils.parse(order);
                 if (arr != null && ArrayUtils.isNotEmpty(arr)) {
                     if (OrderUtils.isAsc(arr[1])) {
-                        orderItems.add(OrderItem.asc(camelToUnderline(arr[0])));
+                        orderItems.add(OrderItem.asc(StringUtils.camelToUnderline(arr[0])));
                     } else {
-                        orderItems.add(OrderItem.desc(camelToUnderline(arr[0])));
+                        orderItems.add(OrderItem.desc(StringUtils.camelToUnderline(arr[0])));
                     }
                 }
             });
@@ -156,49 +154,49 @@ public class MybatisPlusDataImpl<M extends IBaseMapper<T>, T extends BaseModel> 
 
     private void parseParamsProps(QueryWrapper<T> queryWrapper, QueryParams<T> params) {
         if (MapUtils.isNotEmpty(params.getEqMap())) {
-            params.getEqMap().forEach((name, value) -> queryWrapper.eq(camelToUnderline(name), value));
+            params.getEqMap().forEach((name, value) -> queryWrapper.eq(StringUtils.camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getNeMap())) {
-            params.getNeMap().forEach((name, value) -> queryWrapper.ne(camelToUnderline(name), value));
+            params.getNeMap().forEach((name, value) -> queryWrapper.ne(StringUtils.camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getLtMap())) {
-            params.getLtMap().forEach((name, value) -> queryWrapper.lt(camelToUnderline(name), value));
+            params.getLtMap().forEach((name, value) -> queryWrapper.lt(StringUtils.camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getLeMap())) {
-            params.getLeMap().forEach((name, value) -> queryWrapper.le(camelToUnderline(name), value));
+            params.getLeMap().forEach((name, value) -> queryWrapper.le(StringUtils.camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getGtMap())) {
-            params.getGtMap().forEach((name, value) -> queryWrapper.gt(camelToUnderline(name), value));
+            params.getGtMap().forEach((name, value) -> queryWrapper.gt(StringUtils.camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getGeMap())) {
-            params.getGeMap().forEach((name, value) -> queryWrapper.ge(camelToUnderline(name), value));
+            params.getGeMap().forEach((name, value) -> queryWrapper.ge(StringUtils.camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getLikeMap())) {
-            params.getLikeMap().forEach((name, value) -> queryWrapper.like(camelToUnderline(name), value));
+            params.getLikeMap().forEach((name, value) -> queryWrapper.like(StringUtils.camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getNotLikeMap())) {
-            params.getNotLikeMap().forEach((name, value) -> queryWrapper.notLike(camelToUnderline(name), value));
+            params.getNotLikeMap().forEach((name, value) -> queryWrapper.notLike(StringUtils.camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getInMap())) {
-            params.getInMap().forEach((name, value) -> queryWrapper.in(camelToUnderline(name), value));
+            params.getInMap().forEach((name, value) -> queryWrapper.in(StringUtils.camelToUnderline(name), value));
         }
         if (MapUtils.isNotEmpty(params.getNotInMap())) {
-            params.getNotInMap().forEach((name, value) -> queryWrapper.notIn(camelToUnderline(name), value));
+            params.getNotInMap().forEach((name, value) -> queryWrapper.notIn(StringUtils.camelToUnderline(name), value));
         }
         if (CollectionUtils.isNotEmpty(params.getNulls())) {
-            params.getNulls().forEach(name -> queryWrapper.isNull(camelToUnderline(name)));
+            params.getNulls().forEach(name -> queryWrapper.isNull(StringUtils.camelToUnderline(name)));
         }
         if (CollectionUtils.isNotEmpty(params.getNotNulls())) {
-            params.getNotNulls().forEach(name -> queryWrapper.isNotNull(camelToUnderline(name)));
+            params.getNotNulls().forEach(name -> queryWrapper.isNotNull(StringUtils.camelToUnderline(name)));
         }
         if (CollectionUtils.isNotEmpty(params.getOrders())) {
             params.getOrders().forEach(order -> {
                 String[] arr = OrderUtils.parse(order);
                 if (arr != null && ArrayUtils.isNotEmpty(arr)) {
                     if (OrderUtils.isAsc(arr[1])) {
-                        queryWrapper.orderByAsc(camelToUnderline(arr[0]));
+                        queryWrapper.orderByAsc(StringUtils.camelToUnderline(arr[0]));
                     } else {
-                        queryWrapper.orderByDesc(camelToUnderline(arr[0]));
+                        queryWrapper.orderByDesc(StringUtils.camelToUnderline(arr[0]));
                     }
                 }
             });

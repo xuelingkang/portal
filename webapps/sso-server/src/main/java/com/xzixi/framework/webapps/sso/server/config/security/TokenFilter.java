@@ -25,6 +25,7 @@ import com.xzixi.framework.webapps.common.model.po.Token;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
 import com.xzixi.framework.webapps.remote.service.RemoteUserService;
 import com.xzixi.framework.webapps.sso.server.model.UserDetailsImpl;
+import com.xzixi.framework.webapps.sso.server.service.ISsoAccessTokenService;
 import com.xzixi.framework.webapps.sso.server.service.ITokenService2;
 import com.xzixi.framework.webapps.sso.server.util.WebUtils;
 import org.apache.commons.lang.StringUtils;
@@ -49,6 +50,8 @@ public class TokenFilter extends OncePerRequestFilter {
 
     @Autowired
     private ITokenService2 tokenService;
+    @Autowired
+    private ISsoAccessTokenService ssoAccessTokenService;
     @Autowired
     private RemoteUserService remoteUserService;
 

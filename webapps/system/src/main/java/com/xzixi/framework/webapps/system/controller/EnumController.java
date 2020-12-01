@@ -21,6 +21,7 @@ package com.xzixi.framework.webapps.system.controller;
 
 import com.xzixi.framework.boot.core.exception.ClientException;
 import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.vo.EnumVO;
 import com.xzixi.framework.webapps.system.service.IEnumService;
 import io.swagger.annotations.Api;
@@ -36,13 +37,11 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 
-import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
-
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/enum", produces = RESPONSE_MEDIA_TYPE)
+@RequestMapping(value = "/enum", produces = ProjectConstant.RESPONSE_MEDIA_TYPE)
 @Api(tags = "枚举")
 @Validated
 public class EnumController {

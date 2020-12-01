@@ -22,8 +22,8 @@ package com.xzixi.framework.webapps.sso.server.util;
 import com.alibaba.fastjson.JSON;
 import com.xzixi.framework.boot.core.exception.ProjectException;
 import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -59,7 +59,7 @@ public class WebUtils {
     }
 
     public static void printJson(HttpServletResponse response, Result<?> result) {
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.setContentType(ProjectConstant.RESPONSE_MEDIA_TYPE);
         response.setStatus(result.getCode());
         OutputStream out = null;
         try {

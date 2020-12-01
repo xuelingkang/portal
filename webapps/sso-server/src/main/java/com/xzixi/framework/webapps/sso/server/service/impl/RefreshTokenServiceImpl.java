@@ -19,6 +19,7 @@
 
 package com.xzixi.framework.webapps.sso.server.service.impl;
 
+import com.xzixi.framework.webapps.sso.server.constant.TokenConstant;
 import com.xzixi.framework.webapps.sso.server.model.RefreshTokenValue;
 import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
 import com.xzixi.framework.webapps.sso.server.service.IRefreshTokenService;
@@ -26,9 +27,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-import static com.xzixi.framework.webapps.sso.server.constant.TokenConstant.REFRESH_TOKEN_EXPIRE_MINUTE;
-import static com.xzixi.framework.webapps.sso.server.constant.TokenConstant.REFRESH_TOKEN_KEY_TEMPLATE;
 
 /**
  * @author xuelingkang
@@ -47,7 +45,7 @@ public class RefreshTokenServiceImpl extends AbstractTokenService implements IRe
         String uuid = UUID.randomUUID().toString();
         String jwtToken = getJwtToken(uuid);
         RefreshTokenValue refreshTokenValue = new RefreshTokenValue(userId);
-        redisTemplate.boundValueOps(getRedisKey(uuid)).set(refreshTokenValue, REFRESH_TOKEN_EXPIRE_MINUTE, TimeUnit.MINUTES);
+        redisTemplate.boundValueOps(getRedisKey(uuid)).set(refreshTokenValue, TokenConstant.REFRESH_TOKEN_EXPIRE_MINUTE, TimeUnit.MINUTES);
         return new TokenInfo(uuid, jwtToken);
     }
 
@@ -71,6 +69,6 @@ public class RefreshTokenServiceImpl extends AbstractTokenService implements IRe
     }
 
     private String getRedisKey(String uuid) {
-        return String.format(REFRESH_TOKEN_KEY_TEMPLATE, uuid);
+        return String.format(TokenConstant.REFRESH_TOKEN_KEY_TEMPLATE, uuid);
     }
 }

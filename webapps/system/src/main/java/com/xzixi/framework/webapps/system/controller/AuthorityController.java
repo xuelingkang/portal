@@ -23,6 +23,7 @@ import com.xzixi.framework.boot.core.exception.ServerException;
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.Pagination;
 import com.xzixi.framework.boot.core.util.BeanUtils;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.params.AuthoritySearchParams;
 import com.xzixi.framework.webapps.common.model.po.Authority;
 import com.xzixi.framework.webapps.common.model.valid.AuthoritySave;
@@ -40,13 +41,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
-
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/authority", produces = RESPONSE_MEDIA_TYPE)
+@RequestMapping(value = "/authority", produces = ProjectConstant.RESPONSE_MEDIA_TYPE)
 @Api(tags = "权限")
 @Validated
 public class AuthorityController {

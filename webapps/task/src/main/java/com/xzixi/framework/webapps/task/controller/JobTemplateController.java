@@ -21,6 +21,7 @@ package com.xzixi.framework.webapps.task.controller;
 
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.Pagination;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.params.JobTemplateSearchParams;
 import com.xzixi.framework.webapps.common.model.po.JobTemplate;
 import com.xzixi.framework.webapps.common.model.valid.JobTemplateSave;
@@ -38,13 +39,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
-
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/job-template", produces = RESPONSE_MEDIA_TYPE)
+@RequestMapping(value = "/job-template", produces = ProjectConstant.RESPONSE_MEDIA_TYPE)
 @Api(tags = "任务模板")
 @Validated
 public class JobTemplateController {

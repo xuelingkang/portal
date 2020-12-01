@@ -54,9 +54,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.xzixi.framework.boot.core.model.search.QueryParams.SCORE;
-import static com.xzixi.framework.boot.core.util.TypeUtils.parseObject;
-
 /**
  * elasticsearch实现
  *
@@ -256,13 +253,13 @@ public class ElasticsearchDataImpl<T extends BaseModel> implements IBaseData<T> 
                 if (arr != null && ArrayUtils.isNotEmpty(arr)) {
                     String name = arr[0];
                     if (OrderUtils.isAsc(arr[1])) {
-                        if (StringUtils.equals(SCORE, name)) {
+                        if (StringUtils.equals(QueryParams.SCORE, name)) {
                             builders.add(new ScoreSortBuilder().order(SortOrder.ASC));
                         } else {
                             builders.add(new FieldSortBuilder(name).order(SortOrder.ASC));
                         }
                     } else {
-                        if (StringUtils.equals(SCORE, name)) {
+                        if (StringUtils.equals(QueryParams.SCORE, name)) {
                             builders.add(new ScoreSortBuilder().order(SortOrder.DESC));
                         } else {
                             builders.add(new FieldSortBuilder(name).order(SortOrder.DESC));
@@ -300,7 +297,7 @@ public class ElasticsearchDataImpl<T extends BaseModel> implements IBaseData<T> 
             if (value == null) {
                 return;
             }
-            Object parsedValue = parseObject(value);
+            Object parsedValue = TypeUtils.parseObject(value);
             Field esField = field.getDeclaredAnnotation(Field.class);
             if (esField == null) {
                 return;

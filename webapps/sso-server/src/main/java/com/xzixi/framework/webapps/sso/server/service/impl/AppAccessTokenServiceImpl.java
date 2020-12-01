@@ -19,16 +19,15 @@
 
 package com.xzixi.framework.webapps.sso.server.service.impl;
 
-import com.xzixi.framework.webapps.sso.server.model.AppAccessTokenValue;
+import com.xzixi.framework.webapps.sso.server.constant.TokenConstant;
 import com.xzixi.framework.webapps.sso.server.model.AppAccessTokenMountValue;
+import com.xzixi.framework.webapps.sso.server.model.AppAccessTokenValue;
 import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
 import com.xzixi.framework.webapps.sso.server.service.IAppAccessTokenService;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-import static com.xzixi.framework.webapps.sso.server.constant.TokenConstant.*;
 
 /**
  * @author xuelingkang
@@ -47,7 +46,7 @@ public class AppAccessTokenServiceImpl extends AbstractTokenService implements I
         String uuid = UUID.randomUUID().toString();
         String jwtToken = getJwtToken(uuid);
         AppAccessTokenValue appAccessTokenValue = new AppAccessTokenValue(userId, refreshToken);
-        redisTemplate.boundValueOps(getRedisKey(uuid, appUid)).set(appAccessTokenValue, APP_ACCESS_TOKEN_FOR_CHECK_EXPIRE_MINUTE, TimeUnit.MINUTES);
+        redisTemplate.boundValueOps(getRedisKey(uuid, appUid)).set(appAccessTokenValue, TokenConstant.APP_ACCESS_TOKEN_FOR_CHECK_EXPIRE_MINUTE, TimeUnit.MINUTES);
         return new TokenInfo(uuid, jwtToken);
     }
 
@@ -65,7 +64,7 @@ public class AppAccessTokenServiceImpl extends AbstractTokenService implements I
     public void mount(String appAccessTokenUuid, String appAccessToken, String appUid, String refreshTokenUuid) {
         String key = getMountKey(appAccessTokenUuid, appUid, refreshTokenUuid);
         AppAccessTokenMountValue appAccessTokenMountValue = new AppAccessTokenMountValue(appUid, appAccessToken);
-        redisTemplate.boundValueOps(key).set(appAccessTokenMountValue, APP_ACCESS_TOKEN_NODE_EXPIRE_MINUTE, TimeUnit.MINUTES);
+        redisTemplate.boundValueOps(key).set(appAccessTokenMountValue, TokenConstant.APP_ACCESS_TOKEN_NODE_EXPIRE_MINUTE, TimeUnit.MINUTES);
     }
 
     @Override
@@ -90,10 +89,10 @@ public class AppAccessTokenServiceImpl extends AbstractTokenService implements I
     }
 
     private String getRedisKey(String appUid, String uuid) {
-        return String.format(APP_ACCESS_TOKEN_FOR_CHECK_KEY_TEMPLATE, appUid, uuid);
+        return String.format(TokenConstant.APP_ACCESS_TOKEN_FOR_CHECK_KEY_TEMPLATE, appUid, uuid);
     }
 
     private String getMountKey(String appAccessTokenUuid, String appUid, String refreshTokenUuid) {
-        return String.format(APP_ACCESS_TOKEN_NODE_KEY_TEMPLATE, refreshTokenUuid, appUid, appAccessTokenUuid);
+        return String.format(TokenConstant.APP_ACCESS_TOKEN_NODE_KEY_TEMPLATE, refreshTokenUuid, appUid, appAccessTokenUuid);
     }
 }

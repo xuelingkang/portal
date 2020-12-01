@@ -23,6 +23,7 @@ import com.xzixi.framework.boot.core.exception.ServerException;
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.Pagination;
 import com.xzixi.framework.boot.core.util.BeanUtils;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.params.AppSearchParams;
 import com.xzixi.framework.webapps.common.model.po.App;
 import com.xzixi.framework.webapps.common.model.valid.AppSave;
@@ -38,10 +39,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
 import java.util.List;
-
-import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * 应用 前端控制器
@@ -50,7 +48,7 @@ import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPON
  * @date 2020-10-25
  */
 @RestController
-@RequestMapping(value = "/app", produces = RESPONSE_MEDIA_TYPE)
+@RequestMapping(value = "/app", produces = ProjectConstant.RESPONSE_MEDIA_TYPE)
 @Api(tags = "应用")
 @Validated
 public class AppController {

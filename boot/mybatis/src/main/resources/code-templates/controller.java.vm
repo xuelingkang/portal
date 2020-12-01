@@ -3,6 +3,7 @@ package ${package.Controller};
 import io.swagger.annotations.Api;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 
 #if(${restControllerStyle})
 import org.springframework.web.bind.annotation.RestController;
@@ -12,8 +13,6 @@ import org.springframework.stereotype.Controller;
 #if(${superControllerClassPackage})
 import ${superControllerClassPackage};
 #end
-
-import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * $!{table.comment} 前端控制器
@@ -26,7 +25,7 @@ import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPON
 #else
 @Controller
 #end
-@RequestMapping(value = "#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end", produces = RESPONSE_MEDIA_TYPE)
+@RequestMapping(value = "#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end", produces = ProjectConstant.RESPONSE_MEDIA_TYPE)
 @Api(tags = "${table.comment}")
 @Validated
 #if(${superControllerClass})

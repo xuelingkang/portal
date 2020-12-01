@@ -25,12 +25,14 @@ import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.Pagination;
 import com.xzixi.framework.boot.core.model.search.QueryParams;
 import com.xzixi.framework.boot.core.util.BeanUtils;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.params.UserSearchParams;
 import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.common.model.po.UserRoleLink;
 import com.xzixi.framework.webapps.common.model.valid.UserSave;
 import com.xzixi.framework.webapps.common.model.valid.UserUpdate;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
+import com.xzixi.framework.webapps.system.constant.UserConstant;
 import com.xzixi.framework.webapps.system.service.IUserRoleLinkService;
 import com.xzixi.framework.webapps.system.service.IUserService;
 import io.swagger.annotations.Api;
@@ -53,14 +55,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
-import static com.xzixi.framework.webapps.system.constant.UserConstant.USER_ACTIVATE_KEY_TEMPLATE;
-
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/user", produces = RESPONSE_MEDIA_TYPE)
+@RequestMapping(value = "/user", produces = ProjectConstant.RESPONSE_MEDIA_TYPE)
 @Api(tags = "用户")
 @Validated
 public class UserController {
@@ -282,7 +281,7 @@ public class UserController {
     @ApiOperation(value = "激活账户")
     public Result<?> activate(
             @ApiParam(value = "激活账户key", required = true) @NotBlank(message = "激活账户key不能为空！") @RequestParam String key) {
-        String cacheKey = String.format(USER_ACTIVATE_KEY_TEMPLATE, key);
+        String cacheKey = String.format(UserConstant.USER_ACTIVATE_KEY_TEMPLATE, key);
         Integer id = (Integer) redisTemplate.opsForValue().get(cacheKey);
         if (id == null) {
             throw new ClientException(404, "链接已经失效！");

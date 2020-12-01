@@ -24,6 +24,7 @@ import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.Pagination;
 import com.xzixi.framework.boot.core.model.search.QueryParams;
 import com.xzixi.framework.boot.core.util.BeanUtils;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.params.RoleSearchParams;
 import com.xzixi.framework.webapps.common.model.po.Role;
 import com.xzixi.framework.webapps.common.model.po.RoleAuthorityLink;
@@ -45,13 +46,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
-
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/role", produces = RESPONSE_MEDIA_TYPE)
+@RequestMapping(value = "/role", produces = ProjectConstant.RESPONSE_MEDIA_TYPE)
 @Api(tags = "角色")
 @Validated
 public class RoleController {

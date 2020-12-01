@@ -20,6 +20,7 @@
 package com.xzixi.framework.webapps.system.controller;
 
 import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.system.service.IUserLinkService;
 import com.xzixi.framework.webapps.system.service.IUserService;
@@ -33,13 +34,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 
-import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
-
 /**
  * @author 薛凌康
  */
 @RestController
-@RequestMapping(value = "/user-link", produces = RESPONSE_MEDIA_TYPE)
+@RequestMapping(value = "/user-link", produces = ProjectConstant.RESPONSE_MEDIA_TYPE)
 @Api(tags = "关注")
 @Validated
 public class UserLinkController {
