@@ -17,10 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.sso.server.config;
+package com.xzixi.framework.webapps.sso.server.controller;
 
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.webapps.sso.server.exception.AccessTokenExpireException;
+import com.xzixi.framework.webapps.sso.server.exception.AuthException;
 import com.xzixi.framework.webapps.sso.server.exception.RefreshTokenExpireException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -50,7 +51,7 @@ public class ControllerExceptionHandler {
      *
      * @return Result
      */
-    @ExceptionHandler(RefreshTokenExpireException.class)
+    @ExceptionHandler({RefreshTokenExpireException.class, AuthException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public Result<?> handleRefreshTokenExpireException() {
         return new Result<>(HttpStatus.UNAUTHORIZED.value(), 0);

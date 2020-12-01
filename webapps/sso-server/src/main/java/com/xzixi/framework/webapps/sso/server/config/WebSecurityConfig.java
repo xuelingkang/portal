@@ -46,7 +46,6 @@ import java.security.Key;
 
 /**
  * 认证授权配置
- * TODO 研究一下cas
  *
  * @author 薛凌康
  */

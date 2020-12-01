@@ -45,7 +45,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.xzixi.framework.webapps.common.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * @author 薛凌康

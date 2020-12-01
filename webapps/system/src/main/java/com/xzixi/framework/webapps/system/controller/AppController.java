@@ -41,7 +41,7 @@ import javax.validation.constraints.NotNull;
 
 import java.util.List;
 
-import static com.xzixi.framework.webapps.common.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * 应用 前端控制器

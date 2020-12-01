@@ -20,7 +20,7 @@
 package com.xzixi.framework.webapps.sso.server.service.impl;
 
 import com.xzixi.framework.boot.core.exception.ClientException;
-import com.xzixi.framework.webapps.common.constant.SecurityConstant;
+import com.xzixi.framework.webapps.sso.server.constant.SecurityConstant;
 import com.xzixi.framework.webapps.common.model.po.Token;
 import com.xzixi.framework.webapps.sso.server.service.ITokenService2;
 import io.jsonwebtoken.Jwts;

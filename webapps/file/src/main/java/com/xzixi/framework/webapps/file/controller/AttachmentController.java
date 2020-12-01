@@ -44,8 +44,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
-import static com.xzixi.framework.webapps.common.constant.AttachmentConstant.*;
-import static com.xzixi.framework.webapps.common.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.framework.webapps.file.constant.AttachmentConstant.*;
+import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * @author 薛凌康

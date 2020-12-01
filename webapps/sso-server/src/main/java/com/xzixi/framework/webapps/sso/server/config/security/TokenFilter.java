@@ -20,7 +20,7 @@
 package com.xzixi.framework.webapps.sso.server.config.security;
 
 import com.xzixi.framework.boot.core.model.Result;
-import com.xzixi.framework.webapps.common.constant.SecurityConstant;
+import com.xzixi.framework.webapps.sso.server.constant.SecurityConstant;
 import com.xzixi.framework.webapps.common.model.po.Token;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
 import com.xzixi.framework.webapps.remote.service.RemoteUserService;

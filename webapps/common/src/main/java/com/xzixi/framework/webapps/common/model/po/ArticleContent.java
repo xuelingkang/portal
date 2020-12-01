@@ -19,10 +19,9 @@
 
 package com.xzixi.framework.webapps.common.model.po;
 
+import com.xzixi.framework.boot.core.model.BaseModel;
 import com.xzixi.framework.webapps.common.model.valid.ArticleSave;
 import com.xzixi.framework.webapps.common.model.valid.ArticleUpdate;
-import com.xzixi.framework.boot.core.model.BaseModel;
-import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -33,12 +32,14 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import javax.validation.constraints.NotBlank;
 
+import static com.xzixi.framework.webapps.common.constant.ProjectConstant.INDEX_NAME_PREFIX;
+
 /**
  * @author 薛凌康
  */
 @Data
 @ApiModel(description = "文章内容")
-@Document(indexName = ProjectConstant.INDEX_NAME_PREFIX + "article-content")
+@Document(indexName = INDEX_NAME_PREFIX + "article-content")
 public class ArticleContent extends BaseModel {
 
     private static final long serialVersionUID = 1L;

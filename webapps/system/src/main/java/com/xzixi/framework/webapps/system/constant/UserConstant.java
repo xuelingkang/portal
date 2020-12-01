@@ -17,14 +17,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.common.constant;
+package com.xzixi.framework.webapps.system.constant;
 
 /**
  * @author 薛凌康
  */
 public interface UserConstant {
-
-    Integer SYSTEM_ADMIN_USER_ID = 1;
 
     long USER_ACTIVATE_EXPIRE_DAY = 7;
     long USER_ACTIVATE_EXPIRE_SECOND = USER_ACTIVATE_EXPIRE_DAY * 24 * 60 * 60L;

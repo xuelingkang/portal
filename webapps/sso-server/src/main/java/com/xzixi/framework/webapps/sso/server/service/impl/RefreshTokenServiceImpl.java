@@ -27,8 +27,8 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static com.xzixi.framework.webapps.common.constant.TokenConstant.REFRESH_TOKEN_EXPIRE_MINUTE;
-import static com.xzixi.framework.webapps.common.constant.TokenConstant.REFRESH_TOKEN_KEY_TEMPLATE;
+import static com.xzixi.framework.webapps.sso.server.constant.TokenConstant.REFRESH_TOKEN_EXPIRE_MINUTE;
+import static com.xzixi.framework.webapps.sso.server.constant.TokenConstant.REFRESH_TOKEN_KEY_TEMPLATE;
 
 /**
  * @author xuelingkang

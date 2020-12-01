@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 
-import static com.xzixi.framework.webapps.common.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * @author 薛凌康

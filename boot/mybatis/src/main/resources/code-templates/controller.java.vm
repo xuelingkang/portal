@@ -13,7 +13,7 @@ import org.springframework.stereotype.Controller;
 import ${superControllerClassPackage};
 #end
 
-import static com.xzixi.framework.webapps.common.constant.ControllerConstant.RESPONSE_MEDIA_TYPE;
+import static com.xzixi.framework.webapps.common.constant.ProjectConstant.RESPONSE_MEDIA_TYPE;
 
 /**
  * $!{table.comment} 前端控制器

@@ -28,7 +28,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static com.xzixi.framework.webapps.common.constant.TokenConstant.*;
+import static com.xzixi.framework.webapps.sso.server.constant.TokenConstant.*;
 
 /**
  * @author xuelingkang

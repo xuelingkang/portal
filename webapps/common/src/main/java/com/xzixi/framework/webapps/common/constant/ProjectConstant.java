@@ -19,10 +19,14 @@
 
 package com.xzixi.framework.webapps.common.constant;
 
+import org.springframework.http.MediaType;
+
 /**
  * @author 薛凌康
  */
 public interface ProjectConstant {
+
+    String RESPONSE_MEDIA_TYPE = MediaType.APPLICATION_JSON_VALUE;
 
     String INDEX_NAME_PREFIX = "portal-";
 }

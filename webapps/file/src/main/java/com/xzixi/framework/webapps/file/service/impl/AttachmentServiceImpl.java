@@ -22,7 +22,7 @@ package com.xzixi.framework.webapps.file.service.impl;
 import com.xzixi.framework.boot.sftp.client.component.ISftpClient;
 import com.xzixi.framework.boot.core.exception.ServerException;
 import com.xzixi.framework.boot.persistent.service.impl.BaseServiceImpl;
-import com.xzixi.framework.webapps.common.constant.AttachmentConstant;
+import com.xzixi.framework.webapps.file.constant.AttachmentConstant;
 import com.xzixi.framework.webapps.common.model.po.Attachment;
 import com.xzixi.framework.webapps.common.model.vo.AttachmentVO;
 import com.xzixi.framework.webapps.file.data.IAttachmentData;

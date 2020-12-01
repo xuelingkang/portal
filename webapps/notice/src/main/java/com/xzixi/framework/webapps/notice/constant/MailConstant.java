@@ -17,12 +17,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.common.constant;
+package com.xzixi.framework.webapps.notice.constant;
 
-public interface AuthorityConstant {
+/**
+ * @author xuelingkang
+ * @date 2020-12-01
+ */
+public interface MailConstant {
 
-    /**
-     * 所有路径
-     */
-    String ALL_PATH = "/**";
+    int SEND_MAIL_USER_ID = 1;
 }
