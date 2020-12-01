@@ -24,17 +24,18 @@
 
     <modules>
         <module>common</module>
-        <module>content</module>
+        <module>remote</module>
         <module>gateway</module>
         <module>sso-server</module>
+        <module>sso-client</module>
+        <module>content</module>
         <module>system</module>
         <module>task</module>
         <module>notice</module>
         <module>queue</module>
+        <module>file</module>
         <module>admin</module>
         <module>master</module>
-        <module>file</module>
-        <module>remote</module>
     </modules>
 
     <dependencyManagement>
@@ -47,6 +48,11 @@
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>remote</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>sso-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
