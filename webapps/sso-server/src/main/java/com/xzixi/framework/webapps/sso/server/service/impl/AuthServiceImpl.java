@@ -176,67 +176,6 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     @Override
-    public AppCheckTokenResponse check(String refreshToken, String appAccessToken, String appUid) {
-        long now = System.currentTimeMillis();
-
-        // 解密refreshToken获取uuid
-        String refreshTokenUuid = refreshTokenService.decodeJwtToken(refreshToken);
-
-        ILock lock = redisLockService.getLock(LOCK_PREFIX + refreshTokenUuid);
-        try {
-            lock.acquire();
-            long refreshTokenExpire = refreshTokenService.getExpire(refreshTokenUuid);
-            if (refreshTokenExpire == 0) {
-                throw new RefreshTokenExpireException();
-            }
-            RefreshTokenValue refreshTokenValue = refreshTokenService.getTokenValue(refreshTokenUuid);
-            if (refreshTokenValue == null) {
-                throw new RefreshTokenExpireException();
-            }
-
-            int userIdInRefreshToken = refreshTokenValue.getUserId();
-
-            // 解密appAccessToken获取uuid
-            String appAccessTokenUuid = appAccessTokenService.decodeJwtToken(appAccessToken);
-            AppAccessTokenValue appAccessTokenValue = appAccessTokenService.getTokenValue(appAccessTokenUuid, appUid);
-            if (appAccessTokenValue == null) {
-                throw new AccessTokenExpireException();
-            }
-
-            int userIdInAccessToken = appAccessTokenValue.getUserId();
-            if (userIdInAccessToken <= 0) {
-                throw new AuthException();
-            }
-
-            String refreshTokenInAccessToken = appAccessTokenValue.getRefreshToken();
-            if (!Objects.equals(refreshToken, refreshTokenInAccessToken)) {
-                throw new AuthException();
-            }
-
-            if (userIdInAccessToken != userIdInRefreshToken) {
-                throw new AuthException();
-            }
-
-            // 删除appAccessToken
-            appAccessTokenService.delete(appAccessTokenUuid, appUid);
-
-            // 获取挂载过期时间
-            long appAccessTokenMountExpire = appAccessTokenService.getMountExpire(appAccessTokenUuid, appUid, refreshTokenUuid);
-
-            AppCheckTokenResponse appCheckTokenResponse = new AppCheckTokenResponse();
-            appCheckTokenResponse.setUserId(userIdInAccessToken);
-            appCheckTokenResponse.setAccessExpireTime(now + appAccessTokenMountExpire);
-            appCheckTokenResponse.setRefreshExpireTime(now + refreshTokenExpire);
-
-            return appCheckTokenResponse;
-        } catch (LockAcquireException e) {
-            throw new AuthException();
-        } finally {
-            lock.safeRelease();
-        }
-    }
-
-    @Override
     public RefreshAccessTokenResponse refreshSsoAccessToken(String refreshToken) {
         // 解密refreshToken获取uuid
         String refreshTokenUuid = refreshTokenService.decodeJwtToken(refreshToken);
@@ -302,6 +241,67 @@ public class AuthServiceImpl implements IAuthService {
             refreshAccessTokenResponse.setExpireTime(now + TokenConstant.APP_ACCESS_TOKEN_EXPIRE_MINUTE * 60 * 1000);
 
             return refreshAccessTokenResponse;
+        } catch (LockAcquireException e) {
+            throw new AuthException();
+        } finally {
+            lock.safeRelease();
+        }
+    }
+
+    @Override
+    public AppCheckTokenResponse check(String refreshToken, String appAccessToken, String appUid) {
+        long now = System.currentTimeMillis();
+
+        // 解密refreshToken获取uuid
+        String refreshTokenUuid = refreshTokenService.decodeJwtToken(refreshToken);
+
+        ILock lock = redisLockService.getLock(LOCK_PREFIX + refreshTokenUuid);
+        try {
+            lock.acquire();
+            long refreshTokenExpire = refreshTokenService.getExpire(refreshTokenUuid);
+            if (refreshTokenExpire == 0) {
+                throw new RefreshTokenExpireException();
+            }
+            RefreshTokenValue refreshTokenValue = refreshTokenService.getTokenValue(refreshTokenUuid);
+            if (refreshTokenValue == null) {
+                throw new RefreshTokenExpireException();
+            }
+
+            int userIdInRefreshToken = refreshTokenValue.getUserId();
+
+            // 解密appAccessToken获取uuid
+            String appAccessTokenUuid = appAccessTokenService.decodeJwtToken(appAccessToken);
+            AppAccessTokenValue appAccessTokenValue = appAccessTokenService.getTokenValue(appAccessTokenUuid, appUid);
+            if (appAccessTokenValue == null) {
+                throw new AccessTokenExpireException();
+            }
+
+            int userIdInAccessToken = appAccessTokenValue.getUserId();
+            if (userIdInAccessToken <= 0) {
+                throw new AuthException();
+            }
+
+            String refreshTokenInAccessToken = appAccessTokenValue.getRefreshToken();
+            if (!Objects.equals(refreshToken, refreshTokenInAccessToken)) {
+                throw new AuthException();
+            }
+
+            if (userIdInAccessToken != userIdInRefreshToken) {
+                throw new AuthException();
+            }
+
+            // 删除appAccessToken
+            appAccessTokenService.delete(appAccessTokenUuid, appUid);
+
+            // 获取挂载过期时间
+            long appAccessTokenMountExpire = appAccessTokenService.getMountExpire(appAccessTokenUuid, appUid, refreshTokenUuid);
+
+            AppCheckTokenResponse appCheckTokenResponse = new AppCheckTokenResponse();
+            appCheckTokenResponse.setUserId(userIdInAccessToken);
+            appCheckTokenResponse.setAccessExpireTime(now + appAccessTokenMountExpire);
+            appCheckTokenResponse.setRefreshExpireTime(now + refreshTokenExpire);
+
+            return appCheckTokenResponse;
         } catch (LockAcquireException e) {
             throw new AuthException();
         } finally {

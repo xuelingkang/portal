@@ -34,18 +34,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "portal-sso-server", contextId = "sso-server")
 public interface RemoteSsoService {
 
+    @GetMapping("/token/refresh-app-access-token")
+    Result<RefreshAccessTokenResponse> refreshAppAccessToken(@RequestParam("appUid") String appUid,
+                                                             @RequestParam("refreshToken") String refreshToken,
+                                                             @RequestParam("timestamp") long timestamp,
+                                                             @RequestParam("sign") String sign);
+
     @PostMapping("/token/check-app-access-token")
     Result<AppCheckTokenResponse> checkAppAccessToken(@RequestParam("appUid") String appUid,
                                                       @RequestParam("appAccessToken") String appAccessToken,
                                                       @RequestParam("refreshToken") String refreshToken,
                                                       @RequestParam("timestamp") long timestamp,
                                                       @RequestParam("sign") String sign);
-
-    @GetMapping("/token/refresh-app-access-token")
-    Result<RefreshAccessTokenResponse> refreshAppAccessToken(@RequestParam("appUid") String appUid,
-                                                             @RequestParam("refreshToken") String refreshToken,
-                                                             @RequestParam("timestamp") long timestamp,
-                                                             @RequestParam("sign") String sign);
 
     @GetMapping("/logout")
     void logout(@RequestParam("appUid") String appUid,

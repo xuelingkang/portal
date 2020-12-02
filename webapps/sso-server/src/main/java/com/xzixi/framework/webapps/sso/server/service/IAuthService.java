@@ -48,15 +48,6 @@ public interface IAuthService {
     LoginSuccessResponse login(String ssoAccessToken, String appUid);
 
     /**
-     * 验证应用收到的token是否真实
-     *
-     * @param refreshToken jwtToken
-     * @param appAccessToken jwtToken
-     * @param appUid 应用uid
-     */
-    AppCheckTokenResponse check(String refreshToken, String appAccessToken, String appUid);
-
-    /**
      * 刷新ssoAccessToken
      *
      * @param refreshToken jwtToken
@@ -72,6 +63,15 @@ public interface IAuthService {
      * @return 刷新响应
      */
     RefreshAccessTokenResponse refreshAppAccessToken(String refreshToken, String appUid);
+
+    /**
+     * 验证应用收到的token是否真实
+     *
+     * @param refreshToken jwtToken
+     * @param appAccessToken jwtToken
+     * @param appUid 应用uid
+     */
+    AppCheckTokenResponse check(String refreshToken, String appAccessToken, String appUid);
 
     /**
      * 单点登出
