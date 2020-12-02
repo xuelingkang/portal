@@ -29,8 +29,11 @@ import com.xzixi.framework.boot.core.util.Utils;
 import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
 import com.xzixi.framework.boot.webmvc.service.ISignService;
 import com.xzixi.framework.webapps.common.model.params.AppSearchParams;
+import com.xzixi.framework.webapps.common.model.params.UserSearchParams;
 import com.xzixi.framework.webapps.common.model.po.App;
+import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.remote.service.RemoteAppService;
+import com.xzixi.framework.webapps.remote.service.RemoteUserService;
 import com.xzixi.framework.webapps.sso.server.model.SsoAccessTokenValue;
 import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
 import com.xzixi.framework.webapps.sso.server.service.ISsoAccessTokenService;
@@ -66,6 +69,8 @@ public class SsoApplicationTests {
     private RemoteAppService remoteAppService;
     @Autowired
     private ISignService signService;
+    @Autowired
+    private RemoteUserService remoteUserService;
 
     @Test
     public void testSave() {
@@ -128,5 +133,13 @@ public class SsoApplicationTests {
         String uri = UriComponentsBuilder.fromHttpUrl(app.getLogoutCallbackUrl()).queryParams(queryParams).toUriString();
 
         log.info("sign: {}, uri: {}", sign, uri);
+    }
+
+    @Test
+    public void testGetOneUser() {
+        UserSearchParams userSearchParams = new UserSearchParams();
+        userSearchParams.setModel(new User().setUsername("admin1"));
+        User user = remoteUserService.getOne(userSearchParams).getData();
+        System.out.println(user);
     }
 }

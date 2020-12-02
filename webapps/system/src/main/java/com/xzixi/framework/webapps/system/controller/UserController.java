@@ -88,8 +88,8 @@ public class UserController {
 
     @GetMapping("/one")
     @ApiOperation(value = "根据条件查询一个用户")
-    public Result<User> getOne(QueryParams<User> queryParams) {
-        User user = userService.getOne(queryParams);
+    public Result<User> getOne(UserSearchParams searchParams) {
+        User user = userService.getOne(searchParams.buildQueryParams());
         return new Result<>(user);
     }
 

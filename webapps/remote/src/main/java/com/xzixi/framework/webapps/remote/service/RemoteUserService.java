@@ -21,7 +21,6 @@ package com.xzixi.framework.webapps.remote.service;
 
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.Pagination;
-import com.xzixi.framework.boot.core.model.search.QueryParams;
 import com.xzixi.framework.webapps.common.model.params.UserSearchParams;
 import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
@@ -43,7 +42,7 @@ public interface RemoteUserService {
     Result<Pagination<UserVO>> page(@SpringQueryMap UserSearchParams searchParams);
 
     @GetMapping("/one")
-    Result<User> getOne(@SpringQueryMap QueryParams<User> queryParams);
+    Result<User> getOne(@SpringQueryMap UserSearchParams searchParams);
 
     @GetMapping("/{id}")
     Result<UserVO> getById(@PathVariable("id") Integer id);

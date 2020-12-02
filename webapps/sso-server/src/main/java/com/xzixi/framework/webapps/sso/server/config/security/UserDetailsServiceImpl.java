@@ -20,8 +20,7 @@
 package com.xzixi.framework.webapps.sso.server.config.security;
 
 import com.xzixi.framework.boot.core.exception.ClientException;
-import com.xzixi.framework.boot.core.model.Result;
-import com.xzixi.framework.boot.core.model.search.QueryParams;
+import com.xzixi.framework.webapps.common.model.params.UserSearchParams;
 import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
 import com.xzixi.framework.webapps.remote.service.RemoteUserService;
@@ -48,9 +47,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new ClientException(400, "用户名username不能为空！");
         }
 
-        Result<User> getOneUserResult = remoteUserService.getOne(new QueryParams<>(new User().setUsername(username)));
+        UserSearchParams userSearchParams = new UserSearchParams();
+        userSearchParams.setModel(new User().setUsername(username));
+        User user = remoteUserService.getOne(userSearchParams).getData();
 
-        User user = getOneUserResult.getData();
         if (user == null) {
             throw new UsernameNotFoundException("用户名：" + username + "不存在！");
         }
