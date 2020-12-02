@@ -17,28 +17,40 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.common.model.po;
+package com.xzixi.framework.webapps.common.model.vo.sso;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * @author 薛凌康
+ * sso-server登录成功响应
+ *
+ * @author xuelingkang
+ * @date 2020-10-27
  */
 @Data
-@ApiModel(description = "令牌")
-public class Token {
+@ApiModel(description = "sso-server登录成功响应")
+public class LoginSuccessResponse {
 
-    @ApiModelProperty(value = "标识")
-    private String signature;
+    @ApiModelProperty(value = "sso站点的x-access-token")
+    private String ssoAccessToken;
 
-    @ApiModelProperty(value = "用户id")
-    private Integer userId;
+    @ApiModelProperty(value = "app站点的x-access-token")
+    private String appAccessToken;
 
-    @ApiModelProperty(value = "登陆时间")
+    @ApiModelProperty(value = "通用的x-refresh-token")
+    private String refreshToken;
+
+    @ApiModelProperty(value = "登录时间")
     private Long loginTime;
 
-    @ApiModelProperty(value = "过期时间")
-    private Long expireTime;
+    @ApiModelProperty(value = "sso站点的x-access-token失效时间")
+    private Long accessExpireTime;
+
+    @ApiModelProperty(value = "x-refresh-token失效时间")
+    private Long refreshExpireTime;
+
+    @ApiModelProperty(value = "跳转url")
+    private String redirectUrl;
 }

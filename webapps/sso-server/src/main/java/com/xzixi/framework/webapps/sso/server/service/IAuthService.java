@@ -21,7 +21,7 @@ package com.xzixi.framework.webapps.sso.server.service;
 
 import com.xzixi.framework.webapps.common.model.vo.sso.AppCheckTokenResponse;
 import com.xzixi.framework.webapps.common.model.vo.sso.RefreshAccessTokenResponse;
-import com.xzixi.framework.webapps.common.model.vo.sso.SsoServerLoginResponse;
+import com.xzixi.framework.webapps.common.model.vo.sso.LoginSuccessResponse;
 
 /**
  * @author xuelingkang
@@ -36,7 +36,7 @@ public interface IAuthService {
      * @param appUid 应用uid
      * @return sso登录响应
      */
-    SsoServerLoginResponse login(int userId, String appUid);
+    LoginSuccessResponse login(int userId, String appUid);
 
     /**
      * 使用ssoAccessToken登录
@@ -45,7 +45,7 @@ public interface IAuthService {
      * @param appUid 应用uid
      * @return sso登录响应
      */
-    SsoServerLoginResponse login(String ssoAccessToken, String appUid);
+    LoginSuccessResponse login(String ssoAccessToken, String appUid);
 
     /**
      * 验证应用收到的token是否真实

@@ -19,7 +19,6 @@
 
 package com.xzixi.framework.webapps.sso.server.config;
 
-import com.xzixi.framework.webapps.sso.server.config.security.TokenFilter;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,7 +36,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -65,8 +63,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationEntryPoint authenticationEntryPoint;
     @Autowired
     private AccessDeniedHandler accessDeniedHandler;
-    @Autowired
-    private TokenFilter tokenFilter;
     @Autowired
     @Qualifier("userDetailsServiceImpl")
     private UserDetailsService userDetailsService;
@@ -125,7 +121,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // 解决不允许显示在iframe的问题
         http.headers().frameOptions().disable();
         http.headers().cacheControl();
-
-        http.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
 }

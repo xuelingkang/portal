@@ -20,13 +20,10 @@
 package com.xzixi.framework.webapps.sso.server.config.security;
 
 import com.xzixi.framework.boot.core.model.Result;
-import com.xzixi.framework.webapps.remote.service.RemoteUserService;
-import com.xzixi.framework.webapps.common.model.po.Token;
-import com.xzixi.framework.webapps.common.model.vo.sso.SsoServerLoginResponse;
-import com.xzixi.framework.webapps.common.model.vo.TokenVO;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
+import com.xzixi.framework.webapps.common.model.vo.sso.LoginSuccessResponse;
 import com.xzixi.framework.webapps.sso.server.model.UserDetailsImpl;
-import com.xzixi.framework.webapps.common.model.vo.UserVO;
-import com.xzixi.framework.webapps.sso.server.service.ITokenService2;
+import com.xzixi.framework.webapps.sso.server.service.IAuthService;
 import com.xzixi.framework.webapps.sso.server.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -38,7 +35,6 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 认证成功
- * TODO 认证成功回调应用
  *
  * @author 薛凌康
  */
@@ -46,32 +42,20 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
 
     @Autowired
-    private ITokenService2 tokenService;
-    @Autowired
-    private RemoteUserService remoteUserService;
+    private IAuthService authService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        UserVO user = userDetails.getUser();
+        // 用户id
+        int userId = ((UserDetailsImpl) authentication.getPrincipal()).getUser().getId();
+        // 应用uid
+        String appUid = WebUtils.getParameter(request, ProjectConstant.APP_UID_NAME);
 
-        // TODO 响应
-        long now = System.currentTimeMillis();
-        SsoServerLoginResponse ssoServerLoginResponse = new SsoServerLoginResponse();
-        ssoServerLoginResponse.setLoginTime(now);
+        // 设置登录信息
+        LoginSuccessResponse loginSuccessResponse = authService.login(userId, appUid);
 
-        // TODO 重构
-        // 保存token
-        Token token = tokenService.saveToken(user.getId());
-
-        // 返回token
-        user.setPassword(null);
-        user.setLoginTime(token.getLoginTime());
-        TokenVO tokenVO = new TokenVO(token).setUser(user);
-        Result<TokenVO> result = new Result<>(200, "登录成功！", tokenVO);
+        // 响应
+        Result<LoginSuccessResponse> result = new Result<>(200, "登录成功！", loginSuccessResponse);
         WebUtils.printJson(response, result);
-
-        // 设置登录时间
-        remoteUserService.updateLoginTime(user.getId(), user.getLoginTime());
     }
 }

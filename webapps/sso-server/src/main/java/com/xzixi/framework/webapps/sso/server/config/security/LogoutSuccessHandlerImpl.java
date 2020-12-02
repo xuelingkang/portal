@@ -20,22 +20,27 @@
 package com.xzixi.framework.webapps.sso.server.config.security;
 
 import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.boot.webmvc.service.ISignService;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
+import com.xzixi.framework.webapps.common.model.po.App;
+import com.xzixi.framework.webapps.remote.service.RemoteAppService;
 import com.xzixi.framework.webapps.sso.server.constant.SecurityConstant;
-import com.xzixi.framework.webapps.sso.server.service.ITokenService2;
+import com.xzixi.framework.webapps.sso.server.service.IAuthService;
 import com.xzixi.framework.webapps.sso.server.util.WebUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 退出登录
- * TODO 单点登出
  *
  * @author 薛凌康
  */
@@ -43,20 +48,45 @@ import java.util.Objects;
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
     @Autowired
-    private ITokenService2 tokenService;
+    private RemoteAppService remoteAppService;
+    @Autowired
+    private IAuthService authService;
+    @Autowired
+    private ISignService signService;
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        String signature = WebUtils.getHeaderOrParameter(request, SecurityConstant.AUTHENTICATION_HEADER_NAME, SecurityConstant.AUTHENTICATION_PARAMETER_NAME);
-        if (StringUtils.isNotBlank(signature) && !Objects.equals(SecurityConstant.NULL_TOKEN, signature)) {
-            try {
-                tokenService.deleteToken(signature);
-            } catch (Exception e) {
-                Result<?> result = new Result<>(401, "非法认证！", null);
-                WebUtils.printJson(response, result);
-                return;
-            }
+        String appUid = WebUtils.getParameter(request, ProjectConstant.APP_UID_NAME);
+        String refreshToken = WebUtils.getParameter(request, SecurityConstant.REFRESH_TOKEN_NAME);
+        String timestamp = WebUtils.getParameter(request, ProjectConstant.TIMESTAMP_NAME);
+        String sign = WebUtils.getParameter(request, ProjectConstant.SIGN_NAME);
+
+        // 验证参数
+        Assert.hasText(appUid, "appUid不能为空！");
+        Assert.hasText(refreshToken, "refreshToken不能为空！");
+        Assert.isTrue(NumberUtils.isNumber(timestamp), "timestamp必须是数字！");
+        Assert.hasText(sign, "sign不能为空！");
+
+        // 查询应用
+        App app = remoteAppService.getByUid(appUid).getData();
+        Assert.notNull(app, "app不存在！");
+        String secret = app.getSecret();
+
+        Map<String, Object> params = new HashMap<>();
+        params.put(ProjectConstant.APP_UID_NAME, appUid);
+        params.put(SecurityConstant.REFRESH_TOKEN_NAME, refreshToken);
+        params.put(ProjectConstant.TIMESTAMP_NAME, Long.parseLong(timestamp));
+
+        // 验证签名
+        if (!signService.check(params, sign, secret)) {
+            Result<?> result = new Result<>(403, "没有权限！", null);
+            WebUtils.printJson(response, result);
+            return;
         }
+
+        // 执行单点登出
+        authService.logout(refreshToken);
+
         Result<?> result = new Result<>(200, "退出成功！", null);
         WebUtils.printJson(response, result);
     }

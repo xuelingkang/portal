@@ -25,11 +25,14 @@ import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
 import com.xzixi.framework.boot.redis.service.impl.RedisScanService;
 import com.xzixi.framework.boot.webmvc.service.ISignService;
+import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.po.App;
 import com.xzixi.framework.webapps.common.model.vo.sso.AppCheckTokenResponse;
 import com.xzixi.framework.webapps.common.model.vo.sso.RefreshAccessTokenResponse;
-import com.xzixi.framework.webapps.common.model.vo.sso.SsoServerLoginResponse;
+import com.xzixi.framework.webapps.common.model.vo.sso.LoginSuccessResponse;
 import com.xzixi.framework.webapps.remote.service.RemoteAppService;
+import com.xzixi.framework.webapps.remote.service.RemoteUserService;
+import com.xzixi.framework.webapps.sso.server.constant.SecurityConstant;
 import com.xzixi.framework.webapps.sso.server.constant.SsoServerConstant;
 import com.xzixi.framework.webapps.sso.server.constant.TokenConstant;
 import com.xzixi.framework.webapps.sso.server.exception.AccessTokenExpireException;
@@ -76,6 +79,8 @@ public class AuthServiceImpl implements IAuthService {
     @Autowired
     private RemoteAppService remoteAppService;
     @Autowired
+    private RemoteUserService remoteUserService;
+    @Autowired
     private RedisLockService redisLockService;
     @Autowired
     private RedisScanService redisScanService;
@@ -83,7 +88,7 @@ public class AuthServiceImpl implements IAuthService {
     private ISignService signService;
 
     @Override
-    public SsoServerLoginResponse login(int userId, String appUid) {
+    public LoginSuccessResponse login(int userId, String appUid) {
         // 查询应用信息
         App app = remoteAppService.getByUid(appUid).getData();
 
@@ -105,7 +110,7 @@ public class AuthServiceImpl implements IAuthService {
         ssoAccessTokenService.mount(ssoAccessTokenUuid, ssoAccessToken, refreshTokenUuid);
         appAccessTokenService.mount(appAccessTokenUuid, appAccessToken, appUid, refreshTokenUuid);
 
-        SsoServerLoginResponse response = new SsoServerLoginResponse();
+        LoginSuccessResponse response = new LoginSuccessResponse();
         response.setSsoAccessToken(ssoAccessToken);
         response.setAppAccessToken(appAccessToken);
         response.setRefreshToken(refreshToken);
@@ -116,11 +121,14 @@ public class AuthServiceImpl implements IAuthService {
                 app.getLoginCallbackUrl(), appAccessToken, refreshToken);
         response.setRedirectUrl(redirectUrl);
 
+        // 刷新登录时间
+        remoteUserService.updateLoginTime(userId, now);
+
         return response;
     }
 
     @Override
-    public SsoServerLoginResponse login(String ssoAccessToken, String appUid) {
+    public LoginSuccessResponse login(String ssoAccessToken, String appUid) {
         // 获取ssoAccessToken保存的信息
         String ssoAccessTokenUuid = ssoAccessTokenService.decodeJwtToken(ssoAccessToken);
         SsoAccessTokenValue ssoAccessTokenValue = ssoAccessTokenService.getTokenValue(ssoAccessTokenUuid);
@@ -151,7 +159,7 @@ public class AuthServiceImpl implements IAuthService {
             // 查询应用信息
             App app = remoteAppService.getByUid(appUid).getData();
 
-            SsoServerLoginResponse response = new SsoServerLoginResponse();
+            LoginSuccessResponse response = new LoginSuccessResponse();
             response.setSsoAccessToken(ssoAccessToken);
             response.setAppAccessToken(appAccessToken);
             response.setRefreshToken(refreshToken);
@@ -356,15 +364,15 @@ public class AuthServiceImpl implements IAuthService {
             // 构造签名和参数
             long now = System.currentTimeMillis();
             Map<String, Object> params = new HashMap<>();
-            params.put("accessToken", appAccessToken);
-            params.put("appUid", SsoServerConstant.APP_UID);
+            params.put(SecurityConstant.ACCESS_TOKEN_NAME, appAccessToken);
+            params.put(ProjectConstant.APP_UID_NAME, SsoServerConstant.APP_UID);
             params.put(ISignService.TIMESTAMP_NAME, now);
             String sign = signService.genSign(params, ssoServer.getSecret());
 
             // 构造app登出请求
             MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
             params.forEach((name, value) -> queryParams.add(name, String.valueOf(value)));
-            queryParams.add("sign", sign);
+            queryParams.add(ProjectConstant.SIGN_NAME, sign);
             String uri = UriComponentsBuilder.fromHttpUrl(app.getLogoutCallbackUrl()).queryParams(queryParams).toUriString();
             WebClient.create(uri)
                     .get()

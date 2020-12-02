@@ -24,6 +24,10 @@ package com.xzixi.framework.webapps.sso.server.constant;
  */
 public interface SecurityConstant {
 
+    String APP_ACCESS_TOKEN_NAME = "appAccessToken";
+    String SSO_ACCESS_TOKEN_NAME = "ssoAccessToken";
+    String ACCESS_TOKEN_NAME = "accessToken";
+    String REFRESH_TOKEN_NAME = "refreshToken";
     String NULL_TOKEN = "null";
     String AUTHENTICATION_HEADER_NAME = "x-access-token";
     String AUTHENTICATION_PARAMETER_NAME = "_access";

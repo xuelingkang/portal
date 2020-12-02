@@ -29,4 +29,10 @@ public interface ProjectConstant {
     String RESPONSE_MEDIA_TYPE = MediaType.APPLICATION_JSON_VALUE;
 
     String INDEX_NAME_PREFIX = "portal-";
+
+    String APP_UID_NAME = "appUid";
+
+    String SIGN_NAME = "sign";
+
+    String TIMESTAMP_NAME = "timestamp";
 }
