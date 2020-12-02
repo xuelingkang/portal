@@ -154,6 +154,18 @@ public class GlobalControllerExceptionHandler {
     }
 
     /**
+     * 参数校验异常
+     *
+     * @param e IllegalArgumentException
+     * @return Result
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Result<?> handleIllegalArgumentException(IllegalArgumentException e) {
+        return new Result<>(HttpStatus.BAD_REQUEST.value(), e.getMessage(), null);
+    }
+
+    /**
      * 客户端异常
      *
      * @param e ClientException

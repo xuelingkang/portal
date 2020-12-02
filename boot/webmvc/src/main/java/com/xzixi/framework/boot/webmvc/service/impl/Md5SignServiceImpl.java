@@ -23,6 +23,8 @@ import com.xzixi.framework.boot.core.exception.ClientException;
 import com.xzixi.framework.boot.core.exception.ProjectException;
 import com.xzixi.framework.boot.core.util.TypeUtils;
 import com.xzixi.framework.boot.webmvc.service.ISignService;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -39,12 +41,19 @@ import java.util.stream.Collectors;
  */
 public class Md5SignServiceImpl implements ISignService {
 
+    @Getter
+    @Setter
+    private String timestampName = TIMESTAMP_NAME;
+    @Getter
+    @Setter
+    private String secretName = SECRET_NAME;
+
     @Override
     public String genSign(Map<String, Object> params, String secret) {
         if (StringUtils.isBlank(secret)) {
             throw new ProjectException("密钥不能为空！");
         }
-        Object timestampObj = params.get(TIMESTAMP_NAME);
+        Object timestampObj = params.get(timestampName);
         if (timestampObj == null || !Long.class.isAssignableFrom(timestampObj.getClass())) {
             throw new ProjectException("必须设置long时间戳！");
         }
@@ -63,7 +72,7 @@ public class Md5SignServiceImpl implements ISignService {
             return String.format(PAIR_FORMAT, key, value.hashCode());
         }).collect(Collectors.joining(DELIMITER));
         // md5签名
-        return DigestUtils.md5Hex((pairs + DELIMITER + String.format(PAIR_FORMAT, SECRET_NAME, secret)).getBytes(StandardCharsets.UTF_8));
+        return DigestUtils.md5Hex((pairs + DELIMITER + String.format(PAIR_FORMAT, secretName, secret)).getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
@@ -75,7 +84,7 @@ public class Md5SignServiceImpl implements ISignService {
         if (StringUtils.isBlank(secret)) {
             throw new ClientException(400, "密钥不能为空！");
         }
-        Object timestampObj = params.get(TIMESTAMP_NAME);
+        Object timestampObj = params.get(timestampName);
         if (timestampObj == null || !Long.class.isAssignableFrom(timestampObj.getClass())) {
             throw new ClientException(400, "必须设置long时间戳！");
         }
