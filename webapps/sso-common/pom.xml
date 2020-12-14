@@ -10,22 +10,19 @@
         <version>2.2.1</version>
     </parent>
 
-    <artifactId>sso-client</artifactId>
+    <artifactId>sso-common</artifactId>
     <name>${project.artifactId}</name>
-    <description>单点登录、单点登出等接口</description>
+    <description>sso-server和sso-client公共部分</description>
 
     <dependencies>
         <dependency>
-            <groupId>com.xzixi.framework</groupId>
-            <artifactId>common</artifactId>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.xzixi.framework</groupId>
-            <artifactId>remote</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.xzixi.framework</groupId>
-            <artifactId>sso-common</artifactId>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

@@ -24,7 +24,7 @@ import com.xzixi.framework.boot.webmvc.service.ISignService;
 import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.po.App;
 import com.xzixi.framework.webapps.remote.service.RemoteAppService;
-import com.xzixi.framework.webapps.sso.server.constant.SecurityConstant;
+import com.xzixi.framework.webapps.sso.server.constant.SsoServerConstant;
 import com.xzixi.framework.webapps.sso.server.service.IAuthService;
 import com.xzixi.framework.webapps.sso.server.util.WebUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -57,7 +57,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String appUid = WebUtils.getParameter(request, ProjectConstant.APP_UID_NAME);
-        String refreshToken = WebUtils.getParameter(request, SecurityConstant.REFRESH_TOKEN_NAME);
+        String refreshToken = WebUtils.getParameter(request, SsoServerConstant.REFRESH_TOKEN_NAME);
         String timestamp = WebUtils.getParameter(request, ProjectConstant.TIMESTAMP_NAME);
         String sign = WebUtils.getParameter(request, ProjectConstant.SIGN_NAME);
 
@@ -74,7 +74,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
         Map<String, Object> params = new HashMap<>();
         params.put(ProjectConstant.APP_UID_NAME, appUid);
-        params.put(SecurityConstant.REFRESH_TOKEN_NAME, refreshToken);
+        params.put(SsoServerConstant.REFRESH_TOKEN_NAME, refreshToken);
         params.put(ProjectConstant.TIMESTAMP_NAME, Long.parseLong(timestamp));
 
         // 验证签名

@@ -20,8 +20,8 @@
 package com.xzixi.framework.webapps.remote.service;
 
 import com.xzixi.framework.boot.core.model.Result;
-import com.xzixi.framework.webapps.common.model.vo.sso.AppCheckTokenResponse;
-import com.xzixi.framework.webapps.common.model.vo.sso.RefreshAccessTokenResponse;
+import com.xzixi.framework.webapps.sso.common.model.AppCheckTokenResponse;
+import com.xzixi.framework.webapps.sso.common.model.RefreshAccessTokenResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

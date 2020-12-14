@@ -19,7 +19,7 @@
 
 package com.xzixi.framework.webapps.sso.server.service.impl;
 
-import com.xzixi.framework.webapps.sso.server.constant.TokenConstant;
+import com.xzixi.framework.webapps.sso.common.constant.TokenConstant;
 import com.xzixi.framework.webapps.sso.server.model.AppAccessTokenMountValue;
 import com.xzixi.framework.webapps.sso.server.model.AppAccessTokenValue;
 import com.xzixi.framework.webapps.sso.server.model.TokenInfo;

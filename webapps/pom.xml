@@ -26,6 +26,7 @@
         <module>common</module>
         <module>remote</module>
         <module>gateway</module>
+        <module>sso-common</module>
         <module>sso-server</module>
         <module>sso-client</module>
         <module>content</module>
@@ -43,6 +44,11 @@
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
                 <artifactId>common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xzixi.framework</groupId>
+                <artifactId>sso-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.sso.server.constant;
+package com.xzixi.framework.webapps.sso.common.constant;
 
 /**
  * @author xuelingkang

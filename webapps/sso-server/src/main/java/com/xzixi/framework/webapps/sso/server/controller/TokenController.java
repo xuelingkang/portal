@@ -21,9 +21,9 @@ package com.xzixi.framework.webapps.sso.server.controller;
 
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.webapps.common.constant.ProjectConstant;
-import com.xzixi.framework.webapps.common.model.vo.sso.AppCheckTokenResponse;
-import com.xzixi.framework.webapps.common.model.vo.sso.LoginSuccessResponse;
-import com.xzixi.framework.webapps.common.model.vo.sso.RefreshAccessTokenResponse;
+import com.xzixi.framework.webapps.sso.common.model.AppCheckTokenResponse;
+import com.xzixi.framework.webapps.sso.common.model.LoginSuccessResponse;
+import com.xzixi.framework.webapps.sso.common.model.RefreshAccessTokenResponse;
 import com.xzixi.framework.webapps.sso.server.service.IAuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

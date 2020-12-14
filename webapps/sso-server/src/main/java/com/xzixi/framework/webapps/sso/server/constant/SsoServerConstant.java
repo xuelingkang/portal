@@ -26,4 +26,6 @@ package com.xzixi.framework.webapps.sso.server.constant;
 public interface SsoServerConstant {
 
     String APP_UID = "sso";
+    String ACCESS_TOKEN_NAME = "accessToken";
+    String REFRESH_TOKEN_NAME = "refreshToken";
 }

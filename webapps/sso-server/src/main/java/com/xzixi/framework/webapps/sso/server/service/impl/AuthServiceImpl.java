@@ -27,14 +27,13 @@ import com.xzixi.framework.boot.redis.service.impl.RedisScanService;
 import com.xzixi.framework.boot.webmvc.service.ISignService;
 import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.po.App;
-import com.xzixi.framework.webapps.common.model.vo.sso.AppCheckTokenResponse;
-import com.xzixi.framework.webapps.common.model.vo.sso.RefreshAccessTokenResponse;
-import com.xzixi.framework.webapps.common.model.vo.sso.LoginSuccessResponse;
+import com.xzixi.framework.webapps.sso.common.model.AppCheckTokenResponse;
+import com.xzixi.framework.webapps.sso.common.model.RefreshAccessTokenResponse;
+import com.xzixi.framework.webapps.sso.common.model.LoginSuccessResponse;
 import com.xzixi.framework.webapps.remote.service.RemoteAppService;
 import com.xzixi.framework.webapps.remote.service.RemoteUserService;
-import com.xzixi.framework.webapps.sso.server.constant.SecurityConstant;
 import com.xzixi.framework.webapps.sso.server.constant.SsoServerConstant;
-import com.xzixi.framework.webapps.sso.server.constant.TokenConstant;
+import com.xzixi.framework.webapps.sso.common.constant.TokenConstant;
 import com.xzixi.framework.webapps.sso.server.exception.AccessTokenExpireException;
 import com.xzixi.framework.webapps.sso.server.exception.AuthException;
 import com.xzixi.framework.webapps.sso.server.exception.RefreshTokenExpireException;
@@ -364,7 +363,7 @@ public class AuthServiceImpl implements IAuthService {
             // 构造签名和参数
             long now = System.currentTimeMillis();
             Map<String, Object> params = new HashMap<>();
-            params.put(SecurityConstant.ACCESS_TOKEN_NAME, appAccessToken);
+            params.put(SsoServerConstant.ACCESS_TOKEN_NAME, appAccessToken);
             params.put(ProjectConstant.APP_UID_NAME, SsoServerConstant.APP_UID);
             params.put(ISignService.TIMESTAMP_NAME, now);
             String sign = signService.genSign(params, ssoServer.getSecret());
