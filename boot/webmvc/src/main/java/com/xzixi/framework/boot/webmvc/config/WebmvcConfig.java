@@ -19,11 +19,9 @@
 
 package com.xzixi.framework.boot.webmvc.config;
 
-import com.xzixi.framework.boot.webmvc.component.ObjectQueryMapEncoder;
 import com.xzixi.framework.boot.webmvc.controller.GlobalControllerExceptionHandler;
 import com.xzixi.framework.boot.webmvc.service.ISignService;
 import com.xzixi.framework.boot.webmvc.service.impl.Md5SignServiceImpl;
-import feign.QueryMapEncoder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
@@ -56,11 +54,5 @@ public class WebmvcConfig {
     @ConditionalOnMissingBean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public QueryMapEncoder queryMapEncoder() {
-        return new ObjectQueryMapEncoder();
     }
 }

@@ -5,23 +5,31 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>webapps</artifactId>
+        <artifactId>boot</artifactId>
         <groupId>com.xzixi.framework</groupId>
         <version>2.2.1</version>
     </parent>
 
-    <artifactId>remote</artifactId>
+    <artifactId>feign</artifactId>
     <name>${project.artifactId}</name>
-    <description>远程接口</description>
+    <description>feign通用配置</description>
 
     <dependencies>
         <dependency>
             <groupId>com.xzixi.framework</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.xzixi.framework</groupId>
-            <artifactId>feign</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

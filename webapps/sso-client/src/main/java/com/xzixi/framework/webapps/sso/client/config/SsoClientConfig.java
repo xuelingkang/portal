@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.remote.config;
+package com.xzixi.framework.webapps.sso.client.config;
 
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
@@ -25,10 +25,10 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author xuelingkang
- * @date 2020-11-17
+ * @date 2020-12-14
  */
 @Configuration
-@EnableFeignClients(basePackages = {"com.xzixi.framework.webapps.remote.service"})
-@ComponentScan(basePackages = {"com.xzixi.framework.webapps.remote.fallback"})
-public class RemoteConfig {
+@EnableFeignClients(basePackages = {"com.xzixi.framework.webapps.sso.client.service"})
+@ComponentScan(basePackages = {"com.xzixi.framework.webapps.sso.client.fallback"})
+public class SsoClientConfig {
 }

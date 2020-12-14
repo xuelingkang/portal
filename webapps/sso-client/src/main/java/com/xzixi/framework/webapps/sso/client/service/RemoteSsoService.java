@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.remote.service;
+package com.xzixi.framework.webapps.sso.client.service;
 
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.webapps.sso.common.model.AppCheckTokenResponse;

@@ -53,12 +53,12 @@
             </dependency>
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
-                <artifactId>remote</artifactId>
+                <artifactId>sso-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.xzixi.framework</groupId>
-                <artifactId>sso-client</artifactId>
+                <artifactId>remote</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
