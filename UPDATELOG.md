@@ -5,6 +5,7 @@
   - 增加RedisScanService
   - 全局异常拦截增加IllegalArgumentException
   - 优化Md5SignServiceImpl
+  - 增加feign通用配置模块
 - **2020.11.18 v2.2.1**
   - 优化enhance模块生成的listByIds方法
   - enhance模块追加方法和属性时增加检查，防止重复定义

@@ -88,6 +88,13 @@
 </dependency>
 ```
 ```xml
+<!-- feign通用配置 -->
+<dependency>
+    <groupId>com.xzixi.framework</groupId>
+    <artifactId>feign</artifactId>
+</dependency>
+```
+```xml
 <!-- 编译期增强 -->
 <dependency>
     <groupId>com.xzixi.framework</groupId>
