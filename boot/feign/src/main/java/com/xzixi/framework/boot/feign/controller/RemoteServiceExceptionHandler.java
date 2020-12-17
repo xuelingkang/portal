@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.remote.controller;
+package com.xzixi.framework.boot.feign.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.netflix.hystrix.exception.HystrixRuntimeException;

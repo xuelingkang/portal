@@ -17,26 +17,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.common.model.vo.sso;
+package com.xzixi.framework.webapps.sso.client.config;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author xuelingkang
- * @date 2020-11-07
+ * @date 2020-12-14
  */
-@Data
-@ApiModel(description = "应用检查token响应")
-public class AppCheckTokenResponse {
-
-    @ApiModelProperty(value = "登录用户id")
-    private Integer userId;
-
-    @ApiModelProperty(value = "app站点的x-access-token失效时间")
-    private Long accessExpireTime;
-
-    @ApiModelProperty(value = "x-refresh-token失效时间")
-    private Long refreshExpireTime;
+@Configuration
+@EnableFeignClients(basePackages = {"com.xzixi.framework.webapps.sso.client.service"})
+@ComponentScan(basePackages = {"com.xzixi.framework.webapps.sso.client.fallback"})
+public class SsoClientConfig {
 }

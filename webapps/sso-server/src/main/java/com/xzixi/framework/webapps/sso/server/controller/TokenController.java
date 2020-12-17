@@ -19,11 +19,15 @@
 
 package com.xzixi.framework.webapps.sso.server.controller;
 
+import com.xzixi.framework.boot.core.exception.ClientException;
 import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.boot.webmvc.service.ISignService;
 import com.xzixi.framework.webapps.common.constant.ProjectConstant;
-import com.xzixi.framework.webapps.common.model.vo.sso.AppCheckTokenResponse;
-import com.xzixi.framework.webapps.common.model.vo.sso.LoginSuccessResponse;
-import com.xzixi.framework.webapps.common.model.vo.sso.RefreshAccessTokenResponse;
+import com.xzixi.framework.webapps.common.model.po.App;
+import com.xzixi.framework.webapps.remote.service.RemoteAppService;
+import com.xzixi.framework.webapps.sso.common.model.AppCheckTokenResponse;
+import com.xzixi.framework.webapps.sso.common.model.LoginSuccessResponse;
+import com.xzixi.framework.webapps.sso.common.model.RefreshAccessTokenResponse;
 import com.xzixi.framework.webapps.sso.server.service.IAuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -36,6 +40,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotBlank;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author xuelingkang
@@ -49,22 +55,26 @@ public class TokenController {
 
     @Autowired
     private IAuthService authService;
+    @Autowired
+    private RemoteAppService remoteAppService;
+    @Autowired
+    private ISignService signService;
 
     @PostMapping("/login-again")
     @ApiOperation(value = "使用已有的ssoAccessToken再次登录")
     public Result<LoginSuccessResponse> loginAgain(
             @ApiParam(value = "ssoAccessToken", required = true) @NotBlank(message = "ssoAccessToken不能为空！") String ssoAccessToken,
             @ApiParam(value = "应用uid", required = true) @NotBlank(message = "appUid不能为空！") String appUid) {
-        // TODO
-        return null;
+        LoginSuccessResponse response = authService.login(ssoAccessToken, appUid);
+        return new Result<>(response);
     }
 
     @GetMapping("/refresh-sso-access-token")
     @ApiOperation(value = "刷新ssoAccessToken")
     public Result<RefreshAccessTokenResponse> refreshSsoAccessToken(
             @ApiParam(value = "refreshToken", required = true) @NotBlank(message = "refreshToken不能为空！") String refreshToken) {
-        // TODO
-        return null;
+        RefreshAccessTokenResponse response = authService.refreshSsoAccessToken(refreshToken);
+        return new Result<>(response);
     }
 
     @GetMapping("/refresh-app-access-token")
@@ -74,8 +84,20 @@ public class TokenController {
             @ApiParam(value = "refreshToken", required = true) @NotBlank(message = "refreshToken不能为空！") String refreshToken,
             @ApiParam(value = "调用时间戳", required = true) long timestamp,
             @ApiParam(value = "签名", required = true) @NotBlank(message = "sign不能为空") String sign) {
-        // TODO
-        return null;
+        // 查询app
+        App app = remoteAppService.getByUid(appUid).getData();
+        // 验签
+        Map<String, Object> params = new HashMap<>();
+        params.put("appUid", appUid);
+        params.put("refreshToken", refreshToken);
+        params.put("timestamp", timestamp);
+        boolean signValid = signService.check(params, sign, app.getSecret());
+        if (!signValid) {
+            throw new ClientException(400, "签名错误");
+        }
+        // 刷新accessToken
+        RefreshAccessTokenResponse response = authService.refreshAppAccessToken(refreshToken, appUid);
+        return new Result<>(response);
     }
 
     @PostMapping("/check-app-access-token")
@@ -86,7 +108,20 @@ public class TokenController {
             @ApiParam(value = "refreshToken", required = true) @NotBlank(message = "refreshToken不能为空！") String refreshToken,
             @ApiParam(value = "调用时间戳", required = true) long timestamp,
             @ApiParam(value = "签名", required = true) @NotBlank(message = "sign不能为空") String sign) {
-        // TODO
-        return null;
+        // 查询app
+        App app = remoteAppService.getByUid(appUid).getData();
+        // 验签
+        Map<String, Object> params = new HashMap<>();
+        params.put("appUid", appUid);
+        params.put("appAccessToken", appAccessToken);
+        params.put("refreshToken", refreshToken);
+        params.put("timestamp", timestamp);
+        boolean signValid = signService.check(params, sign, app.getSecret());
+        if (!signValid) {
+            throw new ClientException(400, "签名错误");
+        }
+        // 验证refreshToken和accessToken
+        AppCheckTokenResponse response = authService.check(refreshToken, appAccessToken, appUid);
+        return new Result<>(response);
     }
 }

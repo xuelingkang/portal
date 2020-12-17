@@ -19,9 +19,9 @@
 
 package com.xzixi.framework.webapps.sso.server.service;
 
-import com.xzixi.framework.webapps.common.model.vo.sso.AppCheckTokenResponse;
-import com.xzixi.framework.webapps.common.model.vo.sso.RefreshAccessTokenResponse;
-import com.xzixi.framework.webapps.common.model.vo.sso.LoginSuccessResponse;
+import com.xzixi.framework.webapps.sso.common.model.AppCheckTokenResponse;
+import com.xzixi.framework.webapps.sso.common.model.RefreshAccessTokenResponse;
+import com.xzixi.framework.webapps.sso.common.model.LoginSuccessResponse;
 
 /**
  * @author xuelingkang

@@ -19,22 +19,9 @@
 
 package com.xzixi.framework.webapps.remote.config;
 
-import com.xzixi.framework.webapps.remote.controller.RemoteServiceExceptionHandler;
-import feign.Feign;
-import feign.QueryMapEncoder;
-import feign.codec.Encoder;
-import feign.form.spring.SpringFormEncoder;
-import feign.hystrix.HystrixFeign;
-import org.springframework.beans.factory.ObjectFactory;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.cloud.openfeign.support.SpringEncoder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 
 /**
  * @author xuelingkang
@@ -44,22 +31,4 @@ import org.springframework.context.annotation.Scope;
 @EnableFeignClients(basePackages = {"com.xzixi.framework.webapps.remote.service"})
 @ComponentScan(basePackages = {"com.xzixi.framework.webapps.remote.fallback"})
 public class RemoteConfig {
-
-    @Bean
-    public Encoder feignFormEncoder(ObjectFactory<HttpMessageConverters> messageConverters) {
-        return new SpringFormEncoder(new SpringEncoder(messageConverters));
-    }
-
-    @Bean
-    @Scope("prototype")
-    @ConditionalOnProperty(name = "feign.hystrix.enabled")
-    @ConditionalOnBean(QueryMapEncoder.class)
-    public Feign.Builder feignHystrixBuilder(QueryMapEncoder queryMapEncoder) {
-        return HystrixFeign.builder().queryMapEncoder(queryMapEncoder);
-    }
-
-    @Bean
-    public RemoteServiceExceptionHandler remoteServiceExceptionHandler() {
-        return new RemoteServiceExceptionHandler();
-    }
 }

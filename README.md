@@ -29,7 +29,7 @@
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>boot</artifactId>
-            <version>2.2.1</version>
+            <version>2.2.2</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -86,6 +86,13 @@
 <dependency>
     <groupId>com.xzixi.framework</groupId>
     <artifactId>webmvc</artifactId>
+</dependency>
+```
+```xml
+<!-- feign通用配置 -->
+<dependency>
+    <groupId>com.xzixi.framework</groupId>
+    <artifactId>feign</artifactId>
 </dependency>
 ```
 ```xml

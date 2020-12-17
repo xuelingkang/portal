@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.common.model.vo.sso;
+package com.xzixi.framework.webapps.sso.common.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,18 +25,18 @@ import lombok.Data;
 
 /**
  * @author xuelingkang
- * @date 2020-11-05
+ * @date 2020-11-07
  */
 @Data
-@ApiModel(description = "刷新accessToken响应")
-public class RefreshAccessTokenResponse {
-
-    @ApiModelProperty(value = "新的accessToken")
-    private String accessToken;
+@ApiModel(description = "应用检查token响应")
+public class AppCheckTokenResponse {
 
     @ApiModelProperty(value = "登录用户id")
     private Integer userId;
 
-    @ApiModelProperty(value = "新的accessToken的过期时间")
-    private Long expireTime;
+    @ApiModelProperty(value = "app站点的x-access-token失效时间")
+    private Long accessExpireTime;
+
+    @ApiModelProperty(value = "x-refresh-token失效时间")
+    private Long refreshExpireTime;
 }

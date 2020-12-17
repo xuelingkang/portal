@@ -21,7 +21,7 @@ package com.xzixi.framework.webapps.sso.server.config.security;
 
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.webapps.common.constant.ProjectConstant;
-import com.xzixi.framework.webapps.common.model.vo.sso.LoginSuccessResponse;
+import com.xzixi.framework.webapps.sso.common.model.LoginSuccessResponse;
 import com.xzixi.framework.webapps.sso.server.model.UserDetailsImpl;
 import com.xzixi.framework.webapps.sso.server.service.IAuthService;
 import com.xzixi.framework.webapps.sso.server.util.WebUtils;
