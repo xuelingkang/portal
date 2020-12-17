@@ -14,7 +14,8 @@
 | 6 | `redis` | redis配置 |
 | 7 | `cache` | 缓存配置，依赖了redis配置 |
 | 8 | `webmvc` | 常用依赖、配置 |
-| 9 | `enhance` | 使用注解驱动器实现编译期增强，配合`mybatis`、`cache`，可以自动管理缓存 |
+| 9 | `feign` | feign通用配置 |
+| 10 | `enhance` | 使用注解驱动器实现编译期增强，配合`mybatis`、`cache`，可以自动管理缓存 |
 
 - [更新日志](./UPDATELOG.md)
 
