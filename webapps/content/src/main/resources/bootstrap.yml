@@ -93,7 +93,6 @@ swagger2:
     header-name: x-access-token
 
 log:
-  root-level: INFO
   max-size: 1024MB
   max-history: 30
   charset: UTF-8

@@ -34,7 +34,6 @@ logging:
   config: classpath:logback-spring.xml
 
 log:
-  root-level: INFO
   max-size: 1024MB
   max-history: 30
   charset: UTF-8

@@ -48,12 +48,12 @@ swagger2:
   project-name: ${spring.application.name}
   project-version: @project.version@
   auth-api:
-    exclude-url-reg: ^(?!(/login|/password/encode|/password/matches)).*$
+    enable: true
+    exclude-url-reg: ^(?!(/login|/token)).*$
     param-name: Authorization
     header-name: x-access-token
 
 log:
-  root-level: INFO
   max-size: 1024MB
   max-history: 30
   charset: UTF-8

@@ -21,3 +21,4 @@ swagger2:
 
 log:
   home: /data/logs/portal/queue
+  root-level: INFO

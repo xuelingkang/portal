@@ -19,3 +19,4 @@ swagger2:
 
 log:
   home: /var/log/portal/system
+  root-level: WARN

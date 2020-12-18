@@ -19,6 +19,7 @@
 
 package com.xzixi.framework.webapps.system.controller;
 
+import com.xzixi.framework.boot.core.exception.ClientException;
 import com.xzixi.framework.boot.core.exception.ServerException;
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.boot.core.model.search.Pagination;
@@ -69,6 +70,9 @@ public class AppController {
     public Result<App> getById(
             @ApiParam(value = "应用id", required = true) @NotNull(message = "应用id不能为空！") @PathVariable Integer id) {
         App app = appService.getById(id);
+        if (app == null) {
+            throw new ClientException(404, String.format("[id=%s]应用不存在", id));
+        }
         return new Result<>(app);
     }
 
@@ -77,6 +81,9 @@ public class AppController {
     public Result<App> getByUid(
             @ApiParam(value = "应用uid", required = true) @NotBlank(message = "应用uid不能为空！") @PathVariable String uid) {
         App app = appService.getByUid(uid);
+        if (app == null) {
+            throw new ClientException(404, String.format("[uid=%s]应用不存在", uid));
+        }
         return new Result<>(app);
     }
 

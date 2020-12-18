@@ -11,11 +11,10 @@ spring:
 
 swagger2:
   enable: true
-  auth-api:
-    enable: true
 
 log:
   home: /data/logs/portal/sso
+  root-level: INFO
 
 jwt:
   secret: d6xoioir614_zkUDa3Mh4LRh$uxlgnXJ

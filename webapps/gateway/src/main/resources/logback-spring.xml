@@ -15,7 +15,7 @@
     <appender name="TRACE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件输出的文件名 -->
-            <FileNamePattern>${HOME}/trace/log-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
+            <FileNamePattern>${HOME}/trace/%d{yyyy_MM_dd}.%i.log</FileNamePattern>
             <!-- 日志文件保留天数 -->
             <MaxHistory>${MAX_HISTORY}</MaxHistory>
             <!-- 日志文件最大的大小 -->
@@ -23,7 +23,7 @@
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <charset>${CHARSET}</charset>
         </encoder>
         <!-- 日志过滤 -->
@@ -38,7 +38,7 @@
     <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件输出的文件名 -->
-            <FileNamePattern>${HOME}/debug/log-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
+            <FileNamePattern>${HOME}/debug/%d{yyyy_MM_dd}.%i.log</FileNamePattern>
             <!-- 日志文件保留天数 -->
             <MaxHistory>${MAX_HISTORY}</MaxHistory>
             <!-- 日志文件最大的大小 -->
@@ -46,7 +46,7 @@
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <charset>${CHARSET}</charset>
         </encoder>
         <!-- 日志过滤 -->
@@ -61,7 +61,7 @@
     <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件输出的文件名 -->
-            <FileNamePattern>${HOME}/info/log-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
+            <FileNamePattern>${HOME}/info/%d{yyyy_MM_dd}.%i.log</FileNamePattern>
             <!-- 日志文件保留天数 -->
             <MaxHistory>${MAX_HISTORY}</MaxHistory>
             <!-- 日志文件最大的大小 -->
@@ -69,7 +69,7 @@
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <charset>${CHARSET}</charset>
         </encoder>
         <!-- 日志过滤 -->
@@ -84,7 +84,7 @@
     <appender name="WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件输出的文件名 -->
-            <FileNamePattern>${HOME}/warn/log-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
+            <FileNamePattern>${HOME}/warn/%d{yyyy_MM_dd}.%i.log</FileNamePattern>
             <!-- 日志文件保留天数 -->
             <MaxHistory>${MAX_HISTORY}</MaxHistory>
             <!-- 日志文件最大的大小 -->
@@ -92,7 +92,7 @@
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <charset>${CHARSET}</charset>
         </encoder>
         <!-- 日志过滤 -->
@@ -107,7 +107,7 @@
     <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 日志文件输出的文件名 -->
-            <FileNamePattern>${HOME}/error/log-%d{yyyy-MM-dd_HH}.%i.log</FileNamePattern>
+            <FileNamePattern>${HOME}/error/%d{yyyy_MM_dd}.%i.log</FileNamePattern>
             <!-- 日志文件保留天数 -->
             <MaxHistory>${MAX_HISTORY}</MaxHistory>
             <!-- 日志文件最大的大小 -->
@@ -115,7 +115,7 @@
         </rollingPolicy>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
             <charset>${CHARSET}</charset>
         </encoder>
         <!-- 日志过滤 -->
@@ -141,7 +141,7 @@
         <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
             <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
                 <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
-                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
                 <charset>${CHARSET}</charset>
             </encoder>
         </appender>

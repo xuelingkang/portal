@@ -6,3 +6,4 @@ spring:
 
 log:
   home: /data/logs/portal/gateway
+  root-level: INFO

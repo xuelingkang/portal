@@ -6,3 +6,4 @@ spring:
 
 log:
   home: /var/log/portal/gateway
+  root-level: WARN

@@ -34,10 +34,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import java.util.HashMap;
@@ -63,8 +60,8 @@ public class TokenController {
     @PostMapping("/login-again")
     @ApiOperation(value = "使用已有的ssoAccessToken再次登录")
     public Result<LoginSuccessResponse> loginAgain(
-            @ApiParam(value = "ssoAccessToken", required = true) @NotBlank(message = "ssoAccessToken不能为空！") String ssoAccessToken,
-            @ApiParam(value = "应用uid", required = true) @NotBlank(message = "appUid不能为空！") String appUid) {
+            @ApiParam(value = "ssoAccessToken", required = true) @NotBlank(message = "ssoAccessToken不能为空！") @RequestParam String ssoAccessToken,
+            @ApiParam(value = "应用uid", required = true) @NotBlank(message = "appUid不能为空！") @RequestParam String appUid) {
         LoginSuccessResponse response = authService.login(ssoAccessToken, appUid);
         return new Result<>(response);
     }
@@ -72,7 +69,7 @@ public class TokenController {
     @GetMapping("/refresh-sso-access-token")
     @ApiOperation(value = "刷新ssoAccessToken")
     public Result<RefreshAccessTokenResponse> refreshSsoAccessToken(
-            @ApiParam(value = "refreshToken", required = true) @NotBlank(message = "refreshToken不能为空！") String refreshToken) {
+            @ApiParam(value = "refreshToken", required = true) @NotBlank(message = "refreshToken不能为空！") @RequestParam String refreshToken) {
         RefreshAccessTokenResponse response = authService.refreshSsoAccessToken(refreshToken);
         return new Result<>(response);
     }
@@ -80,10 +77,10 @@ public class TokenController {
     @GetMapping("/refresh-app-access-token")
     @ApiOperation(value = "刷新appAccessToken")
     public Result<RefreshAccessTokenResponse> refreshAppAccessToken(
-            @ApiParam(value = "应用uid", required = true) @NotBlank(message = "appUid不能为空！") String appUid,
-            @ApiParam(value = "refreshToken", required = true) @NotBlank(message = "refreshToken不能为空！") String refreshToken,
-            @ApiParam(value = "调用时间戳", required = true) long timestamp,
-            @ApiParam(value = "签名", required = true) @NotBlank(message = "sign不能为空") String sign) {
+            @ApiParam(value = "应用uid", required = true) @NotBlank(message = "appUid不能为空！") @RequestParam String appUid,
+            @ApiParam(value = "refreshToken", required = true) @NotBlank(message = "refreshToken不能为空！") @RequestParam String refreshToken,
+            @ApiParam(value = "调用时间戳", required = true) @RequestParam long timestamp,
+            @ApiParam(value = "签名", required = true) @NotBlank(message = "sign不能为空") @RequestParam String sign) {
         // 查询app
         App app = remoteAppService.getByUid(appUid).getData();
         // 验签
@@ -103,11 +100,11 @@ public class TokenController {
     @PostMapping("/check-app-access-token")
     @ApiOperation(value = "验证token")
     public Result<AppCheckTokenResponse> checkAppAccessToken(
-            @ApiParam(value = "应用uid", required = true) @NotBlank(message = "appUid不能为空！") String appUid,
-            @ApiParam(value = "appAccessToken", required = true) @NotBlank(message = "appAccessToken不能为空！") String appAccessToken,
-            @ApiParam(value = "refreshToken", required = true) @NotBlank(message = "refreshToken不能为空！") String refreshToken,
-            @ApiParam(value = "调用时间戳", required = true) long timestamp,
-            @ApiParam(value = "签名", required = true) @NotBlank(message = "sign不能为空") String sign) {
+            @ApiParam(value = "应用uid", required = true) @NotBlank(message = "appUid不能为空！") @RequestParam String appUid,
+            @ApiParam(value = "appAccessToken", required = true) @NotBlank(message = "appAccessToken不能为空！") @RequestParam String appAccessToken,
+            @ApiParam(value = "refreshToken", required = true) @NotBlank(message = "refreshToken不能为空！") @RequestParam String refreshToken,
+            @ApiParam(value = "调用时间戳", required = true) @RequestParam long timestamp,
+            @ApiParam(value = "签名", required = true) @NotBlank(message = "sign不能为空") @RequestParam String sign) {
         // 查询app
         App app = remoteAppService.getByUid(appUid).getData();
         // 验签

@@ -138,7 +138,7 @@ public class SsoApplicationTests {
     @Test
     public void testGetOneUser() {
         UserSearchParams userSearchParams = new UserSearchParams();
-        userSearchParams.setModel(new User().setUsername("admin1"));
+        userSearchParams.setModel(new User().setUsername("admin"));
         User user = remoteUserService.getOne(userSearchParams).getData();
         System.out.println(user);
     }

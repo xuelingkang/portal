@@ -19,3 +19,4 @@ swagger2:
 
 log:
   home: /data/logs/portal/task
+  root-level: INFO
