@@ -10,19 +10,14 @@
         <version>2.2.2</version>
     </parent>
 
-    <artifactId>sso-common</artifactId>
+    <artifactId>sso</artifactId>
+    <packaging>pom</packaging>
     <name>${project.artifactId}</name>
-    <description>sso-server和sso-client公共部分</description>
+    <description>单点登录server和client</description>
 
-    <dependencies>
-        <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-annotations</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>sso-common</module>
+        <module>sso-server</module>
+        <module>sso-client</module>
+    </modules>
 </project>
