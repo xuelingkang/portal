@@ -140,8 +140,10 @@ portal
 
 ## 启动webapp
 
-1. 在develop目录下执行命令`docker-compose up -d`
-2. webapps下除`admin`、`master`、`sso`、`gateway`外，其他项目设置VM参数：`-javaagent:/path/to/aspectjweaver/aspectjweaver-1.9.6.jar`
-3. **重要**，`enhance`模块**不要**开启idea的`Enable annotation processing`选项
-4. 使用maven package命令打包`enhance`和`starter`模块
+执行以下操作的前提是，***Linux***操作系统，已经安装了***docker***和***docker-compose***，且当前用户有***docker权限***
+
+1. ***重要***，`enhance`模块***不要***开启idea的***Enable annotation processing***选项
+2. 在develop目录下执行命令`docker-compose up -d`
+3. webapps下的`content`、`file`、`notice`、`queue`、`system`、`task`项目设置VM参数：`-javaagent:/path/to/aspectjweaver/aspectjweaver-1.9.6.jar`
+4. 使用maven package命令打包`boot`模块，`mvn clean package -Dmaven.test.skip=true`
 5. 启动项目
