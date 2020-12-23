@@ -1,4 +1,4 @@
-FROM registry.cn-zhangjiakou.aliyuncs.com/publicx/oracle-jdk:8u261
+FROM registry.cn-zhangjiakou.aliyuncs.com/publicx/oracle-jdk:8u271
 
 MAINTAINER xuelingkang
 
