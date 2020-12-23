@@ -15,7 +15,8 @@ spring:
     password: portal
 
 sftp-client:
-  host: file-server
+  host: localhost
+  port: 122
   username: portalfile
   password: portal
 

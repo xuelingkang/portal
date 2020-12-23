@@ -84,6 +84,19 @@ services:
     ports:
       - "8848:8848"
 
+  file:
+    image: registry.cn-zhangjiakou.aliyuncs.com/publicx/sshd:7.9p1
+    container_name: portal_file
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - /etc/timezone:/etc/timezone
+    environment:
+      - SSH_USER=portalfile
+      - SSH_PWD=portal
+    ports:
+      - "122:22"
+
 networks:
   default:
     name: portal_dev
