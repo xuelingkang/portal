@@ -1,4 +1,4 @@
-# 简化开发框架
+# 基于spring boot的快速开发框架
 
 `Talk is cheap. Show you my code.`
 
