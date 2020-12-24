@@ -13,7 +13,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
     ports:
-      - "3306:3306"
+      - '3306:3306'
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
 
   redis:
@@ -24,7 +24,7 @@ services:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
     ports:
-      - "6379:6379"
+      - '6379:6379'
     command: redis-server --appendonly yes --requirepass portal
 
   rabbitmq:
@@ -38,8 +38,8 @@ services:
       - RABBITMQ_DEFAULT_USER=portal
       - RABBITMQ_DEFAULT_PASS=portal
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - '5672:5672'
+      - '15672:15672'
 
   elasticsearch:
     image: elasticsearch:6.8.10
@@ -51,11 +51,11 @@ services:
       - ./elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - ./elasticsearch/plugins/ik/:/etc/elasticsearch/plugins/ik/
     environment:
-      - "ES_JAVA_OPTS=-Xms2048m -Xmx2048m"
-      - "discovery.type=single-node"
+      - 'ES_JAVA_OPTS=-Xms2048m -Xmx2048m'
+      - 'discovery.type=single-node'
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - '9200:9200'
+      - '9300:9300'
 
   kibana:
     image: kibana:6.8.10
@@ -66,9 +66,9 @@ services:
       - /etc/timezone:/etc/timezone
       - ./kibana/kibana.yml:/usr/share/kibana/config/kibana.yml
     ports:
-      - "5601:5601"
+      - '5601:5601'
     depends_on:
-      - "elasticsearch"
+      - 'elasticsearch'
 
   nacos:
     image: nacos/nacos-server:1.3.1
@@ -82,7 +82,7 @@ services:
       - PREFER_HOST_MODE=hostname
       - NACOS_AUTH_ENABLE=true
     ports:
-      - "8848:8848"
+      - '8848:8848'
 
   file:
     image: registry.cn-zhangjiakou.aliyuncs.com/publicx/sshd:7.9p1
@@ -95,7 +95,7 @@ services:
       - SSH_USER=portalfile
       - SSH_PWD=portal
     ports:
-      - "122:22"
+      - '122:22'
 
 networks:
   default:
