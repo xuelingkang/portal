@@ -1,8 +1,7 @@
 SET CHARACTER SET utf8mb4;
 CREATE DATABASE portal_system DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 USE portal_system;
-
--- MySQL dump 10.13  Distrib 8.0.22, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.21, for Linux (x86_64)
 --
 -- Host: 127.0.0.1    Database: portal_system
 -- ------------------------------------------------------
@@ -29,10 +28,10 @@ DROP TABLE IF EXISTS `t_app`;
 CREATE TABLE `t_app` (
   `id` int NOT NULL AUTO_INCREMENT,
   `uid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '应用标识',
-  `secret` varchar(64) COLLATE utf8mb4_bin NOT NULL COMMENT '密钥',
+  `secret` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '密钥',
   `name` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '' COMMENT '应用名称',
-  `login_callback_url` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '登录回调url',
-  `logout_callback_url` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL COMMENT '登出回调url',
+  `login_callback_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '登录回调url',
+  `logout_callback_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL COMMENT '登出回调url',
   `seq` int NOT NULL DEFAULT '0' COMMENT '顺序',
   PRIMARY KEY (`id`),
   UNIQUE KEY `t_app_uk_uid` (`uid`),
@@ -46,7 +45,7 @@ CREATE TABLE `t_app` (
 
 LOCK TABLES `t_app` WRITE;
 /*!40000 ALTER TABLE `t_app` DISABLE KEYS */;
-INSERT INTO `t_app` VALUES (1,'sso','bdk6wxs8r6uBN0yxXkmAi6Ej1+2EHkrgnZHp!eNbbph_wcofvIKbYYBGjHfJG5JS','单点登录',NULL,NULL,100),(2,'admin','6JD-FX!eS8%ffyKw4ynSJ8kOYhyUQW4YA894@4sztV%6spTrgFA_TA2tQ6L5SitQ','管理后台','http://admin.xzixi.com/admin/login/callback','http://admin.xzixi.com/admin/logout/callback',200),(3,'master','x1cTC6s&O8kMf6wZ%nBN1E_TfVCA9!!lx+gInK%-mczcy@MaRgnT!ojnjriA&Lsz','前台','http://www.xzixi.com/master/login/callback','http://www.xzixi.com/master/logout/callback',300);
+INSERT INTO `t_app` VALUES (1,'sso','bdk6wxs8r6uBN0yxXkmAi6Ej1+2EHkrgnZHp!eNbbph_wcofvIKbYYBGjHfJG5JS','单点登录',NULL,NULL,100),(2,'admin','6JD-FX!eS8%ffyKw4ynSJ8kOYhyUQW4YA894@4sztV%6spTrgFA_TA2tQ6L5SitQ','管理后台','http://admin.xzixi.com/login/callback','http://admin.xzixi.com/sso/logout/callback',200),(3,'master','x1cTC6s&O8kMf6wZ%nBN1E_TfVCA9!!lx+gInK%-mczcy@MaRgnT!ojnjriA&Lsz','前台','http://www.xzixi.com/login/callback','http://www.xzixi.com/sso/logout/callback',300);
 /*!40000 ALTER TABLE `t_app` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -235,4 +234,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-11-08 14:02:04
+-- Dump completed on 2021-01-05 23:31:05
