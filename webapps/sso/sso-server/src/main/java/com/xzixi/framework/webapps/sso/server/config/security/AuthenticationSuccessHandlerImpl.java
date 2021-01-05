@@ -22,6 +22,7 @@ package com.xzixi.framework.webapps.sso.server.config.security;
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.sso.common.model.LoginSuccessResponse;
+import com.xzixi.framework.webapps.sso.server.constant.SsoServerConstant;
 import com.xzixi.framework.webapps.sso.server.model.UserDetailsImpl;
 import com.xzixi.framework.webapps.sso.server.service.IAuthService;
 import com.xzixi.framework.webapps.sso.server.util.WebUtils;
@@ -50,9 +51,11 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         int userId = ((UserDetailsImpl) authentication.getPrincipal()).getUser().getId();
         // 应用uid
         String appUid = WebUtils.getParameter(request, ProjectConstant.APP_UID_NAME);
+        // 返回url
+        String returnUrl = WebUtils.getParameter(request, SsoServerConstant.RETURN_URL_NAME);
 
         // 设置登录信息
-        LoginSuccessResponse loginSuccessResponse = authService.login(userId, appUid);
+        LoginSuccessResponse loginSuccessResponse = authService.login(userId, appUid, returnUrl);
 
         // 响应
         Result<LoginSuccessResponse> result = new Result<>(200, "登录成功！", loginSuccessResponse);

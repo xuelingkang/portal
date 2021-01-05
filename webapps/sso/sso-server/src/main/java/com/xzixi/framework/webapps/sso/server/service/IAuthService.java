@@ -34,18 +34,20 @@ public interface IAuthService {
      *
      * @param userId 用户id
      * @param appUid 应用uid
+     * @param returnUrl 返回地址
      * @return sso登录响应
      */
-    LoginSuccessResponse login(int userId, String appUid);
+    LoginSuccessResponse login(int userId, String appUid, String returnUrl);
 
     /**
      * 使用ssoAccessToken登录
      *
      * @param ssoAccessToken jwtToken
      * @param appUid 应用uid
+     * @param returnUrl 返回地址
      * @return sso登录响应
      */
-    LoginSuccessResponse login(String ssoAccessToken, String appUid);
+    LoginSuccessResponse login(String ssoAccessToken, String appUid, String returnUrl);
 
     /**
      * 刷新ssoAccessToken

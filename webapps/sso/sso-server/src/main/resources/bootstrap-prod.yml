@@ -18,3 +18,6 @@ log:
 
 jwt:
   secret: U$hKEZi7dh+bSg-qHDIw6mT$T+CCMqWt
+
+sso:
+  login-page-template: http://localhost:3000/login.html?appUid=%s&returnUrl=%s
