@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.xzixi.framework.webapps.sso.client.config.SsoClientConfig
+  com.xzixi.framework.webapps.sso.client.config.SsoClientConfig,\
+  com.xzixi.framework.webapps.sso.client.config.WebSecurityConfig

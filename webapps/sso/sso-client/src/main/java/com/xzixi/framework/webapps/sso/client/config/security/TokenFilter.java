@@ -1,7 +1,7 @@
 /*
  * The spring-based xzixi framework simplifies development.
  *
- * Copyright (C) 2020  xuelingkang@163.com.
+ * Copyright (C) 2021  xuelingkang@163.com.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,25 +17,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.sso.client.config;
+package com.xzixi.framework.webapps.sso.client.config.security;
 
-import com.xzixi.framework.webapps.sso.client.controller.SsoController;
-import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * @author xuelingkang
- * @date 2020-12-14
+ * @date 2021-01-05
  */
-@Configuration
-@EnableFeignClients(basePackages = {"com.xzixi.framework.webapps.sso.client.service"})
-@ComponentScan(basePackages = {"com.xzixi.framework.webapps.sso.client.fallback"})
-public class SsoClientConfig {
+@Component
+public class TokenFilter extends OncePerRequestFilter {
 
-    @Bean
-    public SsoController ssoController() {
-        return new SsoController();
+    @Override
+    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
     }
 }

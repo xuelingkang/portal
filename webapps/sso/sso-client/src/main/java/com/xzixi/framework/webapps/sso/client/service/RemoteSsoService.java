@@ -34,6 +34,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(value = "portal-sso-server", contextId = "sso-server")
 public interface RemoteSsoService {
 
+    @GetMapping("/token/get-login-page-url")
+    Result<String> getLoginPageUrl(@RequestParam("appUid") String appUid, @RequestParam("returnUrl") String returnUrl);
+
     @GetMapping("/token/refresh-app-access-token")
     Result<RefreshAccessTokenResponse> refreshAppAccessToken(@RequestParam("appUid") String appUid,
                                                              @RequestParam("refreshToken") String refreshToken,
