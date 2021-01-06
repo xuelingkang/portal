@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.sso.server.util;
+package com.xzixi.framework.webapps.sso.common.util;
 
 import com.alibaba.fastjson.JSON;
 import com.xzixi.framework.boot.core.exception.ProjectException;

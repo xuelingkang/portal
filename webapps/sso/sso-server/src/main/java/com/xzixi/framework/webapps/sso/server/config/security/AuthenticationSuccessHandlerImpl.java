@@ -22,10 +22,10 @@ package com.xzixi.framework.webapps.sso.server.config.security;
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.sso.common.model.LoginSuccessResponse;
-import com.xzixi.framework.webapps.sso.server.constant.SsoServerConstant;
-import com.xzixi.framework.webapps.sso.server.model.UserDetailsImpl;
+import com.xzixi.framework.webapps.sso.common.constant.SsoConstant;
+import com.xzixi.framework.webapps.sso.common.model.UserDetailsImpl;
 import com.xzixi.framework.webapps.sso.server.service.IAuthService;
-import com.xzixi.framework.webapps.sso.server.util.WebUtils;
+import com.xzixi.framework.webapps.sso.common.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -52,7 +52,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         // 应用uid
         String appUid = WebUtils.getParameter(request, ProjectConstant.APP_UID_NAME);
         // 返回url
-        String returnUrl = WebUtils.getParameter(request, SsoServerConstant.RETURN_URL_NAME);
+        String returnUrl = WebUtils.getParameter(request, SsoConstant.RETURN_URL_NAME);
 
         // 设置登录信息
         LoginSuccessResponse loginSuccessResponse = authService.login(userId, appUid, returnUrl);

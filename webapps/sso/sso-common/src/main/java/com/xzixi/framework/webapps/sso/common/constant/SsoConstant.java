@@ -17,22 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.sso.server.model;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+package com.xzixi.framework.webapps.sso.common.constant;
 
 /**
  * @author xuelingkang
- * @date 2020-11-05
+ * @date 2020-12-01
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class AppAccessTokenValue {
+public interface SsoConstant {
 
-    private Integer userId;
-
-    private String refreshToken;
+    String ACCESS_TOKEN_NAME = "accessToken";
+    String ACCESS_TOKEN_HEADER_NAME = "x-access-token";
+    String REFRESH_TOKEN_NAME = "refreshToken";
+    String RETURN_URL_NAME = "returnUrl";
 }

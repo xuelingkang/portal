@@ -24,7 +24,7 @@ import com.xzixi.framework.webapps.common.model.params.UserSearchParams;
 import com.xzixi.framework.webapps.common.model.po.User;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
 import com.xzixi.framework.webapps.remote.service.RemoteUserService;
-import com.xzixi.framework.webapps.sso.server.model.UserDetailsImpl;
+import com.xzixi.framework.webapps.sso.common.model.UserDetailsImpl;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
