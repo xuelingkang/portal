@@ -85,13 +85,13 @@ public class TokenFilter extends OncePerRequestFilter {
                 UserDetails userDetails = new UserDetailsImpl(userVO);
                 if (!userDetails.isEnabled()) {
                     logout(accessTokenValue.getRefreshToken());
-                    Result<?> result = new Result<>(HttpStatus.UNAUTHORIZED.value(), 0, "账户未激活！");
+                    Result<?> result = new Result<>(HttpStatus.UNAUTHORIZED.value(), 2, "账户未激活！");
                     WebUtils.printJson(response, result);
                     return;
                 }
                 if (!userDetails.isAccountNonLocked()) {
                     logout(accessTokenValue.getRefreshToken());
-                    Result<?> result = new Result<>(HttpStatus.UNAUTHORIZED.value(), 0, "账户已被锁定！");
+                    Result<?> result = new Result<>(HttpStatus.UNAUTHORIZED.value(), 2, "账户已被锁定！");
                     WebUtils.printJson(response, result);
                     return;
                 }
