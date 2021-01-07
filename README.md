@@ -51,8 +51,6 @@ portal
         └── sso-client ·························· 单点登录client，通用接口和feign接口
 ```
 
-- [更新日志](./UPDATELOG.md)
-
 ## 使用方式
 
 ### 导入依赖管理
@@ -137,6 +135,93 @@ portal
     <scope>provided</scope>
 </dependency>
 ```
+
+## 更新日志
+
+<details>
+<summary>2020.12.15 v2.2.2</summary>
+
+- 增加转换@SpringQueryMap参数的工具
+- 全局异常拦截的顺序调整到最低
+- 修复调用远程接口异常拦截
+- 增加RedisScanService
+- 全局异常拦截增加IllegalArgumentException
+- 优化Md5SignServiceImpl
+- 增加feign通用配置模块
+
+</details>
+
+<details>
+<summary>2020.11.18 v2.2.1</summary>
+
+- 优化enhance模块生成的listByIds方法
+- enhance模块追加方法和属性时增加检查，防止重复定义
+
+</details>
+
+<details>
+<summary>2020.11.17 v2.2.0</summary>
+
+- 新增RedisPipelineService
+- 优化CacheEnhanceProcessor生成的listByIds方法
+- 简化@CacheEnhance注解，去掉baseCacheName和casualCacheName
+- 将@EnableXXX注解替换为autoconfigure
+- 修复自定义Annotation Processor导致编译报错的问题
+
+</details>
+
+<details>
+<summary>2020.11.08 v2.1.2</summary>
+
+- 优化依赖管理
+
+</details>
+
+<details>
+<summary>2020.11.08 v2.1.1</summary>
+
+- 修正maven依赖bug
+- 全局异常拦截修正
+- 将mybatis、elasticsearch、redis、cache从webmvc模块中拆分出来
+- redis实现可重入分布式锁
+
+</details>
+
+<details>
+<summary>2020.11.02 v2.1.0</summary>
+
+- 代码生成器增加默认模板配置
+- 代码生成器跨项目生成代码
+- 公共全局异常拦截
+- swagger2启动器优化
+- 增加RemoteException，调用远程接口异常
+- 增加签名工具
+
+</details>
+
+<details>
+<summary>2020.10.12 v2.0.0</summary>
+
+- 修改maven坐标和包名
+
+</details>
+
+<details>
+<summary>2020.10.11 v1.0.1</summary>
+
+- 修正发布配置
+
+</details>
+
+<details>
+<summary>2020.10.10 v1.0.0</summary>
+
+- 发布第一个版本
+- 编译期增强模块
+- sftp和swagger2扩展和springboot启动器
+- 常用web组件整合，可以通过@EnableXXX注解快速配置
+
+</details>
 
 ## 启动webapp
 
