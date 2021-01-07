@@ -139,6 +139,13 @@ portal
 ## 更新日志
 
 <details>
+<summary>current</summary>
+
+- 替换httpclient，解决java.net.HttpURLConnection不支持PATCH请求的问题
+
+</details>
+
+<details>
 <summary>2020.12.15 v2.2.2</summary>
 
 - 增加转换@SpringQueryMap参数的工具
