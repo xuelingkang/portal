@@ -20,13 +20,8 @@
 package com.xzixi.framework.webapps.sso.client.config.security;
 
 import com.xzixi.framework.boot.core.model.Result;
-import com.xzixi.framework.boot.webmvc.service.ISignService;
-import com.xzixi.framework.webapps.common.constant.ProjectConstant;
-import com.xzixi.framework.webapps.common.model.po.App;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
-import com.xzixi.framework.webapps.remote.service.RemoteAppService;
 import com.xzixi.framework.webapps.remote.service.RemoteUserService;
-import com.xzixi.framework.webapps.sso.client.service.RemoteSsoService;
 import com.xzixi.framework.webapps.sso.common.constant.SsoConstant;
 import com.xzixi.framework.webapps.sso.common.constant.TokenConstant;
 import com.xzixi.framework.webapps.sso.common.constant.UnAuthSubCode;
@@ -34,7 +29,6 @@ import com.xzixi.framework.webapps.sso.common.model.AppAccessTokenValue;
 import com.xzixi.framework.webapps.sso.common.model.UserDetailsImpl;
 import com.xzixi.framework.webapps.sso.common.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -48,8 +42,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author xuelingkang
@@ -58,18 +50,12 @@ import java.util.Map;
 @Component
 public class TokenFilter extends OncePerRequestFilter {
 
-    @Value("${app-uid}")
-    private String appUid;
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
     private RemoteUserService remoteUserService;
     @Autowired
-    private RemoteAppService remoteAppService;
-    @Autowired
-    private RemoteSsoService remoteSsoService;
-    @Autowired
-    private ISignService signService;
+    private LogoutService logoutService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -85,13 +71,13 @@ public class TokenFilter extends OncePerRequestFilter {
             if (userVO != null) {
                 UserDetails userDetails = new UserDetailsImpl(userVO);
                 if (!userDetails.isEnabled()) {
-                    logout(accessTokenValue.getRefreshToken());
+                    logoutService.logout(accessTokenValue.getRefreshToken());
                     Result<?> result = new Result<>(HttpStatus.UNAUTHORIZED.value(), UnAuthSubCode.INACTIVATED);
                     WebUtils.printJson(response, result);
                     return;
                 }
                 if (!userDetails.isAccountNonLocked()) {
-                    logout(accessTokenValue.getRefreshToken());
+                    logoutService.logout(accessTokenValue.getRefreshToken());
                     Result<?> result = new Result<>(HttpStatus.UNAUTHORIZED.value(), UnAuthSubCode.LOCKED);
                     WebUtils.printJson(response, result);
                     return;
@@ -102,16 +88,5 @@ public class TokenFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
-    }
-
-    private void logout(String refreshToken) {
-        App app = remoteAppService.getByUid(appUid).getData();
-        long timestamp = System.currentTimeMillis();
-        Map<String, Object> params = new HashMap<>();
-        params.put(ProjectConstant.APP_UID_NAME, appUid);
-        params.put(SsoConstant.REFRESH_TOKEN_NAME, refreshToken);
-        params.put(ProjectConstant.TIMESTAMP_NAME, timestamp);
-        String sign = signService.genSign(params, app.getSecret());
-        remoteSsoService.logout(appUid, refreshToken, timestamp, sign);
     }
 }

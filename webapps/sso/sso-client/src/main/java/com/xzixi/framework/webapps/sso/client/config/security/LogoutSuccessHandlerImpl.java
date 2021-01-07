@@ -19,16 +19,21 @@
 
 package com.xzixi.framework.webapps.sso.client.config.security;
 
-import com.xzixi.framework.webapps.sso.client.service.RemoteSsoService;
+import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.webapps.sso.common.constant.SsoConstant;
+import com.xzixi.framework.webapps.sso.common.constant.TokenConstant;
+import com.xzixi.framework.webapps.sso.common.constant.UnAuthSubCode;
+import com.xzixi.framework.webapps.sso.common.model.AppAccessTokenValue;
+import com.xzixi.framework.webapps.sso.common.util.WebUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * @author xuelingkang
@@ -38,9 +43,24 @@ import java.io.IOException;
 public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
     @Autowired
-    private RemoteSsoService remoteSsoService;
+    private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private LogoutService logoutService;
 
     @Override
-    public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
+    public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        // 获取请求头或请求参数上的accessToken
+        String accessToken = WebUtils.getHeaderOrParameter(request, SsoConstant.ACCESS_TOKEN_HEADER_NAME, SsoConstant.ACCESS_TOKEN_NAME);
+        // redis key
+        String key = String.format(TokenConstant.APP_ACCESS_TOKEN_KEY_TEMPLATE, accessToken);
+        // 查询redis
+        AppAccessTokenValue accessTokenValue = (AppAccessTokenValue) redisTemplate.boundValueOps(key).get();
+        if (accessTokenValue == null) {
+            Result<?> result = new Result<>(HttpStatus.UNAUTHORIZED.value(), UnAuthSubCode.ACCESS_EXPIRE);
+            WebUtils.printJson(response, result);
+            return;
+        }
+        // 登出
+        logoutService.logout(accessTokenValue.getRefreshToken());
     }
 }

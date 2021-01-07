@@ -19,8 +19,9 @@
 
 package com.xzixi.framework.webapps.sso.server.config.security;
 
-import com.xzixi.framework.webapps.sso.common.util.WebUtils;
 import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.webapps.sso.common.util.WebUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -38,7 +39,7 @@ public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException exception) {
-        Result<?> result = new Result<>(403, exception.getMessage(), null);
+        Result<?> result = new Result<>(HttpStatus.FORBIDDEN.value(), exception.getMessage(), null);
         WebUtils.printJson(response, result);
     }
 }

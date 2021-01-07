@@ -21,6 +21,7 @@ package com.xzixi.framework.webapps.sso.server.config.security;
 
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.webapps.sso.common.util.WebUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -38,7 +39,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) {
-        Result<?> result = new Result<>(401, exception.getMessage(), null);
+        Result<?> result = new Result<>(HttpStatus.UNAUTHORIZED.value(), exception.getMessage(), null);
         WebUtils.printJson(response, result);
     }
 }

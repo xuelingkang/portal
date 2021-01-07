@@ -19,9 +19,10 @@
 
 package com.xzixi.framework.webapps.sso.server.config.security;
 
+import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.webapps.sso.common.constant.UnAuthSubCode;
 import com.xzixi.framework.webapps.sso.common.util.WebUtils;
-import com.xzixi.framework.boot.core.model.Result;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.LockedException;
@@ -58,7 +59,7 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
             message = "登录失败！";
             subCode = UnAuthSubCode.DEFAULT;
         }
-        Result<?> result = new Result<>(401, subCode, message);
+        Result<?> result = new Result<>(HttpStatus.UNAUTHORIZED.value(), subCode, message);
         WebUtils.printJson(response, result);
     }
 }

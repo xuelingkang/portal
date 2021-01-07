@@ -21,12 +21,13 @@ package com.xzixi.framework.webapps.sso.server.config.security;
 
 import com.xzixi.framework.boot.core.model.Result;
 import com.xzixi.framework.webapps.common.constant.ProjectConstant;
-import com.xzixi.framework.webapps.sso.common.model.LoginSuccessResponse;
 import com.xzixi.framework.webapps.sso.common.constant.SsoConstant;
+import com.xzixi.framework.webapps.sso.common.model.LoginSuccessResponse;
 import com.xzixi.framework.webapps.sso.common.model.UserDetailsImpl;
-import com.xzixi.framework.webapps.sso.server.service.IAuthService;
 import com.xzixi.framework.webapps.sso.common.util.WebUtils;
+import com.xzixi.framework.webapps.sso.server.service.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -58,7 +59,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         LoginSuccessResponse loginSuccessResponse = authService.login(userId, appUid, returnUrl);
 
         // 响应
-        Result<LoginSuccessResponse> result = new Result<>(200, "登录成功！", loginSuccessResponse);
+        Result<LoginSuccessResponse> result = new Result<>(HttpStatus.OK.value(), "登录成功！", loginSuccessResponse);
         WebUtils.printJson(response, result);
     }
 }

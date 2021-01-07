@@ -29,6 +29,7 @@ import com.xzixi.framework.webapps.sso.server.service.IAuthService;
 import com.xzixi.framework.webapps.sso.common.util.WebUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -79,7 +80,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
 
         // 验证签名
         if (!signService.check(params, sign, secret)) {
-            Result<?> result = new Result<>(403, "没有权限！", null);
+            Result<?> result = new Result<>(HttpStatus.FORBIDDEN.value(), "没有权限！", null);
             WebUtils.printJson(response, result);
             return;
         }
@@ -87,7 +88,7 @@ public class LogoutSuccessHandlerImpl implements LogoutSuccessHandler {
         // 执行单点登出
         authService.logout(refreshToken);
 
-        Result<?> result = new Result<>(200, "退出成功！", null);
+        Result<?> result = new Result<>(HttpStatus.OK.value(), "退出成功！", null);
         WebUtils.printJson(response, result);
     }
 }
