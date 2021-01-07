@@ -1,7 +1,7 @@
 /*
  * The spring-based xzixi framework simplifies development.
  *
- * Copyright (C) 2020  xuelingkang@163.com.
+ * Copyright (C) 2021  xuelingkang@163.com.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,19 +17,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.sso.server.model;
+package com.xzixi.framework.webapps.sso.common.model;
 
 import com.xzixi.framework.webapps.common.model.po.Authority;
 import com.xzixi.framework.webapps.common.model.vo.UserVO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author 薛凌康
@@ -39,14 +39,11 @@ import java.util.HashSet;
 public class UserDetailsImpl implements UserDetails {
 
     private UserVO user;
+    private Set<SimpleGrantedAuthority> authorities;
 
     public UserDetailsImpl(UserVO user) {
         this.user = user;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Collection<SimpleGrantedAuthority> authorities = new HashSet<>();
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         if (user != null) {
             Collection<Authority> authorityCollection = user.getAuthorities();
             if (CollectionUtils.isNotEmpty(authorityCollection)) {
@@ -54,7 +51,7 @@ public class UserDetailsImpl implements UserDetails {
                         authorities.add(new SimpleGrantedAuthority(String.valueOf(authority.getId()))));
             }
         }
-        return authorities;
+        this.authorities = authorities;
     }
 
     @Override

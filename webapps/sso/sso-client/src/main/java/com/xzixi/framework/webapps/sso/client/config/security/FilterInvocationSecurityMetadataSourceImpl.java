@@ -1,7 +1,7 @@
 /*
  * The spring-based xzixi framework simplifies development.
  *
- * Copyright (C) 2020  xuelingkang@163.com.
+ * Copyright (C) 2021  xuelingkang@163.com.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,28 +17,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.sso.server.config.security;
+package com.xzixi.framework.webapps.sso.client.config.security;
 
-import com.xzixi.framework.boot.core.model.Result;
-import com.xzixi.framework.webapps.sso.common.util.WebUtils;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.Collection;
 
 /**
- * 认证异常
- *
- * @author 薛凌康
+ * @author xuelingkang
+ * @date 2021-01-06
  */
 @Component
-public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
+public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocationSecurityMetadataSource {
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) {
-        Result<?> result = new Result<>(401, exception.getMessage(), null);
-        WebUtils.printJson(response, result);
+    public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
+        return null;
+    }
+
+    @Override
+    public Collection<ConfigAttribute> getAllConfigAttributes() {
+        return null;
+    }
+
+    @Override
+    public boolean supports(Class<?> aClass) {
+        return false;
     }
 }

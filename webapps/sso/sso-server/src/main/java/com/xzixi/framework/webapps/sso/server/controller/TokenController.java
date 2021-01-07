@@ -33,6 +33,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +51,8 @@ import java.util.Map;
 @Validated
 public class TokenController {
 
+    @Value("${sso.login-page-template}")
+    private String loginPageTemplate;
     @Autowired
     private IAuthService authService;
     @Autowired
@@ -57,12 +60,22 @@ public class TokenController {
     @Autowired
     private ISignService signService;
 
+    @GetMapping("/get-login-page-url")
+    @ApiOperation(value = "获取登录页面地址")
+    public Result<String> getLoginPageUrl(
+            @ApiParam(value = "应用uid", required = true) @NotBlank(message = "appUid不能为空！") @RequestParam String appUid,
+            @ApiParam(value = "返回url") @RequestParam(required = false, defaultValue = "") String returnUrl) {
+        String loginPageUrl = String.format(loginPageTemplate, appUid, returnUrl);
+        return new Result<>(loginPageUrl);
+    }
+
     @PostMapping("/login-again")
     @ApiOperation(value = "使用已有的ssoAccessToken再次登录")
     public Result<LoginSuccessResponse> loginAgain(
             @ApiParam(value = "ssoAccessToken", required = true) @NotBlank(message = "ssoAccessToken不能为空！") @RequestParam String ssoAccessToken,
-            @ApiParam(value = "应用uid", required = true) @NotBlank(message = "appUid不能为空！") @RequestParam String appUid) {
-        LoginSuccessResponse response = authService.login(ssoAccessToken, appUid);
+            @ApiParam(value = "应用uid", required = true) @NotBlank(message = "appUid不能为空！") @RequestParam String appUid,
+            @ApiParam(value = "返回url") @RequestParam(required = false) String returnUrl) {
+        LoginSuccessResponse response = authService.login(ssoAccessToken, appUid, returnUrl);
         return new Result<>(response);
     }
 

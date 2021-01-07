@@ -17,25 +17,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.sso.client.config;
-
-import com.xzixi.framework.webapps.sso.client.controller.SsoController;
-import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+package com.xzixi.framework.webapps.sso.common.constant;
 
 /**
  * @author xuelingkang
- * @date 2020-12-14
+ * @date 2020-12-01
  */
-@Configuration
-@EnableFeignClients(basePackages = {"com.xzixi.framework.webapps.sso.client.service"})
-@ComponentScan(basePackages = {"com.xzixi.framework.webapps.sso.client.fallback"})
-public class SsoClientConfig {
+public interface SsoConstant {
 
-    @Bean
-    public SsoController ssoController() {
-        return new SsoController();
-    }
+    String ACCESS_TOKEN_NAME = "accessToken";
+    String ACCESS_TOKEN_HEADER_NAME = "x-access-token";
+    String REFRESH_TOKEN_NAME = "refreshToken";
+    String RETURN_URL_NAME = "returnUrl";
 }

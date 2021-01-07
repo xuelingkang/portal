@@ -21,11 +21,32 @@
         </dependency>
         <dependency>
             <groupId>com.xzixi.framework</groupId>
+            <artifactId>webmvc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
+            <artifactId>redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
             <artifactId>sso-common</artifactId>
         </dependency>
         <dependency>
             <groupId>com.xzixi.framework</groupId>
             <artifactId>feign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xzixi.framework</groupId>
+            <artifactId>remote</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
     </dependencies>
 </project>

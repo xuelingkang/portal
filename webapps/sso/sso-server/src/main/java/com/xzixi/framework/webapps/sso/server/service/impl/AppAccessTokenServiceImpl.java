@@ -21,7 +21,7 @@ package com.xzixi.framework.webapps.sso.server.service.impl;
 
 import com.xzixi.framework.webapps.sso.common.constant.TokenConstant;
 import com.xzixi.framework.webapps.sso.server.model.AppAccessTokenMountValue;
-import com.xzixi.framework.webapps.sso.server.model.AppAccessTokenValue;
+import com.xzixi.framework.webapps.sso.common.model.AppAccessTokenValue;
 import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
 import com.xzixi.framework.webapps.sso.server.service.IAppAccessTokenService;
 import org.springframework.stereotype.Service;

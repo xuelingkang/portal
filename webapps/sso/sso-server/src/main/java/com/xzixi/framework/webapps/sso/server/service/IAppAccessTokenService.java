@@ -20,7 +20,7 @@
 package com.xzixi.framework.webapps.sso.server.service;
 
 import com.xzixi.framework.webapps.sso.server.model.AppAccessTokenMountValue;
-import com.xzixi.framework.webapps.sso.server.model.AppAccessTokenValue;
+import com.xzixi.framework.webapps.sso.common.model.AppAccessTokenValue;
 import com.xzixi.framework.webapps.sso.server.model.TokenInfo;
 
 /**

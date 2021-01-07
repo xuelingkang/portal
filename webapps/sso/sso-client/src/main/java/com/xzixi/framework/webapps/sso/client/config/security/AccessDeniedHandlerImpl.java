@@ -1,7 +1,7 @@
 /*
  * The spring-based xzixi framework simplifies development.
  *
- * Copyright (C) 2020  xuelingkang@163.com.
+ * Copyright (C) 2021  xuelingkang@163.com.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,15 +17,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.sso.server.constant;
+package com.xzixi.framework.webapps.sso.client.config.security;
+
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * @author xuelingkang
- * @date 2020-12-01
+ * @date 2021-01-06
  */
-public interface SsoServerConstant {
+@Component
+public class AccessDeniedHandlerImpl implements AccessDeniedHandler {
 
-    String APP_UID = "sso";
-    String ACCESS_TOKEN_NAME = "accessToken";
-    String REFRESH_TOKEN_NAME = "refreshToken";
+    @Override
+    public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException, ServletException {
+    }
 }

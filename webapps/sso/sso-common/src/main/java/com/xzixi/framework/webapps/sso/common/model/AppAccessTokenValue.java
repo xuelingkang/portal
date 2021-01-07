@@ -17,25 +17,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.xzixi.framework.webapps.sso.client.config;
+package com.xzixi.framework.webapps.sso.common.model;
 
-import com.xzixi.framework.webapps.sso.client.controller.SsoController;
-import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author xuelingkang
- * @date 2020-12-14
+ * @date 2020-11-05
  */
-@Configuration
-@EnableFeignClients(basePackages = {"com.xzixi.framework.webapps.sso.client.service"})
-@ComponentScan(basePackages = {"com.xzixi.framework.webapps.sso.client.fallback"})
-public class SsoClientConfig {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AppAccessTokenValue {
 
-    @Bean
-    public SsoController ssoController() {
-        return new SsoController();
-    }
+    private Integer userId;
+
+    private String refreshToken;
 }

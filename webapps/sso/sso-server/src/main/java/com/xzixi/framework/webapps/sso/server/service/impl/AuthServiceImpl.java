@@ -27,12 +27,13 @@ import com.xzixi.framework.boot.redis.service.impl.RedisScanService;
 import com.xzixi.framework.boot.webmvc.service.ISignService;
 import com.xzixi.framework.webapps.common.constant.ProjectConstant;
 import com.xzixi.framework.webapps.common.model.po.App;
+import com.xzixi.framework.webapps.sso.common.model.AppAccessTokenValue;
 import com.xzixi.framework.webapps.sso.common.model.AppCheckTokenResponse;
 import com.xzixi.framework.webapps.sso.common.model.RefreshAccessTokenResponse;
 import com.xzixi.framework.webapps.sso.common.model.LoginSuccessResponse;
 import com.xzixi.framework.webapps.remote.service.RemoteAppService;
 import com.xzixi.framework.webapps.remote.service.RemoteUserService;
-import com.xzixi.framework.webapps.sso.server.constant.SsoServerConstant;
+import com.xzixi.framework.webapps.sso.common.constant.SsoConstant;
 import com.xzixi.framework.webapps.sso.common.constant.TokenConstant;
 import com.xzixi.framework.webapps.sso.server.exception.AccessTokenExpireException;
 import com.xzixi.framework.webapps.sso.server.exception.AuthException;
@@ -45,6 +46,7 @@ import com.xzixi.framework.webapps.sso.server.service.ISsoAccessTokenService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -68,7 +70,10 @@ public class AuthServiceImpl implements IAuthService {
     private static final String LOCK_PREFIX = "lock::authentication::";
     private static final String MOUNT_KEY_TEMPLATE = "token::refresh::%s::";
     private static final String MOUNT_KEY_SSO_TEMPLATE = MOUNT_KEY_TEMPLATE + "sso::";
+    private static final String REDIRECT_URL_TEMPLATE = "%s?" + SsoConstant.ACCESS_TOKEN_NAME + "=%s&" + SsoConstant.REFRESH_TOKEN_NAME + "=%s&" + SsoConstant.RETURN_URL_NAME + "=%s";
 
+    @Value("${app-uid:sso}")
+    private String appUid;
     @Autowired
     private IRefreshTokenService refreshTokenService;
     @Autowired
@@ -87,7 +92,7 @@ public class AuthServiceImpl implements IAuthService {
     private ISignService signService;
 
     @Override
-    public LoginSuccessResponse login(int userId, String appUid) {
+    public LoginSuccessResponse login(int userId, String appUid, String returnUrl) {
         // 查询应用信息
         App app = remoteAppService.getByUid(appUid).getData();
 
@@ -116,8 +121,8 @@ public class AuthServiceImpl implements IAuthService {
         response.setLoginTime(now);
         response.setAccessExpireTime(now + TokenConstant.SSO_ACCESS_TOKEN_EXPIRE_MINUTE * 60 * 1000);
         response.setRefreshExpireTime(now + TokenConstant.REFRESH_TOKEN_EXPIRE_MINUTE * 60 * 1000);
-        String redirectUrl = String.format("%s?accessToken=%s&refreshToken=%s",
-                app.getLoginCallbackUrl(), appAccessToken, refreshToken);
+        String redirectUrl = String.format(REDIRECT_URL_TEMPLATE,
+                app.getLoginCallbackUrl(), appAccessToken, refreshToken, returnUrl);
         response.setRedirectUrl(redirectUrl);
 
         // 刷新登录时间
@@ -127,7 +132,7 @@ public class AuthServiceImpl implements IAuthService {
     }
 
     @Override
-    public LoginSuccessResponse login(String ssoAccessToken, String appUid) {
+    public LoginSuccessResponse login(String ssoAccessToken, String appUid, String returnUrl) {
         // 获取ssoAccessToken保存的信息
         String ssoAccessTokenUuid = ssoAccessTokenService.decodeJwtToken(ssoAccessToken);
         SsoAccessTokenValue ssoAccessTokenValue = ssoAccessTokenService.getTokenValue(ssoAccessTokenUuid);
@@ -162,8 +167,8 @@ public class AuthServiceImpl implements IAuthService {
             response.setSsoAccessToken(ssoAccessToken);
             response.setAppAccessToken(appAccessToken);
             response.setRefreshToken(refreshToken);
-            String redirectUrl = String.format("%s?accessToken=%s&refreshToken=%s",
-                    app.getLoginCallbackUrl(), appAccessToken, refreshToken);
+            String redirectUrl = String.format(REDIRECT_URL_TEMPLATE,
+                    app.getLoginCallbackUrl(), appAccessToken, refreshToken, returnUrl);
             response.setRedirectUrl(redirectUrl);
 
             return response;
@@ -339,7 +344,7 @@ public class AuthServiceImpl implements IAuthService {
      */
     private void logoutApps(List<String> keys, String refreshTokenUuid) {
         // 查询sso应用信息
-        App ssoServer = remoteAppService.getByUid(SsoServerConstant.APP_UID).getData();
+        App ssoServer = remoteAppService.getByUid(this.appUid).getData();
 
         for (String key : keys) {
             if (key.startsWith(String.format(MOUNT_KEY_SSO_TEMPLATE, refreshTokenUuid))) {
@@ -363,8 +368,8 @@ public class AuthServiceImpl implements IAuthService {
             // 构造签名和参数
             long now = System.currentTimeMillis();
             Map<String, Object> params = new HashMap<>();
-            params.put(SsoServerConstant.ACCESS_TOKEN_NAME, appAccessToken);
-            params.put(ProjectConstant.APP_UID_NAME, SsoServerConstant.APP_UID);
+            params.put(SsoConstant.ACCESS_TOKEN_NAME, appAccessToken);
+            params.put(ProjectConstant.APP_UID_NAME, this.appUid);
             params.put(ISignService.TIMESTAMP_NAME, now);
             String sign = signService.genSign(params, ssoServer.getSecret());
 

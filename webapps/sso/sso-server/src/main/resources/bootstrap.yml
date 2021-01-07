@@ -53,6 +53,8 @@ swagger2:
     param-name: Authorization
     header-name: x-access-token
 
+app-uid: sso
+
 log:
   max-size: 1024MB
   max-history: 30
