@@ -20,6 +20,7 @@
 package com.xzixi.framework.webapps.sso.server.controller;
 
 import com.xzixi.framework.boot.core.model.Result;
+import com.xzixi.framework.webapps.sso.common.constant.UnAuthSubCode;
 import com.xzixi.framework.webapps.sso.server.exception.AccessTokenExpireException;
 import com.xzixi.framework.webapps.sso.server.exception.AuthException;
 import com.xzixi.framework.webapps.sso.server.exception.RefreshTokenExpireException;
@@ -43,7 +44,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(AccessTokenExpireException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public Result<?> handleAccessTokenExpireException() {
-        return new Result<>(HttpStatus.UNAUTHORIZED.value(), 1);
+        return new Result<>(HttpStatus.UNAUTHORIZED.value(), UnAuthSubCode.ACCESS_EXPIRE);
     }
 
     /**
@@ -54,6 +55,6 @@ public class ControllerExceptionHandler {
     @ExceptionHandler({RefreshTokenExpireException.class, AuthException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public Result<?> handleRefreshTokenExpireException() {
-        return new Result<>(HttpStatus.UNAUTHORIZED.value(), 0);
+        return new Result<>(HttpStatus.UNAUTHORIZED.value(), UnAuthSubCode.DEFAULT);
     }
 }

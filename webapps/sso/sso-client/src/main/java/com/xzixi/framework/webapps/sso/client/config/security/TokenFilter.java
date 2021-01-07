@@ -29,6 +29,7 @@ import com.xzixi.framework.webapps.remote.service.RemoteUserService;
 import com.xzixi.framework.webapps.sso.client.service.RemoteSsoService;
 import com.xzixi.framework.webapps.sso.common.constant.SsoConstant;
 import com.xzixi.framework.webapps.sso.common.constant.TokenConstant;
+import com.xzixi.framework.webapps.sso.common.constant.UnAuthSubCode;
 import com.xzixi.framework.webapps.sso.common.model.AppAccessTokenValue;
 import com.xzixi.framework.webapps.sso.common.model.UserDetailsImpl;
 import com.xzixi.framework.webapps.sso.common.util.WebUtils;
@@ -85,13 +86,13 @@ public class TokenFilter extends OncePerRequestFilter {
                 UserDetails userDetails = new UserDetailsImpl(userVO);
                 if (!userDetails.isEnabled()) {
                     logout(accessTokenValue.getRefreshToken());
-                    Result<?> result = new Result<>(HttpStatus.UNAUTHORIZED.value(), 2, "账户未激活！");
+                    Result<?> result = new Result<>(HttpStatus.UNAUTHORIZED.value(), UnAuthSubCode.INACTIVATED);
                     WebUtils.printJson(response, result);
                     return;
                 }
                 if (!userDetails.isAccountNonLocked()) {
                     logout(accessTokenValue.getRefreshToken());
-                    Result<?> result = new Result<>(HttpStatus.UNAUTHORIZED.value(), 2, "账户已被锁定！");
+                    Result<?> result = new Result<>(HttpStatus.UNAUTHORIZED.value(), UnAuthSubCode.LOCKED);
                     WebUtils.printJson(response, result);
                     return;
                 }
