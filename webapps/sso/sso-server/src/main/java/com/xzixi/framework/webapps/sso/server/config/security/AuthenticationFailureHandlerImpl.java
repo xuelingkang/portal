@@ -19,10 +19,12 @@
 
 package com.xzixi.framework.webapps.sso.server.config.security;
 
+import com.xzixi.framework.webapps.sso.common.constant.UnAuthSubCode;
 import com.xzixi.framework.webapps.sso.common.util.WebUtils;
 import com.xzixi.framework.boot.core.model.Result;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -42,14 +44,21 @@ public class AuthenticationFailureHandlerImpl implements AuthenticationFailureHa
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) {
         String message;
+        int subCode;
         if (exception instanceof UsernameNotFoundException || exception instanceof BadCredentialsException) {
             message = "用户名或密码错误！";
+            subCode = UnAuthSubCode.DEFAULT;
         } else if (exception instanceof DisabledException) {
-            message = "账户被禁用！";
+            message = "用户未激活！";
+            subCode = UnAuthSubCode.INACTIVATED;
+        } else if (exception instanceof LockedException) {
+            message = "用户已被锁定！";
+            subCode = UnAuthSubCode.LOCKED;
         } else {
             message = "登录失败！";
+            subCode = UnAuthSubCode.DEFAULT;
         }
-        Result<?> result = new Result<>(401, message, null);
+        Result<?> result = new Result<>(401, subCode, message);
         WebUtils.printJson(response, result);
     }
 }
