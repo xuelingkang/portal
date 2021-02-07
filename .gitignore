@@ -29,4 +29,4 @@ build/
 ### VS Code ###
 .vscode/
 
-jdk-8u261-linux-x64.tar.gz
+.DS_Store
