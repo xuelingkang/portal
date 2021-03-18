@@ -29,6 +29,8 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 /**
+ * 认证授权
+ *
  * @author xuelingkang
  * @date 2021-01-06
  */

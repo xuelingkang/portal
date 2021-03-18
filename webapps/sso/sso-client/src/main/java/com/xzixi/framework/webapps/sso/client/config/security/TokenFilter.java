@@ -44,6 +44,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * 将当前用户信息加入到上下文
+ *
  * @author xuelingkang
  * @date 2021-01-05
  */

@@ -26,6 +26,8 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 /**
+ * 获取访问当前资源所需要到权限
+ *
  * @author xuelingkang
  * @date 2021-01-06
  */

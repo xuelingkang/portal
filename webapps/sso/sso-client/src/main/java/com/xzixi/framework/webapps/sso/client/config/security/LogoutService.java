@@ -33,6 +33,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 单点登出
+ *
  * @author xuelingkang
  * @date 2021-01-08
  */

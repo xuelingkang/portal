@@ -36,6 +36,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * 登出成功
+ *
  * @author xuelingkang
  * @date 2021-01-06
  */
