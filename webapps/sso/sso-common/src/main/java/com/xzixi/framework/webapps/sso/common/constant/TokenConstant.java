@@ -65,11 +65,16 @@ public interface TokenConstant {
     String APP_ACCESS_TOKEN_NODE_KEY_TEMPLATE = "token::refresh::%s::%s::%s";
 
     /**
-     * appAccessTokenKey模板
-     * <p>占位符 appAccessToken
-     * <p>app维护
+     * appAccessTokenNodeKey挂载前缀模板
+     * <p>占位符 refreshToken加密保存的uuid
      */
-    String APP_ACCESS_TOKEN_KEY_TEMPLATE = "token::%s";
+    String MOUNT_APP_KEY_PREFIX_TEMPLATE = "token::refresh::%s::";
+
+    /**
+     * ssoAccessTokenNodeKey挂载前缀模板
+     * <p>占位符 refreshToken加密保存的uuid
+     */
+    String MOUNT_SSO_KEY_PREFIX_TEMPLATE = MOUNT_APP_KEY_PREFIX_TEMPLATE + "sso::";
 
     /**
      * refreshTokenKey过期时间，7天
@@ -103,14 +108,15 @@ public interface TokenConstant {
     long APP_ACCESS_TOKEN_NODE_EXPIRE_MINUTE = SSO_ACCESS_TOKEN_EXPIRE_MINUTE;
 
     /**
+     * appAccessTokenKey模板
+     * <p>占位符 appAccessToken
+     * <p>app维护
+     */
+    String APP_ACCESS_TOKEN_KEY_TEMPLATE = "token::%s";
+
+    /**
      * appAccessTokenKey过期时间
      * <p>app维护
      */
     long APP_ACCESS_TOKEN_EXPIRE_MINUTE = SSO_ACCESS_TOKEN_EXPIRE_MINUTE;
-
-    /**
-     * appAccessTokenRefreshKey过期时间
-     * <p>app维护
-     */
-    long APP_ACCESS_TOKEN_REFRESH_EXPIRE_MINUTE = APP_ACCESS_TOKEN_EXPIRE_MINUTE;
 }

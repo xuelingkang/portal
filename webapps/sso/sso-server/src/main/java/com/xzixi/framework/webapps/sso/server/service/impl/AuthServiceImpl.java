@@ -67,9 +67,13 @@ import java.util.Objects;
 @Service
 public class AuthServiceImpl implements IAuthService {
 
+    /**
+     * sso分布式锁前缀
+     */
     private static final String LOCK_PREFIX = "lock::authentication::";
-    private static final String MOUNT_KEY_TEMPLATE = "token::refresh::%s::";
-    private static final String MOUNT_KEY_SSO_TEMPLATE = MOUNT_KEY_TEMPLATE + "sso::";
+    /**
+     * 重定向url模板
+     */
     private static final String REDIRECT_URL_TEMPLATE = "%s?" + SsoConstant.ACCESS_TOKEN_NAME + "=%s&" + SsoConstant.REFRESH_TOKEN_NAME + "=%s&" + SsoConstant.RETURN_URL_NAME + "=%s";
 
     @Value("${app-uid:sso}")
@@ -321,7 +325,7 @@ public class AuthServiceImpl implements IAuthService {
         ILock lock = redisLockService.getLock(LOCK_PREFIX + refreshTokenUuid);
         try {
             lock.acquire();
-            String pattern = String.format(MOUNT_KEY_TEMPLATE, refreshTokenUuid);
+            String pattern = String.format(TokenConstant.MOUNT_APP_KEY_PREFIX_TEMPLATE, refreshTokenUuid);
             while (true) {
                 List<String> keys = redisScanService.scan(pattern);
                 if (CollectionUtils.isEmpty(keys)) {
@@ -347,7 +351,7 @@ public class AuthServiceImpl implements IAuthService {
         App ssoServer = remoteAppService.getByUid(this.appUid).getData();
 
         for (String key : keys) {
-            if (key.startsWith(String.format(MOUNT_KEY_SSO_TEMPLATE, refreshTokenUuid))) {
+            if (key.startsWith(String.format(TokenConstant.MOUNT_SSO_KEY_PREFIX_TEMPLATE, refreshTokenUuid))) {
                 // 登出sso
                 SsoAccessTokenMountValue ssoAccessTokenMountValue = ssoAccessTokenService.getTokenMountValue(key);
                 String ssoAccessToken = ssoAccessTokenMountValue.getSsoAccessToken();
