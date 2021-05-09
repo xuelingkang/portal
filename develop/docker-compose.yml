@@ -2,7 +2,7 @@ version: '3'
 
 services:
   mysql:
-    image: mysql:8.0.21
+    image: mysql:8
     container_name: portal_mysql
     restart: always
     volumes:
@@ -17,7 +17,7 @@ services:
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
 
   redis:
-    image: redis:6.0.6
+    image: redis:6
     container_name: portal_redis
     restart: always
     volumes:
@@ -28,7 +28,7 @@ services:
     command: redis-server --appendonly yes --requirepass portal
 
   rabbitmq:
-    image: rabbitmq:3.8.7-management
+    image: rabbitmq:3-management
     container_name: portal_rabbitmq
     restart: always
     volumes:
@@ -42,7 +42,7 @@ services:
       - '15672:15672'
 
   elasticsearch:
-    image: elasticsearch:6.8.10
+    image: elasticsearch:6.8.15
     container_name: portal_es
     restart: always
     volumes:
@@ -58,7 +58,7 @@ services:
       - '9300:9300'
 
   kibana:
-    image: kibana:6.8.10
+    image: kibana:6.8.15
     container_name: portal_kibana
     restart: always
     volumes:
@@ -71,7 +71,7 @@ services:
       - 'elasticsearch'
 
   nacos:
-    image: nacos/nacos-server:1.3.1
+    image: nacos/nacos-server:1.3.2
     container_name: portal_nacos
     restart: always
     volumes:

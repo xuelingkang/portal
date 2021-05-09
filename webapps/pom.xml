@@ -95,6 +95,12 @@
                     <version>${spring-boot.version}</version>
                     <configuration>
                         <finalName>${project.build.finalName}</finalName>
+                        <excludes>
+                            <exclude>
+                                <groupId>org.springframework.boot</groupId>
+                                <artifactId>spring-boot-configuration-processor</artifactId>
+                            </exclude>
+                        </excludes>
                     </configuration>
                     <executions>
                         <execution>
