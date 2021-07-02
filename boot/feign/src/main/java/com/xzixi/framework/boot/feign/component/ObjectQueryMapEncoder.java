@@ -31,7 +31,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.*;
 
 /**
- * 自定义@SpringQueryMap参数的转换逻辑
+ * 自定义@SpringQueryMap参数的转换逻辑，支持复杂对象转Map，默认的实现只能转换简单对象
+ * 默认否则只有@RequestBody能支持复杂对象参数，但是有些GET请求的查询参数也是一个复杂对象
  *
  * @author xuelingkang
  * @date 2020-11-19

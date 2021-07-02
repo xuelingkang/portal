@@ -43,12 +43,23 @@ import org.springframework.context.annotation.Scope;
 @Configuration
 public class FeignConfig {
 
+    /**
+     * 支持复杂对象参数
+     *
+     * @return
+     */
     @Bean
     @ConditionalOnMissingBean
     public QueryMapEncoder queryMapEncoder() {
         return new ObjectQueryMapEncoder();
     }
 
+    /**
+     * 支持服务之间上传文件请求
+     *
+     * @param messageConverters
+     * @return
+     */
     @Bean
     public Encoder feignFormEncoder(ObjectFactory<HttpMessageConverters> messageConverters) {
         return new SpringFormEncoder(new SpringEncoder(messageConverters));
