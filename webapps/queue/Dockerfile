@@ -1,4 +1,4 @@
-FROM registry.cn-zhangjiakou.aliyuncs.com/publicx/oracle-jdk:8u271
+FROM registry.cn-zhangjiakou.aliyuncs.com/publicx/oracle-jdk:8u291
 
 MAINTAINER xuelingkang
 
@@ -13,6 +13,6 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
 
 EXPOSE 8085
 
-CMD java -Dfile.encoding=utf-8 -Djava.security.egd=file:/dev/./urandom -javaagent:aspectjweaver.jar $JAVA_OPTS -jar app.jar > /dev/null 2>&1
+ENTRYPOINT ["java", "-Dsun.jnu.encoding=UTF-8", "-Dfile.encoding=utf-8", "-Djava.security.egd=file:/dev/./urandom", "-javaagent:aspectjweaver.jar", "-Xms2048m", "-Xmx2048m", "-jar", "app.jar"]
 
 # 制作基础镜像参考 https://gitee.com/xuelingkang/images
