@@ -164,7 +164,7 @@
         </appender>
 
         <!-- mybatis日志 -->
-        <logger name="com.xzixi.framework.webapps.file.mapper" level="TRACE" additivity="true">
+        <logger name="com.xzixi.framework.webapps.file.mapper" level="TRACE" additivity="false">
             <appender-ref ref="MYBATIS" />
         </logger>
 
