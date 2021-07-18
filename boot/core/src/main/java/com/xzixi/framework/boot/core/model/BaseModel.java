@@ -54,8 +54,7 @@ public abstract class BaseModel implements Cloneable, Serializable {
      *
      * @return BaseModel
      */
-    @Override
-    public BaseModel clone() {
+    public BaseModel copy() {
         ObjectOutputStream oos = null;
         ObjectInputStream ois = null;
         try {
