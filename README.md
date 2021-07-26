@@ -24,7 +24,7 @@ portal
 │   ├── persistent ······························ 持久层接口
 │   ├── mybatis ································· 基于 mybatis plus 实现持久层
 │   ├── elasticsearch ··························· 基于 elasticsearch 实现持久层
-│   ├── redis ··································· redis 配置，分布式锁，pipeline工具
+│   ├── redis ··································· redis 配置，分布式锁，pipeline工具，限流器
 │   ├── cache ··································· redis 缓存配置，扩展缓存管理器，定义常用KeyGenerator
 │   ├── webmvc ·································· web 项目通用配置，序列化、参数验证、异常拦截等
 │   ├── feign ··································· feign 通用配置，支持对象传参和form-data
@@ -142,6 +142,7 @@ portal
 <summary>current</summary>
 
 - 替换httpclient，解决java.net.HttpURLConnection不支持PATCH请求的问题
+- 增加redis限流器
 
 </details>
 

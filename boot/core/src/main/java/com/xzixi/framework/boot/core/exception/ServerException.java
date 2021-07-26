@@ -37,6 +37,10 @@ public class ServerException extends RuntimeException {
         super(message);
     }
 
+    public ServerException(Throwable cause) {
+        super(cause);
+    }
+
     public ServerException(Object data, String message) {
         super(message);
         this.data = data;

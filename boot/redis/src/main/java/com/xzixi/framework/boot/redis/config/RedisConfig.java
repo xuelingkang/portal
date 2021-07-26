@@ -20,6 +20,8 @@
 package com.xzixi.framework.boot.redis.config;
 
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
+import com.xzixi.framework.boot.redis.aspect.RedisLimitAspect;
+import com.xzixi.framework.boot.redis.service.impl.RedisLimitService;
 import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
 import com.xzixi.framework.boot.redis.service.impl.RedisPipelineService;
 import com.xzixi.framework.boot.redis.service.impl.RedisScanService;
@@ -94,5 +96,17 @@ public class RedisConfig {
         RedisScanService redisScanService = new RedisScanService();
         redisScanService.setDefaultBatchSize(100);
         return redisScanService;
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public RedisLimitService redisLimitService() {
+        return new RedisLimitService();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public RedisLimitAspect redisLimitAspect() {
+        return new RedisLimitAspect();
     }
 }
