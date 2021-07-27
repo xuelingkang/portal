@@ -21,6 +21,9 @@ package com.xzixi.framework.boot.redis.service.impl;
 
 import com.google.common.collect.ImmutableList;
 import com.xzixi.framework.boot.core.exception.ProjectException;
+import com.xzixi.framework.boot.redis.annotation.Limit;
+import com.xzixi.framework.boot.redis.model.RedisLimit;
+import com.xzixi.framework.boot.redis.service.RedisLimiter;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -37,32 +40,31 @@ import java.nio.charset.StandardCharsets;
  * 限流检查
  *
  * @author xuelingkang
- * @version 1.0.0
+ * @version 1.0
  * @date 2021年07月27日
  */
-public class RedisLimitService {
+public class RedisCounterLimiterImpl implements RedisLimiter {
 
     private static final RedisScript<Integer> LIMIT_SCRIPT;
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
-    /**
-     * 限流检查
-     *
-     * @param limitKey 请求标识
-     * @param limitPeriod 限流时间段
-     * @param limitCount 时间段内最多s请求个数
-     * @return {@code true}-检查通过 {@code false}-检查不通过
-     */
-    public boolean check(String limitKey, int limitPeriod, int limitCount) {
-        Integer count = stringRedisTemplate.execute(LIMIT_SCRIPT, ImmutableList.of(limitKey), limitPeriod, limitCount);
-        return count != null && count <= limitCount;
+    @Override
+    public Limit.Strategy strategy() {
+        return Limit.Strategy.COUNTER;
+    }
+
+    @Override
+    public boolean check(RedisLimit limit) {
+        Integer count = stringRedisTemplate.execute(LIMIT_SCRIPT, ImmutableList.of(limit.getKey()),
+                limit.getPeriod(), limit.getRate(), limit.getCount());
+        return count != null && count <= limit.getRate();
     }
 
     static {
         try {
-            ClassPathResource resource = new ClassPathResource("/limit.lua");
+            ClassPathResource resource = new ClassPathResource("/counter_limiter.lua");
             InputStream in = resource.getInputStream();
             LIMIT_SCRIPT = new DefaultRedisScript<>(IOUtils.toString(in, StandardCharsets.UTF_8), Integer.class);
         } catch (IOException e) {

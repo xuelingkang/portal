@@ -21,10 +21,8 @@ package com.xzixi.framework.boot.redis.config;
 
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.xzixi.framework.boot.redis.aspect.RedisLimitAspect;
-import com.xzixi.framework.boot.redis.service.impl.RedisLimitService;
-import com.xzixi.framework.boot.redis.service.impl.RedisLockService;
-import com.xzixi.framework.boot.redis.service.impl.RedisPipelineService;
-import com.xzixi.framework.boot.redis.service.impl.RedisScanService;
+import com.xzixi.framework.boot.redis.service.RedisLimiter;
+import com.xzixi.framework.boot.redis.service.impl.*;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
@@ -100,8 +98,20 @@ public class RedisConfig {
 
     @Bean
     @ConditionalOnMissingBean
-    public RedisLimitService redisLimitService() {
-        return new RedisLimitService();
+    public RedisLimiter redisCounterLimiter() {
+        return new RedisCounterLimiterImpl();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public RedisLimiter redisTokenLimiter() {
+        return new RedisTokenLimiterImpl();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public RedisLimiter redisLeakyLimiter() {
+        return new RedisLeakyLimiterImpl();
     }
 
     @Bean

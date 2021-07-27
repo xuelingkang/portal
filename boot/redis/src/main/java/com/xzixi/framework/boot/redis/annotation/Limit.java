@@ -26,7 +26,7 @@ import java.lang.annotation.*;
  * redis限流
  *
  * @author xuelingkang
- * @version 1.0.0
+ * @version 1.0
  * @date 2021年07月27日
  */
 @Target(ElementType.METHOD)
@@ -36,9 +36,14 @@ import java.lang.annotation.*;
 public @interface Limit {
 
     /**
+     * 限流策略
+     */
+    Strategy strategy() default Strategy.TOKEN;
+
+    /**
      * 限流类型
      */
-    LimitType type() default LimitType.METHOD;
+    Type type() default Type.METHOD;
 
     /**
      * 当type={@code KEY}时，必须指定key
@@ -51,14 +56,34 @@ public @interface Limit {
     int period() default 1;
 
     /**
-     * 指定时间范围内最多请求次数
+     * 单位时间限流速率
+     * <p>计数器，单位时间允许数据包个数
+     * <p>令牌桶，单位时间产生令牌个数
+     * <p>漏桶，单位时间流出数据包个数
      */
-    int count();
+    int rate();
+
+    /**
+     * 接口数据包个数
+     */
+    int count() default 1;
+
+    /**
+     * 令牌桶或漏桶策略，表示桶容量，必须设置
+     * <p>计数器忽略
+     */
+    int capacity() default 0;
+
+    /**
+     * 等待超时时间，单位毫秒，0表示不等待
+     * <p>令牌桶策略支持
+     */
+    int timeout() default 0;
 
     /**
      * 限流类型
      */
-    enum LimitType {
+    enum Type {
 
         /**
          * 指定key
@@ -72,5 +97,24 @@ public @interface Limit {
          * 方法名
          */
         METHOD
+    }
+
+    /**
+     * 限流策略
+     */
+    enum Strategy {
+
+        /**
+         * 固定窗口计数器，有临界问题
+         */
+        COUNTER,
+        /**
+         * 令牌桶，取令牌的速度不受限制，所以可以应对短暂的突发流量，但是不一定安全
+         */
+        TOKEN,
+        /**
+         * 漏桶，桶容量和流出速度是恒定的，不能很好的应对突发流量
+         */
+        LEAKY
     }
 }

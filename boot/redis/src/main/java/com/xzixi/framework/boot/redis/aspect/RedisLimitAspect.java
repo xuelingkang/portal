@@ -19,27 +19,32 @@
 
 package com.xzixi.framework.boot.redis.aspect;
 
-import com.xzixi.framework.boot.redis.annotation.Limit;
 import com.xzixi.framework.boot.core.exception.ClientException;
 import com.xzixi.framework.boot.core.exception.ServerException;
-import com.xzixi.framework.boot.redis.service.impl.RedisLimitService;
+import com.xzixi.framework.boot.redis.annotation.Limit;
+import com.xzixi.framework.boot.redis.model.RedisLimit;
+import com.xzixi.framework.boot.redis.service.RedisLimiter;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * LimitAspect
  * description
  *
  * @author xuelingkang
- * @version 1.0.0
+ * @version 1.0
  * @date 2021年07月27日
  */
 @Aspect
@@ -48,26 +53,38 @@ public class RedisLimitAspect {
     private static final String UNKNOWN = "unknown";
 
     @Autowired
-    private RedisLimitService redisLimitService;
+    private ApplicationContext applicationContext;
+
+    private Map<Limit.Strategy, RedisLimiter> strategyLimiterMap;
+
+    @PostConstruct
+    public void init() {
+        strategyLimiterMap = new HashMap<>(4);
+        Map<String, RedisLimiter> limiterMap = applicationContext.getBeansOfType(RedisLimiter.class);
+        limiterMap.forEach((key, limiter) -> strategyLimiterMap.put(limiter.strategy(), limiter));
+    }
 
     @Around("execution(public * *(..)) && @annotation(com.xzixi.framework.boot.redis.annotation.Limit)")
     public Object checkLimit(ProceedingJoinPoint pjp) {
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = signature.getMethod();
         Limit limit = method.getAnnotation(Limit.class);
-        Limit.LimitType type = limit.type();
+        Limit.Strategy strategy = limit.strategy();
+        Limit.Type type = limit.type();
 
-        String limitKey;
-        if (type == Limit.LimitType.IP) {
-            limitKey = getIpAddress();
-        } else if (type == Limit.LimitType.KEY) {
-            limitKey = limit.key();
+        String key;
+        if (type == Limit.Type.IP) {
+            key = getIpAddress();
+        } else if (type == Limit.Type.KEY) {
+            key = limit.key();
         } else {
-            limitKey = method.getName();
+            key = method.getName();
         }
 
+        RedisLimit params = new RedisLimit(key, limit.period(), limit.rate(), limit.count(), limit.capacity(), limit.timeout());
+
         try {
-            boolean result = redisLimitService.check(limitKey, limit.period(), limit.count());
+            boolean result = strategyLimiterMap.get(strategy).check(params);
             if (result) {
                 return pjp.proceed();
             } else {
