@@ -27,7 +27,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
  * RedisTokenLimiterImpl
- * description
+ * 令牌桶限流
  *
  * @author xuelingkang
  * @version 1.0

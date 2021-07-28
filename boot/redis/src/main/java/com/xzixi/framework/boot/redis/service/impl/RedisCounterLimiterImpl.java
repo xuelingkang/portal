@@ -20,24 +20,17 @@
 package com.xzixi.framework.boot.redis.service.impl;
 
 import com.google.common.collect.ImmutableList;
-import com.xzixi.framework.boot.core.exception.ProjectException;
 import com.xzixi.framework.boot.redis.annotation.Limit;
 import com.xzixi.framework.boot.redis.model.RedisLimit;
 import com.xzixi.framework.boot.redis.service.RedisLimiter;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-
 /**
  * RedisLimitService
- * 限流检查
+ * 固定窗口限流
  *
  * @author xuelingkang
  * @version 1.0
@@ -45,7 +38,19 @@ import java.nio.charset.StandardCharsets;
  */
 public class RedisCounterLimiterImpl implements RedisLimiter {
 
-    private static final RedisScript<Integer> LIMIT_SCRIPT;
+    private static final String COUNTER_SCRIPT_CONTENT = "" +
+            "local c; \n" +
+            "c = redis.call('get', KEYS[1]); \n" +
+            "if (c and tonumber(c) > tonumber(ARGV[2])) then \n" +
+            "    return c; \n" +
+            "end ; \n" +
+            "c = redis.call('incrby', KEYS[1], ARGV[3]); \n" +
+            "if (tonumber(c) == ARGV[3]) then \n" +
+            "    redis.call('expire', KEYS[1], ARGV[1]); \n" +
+            "end ; \n" +
+            "return c;";
+
+    private static final RedisScript<Integer> COUNTER_SCRIPT = new DefaultRedisScript<>(COUNTER_SCRIPT_CONTENT, Integer.class);
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -57,18 +62,8 @@ public class RedisCounterLimiterImpl implements RedisLimiter {
 
     @Override
     public boolean check(RedisLimit limit) {
-        Integer count = stringRedisTemplate.execute(LIMIT_SCRIPT, ImmutableList.of(limit.getKey()),
+        Integer count = stringRedisTemplate.execute(COUNTER_SCRIPT, ImmutableList.of(limit.getKey()),
                 limit.getPeriod(), limit.getRate(), limit.getCount());
         return count != null && count <= limit.getRate();
-    }
-
-    static {
-        try {
-            ClassPathResource resource = new ClassPathResource("/counter_limiter.lua");
-            InputStream in = resource.getInputStream();
-            LIMIT_SCRIPT = new DefaultRedisScript<>(IOUtils.toString(in, StandardCharsets.UTF_8), Integer.class);
-        } catch (IOException e) {
-            throw new ProjectException("read redis limit script failure!");
-        }
     }
 }
