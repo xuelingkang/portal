@@ -24,9 +24,9 @@ import com.xzixi.framework.boot.core.exception.LockReleaseException;
 import com.xzixi.framework.boot.core.model.ILock;
 import com.xzixi.framework.boot.core.util.Utils;
 import lombok.Data;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
-import org.springframework.data.redis.core.script.RedisScript;
 
 import java.util.Collections;
 
@@ -44,39 +44,15 @@ public class RedisLock implements ILock {
      */
     private static final long SLEEP_TIME = 100;
 
-    private static final String ACQUIRE_SCRIPT_CONTENT = "" +
-            "if (redis.call('exists', KEYS[1]) == 0) then \n" +
-            "    redis.call('hincrby', KEYS[1], ARGV[2], 1); \n" +
-            "    redis.call('pexpire', KEYS[1], ARGV[1]); \n" +
-            "    return 1; \n" +
-            "end ; \n" +
-            "if (redis.call('hexists', KEYS[1], ARGV[2]) == 1) then \n" +
-            "    redis.call('hincrby', KEYS[1], ARGV[2], 1); \n" +
-            "    redis.call('pexpire', KEYS[1], ARGV[1]); \n" +
-            "    return 1; \n" +
-            "end ; \n" +
-            "return 0;";
-
     /**
      * 获取锁脚本
      */
-    private static final RedisScript<Boolean> ACQUIRE_SCRIPT = new DefaultRedisScript<>(ACQUIRE_SCRIPT_CONTENT, Boolean.class);
-
-    private static final String RELEASE_SCRIPT_CONTENT = "" +
-            "if (redis.call('hexists', KEYS[1], ARGV[1]) == 0) then \n" +
-            "    return nil; \n" +
-            "end ; \n" +
-            "local counter = redis.call('hincrby', KEYS[1], ARGV[1], -1); \n" +
-            "if (counter > 0) then \n" +
-            "    return 0; \n" +
-            "end ; \n" +
-            "redis.call('del', KEYS[1]); \n" +
-            "return 1;";
+    private static final DefaultRedisScript<Boolean> ACQUIRE_SCRIPT;
 
     /**
      * 释放锁脚本
      */
-    private static final RedisScript<Long> RELEASE_SCRIPT = new DefaultRedisScript<>(RELEASE_SCRIPT_CONTENT, Long.class);
+    private static final DefaultRedisScript<Long> RELEASE_SCRIPT;
 
     private final String name;
     private final String value;
@@ -134,5 +110,15 @@ public class RedisLock implements ILock {
      */
     private Boolean tryAcquire() {
         return stringRedisTemplate.execute(ACQUIRE_SCRIPT, Collections.singletonList(this.name), String.valueOf(this.leaseTimeout), this.value);
+    }
+
+    static {
+        ACQUIRE_SCRIPT = new DefaultRedisScript<>();
+        ACQUIRE_SCRIPT.setLocation(new ClassPathResource("/lock/acquire.lua"));
+        ACQUIRE_SCRIPT.setResultType(Boolean.class);
+
+        RELEASE_SCRIPT = new DefaultRedisScript<>();
+        RELEASE_SCRIPT.setLocation(new ClassPathResource("/lock/release.lua"));
+        RELEASE_SCRIPT.setResultType(Long.class);
     }
 }

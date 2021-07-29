@@ -24,9 +24,9 @@ import com.xzixi.framework.boot.redis.annotation.Limit;
 import com.xzixi.framework.boot.redis.model.RedisLimit;
 import com.xzixi.framework.boot.redis.service.RedisLimiter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
-import org.springframework.data.redis.core.script.RedisScript;
 
 /**
  * RedisLimitService
@@ -38,19 +38,7 @@ import org.springframework.data.redis.core.script.RedisScript;
  */
 public class RedisCounterLimiterImpl implements RedisLimiter {
 
-    private static final String COUNTER_SCRIPT_CONTENT = "" +
-            "local c; \n" +
-            "c = redis.call('get', KEYS[1]); \n" +
-            "if (c and tonumber(c) > tonumber(ARGV[2])) then \n" +
-            "    return c; \n" +
-            "end ; \n" +
-            "c = redis.call('incrby', KEYS[1], ARGV[3]); \n" +
-            "if (tonumber(c) == ARGV[3]) then \n" +
-            "    redis.call('expire', KEYS[1], ARGV[1]); \n" +
-            "end ; \n" +
-            "return c;";
-
-    private static final RedisScript<Integer> COUNTER_SCRIPT = new DefaultRedisScript<>(COUNTER_SCRIPT_CONTENT, Integer.class);
+    private static final DefaultRedisScript<Integer> COUNTER_SCRIPT;
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -65,5 +53,11 @@ public class RedisCounterLimiterImpl implements RedisLimiter {
         Integer count = stringRedisTemplate.execute(COUNTER_SCRIPT, ImmutableList.of(limit.getKey()),
                 limit.getPeriod(), limit.getRate(), limit.getCount());
         return count != null && count <= limit.getRate();
+    }
+
+    static {
+        COUNTER_SCRIPT = new DefaultRedisScript<>();
+        COUNTER_SCRIPT.setLocation(new ClassPathResource("/limiter/counter.lua"));
+        COUNTER_SCRIPT.setResultType(Integer.class);
     }
 }
