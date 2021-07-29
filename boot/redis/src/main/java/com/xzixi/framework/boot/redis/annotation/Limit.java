@@ -90,7 +90,7 @@ public @interface Limit {
          */
         KEY,
         /**
-         * 客户端ip
+         * 方法名 + 客户端ip
          */
         IP,
         /**

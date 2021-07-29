@@ -51,6 +51,7 @@ import java.util.Map;
 public class RedisLimitAspect {
 
     private static final String KEY_FORMAT = "limiter::%s::%s";
+    private static final String KEY_FORMAT_IP = "limiter::%s::%s::%s";
     private static final String UNKNOWN = "unknown";
 
     @Autowired
@@ -75,7 +76,7 @@ public class RedisLimitAspect {
 
         String key;
         if (type == Limit.Type.IP) {
-            key = String.format(KEY_FORMAT, strategy.name(), getIpAddress());
+            key = String.format(KEY_FORMAT_IP, strategy.name(), method.getName(), getIpAddress());
         } else if (type == Limit.Type.KEY) {
             key = String.format(KEY_FORMAT, strategy.name(), limit.key());
         } else {
