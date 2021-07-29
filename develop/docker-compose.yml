@@ -14,10 +14,12 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     ports:
       - '3306:3306'
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    command:
+      - '--character-set-server=utf8mb4'
+      - '--collation-server=utf8mb4_bin'
 
   redis:
-    image: redis:6
+    image: registry.cn-zhangjiakou.aliyuncs.com/publicx/redis:6.2.5_0.3.0
     container_name: portal_redis
     restart: always
     volumes:
@@ -25,7 +27,14 @@ services:
       - /etc/timezone:/etc/timezone
     ports:
       - '6379:6379'
-    command: redis-server --appendonly yes --requirepass portal
+    command:
+      - 'redis-server'
+      - '--loadmodule'
+      - '/data/modules/libredis_cell.so'
+      - '--appendonly'
+      - 'yes'
+      - '--requirepass'
+      - 'portal'
 
   rabbitmq:
     image: rabbitmq:3-management
