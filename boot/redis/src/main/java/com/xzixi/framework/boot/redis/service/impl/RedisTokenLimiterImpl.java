@@ -20,9 +20,11 @@
 package com.xzixi.framework.boot.redis.service.impl;
 
 import com.google.common.collect.ImmutableList;
+import com.xzixi.framework.boot.core.exception.ServerException;
 import com.xzixi.framework.boot.redis.annotation.Limit;
 import com.xzixi.framework.boot.redis.model.RedisLimit;
 import com.xzixi.framework.boot.redis.service.RedisLimiter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -36,6 +38,7 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
  * @version 1.0
  * @date 2021年07月28日
  */
+@Slf4j
 public class RedisTokenLimiterImpl implements RedisLimiter {
 
     private static final DefaultRedisScript<Long> TOKEN_SCRIPT;
@@ -52,7 +55,18 @@ public class RedisTokenLimiterImpl implements RedisLimiter {
     public boolean check(RedisLimit limit) {
         Long waitTime = stringRedisTemplate.execute(TOKEN_SCRIPT, ImmutableList.of(limit.getKey()),
                 limit.getPeriod(), limit.getRate(), limit.getCapacity(), limit.getCount(), limit.getTimeout());
-        return waitTime != null && waitTime <= limit.getTimeout();
+        if (waitTime != null && waitTime <= limit.getTimeout()) {
+            if (log.isInfoEnabled()) {
+                log.info("try wait for {}ms, thread: {}", waitTime, Thread.currentThread().getName());
+            }
+            try {
+                Thread.sleep(waitTime);
+            } catch (InterruptedException e) {
+                throw new ServerException("exception occurred while wait for limiter token", e);
+            }
+            return true;
+        }
+        return false;
     }
 
     static {
