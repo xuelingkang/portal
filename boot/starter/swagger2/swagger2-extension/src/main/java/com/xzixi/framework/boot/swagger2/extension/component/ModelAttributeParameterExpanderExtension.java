@@ -100,7 +100,9 @@ public class ModelAttributeParameterExpanderExtension extends ModelAttributePara
                 return input.getName();
             }
         });
-        LOG.debug("Expanding parameter type: {}", context.getParamType());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Expanding parameter type: {}", context.getParamType());
+        }
         AlternateTypeProvider alternateTypeProvider = context.getDocumentationContext().getAlternateTypeProvider();
         FluentIterable<ModelAttributeField> attributes = this.allModelAttributes(propertyLookupByGetter, getters, fieldsByName, alternateTypeProvider);
         FluentIterable<ModelAttributeField> expendables = attributes.filter(Predicates.not(this.simpleType())).filter(Predicates.not(this.recursiveType(context)));
@@ -108,7 +110,9 @@ public class ModelAttributeParameterExpanderExtension extends ModelAttributePara
 
         while (var10.hasNext()) {
             ModelAttributeField each = (ModelAttributeField) var10.next();
-            LOG.debug("Attempting to expand expandable property: {}", each.getName());
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Attempting to expand expandable property: {}", each.getName());
+            }
             parameters.addAll(this.expand(context.childContext(this.nestedParentName(context.getParentName(), each), each.getFieldType(), context.getOperationContext())));
         }
 
@@ -118,7 +122,9 @@ public class ModelAttributeParameterExpanderExtension extends ModelAttributePara
         while (true) {
             while (var16.hasNext()) {
                 ModelAttributeField each = (ModelAttributeField) var16.next();
-                LOG.debug("Attempting to expand collection/array field: {}", each.getName());
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("Attempting to expand collection/array field: {}", each.getName());
+                }
                 ResolvedType itemType = Collections.collectionElementType(each.getFieldType());
                 if (!Types.isBaseType(itemType) && !this.enumTypeDeterminer.isEnum(itemType.getErasedType())) {
                     ExpansionContext childContext = context.childContext(this.nestedParentName(context.getParentName(), each), itemType, context.getOperationContext());
@@ -194,9 +200,13 @@ public class ModelAttributeParameterExpanderExtension extends ModelAttributePara
     }
 
     private Parameter simpleFields(String parentName, ExpansionContext context, ModelAttributeField each) {
-        LOG.debug("Attempting to expand field: {}", each);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Attempting to expand field: {}", each);
+        }
         String dataTypeName = (String) Optional.fromNullable(Types.typeNameFor(each.getFieldType().getErasedType())).or(each.getFieldType().getErasedType().getSimpleName());
-        LOG.debug("Building parameter for field: {}, with type: ", each, each.getFieldType());
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Building parameter for field: {}, with type: ", each, each.getFieldType());
+        }
         ParameterExpansionContext parameterExpansionContext = new ParameterExpansionContext(dataTypeName, parentName, ParameterTypeDeterminer.determineScalarParameterType(context.getOperationContext().consumes(), context.getOperationContext().httpMethod()), new ModelAttributeParameterMetadataAccessor(each.annotatedElements(), each.getFieldType(), each.getName()), context.getDocumentationContext().getDocumentationType(), new ParameterBuilder());
         return this.pluginsManager.expandParameter(parameterExpansionContext);
     }
