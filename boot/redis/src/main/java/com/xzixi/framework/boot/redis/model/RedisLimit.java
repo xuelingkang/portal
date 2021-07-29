@@ -24,8 +24,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * LimitParams
- * description
+ * RedisLimit
+ * 限流器参数
  *
  * @author xuelingkang
  * @version 1.0
@@ -36,10 +36,28 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RedisLimit {
 
+    /**
+     * 限流器key
+     */
     private String key;
+    /**
+     * 单位时间，秒
+     */
     private Integer period;
+    /**
+     * 单位时间产生的令牌个数
+     */
     private Integer rate;
-    private Integer count;
+    /**
+     * 令牌桶容量
+     */
     private Integer capacity;
+    /**
+     * 需要令牌个数
+     */
+    private Integer count;
+    /**
+     * 等待超时时间，毫秒
+     */
     private Integer timeout;
 }
