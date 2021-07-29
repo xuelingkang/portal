@@ -19,11 +19,14 @@
 
 package com.xzixi.framework.boot.redis.service.impl;
 
+import com.google.common.collect.ImmutableList;
 import com.xzixi.framework.boot.redis.annotation.Limit;
 import com.xzixi.framework.boot.redis.model.RedisLimit;
 import com.xzixi.framework.boot.redis.service.RedisLimiter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 
 /**
  * RedisTokenLimiterImpl
@@ -35,6 +38,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
  */
 public class RedisTokenLimiterImpl implements RedisLimiter {
 
+    private static final DefaultRedisScript<Long> TOKEN_SCRIPT;
+
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
@@ -45,6 +50,14 @@ public class RedisTokenLimiterImpl implements RedisLimiter {
 
     @Override
     public boolean check(RedisLimit limit) {
-        return false;
+        Long waitTime = stringRedisTemplate.execute(TOKEN_SCRIPT, ImmutableList.of(limit.getKey()),
+                limit.getPeriod(), limit.getRate(), limit.getCapacity(), limit.getCount(), limit.getTimeout());
+        return waitTime != null && waitTime <= limit.getTimeout();
+    }
+
+    static {
+        TOKEN_SCRIPT = new DefaultRedisScript<>();
+        TOKEN_SCRIPT.setLocation(new ClassPathResource("/limiter/token.lua"));
+        TOKEN_SCRIPT.setResultType(Long.class);
     }
 }
