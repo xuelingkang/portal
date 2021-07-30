@@ -41,11 +41,11 @@ public class RedisLimit {
      */
     private String key;
     /**
-     * 单位时间，秒
+     * 时间周期，秒
      */
     private Integer period;
     /**
-     * 单位时间产生的令牌个数
+     * 时间周期内流量限制
      */
     private Integer rate;
     /**

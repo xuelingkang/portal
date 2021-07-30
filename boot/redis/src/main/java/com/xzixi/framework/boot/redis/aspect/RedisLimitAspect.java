@@ -24,12 +24,15 @@ import com.xzixi.framework.boot.core.exception.ServerException;
 import com.xzixi.framework.boot.redis.annotation.Limit;
 import com.xzixi.framework.boot.redis.model.RedisLimit;
 import com.xzixi.framework.boot.redis.service.RedisLimiter;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -38,6 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * LimitAspect
@@ -47,11 +51,11 @@ import java.util.Map;
  * @version 1.0
  * @date 2021年07月27日
  */
+@Slf4j
 @Aspect
 public class RedisLimitAspect {
 
     private static final String KEY_FORMAT = "limiter::%s::%s";
-    private static final String KEY_FORMAT_IP = "limiter::%s::%s::%s";
     private static final String UNKNOWN = "unknown";
 
     @Autowired
@@ -75,15 +79,34 @@ public class RedisLimitAspect {
         Limit.Type type = limit.type();
 
         String key;
-        if (type == Limit.Type.IP) {
-            key = String.format(KEY_FORMAT_IP, strategy.name(), method.getName(), getIpAddress());
-        } else if (type == Limit.Type.KEY) {
+        if (type == Limit.Type.KEY) {
+            if (StringUtils.isBlank(limit.key())) {
+                throw new ServerException("限流类型为KEY时，必须指定key名称");
+            }
             key = String.format(KEY_FORMAT, strategy.name(), limit.key());
-        } else {
+        } else if (type == Limit.Type.METHOD) {
             key = String.format(KEY_FORMAT, strategy.name(), method.getName());
+        } else {
+            throw new UnsupportedOperationException("不支持的限流类型：" + type.name());
         }
 
-        RedisLimit params = new RedisLimit(key, limit.period(), limit.rate(), limit.count(), limit.capacity(), limit.timeout());
+        ip: if (limit.client()) {
+            String ip;
+            try {
+                ip = getIpAddress();
+            } catch (Exception e) {
+                log.error("获取客户端ip时，出现异常！", e);
+                break ip;
+            }
+            if (StringUtils.isBlank(ip) || Objects.equals(ip, UNKNOWN)) {
+                log.error("获取客户端ip失败！");
+                break ip;
+            }
+            key = String.format("%s::%s", key, ip);
+        }
+
+        int timeout = Math.max(limit.timeout(), 0);
+        RedisLimit params = new RedisLimit(key, limit.period(), limit.rate(), limit.count(), limit.capacity(), timeout);
 
         try {
             boolean result = strategyLimiterMap.get(strategy).check(params);
@@ -100,15 +123,17 @@ public class RedisLimitAspect {
     }
 
     public String getIpAddress() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) requestAttributes;
+        HttpServletRequest request = Objects.requireNonNull(servletRequestAttributes).getRequest();
         String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+        if (StringUtils.isBlank(ip) || Objects.equals(ip, UNKNOWN)) {
             ip = request.getHeader("Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+        if (StringUtils.isBlank(ip) || Objects.equals(ip, UNKNOWN)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
+        if (StringUtils.isBlank(ip) || Objects.equals(ip, UNKNOWN)) {
             ip = request.getRemoteAddr();
         }
         return ip;

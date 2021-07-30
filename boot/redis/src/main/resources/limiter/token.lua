@@ -2,9 +2,9 @@
 -- 使用redis.replicate_commands()，持久化和主从复制只复制写命令而不是整个lua脚本，避免了随机写入的问题
 redis.replicate_commands();
 local key = KEYS[1];
--- 单位时间，秒
+-- 时间周期，秒
 local period = tonumber(ARGV[1]);
--- 单位时间产生的令牌个数
+-- 时间周期内产生的令牌个数
 local rate = tonumber(ARGV[2]);
 -- 令牌桶容量
 local capacity = tonumber(ARGV[3]);

@@ -51,15 +51,20 @@ public @interface Limit {
     String key() default "";
 
     /**
+     * 是否对每个客户端ip分别限流
+     */
+    boolean client() default false;
+
+    /**
      * 指定时间范围，单位秒
      */
     int period() default 1;
 
     /**
-     * 单位时间限流速率
-     * <p>计数器，单位时间允许数据包个数
-     * <p>令牌桶，单位时间产生令牌个数
-     * <p>漏桶，单位时间流出数据包个数
+     * 时间周期内流量限制
+     * <p>计数器，时间周期内允许数据包个数
+     * <p>令牌桶，时间周期内产生令牌个数
+     * <p>漏桶，时间周期内流出数据包个数
      */
     int rate();
 
@@ -90,10 +95,6 @@ public @interface Limit {
          */
         KEY,
         /**
-         * 方法名 + 客户端ip
-         */
-        IP,
-        /**
          * 方法名
          */
         METHOD
@@ -113,7 +114,7 @@ public @interface Limit {
          */
         TOKEN,
         /**
-         * 漏桶，桶容量和流出速度是恒定的，不能很好的应对突发流量
+         * 漏桶，桶容量和流出速度是恒定的，不能很好地应对突发流量
          */
         LEAKY
     }
