@@ -2,7 +2,7 @@ version: '3'
 
 services:
   mysql:
-    image: mysql:8
+    image: mysql:8.0.26
     container_name: portal_mysql
     restart: always
     volumes:
@@ -19,25 +19,21 @@ services:
       - '--collation-server=utf8mb4_bin'
 
   redis:
-    image: registry.cn-zhangjiakou.aliyuncs.com/publicx/redis:6.2.5_0.3.0
+    image: redis:6.2.5
     container_name: portal_redis
     restart: always
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/timezone:/etc/timezone
+      - ./redis/redis.conf:/data/redis.conf
     ports:
       - '6379:6379'
     command:
       - 'redis-server'
-      - '--loadmodule'
-      - '/data/modules/libredis_cell.so'
-      - '--appendonly'
-      - 'yes'
-      - '--requirepass'
-      - 'portal'
+      - '/data/redis.conf'
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3.9.0-management
     container_name: portal_rabbitmq
     restart: always
     volumes:
