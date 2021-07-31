@@ -33,7 +33,7 @@ services:
       - '/data/redis.conf'
 
   rabbitmq:
-    image: rabbitmq:3.9.0-management
+    image: rabbitmq:3.8.19-management
     container_name: portal_rabbitmq
     restart: always
     volumes:
