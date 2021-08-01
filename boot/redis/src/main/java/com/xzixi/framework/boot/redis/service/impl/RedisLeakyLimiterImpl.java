@@ -19,11 +19,15 @@
 
 package com.xzixi.framework.boot.redis.service.impl;
 
+import com.google.common.collect.ImmutableList;
 import com.xzixi.framework.boot.redis.annotation.Limit;
 import com.xzixi.framework.boot.redis.model.RedisLimit;
 import com.xzixi.framework.boot.redis.service.RedisLimiter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 
 /**
  * RedisLeakyLimiterImpl
@@ -33,7 +37,10 @@ import org.springframework.data.redis.core.StringRedisTemplate;
  * @version 1.0
  * @date 2021年07月28日
  */
+@Slf4j
 public class RedisLeakyLimiterImpl implements RedisLimiter {
+
+    private static final DefaultRedisScript<Long> LEAKY_SCRIPT;
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -45,6 +52,36 @@ public class RedisLeakyLimiterImpl implements RedisLimiter {
 
     @Override
     public boolean check(RedisLimit limit) {
-        return false;
+        if (limit.getCount().compareTo(0) == 0) {
+            // 数据包数量等于0，返回成功
+            return true;
+        }
+        if (limit.getCount().compareTo(limit.getCapacity()) > 0) {
+            // 数据包数量大于漏桶容量，返回失败
+            return false;
+        }
+        Long waitTime = stringRedisTemplate.execute(LEAKY_SCRIPT, ImmutableList.of(limit.getKey()),
+                limit.getPeriod(), limit.getRate(), limit.getCapacity(), limit.getCount(),
+                limit.getTimeout(), System.currentTimeMillis());
+        if (waitTime == null) {
+            log.error("leaky limiter error, params: {}", limit);
+            return false;
+        }
+        if (waitTime.compareTo(0L) < 0 || waitTime.compareTo(limit.getTimeout()) > 0) {
+            return false;
+        }
+        if (waitTime.compareTo(0L) > 0) {
+            try {
+                Thread.sleep(waitTime);
+            } catch (InterruptedException ignore) {
+            }
+        }
+        return true;
+    }
+
+    static {
+        LEAKY_SCRIPT = new DefaultRedisScript<>();
+        LEAKY_SCRIPT.setLocation(new ClassPathResource("/limiter/leaky.lua"));
+        LEAKY_SCRIPT.setResultType(Long.class);
     }
 }
