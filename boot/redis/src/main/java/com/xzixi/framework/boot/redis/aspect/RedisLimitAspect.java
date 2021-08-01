@@ -105,7 +105,7 @@ public class RedisLimitAspect {
             key = String.format("%s::%s", key, ip);
         }
 
-        int timeout = Math.max(limit.timeout(), 0);
+        long timeout = Math.max(limit.timeout(), 0);
         RedisLimit params = new RedisLimit(key, limit.period(), limit.rate(), limit.count(), limit.capacity(), timeout);
 
         try {

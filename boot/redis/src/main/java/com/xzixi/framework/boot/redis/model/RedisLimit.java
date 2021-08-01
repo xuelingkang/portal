@@ -53,11 +53,11 @@ public class RedisLimit {
      */
     private Integer capacity;
     /**
-     * 需要令牌个数
+     * 数据包个数
      */
     private Integer count;
     /**
      * 等待超时时间，毫秒
      */
-    private Integer timeout;
+    private Long timeout;
 }

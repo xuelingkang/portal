@@ -20,7 +20,6 @@
 package com.xzixi.framework.boot.redis.service.impl;
 
 import com.google.common.collect.ImmutableList;
-import com.xzixi.framework.boot.core.exception.ServerException;
 import com.xzixi.framework.boot.redis.annotation.Limit;
 import com.xzixi.framework.boot.redis.model.RedisLimit;
 import com.xzixi.framework.boot.redis.service.RedisLimiter;
@@ -41,7 +40,7 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 @Slf4j
 public class RedisTokenLimiterImpl implements RedisLimiter {
 
-    private static final DefaultRedisScript<Long> TOKEN_SCRIPT;
+    private static final DefaultRedisScript<Boolean> TOKEN_SCRIPT;
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -53,25 +52,22 @@ public class RedisTokenLimiterImpl implements RedisLimiter {
 
     @Override
     public boolean check(RedisLimit limit) {
-        Long waitTime = stringRedisTemplate.execute(TOKEN_SCRIPT, ImmutableList.of(limit.getKey()),
-                limit.getPeriod(), limit.getRate(), limit.getCapacity(), limit.getCount(), limit.getTimeout());
-        if (waitTime != null && waitTime <= limit.getTimeout()) {
-            if (log.isInfoEnabled()) {
-                log.info("try wait for {}ms, thread: {}", waitTime, Thread.currentThread().getName());
-            }
-            try {
-                Thread.sleep(waitTime);
-            } catch (InterruptedException e) {
-                throw new ServerException("exception occurred while wait for limiter token", e);
-            }
+        if (limit.getCount().compareTo(0) == 0) {
+            // 消耗令牌数量等于0，返回成功
             return true;
         }
-        return false;
+        if (limit.getCount().compareTo(limit.getCapacity()) > 0) {
+            // 消耗令牌数量大于令牌桶容量，返回失败
+            return false;
+        }
+        Boolean allow = stringRedisTemplate.execute(TOKEN_SCRIPT, ImmutableList.of(limit.getKey()),
+                limit.getPeriod(), limit.getRate(), limit.getCapacity(), limit.getCount(), System.currentTimeMillis());
+        return allow != null && allow;
     }
 
     static {
         TOKEN_SCRIPT = new DefaultRedisScript<>();
         TOKEN_SCRIPT.setLocation(new ClassPathResource("/limiter/token.lua"));
-        TOKEN_SCRIPT.setResultType(Long.class);
+        TOKEN_SCRIPT.setResultType(Boolean.class);
     }
 }

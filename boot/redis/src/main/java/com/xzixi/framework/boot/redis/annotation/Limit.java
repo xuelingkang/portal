@@ -81,9 +81,9 @@ public @interface Limit {
 
     /**
      * 等待超时时间，单位毫秒，0表示不等待
-     * <p>令牌桶策略支持
+     * <p>漏桶策略支持
      */
-    int timeout() default 0;
+    long timeout() default 0;
 
     /**
      * 限流类型
