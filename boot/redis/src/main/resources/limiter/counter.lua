@@ -1,11 +1,19 @@
 -- 固定窗口计数器
-local c;
-c = redis.call('get', KEYS[1]);
-if (c and tonumber(c) > tonumber(ARGV[2])) then
-    return c;
+local key = KEYS[1];
+local period = tonumber(ARGV[1]);
+local rate = tonumber(ARGV[2]);
+local count = tonumber(ARGV[3]);
+local current = tonumber(redis.call('get', KEYS[1]));
+local init = current == nil;
+if (init) then
+    current = 0;
 end ;
-c = redis.call('incr', KEYS[1]);
-if (tonumber(c) == 1) then
-    redis.call('expire', KEYS[1], ARGV[1]);
+current = current + count;
+if (current > rate) then
+    return current;
 end ;
-return c;
+current = redis.call('incrby', key, count);
+if (init) then
+    redis.call('expire', key, period);
+end ;
+return current;
