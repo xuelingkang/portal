@@ -18,5 +18,5 @@ swagger2:
   enable: true
 
 log:
-  home: /data/logs/portal/task
+  home: /Volumes/Data/logs/portal/task
   root-level: INFO

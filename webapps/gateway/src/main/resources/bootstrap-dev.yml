@@ -5,5 +5,5 @@ spring:
         server-addr: localhost:8848
 
 log:
-  home: /data/logs/portal/gateway
+  home: /Volumes/Data/logs/portal/gateway
   root-level: INFO

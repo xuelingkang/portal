@@ -22,5 +22,5 @@ swagger2:
   enable: true
 
 log:
-  home: /data/logs/portal/notice
+  home: /Volumes/Data/logs/portal/notice
   root-level: INFO

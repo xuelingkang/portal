@@ -8,5 +8,5 @@ swagger2:
   enable: true
 
 log:
-  home: /data/logs/portal/master
+  home: /Volumes/Data/logs/portal/master
   root-level: INFO
