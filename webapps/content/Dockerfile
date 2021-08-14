@@ -4,7 +4,7 @@ MAINTAINER xuelingkang
 
 ARG JAR_FILE
 
-RUN mkdir -p /app
+RUN mkdir -p /app /var/log/portal/content
 WORKDIR /app
 
 COPY --from=registry.cn-zhangjiakou.aliyuncs.com/publicx/aspectjweaver:1.9.6 /aspectjweaver.jar aspectjweaver.jar

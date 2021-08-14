@@ -4,7 +4,7 @@ MAINTAINER xuelingkang
 
 ARG JAR_FILE
 
-RUN mkdir -p /app
+RUN mkdir -p /app /var/log/portal/master
 WORKDIR /app
 
 COPY --from=registry.cn-zhangjiakou.aliyuncs.com/publicx/gosu-amd64:1.13 /gosu /usr/bin/gosu
