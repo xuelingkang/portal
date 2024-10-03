@@ -27,7 +27,7 @@
         <swagger2.version>2.9.2</swagger2.version>
         <swagger.version>1.5.21</swagger.version>
         <commons-lang3.version>3.11</commons-lang3.version>
-        <commons-io.version>2.7</commons-io.version>
+        <commons-io.version>2.14.0</commons-io.version>
         <commons-collection.version>3.2.2</commons-collection.version>
     </properties>
 
